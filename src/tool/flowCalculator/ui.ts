@@ -1,0 +1,30 @@
+export interface FlowCalculatorUI extends Record<string, string> {
+  title: string;
+  autoAdjust: string;
+  configLabel: string;
+  nozzleLabel: string;
+  lineWidthLabel: string;
+  layerHeightLabel: string;
+  speedLabel: string;
+  temperatureLabel: string;
+  materialLabel: string;
+  hotendLimitLabel: string;
+  hotendTooltip: string;
+  presetEnder: string;
+  presetBambu: string;
+  presetVolcano: string;
+  presetHF: string;
+  baseLimitLabel: string;
+  resetButton: string;
+  volumetricFlowLabel: string;
+  maxSpeedLabel: string;
+  statusLabel: string;
+  safeStatus: string;
+  stratifiedLabel: string;
+  chartHeightLabel: string;
+  chartSpeedLabel: string;
+  chartSafeLabel: string;
+  copyButton: string;
+  faqTitle: string;
+  bibliographyTitle: string;
+}

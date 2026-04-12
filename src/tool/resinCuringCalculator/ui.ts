@@ -1,0 +1,36 @@
+export interface ResinCuringCalculatorUI extends Record<string, string> {
+  title: string;
+  configLabel: string;
+  brandLabel: string;
+  powerLabel: string;
+  powerUnit: string;
+  distanceLabel: string;
+  distanceUnit: string;
+  materialLabel: string;
+  weightLabel: string;
+  weightUnit: string;
+  ipaCheckbox: string;
+  safetyLabel: string;
+  safetySunglasses: string;
+  safetyGloves: string;
+  sunglassesTooltip: string;
+  glovesTooltip: string;
+  wavelength: string;
+  wavelengthValue: string;
+  statusLabel: string;
+  modeLabel: string;
+  modeValue: string;
+  curingTime: string;
+  startButton: string;
+  intensityChart: string;
+  nearLabel: string;
+  farLabel: string;
+  theoreticalLabel: string;
+  yourConfigLabel: string;
+  evaporateWarning: string;
+  safeDistance: string;
+  riskDistance: string;
+  optimeStatus: string;
+  longStatus: string;
+  fastStatus: string;
+}

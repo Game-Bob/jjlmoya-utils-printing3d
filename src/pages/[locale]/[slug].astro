@@ -1,7 +1,7 @@
 ---
 import PreviewLayout from "../../layouts/PreviewLayout.astro";
 import PreviewNavSidebar from "../../components/PreviewNavSidebar.astro";
-import { ALL_TOOLS } from "../../index";
+import { printing3dCategory, ALL_TOOLS } from "../../index";
 import {
   UtilityHeader,
   FAQSection,
@@ -34,6 +34,7 @@ export async function getStaticPaths() {
     ) as Partial<Record<KnownLocale, string>>;
 
     for (const { locale, content } of localeContents) {
+      const categoryTitle = (await printing3dCategory.i18n[locale]!()).title;
       const allToolsNav = await Promise.all(
         ALL_TOOLS.map(async ({ entry: navEntry }) => ({
           id: navEntry.id,
@@ -44,7 +45,7 @@ export async function getStaticPaths() {
       );
       paths.push({
         params: { locale, slug: content.slug },
-        props: { Component, locale, content, localeUrls, allToolsNav },
+        props: { Component, locale, content, localeUrls, allToolsNav, categoryTitle },
       });
     }
   }
@@ -67,9 +68,10 @@ interface Props {
   content: ToolLocaleContent;
   localeUrls: Partial<Record<KnownLocale, string>>;
   allToolsNav: NavItem[];
+  categoryTitle: string;
 }
 
-const { Component, locale, content, localeUrls, allToolsNav } = Astro.props;
+const { Component, locale, content, localeUrls, allToolsNav, categoryTitle } = Astro.props;
 
 const seoContent: UtilitySEOContent = { locale, sections: content.seo };
 
@@ -86,7 +88,7 @@ const titleBase = words.slice(1).join(" ") || "";
 >
   <PreviewNavSidebar
     slot="sidebar"
-    categoryTitle="Tools"
+    categoryTitle={categoryTitle}
     tools={allToolsNav}
   />
   <Fragment slot="head">

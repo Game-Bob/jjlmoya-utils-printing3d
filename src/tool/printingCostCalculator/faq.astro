@@ -1,0 +1,14 @@
+---
+import { FAQSection } from '@jjlmoya/utils-shared';
+import { printingCostCalculator } from './index';
+import type { KnownLocale } from '../../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'es' } = Astro.props;
+const content = await printingCostCalculator.i18n[locale]?.();
+---
+
+{content && <FAQSection items={content.faq} title={content.faqTitle} inLanguage={locale} />}

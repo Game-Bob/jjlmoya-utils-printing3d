@@ -1,0 +1,27 @@
+---
+import { SharedBibliography } from "@jjlmoya/utils-shared";
+import type { KnownLocale } from "../../types";
+import { content as esContent } from "./i18n/es";
+import { content as enContent } from "./i18n/en";
+import { content as frContent } from "./i18n/fr";
+
+interface Props {
+  locale: KnownLocale;
+}
+
+const { locale } = Astro.props;
+
+const contentMap = {
+  es: esContent,
+  en: enContent,
+  fr: frContent,
+};
+
+const content = contentMap[locale] || enContent;
+---
+
+<SharedBibliography
+  links={content.bibliography}
+  title={content.bibliographyTitle}
+  inLanguage={locale}
+/>

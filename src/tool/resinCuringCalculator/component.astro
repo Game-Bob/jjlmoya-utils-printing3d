@@ -1,0 +1,794 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  ui?: Record<string, unknown>;
+}
+
+const { ui } = Astro.props;
+const t = (ui ?? {}) as Record<string, string>;
+
+const resinTypes = [
+  { id: 'standard', label: 'Estándar', factor: 1.0 },
+  { id: 'transparent', label: 'Transparente', factor: 0.8 },
+  { id: 'opaque', label: 'Opaca (Negra/Gris)', factor: 1.3 },
+  { id: 'tough', label: 'Rígida / Tough', factor: 1.5 },
+  { id: 'flexible', label: 'Flexible', factor: 2.2 },
+  { id: 'castable', label: 'Calcinable', factor: 3.0 },
+];
+
+const brands = [
+  { id: 'generic', label: 'Genérica', multi: 1.0, defaultPower: 40 },
+  { id: 'anycubic', label: 'Anycubic', multi: 0.95, defaultPower: 40 },
+  { id: 'elegoo', label: 'Elegoo', multi: 1.0, defaultPower: 40 },
+  { id: 'siraya', label: 'Siraya Tech', multi: 1.2, defaultPower: 30 },
+];
+---
+
+<div class="rc-root" id="resin-calc-root">
+  <div class="rc-card">
+    <div class="rc-sidebar">
+      <div class="rc-sidebar-section">
+        <div class="rc-section-title">
+          <Icon name="mdi:settings" size={18} />
+          <span>{t.configLabel || 'CONFIGURATION'}</span>
+        </div>
+
+        <div class="rc-input-item">
+          <label>{t.brandLabel || 'Equipment Brand'}</label>
+          <select id="input-brand" class="rc-select">
+            {brands.map((b) => (
+              <option value={b.multi} data-power={b.defaultPower}>
+                {b.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div class="rc-input-item">
+          <div class="rc-label-row">
+            <label>{t.powerLabel || 'Lamp Power (W)'}</label>
+            <span id="val-power">40 {t.powerUnit || 'W'}</span>
+          </div>
+          <input type="range" id="input-power" class="rc-range" min="6" max="100" value="40" />
+        </div>
+
+        <div class="rc-input-item">
+          <div class="rc-label-row">
+            <label>{t.distanceLabel || 'LED Distance (cm)'}</label>
+            <span id="val-dist">10 {t.distanceUnit || 'cm'}</span>
+          </div>
+          <input type="range" id="input-dist" class="rc-range" min="2" max="30" value="10" />
+        </div>
+
+        <div class="rc-input-item">
+          <label>{t.materialLabel || 'Material Type'}</label>
+          <select id="input-type" class="rc-select">
+            {resinTypes.map((r) => (
+              <option value={r.factor}>{r.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="rc-input-item">
+          <div class="rc-label-row">
+            <label>{t.weightLabel || 'Estimated Weight (g)'}</label>
+            <span id="val-size">25 {t.weightUnit || 'g'}</span>
+          </div>
+          <input type="range" id="input-size" class="rc-range" min="1" max="500" value="25" />
+        </div>
+
+        <label class="rc-checkbox">
+          <input type="checkbox" id="input-ipa" />
+          <span>{t.ipaCheckbox || 'Cleaned with Isopropyl Alcohol?'}</span>
+        </label>
+      </div>
+
+      <div class="rc-sidebar-section">
+        <div class="rc-section-title">
+          <Icon name="mdi:shield-alert" size={18} />
+          <span>{t.safetyLabel || 'UV SAFETY'}</span>
+        </div>
+        <div class="rc-safety-item" data-tooltip={t.sunglassesTooltip || 'Direct exposure can damage retina.'}>
+          <Icon name="mdi:glasses" size={16} />
+          <span>{t.safetySunglasses || 'Certified UV Glasses'}</span>
+        </div>
+        <div class="rc-safety-item" data-tooltip={t.glovesTooltip || 'Always use protection.'}>
+          <Icon name="mdi:hand-back-left" size={16} />
+          <span>{t.safetyGloves || 'Nitrile Gloves'}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rc-main">
+      <div class="rc-stats-row">
+        <div class="rc-stat">
+          <small>{t.wavelength || 'Wavelength'}</small>
+          <strong>{t.wavelengthValue || '405 nm'}</strong>
+        </div>
+        <div class="rc-stat">
+          <small>{t.statusLabel || 'Status'}</small>
+          <strong id="stat-status">Estándar</strong>
+        </div>
+        <div class="rc-stat">
+          <small>{t.modeLabel || 'Mode'}</small>
+          <strong>{t.modeValue || 'Industrial'}</strong>
+        </div>
+      </div>
+
+      <div class="rc-timer-container">
+        <div class="rc-timer-ring">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" class="ring-bg" />
+            <circle cx="50" cy="50" r="44" class="ring-fill" id="timer-ring" />
+          </svg>
+          <div class="rc-timer-display">
+            <span id="final-time">02:30</span>
+            <small>{t.curingTime || 'm:s'}</small>
+            <button id="start-btn" class="rc-btn-start" title={t.startButton || 'Start/Stop Curing'}>
+              <Icon name="mdi:play" id="icon-play" size={20} />
+              <Icon name="mdi:stop" id="icon-stop" size={20} style="display:none" />
+            </button>
+          </div>
+        </div>
+
+        <div class="rc-chart-container">
+          <svg viewBox="0 0 100 60" id="power-chart" class="rc-chart-svg">
+            <line x1="0" y1="20" x2="100" y2="20" class="grid-line" />
+            <line x1="0" y1="40" x2="100" y2="40" class="grid-line" />
+            <line x1="25" y1="0" x2="25" y2="60" class="grid-line" />
+            <line x1="50" y1="0" x2="50" y2="60" class="grid-line" />
+            <line x1="75" y1="0" x2="75" y2="60" class="grid-line" />
+
+            <path class="chart-area" id="chart-area" d="" />
+            <path class="chart-path" id="chart-path" d="" />
+            <circle class="chart-cursor" id="chart-dot" r="2.5" />
+          </svg>
+          <div class="chart-label-row">
+            <span>{t.nearLabel || 'Close (2cm)'}</span>
+            <span>{t.intensityChart || 'UV Intensity'}</span>
+            <span>{t.farLabel || 'Far (30cm)'}</span>
+          </div>
+          <div class="rc-chart-legend">
+            <div class="legend-item">
+              <span class="dot-line"></span>
+              <span>{t.theoreticalLabel || 'Theoretical'}</span>
+            </div>
+            <div class="legend-item">
+              <span class="dot-point"></span>
+              <span>{t.yourConfigLabel || 'Your Config'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rc-alerts" id="alerts-container">
+        <div class="rc-alert warning" id="ipa-alert" style="display:none">
+          <Icon name="mdi:clock-alert-outline" size={18} />
+          <span>{t.evaporateWarning || 'Evaporate alcohol (min. 10 min).'}</span>
+        </div>
+        <div class="rc-alert info" id="dist-alert">
+          <Icon name="mdi:shield-check-outline" size={18} />
+          <span>{t.safeDistance || 'Safe distance detected.'}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ statusLargo: t.longStatus, statusOptimo: t.optimeStatus, statusRapido: t.fastStatus, safeDist: t.safeDistance, riskDist: t.riskDistance }}>
+  const statusTexts = {
+    largo: statusLargo,
+    optimo: statusOptimo,
+    rapido: statusRapido,
+    safeDist: safeDist,
+    riskDist: riskDist,
+  };
+
+  const powerIn = document.getElementById('input-power');
+  const distIn = document.getElementById('input-dist');
+  const massIn = document.getElementById('input-size');
+  const typeIn = document.getElementById('input-type');
+  const brandIn = document.getElementById('input-brand');
+  const ipaIn = document.getElementById('input-ipa');
+
+  const valPower = document.getElementById('val-power');
+  const valDist = document.getElementById('val-dist');
+  const valSize = document.getElementById('val-size');
+  const statStatus = document.getElementById('stat-status');
+  const finalTime = document.getElementById('final-time');
+  const timerRing = document.getElementById('timer-ring');
+  const ipaAlert = document.getElementById('ipa-alert');
+  const distAlert = document.getElementById('dist-alert');
+  const chartPath = document.getElementById('chart-path');
+  const chartDot = document.getElementById('chart-dot');
+  const chartArea = document.getElementById('chart-area');
+
+  let audioCtx = null;
+
+  function playBeep() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+  }
+
+  let countdownInterval = null;
+  let secondsLeft = 0;
+  let initialTotal = 0;
+
+  function formatTime(total) {
+    const min = Math.floor(total / 60);
+    const sec = Math.floor(total % 60);
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  function updateRing(current, total) {
+    if (!timerRing) return;
+    const circum = 2 * Math.PI * 44;
+    timerRing.style.strokeDasharray = circum.toString();
+    const offset = circum - (circum * Math.min(100, (current / total) * 100)) / 100;
+    timerRing.style.strokeDashoffset = offset.toString();
+  }
+
+  function computeStatus(total) {
+    if (total > 300) return statusTexts.largo;
+    if (total > 90) return statusTexts.optimo;
+    return statusTexts.rapido;
+  }
+
+  function updateStatusDisplay(total) {
+    if (!statStatus) return;
+    statStatus.textContent = computeStatus(total);
+    statStatus.style.color = total > 300 ? '#f97316' : 'inherit';
+  }
+
+  function updateDistanceAlert(D) {
+    if (!distAlert) return;
+    const isNear = D < 6;
+    distAlert.className = `rc-alert ${isNear ? 'warning' : 'info'}`;
+    const span = distAlert.querySelector('span');
+    if (span) {
+      span.textContent = isNear ? statusTexts.riskDist : statusTexts.safeDist;
+    }
+  }
+
+  function updateAlerts(D) {
+    if (ipaAlert) ipaAlert.style.display = ipaIn.checked ? 'flex' : 'none';
+    updateDistanceAlert(D);
+  }
+
+  function updateDisplayValues(W, D, S) {
+    if (valPower) valPower.textContent = `${W} W`;
+    if (valDist) valDist.textContent = `${D} cm`;
+    if (valSize) valSize.textContent = `${S} g`;
+  }
+
+  function computeCuringTime(params) {
+    const baseTime = 120;
+    const powerRef = 40;
+    const distRef = 10;
+
+    const pFactor = powerRef / params.W;
+    const dFactor = Math.pow((params.D + 1) / (distRef + 1), 2);
+    const sFactor = Math.sqrt(params.S / 25);
+
+    const total = baseTime * params.T * params.B * sFactor * pFactor * dFactor;
+    return Math.max(15, Math.min(3600, total));
+  }
+
+  function calculate() {
+    if (countdownInterval) return;
+    if (!powerIn || !distIn || !massIn || !typeIn || !brandIn) return;
+
+    const W = parseFloat(powerIn.value);
+    const D = parseFloat(distIn.value);
+    const S = parseFloat(massIn.value);
+    const T = parseFloat(typeIn.value);
+    const B = parseFloat(brandIn.value);
+
+    updateDisplayValues(W, D, S);
+    const total = computeCuringTime({ W, D, S, T, B });
+    initialTotal = total;
+    secondsLeft = total;
+
+    if (finalTime) finalTime.textContent = formatTime(total);
+    updateRing(total, total);
+    updateStatusDisplay(total);
+    updateAlerts(D);
+    drawPowerChart(D, W);
+  }
+
+  const startBtn = document.getElementById('start-btn');
+  const iconPlay = document.getElementById('icon-play');
+  const iconStop = document.getElementById('icon-stop');
+
+  function drawPowerChart(d, w) {
+    if (!chartPath || !chartDot || !chartArea) return;
+    let dAttr = 'M 0 60';
+    for (let x = 0; x <= 100; x += 5) {
+      const dist = (x / 100) * 30 + 1;
+      const intensity = 60 - ((w / 2) / Math.pow(dist / 5, 2));
+      const y = Math.max(2, Math.min(58, intensity));
+      dAttr += ` L ${x} ${y}`;
+    }
+    chartPath.setAttribute('d', dAttr);
+    chartArea.setAttribute('d', dAttr + ' L 100 60 L 0 60 Z');
+
+    const dotX = ((d - 1) / 30) * 100;
+    const dotY = Math.max(2, Math.min(58, 60 - ((w / 2) / Math.pow(d / 5, 2))));
+    chartDot.setAttribute('cx', dotX.toString());
+    chartDot.setAttribute('cy', dotY.toString());
+  }
+
+  function stopTimer() {
+    if (!countdownInterval) return;
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+    if (startBtn) {
+      startBtn.classList.remove('running');
+      if (iconPlay) iconPlay.style.display = 'block';
+      if (iconStop) iconStop.style.display = 'none';
+    }
+    calculate();
+  }
+
+  function runCountdown() {
+    if (startBtn) {
+      startBtn.classList.add('running');
+      if (iconPlay) iconPlay.style.display = 'none';
+      if (iconStop) iconStop.style.display = 'block';
+    }
+
+    countdownInterval = window.setInterval(() => {
+      secondsLeft -= 1;
+      if (finalTime) finalTime.textContent = formatTime(secondsLeft);
+      updateRing(secondsLeft, initialTotal);
+
+      if (secondsLeft <= 0) {
+        stopTimer();
+        playBeep();
+        setTimeout(() => {
+          calculate();
+        }, 3000);
+      }
+    }, 1000);
+  }
+
+  function startTimer() {
+    if (countdownInterval) {
+      stopTimer();
+      return;
+    }
+    runCountdown();
+  }
+
+  startBtn?.addEventListener('click', startTimer);
+
+  brandIn?.addEventListener('change', () => {
+    const option = brandIn.options[brandIn.selectedIndex];
+    const power = option.getAttribute('data-power');
+    if (power && powerIn) {
+      powerIn.value = power;
+      calculate();
+    }
+  });
+
+  [powerIn, distIn, massIn, typeIn, brandIn, ipaIn].forEach((el) => {
+    el?.addEventListener('input', calculate);
+  });
+
+  calculate();
+</script>
+
+<style>
+  .rc-root {
+    --rc-bg: #f9fafb;
+    --rc-card: #fff;
+    --rc-border: #e5e7eb;
+    --rc-text-primary: #111;
+    --rc-text-secondary: #666;
+    --rc-accent: #f97316;
+    --rc-safe: #10b981;
+    --rc-warning: #ef4444;
+    --rc-info: #3b82f6;
+    --rc-input-bg: #fff;
+    --rc-input-border: #d1d5db;
+    --rc-input-text: #111;
+    --rc-hover: #f3f4f6;
+    --rc-select-arrow: #666;
+  }
+
+  :global(.theme-dark) .rc-root {
+    --rc-bg: #111112;
+    --rc-card: #1a1a1b;
+    --rc-border: #3a3a3c;
+    --rc-text-primary: #fff;
+    --rc-text-secondary: #a0a0a0;
+    --rc-accent: #fb923c;
+    --rc-safe: #34d399;
+    --rc-warning: #f87171;
+    --rc-info: #60a5fa;
+    --rc-input-bg: #272729;
+    --rc-input-border: #48484a;
+    --rc-input-text: #fff;
+    --rc-hover: #222;
+    --rc-select-arrow: #a0a0a0;
+  }
+
+  .rc-card {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--rc-card);
+    border: 1px solid var(--rc-border);
+    border-radius: 12px;
+    color: var(--rc-text-primary);
+  }
+
+  .rc-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .rc-sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rc-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--rc-text-primary);
+  }
+
+  .rc-input-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rc-input-item label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--rc-text-secondary);
+  }
+
+  .rc-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .rc-label-row label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--rc-text-secondary);
+  }
+
+  .rc-control-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--rc-accent);
+  }
+
+  .rc-select,
+  .rc-range {
+    width: 100%;
+    padding: 0.5rem;
+    background: var(--rc-input-bg);
+    border: 1px solid var(--rc-input-border);
+    border-radius: 6px;
+    color: var(--rc-input-text);
+    font-size: 0.875rem;
+  }
+
+  .rc-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23666"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  :global(.theme-dark) .rc-select {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23a0a0a0"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/%3E%3C/svg%3E');
+  }
+
+  .rc-select:hover {
+    background-color: var(--rc-hover);
+  }
+
+  .rc-range {
+    cursor: pointer;
+    padding: 0.25rem;
+    height: 28px;
+  }
+
+  .rc-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--rc-text-secondary);
+  }
+
+  .rc-checkbox input {
+    cursor: pointer;
+  }
+
+  .rc-safety-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--rc-hover);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    position: relative;
+    color: var(--rc-text-secondary);
+  }
+
+  .rc-safety-item:hover {
+    background: var(--rc-border);
+  }
+
+  .rc-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .rc-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .rc-stat {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: var(--rc-hover);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .rc-stat small {
+    font-size: 0.75rem;
+    color: var(--rc-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rc-stat strong {
+    font-size: 1.25rem;
+    color: var(--rc-accent);
+    margin-top: 0.25rem;
+  }
+
+  .rc-timer-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .rc-timer-ring {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  .rc-timer-ring svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: var(--rc-border);
+    stroke-width: 3;
+  }
+
+  .ring-fill {
+    fill: none;
+    stroke: var(--rc-accent);
+    stroke-width: 3;
+    stroke-dasharray: 276;
+    stroke-dashoffset: 0;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.1s linear;
+  }
+
+  .rc-timer-display {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .rc-timer-display > span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--rc-text-primary);
+  }
+
+  .rc-timer-display small {
+    font-size: 0.75rem;
+    color: var(--rc-text-secondary);
+  }
+
+  .rc-btn-start {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--rc-accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .rc-btn-start:hover {
+    transform: scale(1.05);
+  }
+
+  .rc-btn-start.running {
+    background: var(--rc-warning);
+  }
+
+  .rc-chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rc-chart-svg {
+    width: 100%;
+    height: 200px;
+    background: var(--rc-hover);
+    border-radius: 8px;
+    padding: 0.5rem;
+  }
+
+  .grid-line {
+    stroke: var(--rc-border);
+    stroke-width: 0.5;
+  }
+
+  .chart-area {
+    fill: url('#gradient');
+    opacity: 0.3;
+  }
+
+  .chart-path {
+    stroke: var(--rc-accent);
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .chart-cursor {
+    fill: var(--rc-accent);
+  }
+
+  .chart-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--rc-text-secondary);
+    padding: 0 0.5rem;
+  }
+
+  .rc-chart-legend {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--rc-text-secondary);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dot-line {
+    width: 12px;
+    height: 2px;
+    background: var(--rc-accent);
+    border-radius: 1px;
+  }
+
+  .dot-point {
+    width: 6px;
+    height: 6px;
+    background: var(--rc-accent);
+    border-radius: 50%;
+  }
+
+  .rc-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rc-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+  }
+
+  .rc-alert.warning {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--rc-warning);
+  }
+
+  .rc-alert.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--rc-info);
+  }
+
+  @media (max-width: 1024px) {
+    .rc-card {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-timer-container {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rc-card {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .rc-timer-ring {
+      width: 160px;
+      height: 160px;
+    }
+
+    .rc-timer-display > span {
+      font-size: 1.5rem;
+    }
+
+    .rc-stats-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

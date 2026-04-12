@@ -68,5 +68,6 @@ export interface ToolDefinition {
   Component: unknown;
   SEOComponent: unknown;
   BibliographyComponent: unknown;
+  FAQComponent: unknown;
 }
 
