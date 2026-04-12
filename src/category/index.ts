@@ -2,6 +2,7 @@ import type { Printing3dCategoryEntry } from '../types';
 import { PRINTING_COST_CALCULATOR_TOOL } from '../tool/printingCostCalculator';
 import { SHRINKAGE_CALCULATOR_TOOL } from '../tool/shrinkageCalculator';
 import { FLOW_CALCULATOR_TOOL } from '../tool/flowCalculator';
+import { RESIN_CURING_CALCULATOR_TOOL } from '../tool/resinCuringCalculator';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -9,6 +10,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     PRINTING_COST_CALCULATOR_TOOL.entry,
     SHRINKAGE_CALCULATOR_TOOL.entry,
     FLOW_CALCULATOR_TOOL.entry,
+    RESIN_CURING_CALCULATOR_TOOL.entry,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),
