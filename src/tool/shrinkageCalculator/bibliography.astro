@@ -1,27 +1,14 @@
 ---
-import { SharedBibliography } from "@jjlmoya/utils-shared";
-import type { KnownLocale } from "../../types";
-import { content as esContent } from "./i18n/es";
-import { content as enContent } from "./i18n/en";
-import { content as frContent } from "./i18n/fr";
+import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';
+import { SHRINKAGE_CALCULATOR_TOOL } from './index';
+import type { KnownLocale } from '../../types';
 
 interface Props {
-  locale: KnownLocale;
+  locale?: KnownLocale;
 }
 
-const { locale } = Astro.props;
-
-const contentMap = {
-  es: esContent,
-  en: enContent,
-  fr: frContent,
-};
-
-const content = contentMap[locale] || enContent;
+const { locale = 'es' } = Astro.props;
+const content = await SHRINKAGE_CALCULATOR_TOOL.entry.i18n[locale as keyof typeof SHRINKAGE_CALCULATOR_TOOL.entry.i18n]?.();
 ---
 
-<SharedBibliography
-  links={content.bibliography}
-  title={content.bibliographyTitle}
-  inLanguage={locale}
-/>
+{content && <SharedBibliography links={content.bibliography} />}
