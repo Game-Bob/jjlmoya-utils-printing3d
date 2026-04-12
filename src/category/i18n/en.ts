@@ -122,7 +122,7 @@ export const content: CategoryLocaleContent = {
     {
       type: 'stats',
       columns: 2,
-      stats: [
+      items: [
         { label: 'Material', value: 'PLA/SLA', icon: 'mdi:printer-3d' },
         { label: 'Energy', value: 'KWh Consumption', icon: 'mdi:lightning-bolt' },
         { label: 'Time', value: 'Real Calculation', icon: 'mdi:timer-sand' },
