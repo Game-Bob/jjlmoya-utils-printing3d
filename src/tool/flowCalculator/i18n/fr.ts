@@ -2,7 +2,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<FlowCalculatorUI> = {
-  slug: 'calculateur-debit-volumetrique',
+  slug: 'calculateur-debit-volumetrique-impression-3d',
   title: 'Débit Volumétrique: Comprendre les Vraies Limites de Vitesse de Votre Imprimante 3D',
   description: 'Calculez le débit volumétrique maximum de votre imprimante 3D. Comprenez les véritables limitations matérielles de votre hotend.',
   ui: {

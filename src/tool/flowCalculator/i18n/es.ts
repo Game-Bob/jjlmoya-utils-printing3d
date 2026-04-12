@@ -2,7 +2,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<FlowCalculatorUI> = {
-  slug: 'calculadora-caudal-volumetrico',
+  slug: 'calculadora-caudal-volumetrico-impresion-3d',
   title: 'Caudal Volumétrico: Comprendiendo el Límite Real de tu Impresora 3D',
   description: 'Calcula el flujo volumétrico máximo de tu impresora 3D. Comprendiendo los límites reales de velocidad e limitaciones de hardware.',
   ui: {
