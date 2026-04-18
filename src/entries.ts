@@ -1,4 +1,10 @@
 export { printingCostCalculator } from './tool/printingCostCalculator/entry';
+export { flowCalculator } from './tool/flowCalculator/entry';
+export { resinCuringCalculator } from './tool/resinCuringCalculator/entry';
+export { shrinkageCalculator } from './tool/shrinkageCalculator/entry';
 export { printing3dCategory } from './category';
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
-export const ALL_ENTRIES = [printingCostCalculator];
+import { flowCalculator } from './tool/flowCalculator/entry';
+import { resinCuringCalculator } from './tool/resinCuringCalculator/entry';
+import { shrinkageCalculator } from './tool/shrinkageCalculator/entry';
+export const ALL_ENTRIES = [printingCostCalculator, flowCalculator, resinCuringCalculator, shrinkageCalculator];

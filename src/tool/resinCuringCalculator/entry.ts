@@ -1,17 +1,11 @@
-import type { Printing3dCategoryEntry } from '../types';
-import { printingCostCalculator } from '../tool/printingCostCalculator/entry';
-import { shrinkageCalculator } from '../tool/shrinkageCalculator/entry';
-import { flowCalculator } from '../tool/flowCalculator/entry';
-import { resinCuringCalculator } from '../tool/resinCuringCalculator/entry';
+import type { Printing3dToolEntry } from '../../types';
 
-export const printing3dCategory: Printing3dCategoryEntry = {
-  icon: 'mdi:printer-3d',
-  tools: [
-    printingCostCalculator,
-    shrinkageCalculator,
-    flowCalculator,
-    resinCuringCalculator,
-  ],
+export const resinCuringCalculator: Printing3dToolEntry = {
+  id: 'resin-curing-calculator',
+  icons: {
+    bg: 'mdi:flask',
+    fg: 'mdi:lightbulb-on',
+  },
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),
     en: () => import('./i18n/en').then((m) => m.content),
