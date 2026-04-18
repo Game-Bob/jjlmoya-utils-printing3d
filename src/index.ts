@@ -1,5 +1,5 @@
 export { printing3dCategory } from './category';
-export { default as printing3dCategorySEO } from './category/seo.astro';
+export const printing3dCategorySEO = () => import('./category/seo.astro').then((m) => m.default);
 
 export type {
   KnownLocale,

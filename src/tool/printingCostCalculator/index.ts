@@ -1,9 +1,5 @@
 import type { Printing3dToolEntry, ToolDefinition } from '../../types';
 
-import PrintingCostCalculatorComponent from './component.astro';
-import PrintingCostCalculatorSEO from './seo.astro';
-import PrintingCostCalculatorBibliography from './bibliography.astro';
-import PrintingCostCalculatorFAQ from './faq.astro';
 
 
 export const printingCostCalculator: Printing3dToolEntry = {
@@ -35,8 +31,8 @@ export { PrintingCostCalculatorComponent, PrintingCostCalculatorSEO, PrintingCos
 
 export const PRINTING_COST_CALCULATOR_TOOL: ToolDefinition = {
   entry: printingCostCalculator,
-  Component: PrintingCostCalculatorComponent,
-  SEOComponent: PrintingCostCalculatorSEO,
-  BibliographyComponent: PrintingCostCalculatorBibliography,
+  Component: () => import('./component.astro'),
+  SEOComponent: () => import('./seo.astro'),
+  BibliographyComponent: () => import('./bibliography.astro'),
   FAQComponent: PrintingCostCalculatorFAQ,
 };

@@ -1,8 +1,4 @@
 import type { ToolDefinition } from '../../types';
-import FlowCalculatorComponent from './component.astro';
-import FlowCalculatorSEO from './seo.astro';
-import FlowCalculatorBibliography from './bibliography.astro';
-import FlowCalculatorFAQ from './faq.astro';
 
 export {
   FlowCalculatorComponent,
@@ -36,8 +32,8 @@ export const FLOW_CALCULATOR_TOOL: ToolDefinition = {
       zh: () => import('./i18n/zh').then((m) => m.content),
     },
   },
-  Component: FlowCalculatorComponent,
-  SEOComponent: FlowCalculatorSEO,
-  BibliographyComponent: FlowCalculatorBibliography,
+  Component: () => import('./component.astro'),
+  SEOComponent: () => import('./seo.astro'),
+  BibliographyComponent: () => import('./bibliography.astro'),
   FAQComponent: FlowCalculatorFAQ,
 };

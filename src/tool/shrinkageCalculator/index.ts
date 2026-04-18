@@ -1,8 +1,4 @@
 import type { ToolDefinition } from '../../types';
-import ShrinkageCalculatorComponent from './component.astro';
-import ShrinkageCalculatorSEO from './seo.astro';
-import ShrinkageCalculatorBibliography from './bibliography.astro';
-import ShrinkageCalculatorFAQ from './faq.astro';
 
 export const SHRINKAGE_CALCULATOR_TOOL: ToolDefinition = {
   entry: {
@@ -29,9 +25,9 @@ export const SHRINKAGE_CALCULATOR_TOOL: ToolDefinition = {
       zh: () => import('./i18n/zh').then((m) => m.content),
     },
   },
-  Component: ShrinkageCalculatorComponent,
-  SEOComponent: ShrinkageCalculatorSEO,
-  BibliographyComponent: ShrinkageCalculatorBibliography,
+  Component: () => import('./component.astro'),
+  SEOComponent: () => import('./seo.astro'),
+  BibliographyComponent: () => import('./bibliography.astro'),
   FAQComponent: ShrinkageCalculatorFAQ,
 };
 

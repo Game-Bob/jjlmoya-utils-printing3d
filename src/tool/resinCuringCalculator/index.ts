@@ -1,8 +1,4 @@
 import type { ToolDefinition } from '../../types';
-import ResinCuringCalculatorComponent from './component.astro';
-import ResinCuringCalculatorSEO from './seo.astro';
-import ResinCuringCalculatorBibliography from './bibliography.astro';
-import ResinCuringCalculatorFAQ from './faq.astro';
 
 export {
   ResinCuringCalculatorComponent,
@@ -36,8 +32,8 @@ export const RESIN_CURING_CALCULATOR_TOOL: ToolDefinition = {
       zh: () => import('./i18n/zh').then((m) => m.content),
     },
   },
-  Component: ResinCuringCalculatorComponent,
-  SEOComponent: ResinCuringCalculatorSEO,
-  BibliographyComponent: ResinCuringCalculatorBibliography,
+  Component: () => import('./component.astro'),
+  SEOComponent: () => import('./seo.astro'),
+  BibliographyComponent: () => import('./bibliography.astro'),
   FAQComponent: ResinCuringCalculatorFAQ,
 };
