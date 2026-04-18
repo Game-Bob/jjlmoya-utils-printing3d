@@ -1,12 +1,5 @@
 import type { ToolDefinition } from '../../types';
 
-export {
-  ResinCuringCalculatorComponent,
-  ResinCuringCalculatorSEO,
-  ResinCuringCalculatorBibliography,
-  ResinCuringCalculatorFAQ,
-};
-
 export const RESIN_CURING_CALCULATOR_TOOL: ToolDefinition = {
   entry: {
     id: 'resin-curing-calculator',
@@ -35,5 +28,5 @@ export const RESIN_CURING_CALCULATOR_TOOL: ToolDefinition = {
   Component: () => import('./component.astro'),
   SEOComponent: () => import('./seo.astro'),
   BibliographyComponent: () => import('./bibliography.astro'),
-  FAQComponent: ResinCuringCalculatorFAQ,
+  FAQComponent: () => import('./faq.astro'),
 };

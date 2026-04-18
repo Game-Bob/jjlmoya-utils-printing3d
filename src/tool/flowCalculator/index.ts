@@ -1,12 +1,5 @@
 import type { ToolDefinition } from '../../types';
 
-export {
-  FlowCalculatorComponent,
-  FlowCalculatorSEO,
-  FlowCalculatorBibliography,
-  FlowCalculatorFAQ,
-};
-
 export const FLOW_CALCULATOR_TOOL: ToolDefinition = {
   entry: {
     id: 'flow-calculator',
@@ -35,5 +28,5 @@ export const FLOW_CALCULATOR_TOOL: ToolDefinition = {
   Component: () => import('./component.astro'),
   SEOComponent: () => import('./seo.astro'),
   BibliographyComponent: () => import('./bibliography.astro'),
-  FAQComponent: FlowCalculatorFAQ,
+  FAQComponent: () => import('./faq.astro'),
 };
