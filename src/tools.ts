@@ -10,3 +10,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   FLOW_CALCULATOR_TOOL,
   RESIN_CURING_CALCULATOR_TOOL,
 ];
+
+export const ALL_ENTRIES = ALL_TOOLS.map(t => t.entry);
