@@ -1,3 +1,4 @@
+import { printingCostCalculator } from './entry';
 export * from './entry';
 export const PRINTING_COST_CALCULATOR_TOOL: ToolDefinition = {
   entry: printingCostCalculator,
