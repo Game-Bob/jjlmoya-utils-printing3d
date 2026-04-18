@@ -28,12 +28,5 @@ export const SHRINKAGE_CALCULATOR_TOOL: ToolDefinition = {
   Component: () => import('./component.astro'),
   SEOComponent: () => import('./seo.astro'),
   BibliographyComponent: () => import('./bibliography.astro'),
-  FAQComponent: ShrinkageCalculatorFAQ,
-};
-
-export {
-  ShrinkageCalculatorComponent,
-  ShrinkageCalculatorSEO,
-  ShrinkageCalculatorBibliography,
-  ShrinkageCalculatorFAQ,
+  FAQComponent: () => import('./faq.astro'),
 };

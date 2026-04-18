@@ -27,12 +27,10 @@ export const printingCostCalculator: Printing3dToolEntry = {
   },
 };
 
-export { PrintingCostCalculatorComponent, PrintingCostCalculatorSEO, PrintingCostCalculatorBibliography, PrintingCostCalculatorFAQ };
-
 export const PRINTING_COST_CALCULATOR_TOOL: ToolDefinition = {
   entry: printingCostCalculator,
   Component: () => import('./component.astro'),
   SEOComponent: () => import('./seo.astro'),
   BibliographyComponent: () => import('./bibliography.astro'),
-  FAQComponent: PrintingCostCalculatorFAQ,
+  FAQComponent: () => import('./faq.astro'),
 };
