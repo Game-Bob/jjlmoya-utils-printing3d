@@ -1,3 +1,4 @@
+export { ALL_ENTRIES } from './entries';
 import type { ToolDefinition } from './types';
 import { PRINTING_COST_CALCULATOR_TOOL } from './tool/printingCostCalculator';
 import { SHRINKAGE_CALCULATOR_TOOL } from './tool/shrinkageCalculator';
@@ -11,4 +12,3 @@ export const ALL_TOOLS: ToolDefinition[] = [
   RESIN_CURING_CALCULATOR_TOOL,
 ];
 
-export const ALL_ENTRIES = ALL_TOOLS.map(t => t.entry);
