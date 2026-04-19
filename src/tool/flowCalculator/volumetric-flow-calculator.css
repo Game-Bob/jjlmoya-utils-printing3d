@@ -22,7 +22,7 @@
         color: var(--vf-text);
     }
 
-    :global(.theme-dark) .vf-root {
+    .theme-dark .vf-root {
         --vf-bg: #111112;
         --vf-card: #1a1a1b;
         --vf-border: #333335;
@@ -68,7 +68,7 @@
         background: var(--vf-bg);
     }
 
-    :global(.theme-dark) .vf-sidebar {
+    .theme-dark .vf-sidebar {
         border-right-color: var(--vf-border);
     }
 
@@ -169,7 +169,7 @@
         border-color: var(--vf-text-muted);
     }
 
-    .vf-flat-button:global(.vf-active) {
+    .vf-flat-button.vf-active {
         background: var(--vf-primary);
         border-color: var(--vf-primary);
         color: white;
@@ -284,7 +284,7 @@
         color: var(--vf-text-muted);
     }
 
-    .vf-toggle-simple:global(.vf-active) {
+    .vf-toggle-simple.vf-active {
         color: var(--vf-secondary);
     }
 
@@ -305,7 +305,7 @@
         transition: transform 0.2s;
     }
 
-    .vf-toggle-simple:global(.vf-active) .vf-toggle-knob {
+    .vf-toggle-simple.vf-active .vf-toggle-knob {
         transform: translateX(16px);
         background: var(--vf-secondary);
     }
@@ -333,7 +333,7 @@
         border-color: var(--vf-text-muted);
     }
 
-    .vf-chip-select:global(.vf-active) {
+    .vf-chip-select.vf-active {
         border-color: var(--vf-secondary);
         color: var(--vf-secondary);
         background: rgba(0, 212, 255, 0.05);

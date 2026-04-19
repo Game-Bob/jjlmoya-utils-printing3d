@@ -23,7 +23,7 @@
     margin: 0 auto;
   }
 
-  :global(.theme-dark) .sc-root {
+  .theme-dark .sc-root {
     --sc-bg-surface: rgba(255, 255, 255, 0.03);
     --sc-bg-input: #0f172a;
     --sc-border: rgba(255, 255, 255, 0.1);

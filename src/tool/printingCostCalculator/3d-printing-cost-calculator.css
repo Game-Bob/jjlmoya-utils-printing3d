@@ -26,7 +26,7 @@
     margin: 0 auto;
   }
 
-  :global(.theme-dark) .pcc-root {
+  .theme-dark .pcc-root {
     --pc-bg: rgba(15, 23, 42, 0.6);
     --pc-card-bg: rgba(255, 255, 255, 0.03);
     --pc-border: rgba(255, 255, 255, 0.1);
