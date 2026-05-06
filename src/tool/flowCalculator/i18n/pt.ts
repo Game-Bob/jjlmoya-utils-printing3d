@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'É o volume total de filamento extrudado por segundo. É calculado multiplicando três variáveis principais: velocidade de impressão, largura da linha e altura da camada. Se você tentar extrudar mais plástico do que o seu bloco de aquecimento pode derreter, você enfrentará a temida <strong>subextrusão</strong>.',
     },
   ],
-  faqTitle: 'Perguntas Frequentes',
-  bibliographyTitle: 'Referências',
   faq: [
     {
       question: 'Qual é o fluxo máximo da minha impressora?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'A largura da linha é o multiplicador mais direto junto com a altura da camada. Se você passar de 0,4 mm para 0,6 mm de largura à mesma velocidade, você está exigindo 50% mais fluxo da sua extrusora.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Taxa de fluxo e limites de velocidade',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Calibração',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Calibração de Taxa de Fluxo',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configure seu hardware',

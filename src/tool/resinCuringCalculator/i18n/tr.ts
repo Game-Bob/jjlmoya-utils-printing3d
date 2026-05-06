@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Bir reçine 3D yazıcı baskıyı bitirdiğinde, parça teknisyenlerin <strong>"green state" (çiğ durum)</strong> dediği haldedir. Her ne kadar nihai şekline sahip olsa da, polimerin moleküler zincirleri tam olarak çapraz bağlanmamıştır. UV kürleme, bu çapraz bağlanmayı tamamlayarak yapışkanlığı giderir ve sertliği, mukavemeti ve termal kararlılığı artırır.',
     },
   ],
-  faqTitle: 'Sıkça Sorulan Sorular',
-  bibliographyTitle: 'Referanslar',
   faq: [
     {
       question: 'UV reçine kürleme ne kadar sürer?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Bu, aşırı kürleme veya aşırı sıcaklık etkisidir. Süreyi azaltmak için hesaplayıcımızdaki "Şeffaf" faktörünü kullanın ve LED\'leri en az 5 cm uzakta tutun.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Reçine Baskıların Son Kürlemesi',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV Kürleme Bilimi',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Ekipmanınızı yapılandırın',

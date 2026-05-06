@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'レジン3Dプリンターでプリントが終了した直後の状態を、技術者は<strong>「グリーンステート」</strong>と呼びます。最終的な形は成していますが、ポリマーの分子鎖は完全には架橋されていません。UV硬化によってこの架橋を完了させ、ベタつきを取り除き、硬度、強度、熱安定性を向上させます。',
     },
   ],
-  faqTitle: 'よくある質問',
-  bibliographyTitle: '参考文献',
   faq: [
     {
       question: 'UVレジンの硬化にはどのくらいの時間がかかりますか？',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: '過剰な硬化、または過度の温度上昇による影響です。当計算機の「透明」設定を使用して時間を短縮し、LEDから少なくとも5cm以上離して配置してください。',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - レジンプリントのポストキュア',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV硬化の科学',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: '機器を設定する',

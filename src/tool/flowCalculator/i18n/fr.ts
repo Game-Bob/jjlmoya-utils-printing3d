@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'C\'est le volume total de filament extrudé par seconde. Il est calculé en multipliant trois variables clés: la vitesse d\'impression, la largeur de ligne et la hauteur de couche. Si vous essayez d\'extruder plus de plastique que votre bloc chauffant ne peut fondre, vous ferez face à la redoutée <strong>sous-extrusion</strong>.',
     },
   ],
-  faqTitle: 'Questions Fréquemment Posées',
-  bibliographyTitle: 'Références',
   faq: [
     {
       question: 'Quel est le débit maximal de mon imprimante?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'La largeur de ligne est le multiplicateur le plus direct avec la hauteur de couche. Si vous passez de 0,4 mm à 0,6 mm de largeur à la même vitesse, vous demandez 50% plus de débit à votre extrudeur.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Limites de débit et de vitesse',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'Wiki OrcaSlicer: Étalonnage',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Étalonnage du Débit',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configurez votre matériel',

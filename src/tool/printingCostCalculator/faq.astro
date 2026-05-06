@@ -11,4 +11,4 @@ const { locale = 'es' } = Astro.props;
 const content = await printingCostCalculator.i18n[locale]?.();
 ---
 
-{content && <FAQSection items={content.faq} title={content.faqTitle} inLanguage={locale} />}
+{content && <FAQSection items={content.faq} />}

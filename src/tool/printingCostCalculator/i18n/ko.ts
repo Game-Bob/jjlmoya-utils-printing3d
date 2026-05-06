@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
@@ -162,23 +163,8 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
       ],
     },
   ],
-  faqTitle: '3D 출력 비용에 대한 자주 묻는 질문',
   faq: faqData,
-  bibliographyTitle: '참고 문헌 및 리소스',
-  bibliography: [
-    {
-      name: 'PrusaPrinters: 3D 프린팅 비용 계산하기',
-      url: 'https://blog.prusa3d.com/es/calculadora-precio-impresion-3d_38905/',
-    },
-    {
-      name: 'Simplify3D: 재료 및 비용 추정',
-      url: 'https://forum.simplify3d.com/viewtopic.php?t=11758',
-    },
-    {
-      name: '3DHubs: 적층 제조 비용 가이드',
-      url: 'https://www.hubs.com/knowledge-base/cost-3d-printing/',
-    },
-  ],
+  bibliography,
   howTo: howToData,
   schemas: [faqSchema, howToSchema, appSchema],
 };

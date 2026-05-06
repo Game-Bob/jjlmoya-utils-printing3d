@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Lorsqu\'une imprimante 3D en résine termine l\'impression, la pièce est dans ce que les techniciens appellent l\'<strong>«état vert»</strong>. Bien qu\'elle ait sa forme finale, les chaînes moléculaires du polymère ne sont pas complètement réticulées. La polymérisation UV complète la réticulation, éliminant la viscosité et améliorant la dureté, la résistance et la stabilité thermique.',
     },
   ],
-  faqTitle: 'Questions Fréquemment Posées',
-  bibliographyTitle: 'Références',
   faq: [
     {
       question: 'Combien de temps faut-il pour polymériser la résine UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'C\'est l\'effet d\'une surpolymérisation ou d\'une température excessive. Utilisez le facteur «Transparent» dans notre calculatrice pour réduire le temps et gardez les LEDs à au moins 5cm de distance.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Post-curing Resin Prints',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV Curing Science',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configurez votre équipement',

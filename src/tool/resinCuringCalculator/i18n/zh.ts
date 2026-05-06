@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: '当树脂 3D 打印机完成打印时，部件处于技术人员所称的<strong>“湿坯状态” (green state)</strong>。虽然已具有最终形状，但聚合物的分子链尚未完全交联。UV 固化完成这种交联，消除粘性并提高硬度、强度和热稳定性。',
     },
   ],
-  faqTitle: '常见问题',
-  bibliographyTitle: '参考文献',
   faq: [
     {
       question: 'UV 树脂固化需要多长时间？',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: '这是过固化或温度过高的后果。使用我们计算器中的“透明”参数来缩短时间，并将 LED 保持在至少 5cm 以外。',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - 树脂打印件的后固化',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV 固化的科学',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: '配置设备',

@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'It\'s the total volume of filament extruded per second. It\'s calculated by multiplying three key variables: print speed, line width, and layer height. If you try to extrude more plastic than your heater block can melt, you\'ll face dreaded <strong>underextrusion</strong>.',
     },
   ],
-  faqTitle: 'Frequently Asked Questions',
-  bibliographyTitle: 'References',
   faq: [
     {
       question: 'What is the maximum flow of my printer?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Line width is the most direct multiplier along with layer height. If you go from 0.4mm to 0.6mm width at the same speed, you\'re demanding 50% more flow from your extruder.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Flow rate and speed limits',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Calibration',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Flow Rate Calibration',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configure your hardware',

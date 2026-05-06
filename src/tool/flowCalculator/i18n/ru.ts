@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Это общий объем филамента, экструдируемого в секунду. Он рассчитывается путем умножения трех ключевых переменных: скорости печати, ширины линии и высоты слоя. Если вы попытаетесь выдавить больше пластика, чем может расплавить ваш нагревательный блок, вы столкнетесь с ужасным <strong>недоэкструдом (underextrusion)</strong>.',
     },
   ],
-  faqTitle: 'Часто задаваемые вопросы',
-  bibliographyTitle: 'Ссылки',
   faq: [
     {
       question: 'Каков максимальный поток у моего принтера?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Ширина линии является наиболее прямым множителем наряду с высотой слоя. Если вы перейдете с ширины 0,4 мм на 0,6 мм при той же скорости, вы потребуете от экструдера на 50% больше потока.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Скорость потока и пределы скорости',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Калибровка',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Калибровка скорости потока',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Настройте ваше оборудование',

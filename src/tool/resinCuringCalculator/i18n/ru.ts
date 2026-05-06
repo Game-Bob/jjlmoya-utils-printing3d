@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Когда 3D-принтер для печати смолой завершает печать, деталь находится в состоянии, которое технические специалисты называют <strong>"green state" (сырое состояние)</strong>. Хотя она имеет свою окончательную форму, молекулярные цепи полимера не полностью сшиты. УФ-отверждение завершает сшивание, устраняя липкость и улучшая твердость, прочность и термическую стабильность.',
     },
   ],
-  faqTitle: 'Часто задаваемые вопросы',
-  bibliographyTitle: 'Источники',
   faq: [
     {
       question: 'Как долго длится отверждение УФ-смолы?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Это эффект чрезмерного отверждения или слишком высокой температуры. Используйте фактор «Прозрачный» в нашем калькуляторе, чтобы сократить время, и держите светодиоды на расстоянии не менее 5 см.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Доотверждение отпечатков из смолы',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Наука УФ-отверждения',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Настройте ваше оборудование',

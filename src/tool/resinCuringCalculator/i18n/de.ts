@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Wenn ein Harz-3D-Drucker den Druck beendet, befindet sich das Teil im sogenannten <strong>"Green State"</strong>. Obwohl es seine endgültige Form hat, sind die Molekülketten des Polymers noch nicht vollständig vernetzt. Die UV-Aushärtung schließt diese Vernetzung ab, beseitigt die Klebrigkeit und verbessert Härte, Festigkeit und thermische Stabilität.',
     },
   ],
-  faqTitle: 'Häufig gestellte Fragen',
-  bibliographyTitle: 'Referenzen',
   faq: [
     {
       question: 'Wie lange dauert die UV-Harz-Aushärtung?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Das ist die Folge von Überhärtung oder zu hoher Temperatur. Verwenden Sie den Faktor "Transparent" in unserem Rechner, um die Zeit zu verkürzen, und halten Sie die LEDs mindestens 5 cm entfernt.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Nachhärtung von Harzdrucken',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Wissenschaft der UV-Aushärtung',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurieren Sie Ihre Ausrüstung',

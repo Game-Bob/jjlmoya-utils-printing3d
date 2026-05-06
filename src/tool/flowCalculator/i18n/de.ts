@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Es handelt sich um das Gesamtvolumen des pro Sekunde extrudierten Filaments. Er wird berechnet, indem drei Schlüsselvariablen multipliziert werden: Druckgeschwindigkeit, Linienbreite und Schichthöhe. Wenn Sie versuchen, mehr Kunststoff zu extrudieren, als Ihr Heizblock schmelzen kann, werden Sie mit gefürchteter <strong>Unterextrusion</strong> konfrontiert.',
     },
   ],
-  faqTitle: 'Häufig gestellte Fragen',
-  bibliographyTitle: 'Referenzen',
   faq: [
     {
       question: 'Was ist der maximale Durchfluss meines Druckers?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Die Linienbreite ist zusammen mit der Schichthöhe der direkteste Multiplikator. Wenn Sie bei gleicher Geschwindigkeit von 0,4 mm auf 0,6 mm Breite gehen, verlangen Sie Ihrem Extruder 50% mehr Durchfluss ab.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Durchflussrate und Geschwindigkeitsgrenzen',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Kalibrierung',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Kalibrierung der Durchflussrate',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurieren Sie Ihre Hardware',

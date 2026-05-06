@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'När en 3D-skrivare har skrivit klart en del i harts befinner sig delen i det som tekniker kallar <strong>"grönt tillstånd" (green state)</strong>. Även om den har sin slutliga form, är polymerens molekylkedjor inte helt tvärbundna. UV-härdning fullbordar tvärbindningen, eliminerar klibbighet och förbättrar hårdhet, styrka och termisk stabilitet.',
     },
   ],
-  faqTitle: 'Vanliga frågor',
-  bibliographyTitle: 'Referenser',
   faq: [
     {
       question: 'Hur lång tid tar härdning av UV-harts?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Det är effekten av överhärdning eller för hög temperatur. Använd faktorn "Transparent" i vår kalkylator för att minska tiden och håll LED-lamporna minst 5 cm bort.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Efterhärdning av hartutskrifter',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Vetenskapen bakom UV-härdning',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurera din utrustning',

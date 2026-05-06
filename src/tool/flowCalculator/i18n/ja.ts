@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'これは、1秒間に押し出されるフィラメントの総体積のことです。プリント速度、ライン幅、レイヤー高の3つの変数を掛け合わせることで計算されます。ヒーターブロックが溶かせる量以上のプラスチックを押し出そうとすると、恐ろしい<strong>押し出し不足（アンダーエクストリュージョン）</strong>が発生します。',
     },
   ],
-  faqTitle: 'よくある質問',
-  bibliographyTitle: '参考文献',
   faq: [
     {
       question: '自分のプリンターの最大流量はどれくらいですか？',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'ライン幅はレイヤー高と並んで、フローに直接的な影響を与える要素です。同じ速度でライン幅を0.4mmから0.6mmに変更すると、エクストルーダーに対して50%多いフローを要求することになります。',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: フローレートと速度限界',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: キャリブレーション',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: フローレート・キャリブレーション',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'ハードウェアを設定',

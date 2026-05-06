@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Quando una stampante 3D a resina completa la stampa, il pezzo si trova in quello che i tecnici chiamano <strong>"stato verde" (green state)</strong>. Sebbene abbia la sua forma finale, le catene molecolari del polimero non sono completamente reticolate. La polimerizzazione UV completa la reticolazione, eliminando l\'appiccicosità e migliorando durezza, resistenza e stabilità termica.',
     },
   ],
-  faqTitle: 'Domande Frequenti',
-  bibliographyTitle: 'Riferimenti',
   faq: [
     {
       question: 'Quanto tempo richiede la polimerizzazione della resina UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'È l\'effetto di una sovra-polimerizzazione o di una temperatura eccessiva. Usa il fattore "Trasparente" nel nostro calcolatore per ridurre il tempo e tieni i LED ad almeno 5cm di distanza.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Post-polimerizzazione delle stampe a resina',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: La Scienza della Polimerizzazione UV',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configura la tua attrezzatura',

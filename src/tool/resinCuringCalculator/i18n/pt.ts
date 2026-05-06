@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Quando uma impressora 3D de resina termina a impressão, a peça está naquilo que os técnicos chamam de <strong>"estado verde" (green state)</strong>. Embora tenha a sua forma final, as cadeias moleculares do polímero não estão completamente ligadas entre si. A cura UV completa esta ligação, eliminando a viscosidade e melhorando a dureza, resistência e estabilidade térmica.',
     },
   ],
-  faqTitle: 'Perguntas Frequentes',
-  bibliographyTitle: 'Referências',
   faq: [
     {
       question: 'Quanto tempo demora a cura da resina UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'É o efeito de sobrecura ou temperatura excessiva. Use o fator "Transparente" na nossa calculadora para reduzir o tempo e mantenha os LED a pelo menos 5 cm de distância.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Pós-cura de Impressões em Resina',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Ciência da Cura UV',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configure o seu equipamento',

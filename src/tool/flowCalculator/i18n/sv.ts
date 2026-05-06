@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Det är den totala volymen filament som extruderas per sekund. Det beräknas genom att multiplicera tre nyckelvariabler: utskriftshastighet, linjebredd och lagerhöjd. Om du försöker extrudera mer plast än vad ditt värmeblock kan smälta, kommer du att stöta på den fruktade <strong>underextrudering (underextrusion)</strong>.',
     },
   ],
-  faqTitle: 'Vanliga frågor',
-  bibliographyTitle: 'Referenser',
   faq: [
     {
       question: 'Vad är det maximala flödet på min skrivare?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Linjebredd är den mest direkta multiplikatorn tillsammans med lagerhöjd. Om du går från 0,4 mm till 0,6 mm bredd vid samma hastighet kräver du 50 % mer flöde från din extruder.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Flödeshastighet och hastighetsgränser',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Kalibrering',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Kalibrering av flödeshastighet',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurera din hårdvara',

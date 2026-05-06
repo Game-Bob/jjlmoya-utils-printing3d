@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Wanneer een resin 3D-printer klaar is met printen, bevindt het onderdeel zich in wat technici de <strong>"groene staat"</strong> noemen. Hoewel het zijn uiteindelijke vorm heeft, zijn de moleculaire ketens van het polymeer niet volledig vernet. UV-uitharding voltooit de vernetting, elimineert de plakkerigheid en verbetert de hardheid, sterkte en thermische stabiliteit.',
     },
   ],
-  faqTitle: 'Veelgestelde vragen',
-  bibliographyTitle: 'Referenties',
   faq: [
     {
       question: 'Hoe lang duurt het uitharden van UV-resin?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Het is het effect van over-uitharding of een te hoge temperatuur. Gebruik de "Transparant" factor in onze calculator om de tijd te verkorten en houd de LED\'s op ten minste 5 cm afstand.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Na-uitharding van resin-prints',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Wetenschap van UV-uitharding',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configureer je apparatuur',

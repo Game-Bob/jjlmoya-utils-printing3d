@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: '레진 3D 프린터가 출력을 마친 직후의 상태를 기술적으로 <strong>"그린 스테이트(green state)"</strong>라고 부릅니다. 최종 형태는 갖추고 있지만 폴리머 분자 사슬이 완전히 가교되지 않은 상태입니다. UV 경화는 이 가교를 완료하여 끈적임을 없애고 경도, 강도 및 열 안정성을 향상시킵니다.',
     },
   ],
-  faqTitle: '자주 묻는 질문',
-  bibliographyTitle: '참고 자료',
   faq: [
     {
       question: 'UV 레진 경화는 얼마나 걸리나요?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: '과경화 또는 과도한 온도의 영향입니다. 저희 계산기의 "투명" 설정을 사용하여 경화 시간을 줄이고, LED에서 최소 5cm 이상의 거리를 유지하세요.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - 레진 출력물 후경화',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV 경화 과학',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: '장비 구성',

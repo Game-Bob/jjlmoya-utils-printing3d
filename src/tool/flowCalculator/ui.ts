@@ -25,6 +25,4 @@ export interface FlowCalculatorUI extends Record<string, string> {
   chartSpeedLabel: string;
   chartSafeLabel: string;
   copyButton: string;
-  faqTitle: string;
-  bibliographyTitle: string;
 }

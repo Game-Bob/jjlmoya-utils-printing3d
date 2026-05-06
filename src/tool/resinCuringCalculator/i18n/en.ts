@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'When a resin 3D printer finishes printing, the piece is in what technicians call the <strong>"green state"</strong>. Although it has its final shape, the polymer\'s molecular chains are not completely cross-linked. UV curing completes the cross-linking, eliminating stickiness and improving hardness, strength, and thermal stability.',
     },
   ],
-  faqTitle: 'Frequently Asked Questions',
-  bibliographyTitle: 'References',
   faq: [
     {
       question: 'How long does UV resin curing take?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'It\'s the effect of over-curing or excessive temperature. Use the "Transparent" factor in our calculator to reduce time and keep LEDs at least 5cm away.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Post-curing Resin Prints',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV Curing Science',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configure your equipment',

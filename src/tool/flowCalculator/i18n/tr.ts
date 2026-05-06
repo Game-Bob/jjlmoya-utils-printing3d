@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Saniyede ekstrüde edilen toplam filament hacmidir. Üç temel değişkenin çarpılmasıyla hesaplanır: baskı hızı, çizgi genişliği ve katman yüksekliği. Eğer ısıtıcı bloğunuzun eritebileceğinden daha fazla plastik ekstrüde etmeye çalışırsanız, korkulan <strong>eksik ekstrüzyon (underextrusion)</strong> ile karşılaşırsınız.',
     },
   ],
-  faqTitle: 'Sıkça Sorulan Sorular',
-  bibliographyTitle: 'Referanslar',
   faq: [
     {
       question: 'Yazıcımın maksimum akışı nedir?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Çizgi genişliği, katman yüksekliği ile birlikte en doğrudan çarpandır. Aynı hızda 0,4 mm\'den 0,6 mm genişliğe geçerseniz, ekstrüderinizden %50 daha fazla akış talep etmiş olursunuz.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Akış hızı ve hız limitleri',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Kalibrasyon',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Akış Hızı Kalibrasyonu',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Donanımınızı yapılandırın',

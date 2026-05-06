@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Jest to całkowita objętość filamentu wytłaczanego na sekundę. Oblicza się ją mnożąc trzy kluczowe zmienne: prędkość druku, szerokość linii i wysokość warstwy. Jeśli spróbujesz wytłaczać więcej plastiku, niż Twój blok grzejny jest w stanie stopić, napotkasz przerażającą <strong>niedostateczną ekstruzję (underextrusion)</strong>.',
     },
   ],
-  faqTitle: 'Często zadawane pytania',
-  bibliographyTitle: 'Referencje',
   faq: [
     {
       question: 'Jaki jest maksymalny przepływ mojej drukarki?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Szerokość linii jest najbardziej bezpośrednim mnożnikiem wraz z wysokością warstwy. Jeśli przejdziesz z 0,4 mm na 0,6 mm szerokości przy tej samej prędkości, będziesz wymagać o 50% większego przepływu od swojego ekstrudera.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Natężenie przepływu i limity prędkości',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Kalibracja',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Kalibracja Natężenia Przepływu',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Skonfiguruj swój sprzęt',

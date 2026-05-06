@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Cuando una impresora 3D de resina termina de imprimir, la pieza se encuentra en un estado que los técnicos llaman <strong>"estado verde"</strong>. Aunque tiene su forma final, las cadenas moleculares del plástico no están completamente entrelazadas. El curado UV completa la reticulación, eliminando la pegajosidad y mejorando dureza, resistencia y estabilidad térmica.',
     },
   ],
-  faqTitle: 'Preguntas Frecuentes',
-  bibliographyTitle: 'Referencias',
   faq: [
     {
       question: '¿Cuánto tiempo hay que curar la resina UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Es el efecto del sobre-curado o el exceso de temperatura. Usa el factor de "Transparente" en nuestra calculadora para reducir el tiempo y evita que los LEDs estén a menos de 5cm.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Post-curing Resin Prints',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: UV Curing Science',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configura tu equipamiento',

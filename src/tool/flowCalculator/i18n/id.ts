@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'Ini adalah volume total filamen yang diekstrusi per detik. Dihitung dengan mengalikan tiga variabel kunci: kecepatan cetak, lebar garis, dan tinggi lapisan. Jika Anda mencoba mengekstrusi lebih banyak plastik daripada yang bisa dilelehkan oleh blok pemanas, Anda akan menghadapi <strong>underextrusion</strong>.',
     },
   ],
-  faqTitle: 'Pertanyaan yang Sering Diajukan',
-  bibliographyTitle: 'Referensi',
   faq: [
     {
       question: 'Berapa aliran maksimum printer saya?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'Lebar garis adalah pengali paling langsung bersama dengan tinggi lapisan. Jika Anda mengubah lebar dari 0,4mm ke 0,6mm pada kecepatan yang sama, Anda menuntut aliran 50% lebih banyak dari ekstruder Anda.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Laju aliran dan batas kecepatan',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Kalibrasi',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Kalibrasi Laju Aliran',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurasi perangkat keras Anda',

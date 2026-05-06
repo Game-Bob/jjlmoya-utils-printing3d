@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: 'È il volume totale di filamento estruso al secondo. Si calcola moltiplicando tre variabili chiave: velocità di stampa, larghezza della linea e altezza dello strato. Se provi a estrudere più plastica di quella che il tuo blocco riscaldante può fondere, andrai incontro alla temuta <strong>sottoestrusione</strong>.',
     },
   ],
-  faqTitle: 'Domande Frequenti',
-  bibliographyTitle: 'Riferimenti',
   faq: [
     {
       question: 'Qual è il flusso massimo della mia stampante?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: 'La larghezza della linea è il moltiplicatore più diretto insieme all\'altezza dello strato. Se passi da 0,4mm a 0,6mm di larghezza alla stessa velocità, stai richiedendo il 50% di flusso in più al tuo estrusore.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: Portata e limiti di velocità',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: Calibrazione',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: Calibrazione Portata Flusso',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Configura il tuo hardware',

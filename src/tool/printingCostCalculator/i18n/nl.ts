@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
@@ -162,23 +163,8 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
       ],
     },
   ],
-  faqTitle: 'Veelgestelde Vragen over 3D-Kosten',
   faq: faqData,
-  bibliographyTitle: 'Bibliografie en Bronnen',
-  bibliography: [
-    {
-      name: 'PrusaPrinters: 3D-printkosten berekenen',
-      url: 'https://blog.prusa3d.com/es/calculadora-precio-impresion-3d_38905/',
-    },
-    {
-      name: 'Simplify3D: Schatting van Materiaal en Kosten',
-      url: 'https://forum.simplify3d.com/viewtopic.php?t=11758',
-    },
-    {
-      name: '3DHubs: Gids voor kosten in additive manufacturing',
-      url: 'https://www.hubs.com/knowledge-base/cost-3d-printing/',
-    },
-  ],
+  bibliography,
   howTo: howToData,
   schemas: [faqSchema, howToSchema, appSchema],
 };

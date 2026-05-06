@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Ketika printer 3D resin selesai mencetak, bagian tersebut berada dalam apa yang oleh teknisi disebut sebagai <strong>"green state"</strong>. Meskipun sudah memiliki bentuk akhirnya, rantai molekul polimer belum sepenuhnya terhubung silang. Penyembuhan UV melengkapi koneksi silang ini, menghilangkan rasa lengket dan meningkatkan kekerasan, kekuatan, serta stabilitas termal.',
     },
   ],
-  faqTitle: 'Pertanyaan yang Sering Diajukan',
-  bibliographyTitle: 'Referensi',
   faq: [
     {
       question: 'Berapa lama waktu penyembuhan resin UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Itu adalah efek dari penyembuhan berlebihan atau suhu yang terlalu tinggi. Gunakan faktor "Transparan" di kalkulator kami untuk mengurangi waktu dan jaga jarak LED minimal 5cm.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Post-curing Resin Prints',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Ilmu Penyembuhan UV',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Konfigurasi peralatan Anda',

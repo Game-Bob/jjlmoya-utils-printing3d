@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { ShrinkageCalculatorUI } from '../ui';
@@ -193,23 +194,8 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
       ],
     },
   ],
-  faqTitle: 'よくある質問',
   faq: faqData,
-  bibliographyTitle: '参考文献',
-  bibliography: [
-    {
-      name: 'Simplify3D: 寸法精度と収縮について',
-      url: 'https://www.simplify3d.com/resources/print-quality-troubleshooting/dimensional-accuracy/',
-    },
-    {
-      name: 'Prusa Research: 材料表と収縮係数',
-      url: 'https://help.prusa3d.com/materials',
-    },
-    {
-      name: 'MatterHackers: 3Dプリント材料の収縮を理解する',
-      url: 'https://www.matterhackers.com/articles/how-to-fix-shrinkage-and-warping',
-    },
-  ],
+  bibliography,
   howTo: howToData,
   schemas: [faqSchema, howToSchema, appSchema],
 };

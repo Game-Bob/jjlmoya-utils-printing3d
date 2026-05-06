@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { ResinCuringCalculatorUI } from '../ui';
 
@@ -61,8 +62,6 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       html: 'Gdy drukarka 3D z żywicy kończy drukowanie, element znajduje się w stanie, który technicy nazywają <strong>"green state"</strong>. Chociaż ma on swój ostateczny kształt, łańcuchy molekularne polimeru nie są w pełni usieciowane. Utwardzanie UV dopełnia proces usieciowania, eliminując lepkość oraz poprawiając twardość, wytrzymałość i stabilność termiczną.',
     },
   ],
-  faqTitle: 'Często zadawane pytania',
-  bibliographyTitle: 'Referencje',
   faq: [
     {
       question: 'Jak długo trwa utwardzanie żywicy UV?',
@@ -85,16 +84,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
       answer: 'Jest to efekt nadmiernego utwardzania lub zbyt wysokiej temperatury. Użyj parametru "Przezroczysty" w naszym kalkulatorze, aby skrócić czas i trzymaj diody LED w odległości co najmniej 5 cm.',
     },
   ],
-  bibliography: [
-    {
-      name: 'Formlabs - Utwardzanie wtórne wydruków z żywicy',
-      url: 'https://formlabs.com/blog/how-to-post-cure-3d-prints/',
-    },
-    {
-      name: 'E3D-Online: Nauka o utwardzaniu UV',
-      url: 'https://e3d-online.com/pages/resin-printing-guide',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: 'Skonfiguruj swój sprzęt',

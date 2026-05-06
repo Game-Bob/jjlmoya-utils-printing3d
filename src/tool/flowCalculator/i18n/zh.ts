@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: '它是每秒挤出的耗材总流量。它是由三个关键变量相乘计算得出的：打印速度、线宽和层高。如果您尝试挤出的塑料超过了加热块所能熔化的量，您将面临令人头疼的 <strong>挤出不足 (underextrusion)</strong>。',
     },
   ],
-  faqTitle: '常见问题',
-  bibliographyTitle: '参考文献',
   faq: [
     {
       question: '我的打印机的最大流量是多少？',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: '线宽与层高一样，是最直接的相乘系数。如果您在相同速度下将宽度从 0.4mm 增加到 0.6mm，您要求挤出机提供的流量增加了 50%。',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online：流量和速度限制',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki：校准',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab：流量校准',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: '配置硬件',

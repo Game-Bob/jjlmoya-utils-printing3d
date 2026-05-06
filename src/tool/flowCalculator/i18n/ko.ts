@@ -1,3 +1,4 @@
+import { bibliography } from '../bibliography';
 import type { ToolLocaleContent } from '../../../types';
 import type { FlowCalculatorUI } from '../ui';
 
@@ -53,8 +54,6 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       html: '초당 압출되는 필라멘트의 총 부피를 말합니다. 출력 속도, 라인 너비, 레이어 높이의 세 가지 주요 변수를 곱하여 계산합니다. 히터 블록이 녹일 수 있는 양보다 더 많은 플라스틱을 압출하려고 하면, 흔히 말하는 <strong>압출 부족(underextrusion)</strong> 현상이 발생합니다.',
     },
   ],
-  faqTitle: '자주 묻는 질문',
-  bibliographyTitle: '참고 자료',
   faq: [
     {
       question: '제 프린터의 최대 유량은 얼마인가요?',
@@ -69,20 +68,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
       answer: '라인 너비는 레이어 높이와 함께 가장 직접적인 곱하기 계수입니다. 같은 속도에서 라인 너비를 0.4mm에서 0.6mm로 변경하면, 익스트루더에 50% 더 많은 유량을 요구하게 됩니다.',
     },
   ],
-  bibliography: [
-    {
-      name: 'E3D-Online: 유량 및 속도 한계',
-      url: 'https://e3d-online.com/pages/revo-high-flow-volumetric-flow-rate-calculator',
-    },
-    {
-      name: 'OrcaSlicer Wiki: 캘리브레이션',
-      url: 'https://github.com/OrcaSlicer/OrcaSlicer/wiki/Calibration',
-    },
-    {
-      name: 'Bambu Lab: 유량 캘리브레이션',
-      url: 'https://wiki.bambulab.com/en/software/bambu-studio/calibration_flow_rate',
-    },
-  ],
+  bibliography,
   howTo: [
     {
       name: '하드웨어 구성',
