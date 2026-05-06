@@ -83,7 +83,7 @@ interface Props {
 
 const { Component, locale, content, localeUrls, allToolsNav, categoryTitle, englishSlug } = Astro.props;
 
-const cssFiles = import.meta.glob("../../tool/**/*.css", { query: "?raw", import: "default" });
+const cssFiles = import.meta.glob("../../tool/*/*.css", { query: "?raw", import: "default" });
 const cssKey = Object.keys(cssFiles).find((k) => k.endsWith(`/${englishSlug}.css`));
 const toolCss = cssKey ? await cssFiles[cssKey]() as string : "";
 
@@ -106,7 +106,7 @@ const titleBase = words.slice(1).join(" ") || "";
     tools={allToolsNav}
   />
   <Fragment slot="head">
-    {toolCss && <style set:html={toolCss} />}
+    {toolCss ? <Fragment set:html={`<style is:inline>${toolCss}</style>`} /> : null}
     {
       ( content.schemas ?? []).map((schema: unknown) => (
         <script
