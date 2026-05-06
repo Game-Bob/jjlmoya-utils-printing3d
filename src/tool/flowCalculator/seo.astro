@@ -8,8 +8,8 @@ interface Props {
 }
 
 const { locale = 'es' } = Astro.props;
-const content = await FLOW_CALCULATOR_TOOL.entry.i18n[locale]?.();
+const content = await FLOW_CALCULATOR_TOOL.i18n[locale]?.();
 if (!content) return null;
 ---
 
-<SEORenderer content={{ locale: locale as string, sections: content.seo }} />
+{content.seo?.length > 0 && <SEORenderer content={{ locale, sections: content.seo }} />}

@@ -1,7 +1,7 @@
 ---
 import { SEORenderer } from '@jjlmoya/utils-shared';
 import { printingCostCalculator } from './index';
-import type { KnownLocale } from '../../../types';
+import type { KnownLocale } from '../../types';
 
 interface Props {
   locale?: KnownLocale;
@@ -12,4 +12,4 @@ const content = await printingCostCalculator.i18n[locale]?.();
 if (!content) return null;
 ---
 
-<SEORenderer content={{ locale: locale as string, sections: content.seo }} />
+{content.seo?.length > 0 && <SEORenderer content={{ locale, sections: content.seo }} />}

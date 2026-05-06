@@ -1,27 +1,15 @@
 ---
-import { SEORenderer } from "@jjlmoya/utils-shared";
-import type { KnownLocale } from "../../types";
-import { content as esContent } from "./i18n/es";
-import { content as enContent } from "./i18n/en";
-import { content as frContent } from "./i18n/fr";
+import { SEORenderer } from '@jjlmoya/utils-shared';
+import { SHRINKAGE_CALCULATOR_TOOL } from './index';
+import type { KnownLocale } from '../../types';
 
 interface Props {
   locale?: KnownLocale;
 }
 
 const { locale = 'es' } = Astro.props;
-
-const contentMap = {
-  es: esContent,
-  en: enContent,
-  fr: frContent,
-};
-
-const content = contentMap[locale] || enContent;
-const seoContent = {
-  locale,
-  sections: content.seo,
-};
+const content = await SHRINKAGE_CALCULATOR_TOOL.i18n[locale]?.();
+if (!content) return null;
 ---
 
-<SEORenderer content={seoContent} />
+{content.seo?.length > 0 && <SEORenderer content={{ locale, sections: content.seo }} />}

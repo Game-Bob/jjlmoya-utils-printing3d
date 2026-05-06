@@ -34,16 +34,26 @@ export async function getStaticPaths() {
       ]),
     ) as Partial<Record<KnownLocale, string>>;
 
+    const firstLoader = entry.i18n.en ?? Object.values(entry.i18n)[0];
+    const englishSlug = firstLoader ? (await firstLoader()).slug : entry.id;
+
     for (const { locale, content } of localeContents) {
       const categoryTitle = (await printing3dCategory.i18n[locale]!()).title;
-      const allToolsNav = await Promise.all(
-        ALL_TOOLS.map(async ({ entry: navEntry }) => ({
-          id: navEntry.id,
-          title: (await navEntry.i18n[locale]!()).title,
-          href: `/${locale}/${(await navEntry.i18n[locale]!()).slug}`,
-          isActive: navEntry.id === entry.id,
-        })),
-      );
+      const allToolsNav = (
+        await Promise.all(
+          ALL_TOOLS.map(async ({ entry: navEntry }) => {
+            const loader = navEntry.i18n[locale] ?? navEntry.i18n.en;
+            if (!loader) return null;
+            const navContent = await loader();
+            return {
+              id: navEntry.id,
+              title: navContent.title,
+              href: `/${locale}/${navContent.slug}`,
+              isActive: navEntry.id === entry.id,
+            };
+          }),
+        )
+      ).filter(Boolean) as NavItem[];
       paths.push({
         params: { locale, slug: content.slug },
         props: { Component, locale, content, localeUrls, allToolsNav, categoryTitle },
@@ -67,12 +77,13 @@ interface Props {
   content: ToolLocaleContent;
   localeUrls: Partial<Record<KnownLocale, string>>;
   allToolsNav: NavItem[];
+  englishSlug: string;
   categoryTitle: string;
 }
 
 const { Component, locale, content, localeUrls, allToolsNav, categoryTitle } = Astro.props;
 
-const seoContent: UtilitySEOContent = { locale, sections: content.seo };
+const seoContent: UtilitySEOContent = { locale, sections: content.seo ?? [] };
 
 const words = content.title.split(" ");
 const titleHighlight = words[0] || "";
@@ -91,8 +102,9 @@ const titleBase = words.slice(1).join(" ") || "";
     tools={allToolsNav}
   />
   <Fragment slot="head">
+    {toolCss ? <Fragment set:html={`<style is:inline>${toolCss}</style>`} /> : null}
     {
-      content.schemas.map((schema: unknown) => (
+      ( content.schemas ?? []).map((schema: unknown) => (
         <script
           is:inline
           type="application/ld+json"
