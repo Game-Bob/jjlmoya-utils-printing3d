@@ -1,6 +1,6 @@
 ---
 import { SEORenderer } from '@jjlmoya/utils-shared';
-import { SHRINKAGE_CALCULATOR_TOOL } from './index';
+import { shrinkageCalculator } from './index';
 import type { KnownLocale } from '../../types';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { locale = 'es' } = Astro.props;
-const content = await SHRINKAGE_CALCULATOR_TOOL.i18n[locale]?.();
+const content = await shrinkageCalculator.i18n[locale]?.();
 if (!content) return null;
 ---
 

@@ -1,6 +1,6 @@
 ---
 import { SEORenderer } from '@jjlmoya/utils-shared';
-import { FLOW_CALCULATOR_TOOL } from './index';
+import { flowCalculator } from './index';
 import type { KnownLocale } from '../../types';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { locale = 'es' } = Astro.props;
-const content = await FLOW_CALCULATOR_TOOL.i18n[locale]?.();
+const content = await flowCalculator.i18n[locale]?.();
 if (!content) return null;
 ---
 
