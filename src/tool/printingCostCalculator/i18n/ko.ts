@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: '3D 프린팅의 실제 비용 계산: 필라멘트 그 이상을 고려하기',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

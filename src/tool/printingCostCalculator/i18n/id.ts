@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: 'Menghitung Biaya Nyata Cetak 3D: Lebih dari Sekadar Filamen',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

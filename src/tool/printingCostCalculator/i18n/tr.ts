@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: '3D Baskının Gerçek Maliyetini Hesaplamak: Filamentin Ötesi',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: 'De Echte Kosten van 3D-printen Berekenen: Meer dan Alleen Filament',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

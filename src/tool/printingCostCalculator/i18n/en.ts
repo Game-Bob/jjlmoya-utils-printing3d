@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: 'Calculating the Real Cost of 3D Printing: Beyond Filament',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

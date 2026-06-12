@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: '3Dプリントの真のコストを計算する：フィラメント以外の要素',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

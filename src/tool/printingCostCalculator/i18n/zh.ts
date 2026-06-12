@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: '计算 3D 打印的真实成本：耗材之外的细节',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

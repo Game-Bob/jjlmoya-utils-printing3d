@@ -272,3 +272,35 @@
     line-height: 1.6;
     font-weight: 500;
   }
+
+  @media (max-width: 600px) {
+    .pcc-root {
+      padding: 1rem;
+      border-radius: 1.25rem;
+    }
+
+    .section-card {
+      padding: 1.25rem;
+    }
+
+    .total-card {
+      padding: 2rem 1.25rem;
+    }
+
+    .total-value {
+      font-size: 3rem;
+    }
+
+    .suggested-value {
+      font-size: 2rem;
+    }
+
+    .breakdown-chart {
+      padding: 1.25rem;
+    }
+
+    .input-container input {
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+    }
+  }

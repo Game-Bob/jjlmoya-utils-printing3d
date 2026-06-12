@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: 'Beräkna den verkliga kostnaden för 3D-utskrift: Mer än bara filament',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

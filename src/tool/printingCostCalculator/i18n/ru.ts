@@ -107,7 +107,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'title',
       text: 'Расчет реальной стоимости 3D-печати: больше, чем просто филамент',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',
