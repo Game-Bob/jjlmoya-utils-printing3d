@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylonitrile Butadiene Styrene): 0,8% – 2,0%. È uno dei materiali più difficili per via del suo alto ritiro, che spesso causa "warping" (deformazione degli angoli).',
-        'ASA: 0,5% – 0,9%. Un\'alternativa all\'ABS resistente ai raccordi UV con un ritiro un po\' più contenuto.',
-        'Nylon (PA): 0,7% – 2,5%. A seconda che contenga fibre di carbonio o vetro, il ritiro può variare drasticamente.',
-        'PETG: 0,2% – 0,5%. Molto stabile dimensionalmente, ideale per parti meccaniche che non richiedono la resistenza termica dell\'ABS.',
-        'PLA: 0,1% – 0,3%. Lo standard di riferimento per facilità d\'uso; il suo ritiro è quasi trascurabile per la maggior parte degli utilizzi.',
+        'ABS (Acrylonitrile Butadiene Styrene): 0,8% - 2,0%. È uno dei materiali più difficili per via del suo alto ritiro, che spesso causa "warping" (deformazione degli angoli).',
+        'ASA: 0,5% - 0,9%. Un\'alternativa all\'ABS resistente ai raccordi UV con un ritiro un po\' più contenuto.',
+        'Nylon (PA): 0,7% - 2,5%. A seconda che contenga fibre di carbonio o vetro, il ritiro può variare drasticamente.',
+        'PETG: 0,2% - 0,5%. Molto stabile dimensionalmente, ideale per parti meccaniche che non richiedono la resistenza termica dell\'ABS.',
+        'PLA: 0,1% - 0,3%. Lo standard di riferimento per facilità d\'uso; il suo ritiro è quasi trascurabile per la maggior parte degli utilizzi.',
       ],
     },
     {

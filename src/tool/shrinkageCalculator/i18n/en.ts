@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylonitrile Butadiene Styrene): 0.8% – 2.0%. It is one of the most difficult materials due to its high shrinkage, which often causes "warping" (deformation of the corners).',
-        'ASA: 0.5% – 0.9%. A UV-resistant alternative to ABS with somewhat more contained shrinkage.',
-        'Nylon (PA): 0.7% – 2.5%. Depending on whether it has carbon or glass fiber loading, its shrinkage can vary drastically.',
-        'PETG: 0.2% – 0.5%. Very dimensionally stable, ideal for mechanical parts that do not require the thermal resistance of ABS.',
-        'PLA: 0.1% – 0.3%. The gold standard for ease of use; its shrinkage is almost negligible for most uses.',
+        'ABS (Acrylonitrile Butadiene Styrene): 0.8% - 2.0%. It is one of the most difficult materials due to its high shrinkage, which often causes "warping" (deformation of the corners).',
+        'ASA: 0.5% - 0.9%. A UV-resistant alternative to ABS with somewhat more contained shrinkage.',
+        'Nylon (PA): 0.7% - 2.5%. Depending on whether it has carbon or glass fiber loading, its shrinkage can vary drastically.',
+        'PETG: 0.2% - 0.5%. Very dimensionally stable, ideal for mechanical parts that do not require the thermal resistance of ABS.',
+        'PLA: 0.1% - 0.3%. The gold standard for ease of use; its shrinkage is almost negligible for most uses.',
       ],
     },
     {

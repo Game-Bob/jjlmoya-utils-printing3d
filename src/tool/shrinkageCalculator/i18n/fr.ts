@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { ShrinkageCalculatorUI } from '../ui';
 
 const slug = 'calculateur-retrait-impression-3d';
-const title = 'Calculateur de Retrait 3D : Facteur d\'Échelle et Shrinkage';
+const title = 'Calculateur de Retrait 3D: Facteur d\'Échelle et Shrinkage';
 const description = 'Calculez de combien vous devez mettre à l\'échelle vos conceptions 3D selon le matériau (ABS, Nylon, ASA) pour compenser le retrait thermique et obtenir des mesures exactes.';
 
 const faqData = [
@@ -104,12 +104,12 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
   seo: [
     {
       type: 'title',
-      text: 'Calculateur de Retrait en Impression 3D : Précision Dimensionnelle',
+      text: 'Calculateur de Retrait en Impression 3D: Précision Dimensionnelle',
       level: 1,
     },
     {
       type: 'paragraph',
-      html: 'Si vous êtes un passionné d\'<strong>impression 3D</strong>, il est fort probable que vous ayez été confronté à ce problème : vous concevez une pièce avec des mesures parfaites (par exemple, un cube de 20x20x20 mm), vous l\'imprimez, et en la mesurant avec le pied à coulisse vous découvrez qu\'elle mesure 19,7 mm. Que s\'est-il passé ? La réponse est le <strong>retrait du matériau</strong> ou <i>shrinkage</i>.',
+      html: 'Si vous êtes un passionné d\'<strong>impression 3D</strong>, il est fort probable que vous ayez été confronté à ce problème: vous concevez une pièce avec des mesures parfaites (par exemple, un cube de 20x20x20 mm), vous l\'imprimez, et en la mesurant avec le pied à coulisse vous découvrez qu\'elle mesure 19,7 mm. Que s\'est-il passé ? La réponse est le <strong>retrait du matériau</strong> ou <i>shrinkage</i>.',
     },
     {
       type: 'paragraph',
@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylonitrile Butadiène Styrène) : 0,8 % – 2,0 %. C\'est l\'un des matériaux les plus difficiles en raison de son retrait élevé, qui provoque souvent du "warping" (déformation des coins).',
-        'ASA : 0,5 % – 0,9 %. Une alternative à l\'ABS plus résistante aux UV et avec un retrait un peu plus contenu.',
-        'Nylon (PA) : 0,7 % – 2,5 %. Selon qu\'il a une charge de fibre de carbone ou de verre, son retrait peut varier considérablement.',
-        'PETG : 0,2 % – 0,5 %. Très stable dimensionnellement, idéal pour les pièces mécaniques qui ne nécessitent pas la résistance thermique de l\'ABS.',
-        'PLA : 0,1 % – 0,3 %. La norme de référence pour la facilité d\'utilisation ; son retrait est presque négligeable pour la plupart des usages.',
+        'ABS (Acrylonitrile Butadiène Styrène): 0,8 % - 2,0 %. C\'est l\'un des matériaux les plus difficiles en raison de son retrait élevé, qui provoque souvent du "warping" (déformation des coins).',
+        'ASA: 0,5 % - 0,9 %. Une alternative à l\'ABS plus résistante aux UV et avec un retrait un peu plus contenu.',
+        'Nylon (PA): 0,7 % - 2,5 %. Selon qu\'il a une charge de fibre de carbone ou de verre, son retrait peut varier considérablement.',
+        'PETG: 0,2 % - 0,5 %. Très stable dimensionnellement, idéal pour les pièces mécaniques qui ne nécessitent pas la résistance thermique de l\'ABS.',
+        'PLA: 0,1 % - 0,3 %. La norme de référence pour la facilité d\'utilisation ; son retrait est presque négligeable pour la plupart des usages.',
       ],
     },
     {
@@ -150,24 +150,24 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'De nombreux utilisateurs commettent l\'erreur de simplement "ajouter le pourcentage" (s\'il manque 2 %, ils mettent l\'échelle à 102 %). Cependant, mathématiquement, pour compenser une perte, l\'échelle doit être légèrement différente. La formule correcte utilisée par notre calculateur est : <br><strong>Facteur d\'Échelle = 1 / (1 - S)</strong>',
+      html: 'De nombreux utilisateurs commettent l\'erreur de simplement "ajouter le pourcentage" (s\'il manque 2 %, ils mettent l\'échelle à 102 %). Cependant, mathématiquement, pour compenser une perte, l\'échelle doit être légèrement différente. La formule correcte utilisée par notre calculateur est: <br><strong>Facteur d\'Échelle = 1 / (1 - S)</strong>',
     },
     {
       type: 'paragraph',
-      html: 'Où <strong>S</strong> est le pourcentage de retrait exprimé en décimales (ex : 0,02 pour 2 %). Par exemple, pour un matériau qui se rétracte de 2 %, le facteur d\'échelle est de 1,0204, ce qui signifie que dans le slicer (Cura, PrusaSlicer, Bambu Studio), nous devons régler l\'échelle sur <strong>102,04 %</strong>.',
+      html: 'Où <strong>S</strong> est le pourcentage de retrait exprimé en décimales (ex: 0,02 pour 2 %). Par exemple, pour un matériau qui se rétracte de 2 %, le facteur d\'échelle est de 1,0204, ce qui signifie que dans le slicer (Cura, PrusaSlicer, Bambu Studio), nous devons régler l\'échelle sur <strong>102,04 %</strong>.',
     },
     {
       type: 'title',
-      text: 'Étalonnage Manuel : Mesure Souhaitée vs Réelle',
+      text: 'Étalonnage Manuel: Mesure Souhaitée vs Réelle',
       level: 2,
     },
     {
       type: 'paragraph',
-      html: 'Le processus d\'étalonnage inverse est simple : imprimez un objet de test avec une mesure connue (par exemple, un cube d\'étalonnage de 100 mm). Une fois qu\'il est complètement froid (il est crucial d\'attendre au moins 30 minutes), mesurez la pièce avec un pied à coulisse numérique. Entrez les deux valeurs dans le calculateur et celui-ci vous donnera le pourcentage exact d\'ajustement pour cette bobine de filament.',
+      html: 'Le processus d\'étalonnage inverse est simple: imprimez un objet de test avec une mesure connue (par exemple, un cube d\'étalonnage de 100 mm). Une fois qu\'il est complètement froid (il est crucial d\'attendre au moins 30 minutes), mesurez la pièce avec un pied à coulisse numérique. Entrez les deux valeurs dans le calculateur et celui-ci vous donnera le pourcentage exact d\'ajustement pour cette bobine de filament.',
     },
     {
       type: 'title',
-      text: 'Retrait Non Uniforme : Le Problème des Axes X, Y et Z',
+      text: 'Retrait Non Uniforme: Le Problème des Axes X, Y et Z',
       level: 2,
     },
     {
@@ -187,10 +187,10 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'Température de l\'Extrudeur : À une température plus élevée, le matériau entre plus expansé mais subit également un refroidissement plus brutal.',
-        'Température du Plateau : Un plateau chaud empêche la base de la pièce de se rétracter plus vite que le haut, réduisant le warping.',
-        'Densité de Remplissage (Infill) : Les pièces très denses ont plus de masse de plastique exerçant une force de retrait interne vers le centre.',
-        'Ventilateur de Couche : Dans des matériaux comme l\'ABS, un ventilateur trop puissant peut provoquer des fissures et un retrait excessif et irrégulier.',
+        'Température de l\'Extrudeur: À une température plus élevée, le matériau entre plus expansé mais subit également un refroidissement plus brutal.',
+        'Température du Plateau: Un plateau chaud empêche la base de la pièce de se rétracter plus vite que le haut, réduisant le warping.',
+        'Densité de Remplissage (Infill): Les pièces très denses ont plus de masse de plastique exerçant une force de retrait interne vers le centre.',
+        'Ventilateur de Couche: Dans des matériaux comme l\'ABS, un ventilateur trop puissant peut provoquer des fissures et un retrait excessif et irrégulier.',
       ],
     },
   ],

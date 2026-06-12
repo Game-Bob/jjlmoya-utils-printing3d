@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
 const slug = 'calculateur-cout-impression-3d';
-const title = 'Calculateur de Coût d\'Impression 3D : Filament et Énergie';
+const title = 'Calculateur de Coût d\'Impression 3D: Filament et Énergie';
 const description = 'Calculez le prix réel de vos impressions 3D. Comprend le coût des matériaux, l\'électricité, l\'amortissement de la machine et la main-d\'œuvre.';
 
 const faqData = [
@@ -18,7 +18,7 @@ const faqData = [
   },
   {
     question: 'Qu\'est-ce que la marge de perte ?',
-    answer: 'C\'est le filament qui ne fait pas partie de la pièce finale : supports, radeau (raft), jupe (skirt) et purge initiale. Nous recommandons un minimum de 5 % pour être réaliste.',
+    answer: 'C\'est le filament qui ne fait pas partie de la pièce finale: supports, radeau (raft), jupe (skirt) et purge initiale. Nous recommandons un minimum de 5 % pour être réaliste.',
   },
 ];
 
@@ -81,7 +81,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     gramsUnit: 'grammes',
     spoolPriceLabel: 'Prix de la bobine (1kg)',
     spoolPriceUnit: '€/kg',
-    wasteMarginLabel: 'Marge de perte : ',
+    wasteMarginLabel: 'Marge de perte: ',
     energyTitle: 'Énergie et Temps',
     printTimeLabel: 'Temps d\'impression',
     hoursUnit: 'heures',
@@ -101,12 +101,12 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     electricityLabel: 'Électricité',
     machineLabel: 'Machine',
     laborLabel: 'Main-d\'œuvre',
-    proTip: 'Saviez-vous que chauffer le plateau à 100°C pour l\'ABS peut doubler le coût électrique par rapport au PLA ? N\'oubliez pas de compter les échecs : si 10 % de vos pièces échouent, votre coût réel est 10 % plus élevé.',
+    proTip: 'Saviez-vous que chauffer le plateau à 100°C pour l\'ABS peut doubler le coût électrique par rapport au PLA ? N\'oubliez pas de compter les échecs: si 10 % de vos pièces échouent, votre coût réel est 10 % plus élevé.',
   },
   seo: [
     {
       type: 'title',
-      text: 'Calcul du Coût Réel de l\'Impression 3D : Au-delà du Filament',
+      text: 'Calcul du Coût Réel de l\'Impression 3D: Au-delà du Filament',
       level: 2,
     },
     {
@@ -125,10 +125,10 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'summary',
       items: [
-        'Matériel et Perte : Comprend le poids de la pièce, mais aussi le plastique utilisé dans les supports, les jupes et les purges. Nous recommandons toujours d\'ajouter une marge de 5 à 10 % pour les échecs d\'impression possibles.',
-        'Consommation Électrique : Une imprimante 3D ne dépense pas la même chose en imprimant du PLA (plateau à 60°C) que de l\'ABS ou du Nylon (plateau à 100°C+). Le prix du kWh peut faire la différence sur les pièces longues.',
-        'Amortissement de la Machine : Chaque heure où l\'imprimante fonctionne, ses composants (courroies, ventilateurs, buses) s\'usent. Inclure un petit coût horaire vous permettra de payer les futures réparations.',
-        'Main-d\'œuvre : Votre temps est le plus précieux. La préparation du fichier, le nettoyage du plateau et le post-traitement de la pièce doivent être pris en compte.',
+        'Matériel et Perte: Comprend le poids de la pièce, mais aussi le plastique utilisé dans les supports, les jupes et les purges. Nous recommandons toujours d\'ajouter une marge de 5 à 10 % pour les échecs d\'impression possibles.',
+        'Consommation Électrique: Une imprimante 3D ne dépense pas la même chose en imprimant du PLA (plateau à 60°C) que de l\'ABS ou du Nylon (plateau à 100°C+). Le prix du kWh peut faire la différence sur les pièces longues.',
+        'Amortissement de la Machine: Chaque heure où l\'imprimante fonctionne, ses composants (courroies, ventilateurs, buses) s\'usent. Inclure un petit coût horaire vous permettra de payer les futures réparations.',
+        'Main-d\'œuvre: Votre temps est le plus précieux. La préparation du fichier, le nettoyage du plateau et le post-traitement de la pièce doivent être pris en compte.',
       ],
     },
     {
@@ -157,9 +157,9 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'summary',
       items: [
-        'Tarification au temps : Idéal pour les services d\'impression purs.',
-        'Tarification au gramme : Commun pour les pièces massives mais simples.',
-        'Tarification à la valeur : Si le design est unique, le prix ne doit pas être basé uniquement sur le coût, mais sur ce que le client est prêt à payer.',
+        'Tarification au temps: Idéal pour les services d\'impression purs.',
+        'Tarification au gramme: Commun pour les pièces massives mais simples.',
+        'Tarification à la valeur: Si le design est unique, le prix ne doit pas être basé uniquement sur le coût, mais sur ce que le client est prêt à payer.',
       ],
     },
   ],

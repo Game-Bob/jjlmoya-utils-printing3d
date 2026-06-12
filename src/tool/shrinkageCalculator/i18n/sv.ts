@@ -113,7 +113,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Krympning är ett oundvikligt fysiskt fenomen som uppstår när termoplaster går från sitt smälta tillstånd (vid höga temperaturer) till sitt fasta tillstånd vid rumstemperatur. När de svalnar omorganiseras molekylerna och ”dras ihop”, vilket minskar delens totala volym. Vår <strong>krympkalkylator</strong> är utformad för att hjälpa dig att förutsäga denna förändring och justera skalan i din slicer så att dina delar passar på första försöket.',
+      html: 'Krympning är ett oundvikligt fysiskt fenomen som uppstår när termoplaster går från sitt smälta tillstånd (vid höga temperaturer) till sitt fasta tillstånd vid rumstemperatur. När de svalnar omorganiseras molekylerna och "dras ihop", vilket minskar delens totala volym. Vår <strong>krympkalkylator</strong> är utformad för att hjälpa dig att förutsäga denna förändring och justera skalan i din slicer så att dina delar passar på första försöket.',
     },
     {
       type: 'title',
@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (akrylnitril-butadien-styren): 0,8 % – 2,0 %. Det är ett av de svåraste materialen på grund av dess höga krympning, som ofta orsakar ”warping” (hörndeformation).',
-        'ASA: 0,5 % – 0,9 %. Ett UV-beständigt alternativ till ABS med något mer kontrollerad krympning.',
-        'Nylon (PA): 0,7 % – 2,5 %. Beroende på om det innehåller kolfiber eller glasfiber kan dess krympning variera drastiskt.',
-        'PETG: 0,2 % – 0,5 %. Mycket dimensionellt stabilt, perfekt för mekaniska delar som inte kräver termisk resistivitet som ABS.',
-        'PLA: 0,1 % – 0,3 %. Guldstandarden för användarvänlighet; dess krympning är nästan försumbar för de flesta användningsområden.',
+        'ABS (akrylnitril-butadien-styren): 0,8 % - 2,0 %. Det är ett av de svåraste materialen på grund av dess höga krympning, som ofta orsakar "warping" (hörndeformation).',
+        'ASA: 0,5 % - 0,9 %. Ett UV-beständigt alternativ till ABS med något mer kontrollerad krympning.',
+        'Nylon (PA): 0,7 % - 2,5 %. Beroende på om det innehåller kolfiber eller glasfiber kan dess krympning variera drastiskt.',
+        'PETG: 0,2 % - 0,5 %. Mycket dimensionellt stabilt, perfekt för mekaniska delar som inte kräver termisk resistivitet som ABS.',
+        'PLA: 0,1 % - 0,3 %. Guldstandarden för användarvänlighet; dess krympning är nästan försumbar för de flesta användningsområden.',
       ],
     },
     {
@@ -150,7 +150,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Många användare gör misstaget att bara ”lägga till procentandelen” (om 2 % saknas, skalar de till 102 %). Matematiskt sett måste skalan vara något annorlunda för att kompensera för en förlust. Den korrekta formeln som används av vår kalkylator är: <br><strong>Skalfaktor = 1 / (1 - S)</strong>',
+      html: 'Många användare gör misstaget att bara "lägga till procentandelen" (om 2 % saknas, skalar de till 102 %). Matematiskt sett måste skalan vara något annorlunda för att kompensera för en förlust. Den korrekta formeln som används av vår kalkylator är: <br><strong>Skalfaktor = 1 / (1 - S)</strong>',
     },
     {
       type: 'paragraph',
@@ -177,7 +177,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'tip',
       title: 'Proffstips',
-      html: '<p>Om du arbetar med nylon eller tekniska material, mät alltid delen 24 timmar efter utskrift. Vissa plaster absorberar omgivande fukt och kan ”svälla” något efter avkylning, vilket ändrar det slutliga måttet.</p>',
+      html: '<p>Om du arbetar med nylon eller tekniska material, mät alltid delen 24 timmar efter utskrift. Vissa plaster absorberar omgivande fukt och kan "svälla" något efter avkylning, vilket ändrar det slutliga måttet.</p>',
     },
     {
       type: 'title',

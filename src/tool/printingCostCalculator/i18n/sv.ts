@@ -125,7 +125,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     {
       type: 'summary',
       items: [
-        'Material och spill: Inkluderar delens vikt, men även plasten som används i stöd, skirts och rensning. Vi rekommenderar alltid att du lägger till en marginal på 5–10 % för eventuella utskriftsfel.',
+        'Material och spill: Inkluderar delens vikt, men även plasten som används i stöd, skirts och rensning. Vi rekommenderar alltid att du lägger till en marginal på 5-10 % för eventuella utskriftsfel.',
         'Elförbrukning: En 3D-skrivare drar inte lika mycket när den skriver ut PLA (platta på 60°C) som ABS eller nylon (platta på 100°C+). Priset på kilowattimme kan göra skillnad för stora delar.',
         'Maskinavskrivning: Varje timme som skrivaren är igång slits dess komponenter (remmar, fläktar, munstycken). Genom att inkludera en liten timkostnad kan du betala för framtida reparationer.',
         'Arbete: Din tid är det mest värdefulla. Förberedelse av filen, rengöring av byggplattan och efterbearbetning av delen måste räknas med.',
@@ -152,7 +152,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'När du känner till din baskostnad måste du bestämma din marginal. I världen med on-demand 3D-utskrifter är en marginal på 50–100 % utöver den totala kostnaden vanlig för att täcka risken för oväntade fel och kommersiell vinst. Om delen kräver mycket manuellt slip- och målningsarbete bör marginalen vara högre.',
+      html: 'När du känner till din baskostnad måste du bestämma din marginal. I världen med on-demand 3D-utskrifter är en marginal på 50-100 % utöver den totala kostnaden vanlig för att täcka risken för oväntade fel och kommersiell vinst. Om delen kräver mycket manuellt slip- och målningsarbete bör marginalen vara högre.',
     },
     {
       type: 'summary',

@@ -57,7 +57,7 @@ export const content: ToolLocaleContent<FlowCalculatorUI> = {
   faq: [
     {
       question: 'Vad är det maximala flödet på min skrivare?',
-      answer: 'Det beror helt på din hotend. En standard-hotend (V6-typ) smälter vanligtvis mellan 10 och 12 mm³/s. Högflödesmodeller som Volcano eller Revo High Flow når 30–35 mm³/s.',
+      answer: 'Det beror helt på din hotend. En standard-hotend (V6-typ) smälter vanligtvis mellan 10 och 12 mm³/s. Högflödesmodeller som Volcano eller Revo High Flow når 30-35 mm³/s.',
     },
     {
       question: 'Varför flödar PETG långsammare än PLA?',

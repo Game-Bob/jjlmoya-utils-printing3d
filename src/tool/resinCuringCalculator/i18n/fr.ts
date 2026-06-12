@@ -59,7 +59,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Lorsqu\'une imprimante 3D en résine termine l\'impression, la pièce est dans ce que les techniciens appellent l\'<strong>«état vert»</strong>. Bien qu\'elle ait sa forme finale, les chaînes moléculaires du polymère ne sont pas complètement réticulées. La polymérisation UV complète la réticulation, éliminant la viscosité et améliorant la dureté, la résistance et la stabilité thermique.',
+      html: 'Lorsqu\'une imprimante 3D en résine termine l\'impression, la pièce est dans ce que les techniciens appellent l\'<strong>"état vert"</strong>. Bien qu\'elle ait sa forme finale, les chaînes moléculaires du polymère ne sont pas complètement réticulées. La polymérisation UV complète la réticulation, éliminant la viscosité et améliorant la dureté, la résistance et la stabilité thermique.',
     },
   ],
   faq: [
@@ -77,11 +77,11 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     },
     {
       question: 'Comment savoir si la résine est correctement polymérisée?',
-      answer: 'La pièce doit être complètement sèche au toucher (non collante), avoir perdu son brillant «humide», montrer un léger changement de couleur et ne pas sentir fortement la résine liquide.',
+      answer: 'La pièce doit être complètement sèche au toucher (non collante), avoir perdu son brillant "humide", montrer un léger changement de couleur et ne pas sentir fortement la résine liquide.',
     },
     {
       question: 'Pourquoi ma résine transparente devient-elle jaune?',
-      answer: 'C\'est l\'effet d\'une surpolymérisation ou d\'une température excessive. Utilisez le facteur «Transparent» dans notre calculatrice pour réduire le temps et gardez les LEDs à au moins 5cm de distance.',
+      answer: 'C\'est l\'effet d\'une surpolymérisation ou d\'une température excessive. Utilisez le facteur "Transparent" dans notre calculatrice pour réduire le temps et gardez les LEDs à au moins 5cm de distance.',
     },
   ],
   bibliography,

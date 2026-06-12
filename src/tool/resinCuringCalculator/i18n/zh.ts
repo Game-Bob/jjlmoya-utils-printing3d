@@ -59,7 +59,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: '当树脂 3D 打印机完成打印时，部件处于技术人员所称的<strong>“湿坯状态” (green state)</strong>。虽然已具有最终形状，但聚合物的分子链尚未完全交联。UV 固化完成这种交联，消除粘性并提高硬度、强度和热稳定性。',
+      html: '当树脂 3D 打印机完成打印时，部件处于技术人员所称的<strong>"湿坯状态" (green state)</strong>。虽然已具有最终形状，但聚合物的分子链尚未完全交联。UV 固化完成这种交联，消除粘性并提高硬度、强度和热稳定性。',
     },
   ],
   faq: [
@@ -77,11 +77,11 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     },
     {
       question: '我该如何判断树脂是否完全固化？',
-      answer: '部件触感应完全干燥（不粘手），失去“湿润”光泽，出现轻微色偏，并且不再有液态树脂的强烈气味。',
+      answer: '部件触感应完全干燥（不粘手），失去"湿润"光泽，出现轻微色偏，并且不再有液态树脂的强烈气味。',
     },
     {
       question: '为什么我的透明树脂会变黄？',
-      answer: '这是过固化或温度过高的后果。使用我们计算器中的“透明”参数来缩短时间，并将 LED 保持在至少 5cm 以外。',
+      answer: '这是过固化或温度过高的后果。使用我们计算器中的"透明"参数来缩短时间，并将 LED 保持在至少 5cm 以外。',
     },
   ],
   bibliography,

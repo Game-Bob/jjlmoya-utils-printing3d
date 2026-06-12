@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrilonitrilo Butadieno Estireno): 0.8% – 2.0%. Es uno de los materiales más difíciles debido a su alta contracción, que a menudo provoca "warping" (deformación de las esquinas).',
-        'ASA: 0.5% – 0.9%. Una alternativa al ABS más resistente a los rayos UV y con una contracción algo más contenida.',
-        'Nylon (PA): 0.7% – 2.5%. Dependiendo de si tiene carga de fibra de carbono o de vidrio, su contracción puede variar drásticamente.',
-        'PETG: 0.2% – 0.5%. Muy estable dimensionalmente, ideal para piezas mecánicas que no requieren la resistencia térmica del ABS.',
-        'PLA: 0.1% – 0.3%. El estándar de oro para la facilidad de uso; su contracción es casi despreciable para la mayoría de los usos.',
+        'ABS (Acrilonitrilo Butadieno Estireno): 0.8% - 2.0%. Es uno de los materiales más difíciles debido a su alta contracción, que a menudo provoca "warping" (deformación de las esquinas).',
+        'ASA: 0.5% - 0.9%. Una alternativa al ABS más resistente a los rayos UV y con una contracción algo más contenida.',
+        'Nylon (PA): 0.7% - 2.5%. Dependiendo de si tiene carga de fibra de carbono o de vidrio, su contracción puede variar drásticamente.',
+        'PETG: 0.2% - 0.5%. Muy estable dimensionalmente, ideal para piezas mecánicas que no requieren la resistencia térmica del ABS.',
+        'PLA: 0.1% - 0.3%. El estándar de oro para la facilidad de uso; su contracción es casi despreciable para la mayoría de los usos.',
       ],
     },
     {

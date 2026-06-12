@@ -42,7 +42,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'paragraph',
-      html: 'Verkligheten med 3D-utskrifter är att filament eller harts bara utgör en del av den totala kostnaden. En medelstor FDM-skrivare förbrukar mellan 100–200 W under utskrift, vilket innebär att ett jobb på 20 timmar kan kosta mellan 0,50 och 1,00 USD enbart i el. Multiplicera detta med dina arbetskostnader, så kommer du snabbt att förstå varför många online-3D-printtjänster har så låga marginaler.',
+      html: 'Verkligheten med 3D-utskrifter är att filament eller harts bara utgör en del av den totala kostnaden. En medelstor FDM-skrivare förbrukar mellan 100-200 W under utskrift, vilket innebär att ett jobb på 20 timmar kan kosta mellan 0,50 och 1,00 USD enbart i el. Multiplicera detta med dina arbetskostnader, så kommer du snabbt att förstå varför många online-3D-printtjänster har så låga marginaler.',
     },
     {
       type: 'title',
@@ -51,11 +51,11 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'paragraph',
-      html: 'Varje teknik har sin egen ekonomiska ekvation. FDM (Fused Deposition Modeling) är mest tillgänglig men kräver manuell efterbearbetning. SLA (Stereolitografi) producerar fina detaljer men förbrukar dyrt harts (5–15 USD per 500 ml). SLS (Selektiv lasersintring) är industriell men kräver utrustning för över 50 000 USD och motiveras endast vid höga produktionsvolymer.',
+      html: 'Varje teknik har sin egen ekonomiska ekvation. FDM (Fused Deposition Modeling) är mest tillgänglig men kräver manuell efterbearbetning. SLA (Stereolitografi) producerar fina detaljer men förbrukar dyrt harts (5-15 USD per 500 ml). SLS (Selektiv lasersintring) är industriell men kräver utrustning för över 50 000 USD och motiveras endast vid höga produktionsvolymer.',
     },
     {
       type: 'paragraph',
-      html: 'För hemmamakers är optimering av FDM-kostnader avgörande. Att välja rätt material (standard PLA vs PETG vs ASA) påverkar direkt det slutliga priset. PLA är billigt (8–12 USD/kg) men ömtåligt. PETG (15–20 USD/kg) är mer tåligt men förbrukar mer energi. Kostnadskalkylatorn för 3D-utskrifter hjälper dig att jämföra scenarier och fatta välgrundade beslut.',
+      html: 'För hemmamakers är optimering av FDM-kostnader avgörande. Att välja rätt material (standard PLA vs PETG vs ASA) påverkar direkt det slutliga priset. PLA är billigt (8-12 USD/kg) men ömtåligt. PETG (15-20 USD/kg) är mer tåligt men förbrukar mer energi. Kostnadskalkylatorn för 3D-utskrifter hjälper dig att jämföra scenarier och fatta välgrundade beslut.',
     },
     {
       type: 'summary',
@@ -69,7 +69,7 @@ export const content: CategoryLocaleContent = {
     {
       type: 'tip',
       title: 'Tips för kostnadsoptimering',
-      html: '<p><strong>Infill-analys:</strong> Att minska infill från 20 % till 10 % kan spara upp till 15–20 % material på stora delar utan att offra strukturell integritet om du använder effektiva mönster som Gyroid. Använd vår kalkylator för att se den direkta effekten på delens slutliga pris.</p>',
+      html: '<p><strong>Infill-analys:</strong> Att minska infill från 20 % till 10 % kan spara upp till 15-20 % material på stora delar utan att offra strukturell integritet om du använder effektiva mönster som Gyroid. Använd vår kalkylator för att se den direkta effekten på delens slutliga pris.</p>',
     },
     {
       type: 'title',
@@ -78,7 +78,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'paragraph',
-      html: 'Alla applikationer är inte skapade lika. Att skriva ut ett litet anpassat ställ till ditt skrivbord ger mycket lite ekonomisk mening. Men att skriva ut reservdelar i små volymer (50–500 enheter) där det inte finns något lager i Kina? Det är lönsamt. Eller att tillverka unika prototyper av slutprodukter när kunden betalar ett premiumpris för anpassning.',
+      html: 'Alla applikationer är inte skapade lika. Att skriva ut ett litet anpassat ställ till ditt skrivbord ger mycket lite ekonomisk mening. Men att skriva ut reservdelar i små volymer (50-500 enheter) där det inte finns något lager i Kina? Det är lönsamt. Eller att tillverka unika prototyper av slutprodukter när kunden betalar ett premiumpris för anpassning.',
     },
     {
       type: 'paragraph',

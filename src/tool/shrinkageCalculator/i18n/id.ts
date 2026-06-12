@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylonitrile Butadiene Styrene): 0,8% – 2,0%. Ini adalah salah satu material tersulit karena penyusutannya yang tinggi, yang sering menyebabkan "warping" (deformasi pada sudut-sudutnya).',
-        'ASA: 0,5% – 0,9%. Alternatif ABS yang tahan UV dengan penyusutan yang agak lebih terkendali.',
-        'Nylon (PA): 0,7% – 2,5%. Tergantung pada apakah material tersebut memiliki campuran serat karbon atau kaca, penyusutannya dapat bervariasi secara drastis.',
-        'PETG: 0,2% – 0,5%. Sangat stabil secara dimensional, ideal untuk bagian mekanis yang tidak memerlukan ketahanan termal ABS.',
-        'PLA: 0,1% – 0,3%. Standar emas untuk kemudahan penggunaan; penyusutannya hampir dapat diabaikan untuk sebagian besar penggunaan.',
+        'ABS (Acrylonitrile Butadiene Styrene): 0,8% - 2,0%. Ini adalah salah satu material tersulit karena penyusutannya yang tinggi, yang sering menyebabkan "warping" (deformasi pada sudut-sudutnya).',
+        'ASA: 0,5% - 0,9%. Alternatif ABS yang tahan UV dengan penyusutan yang agak lebih terkendali.',
+        'Nylon (PA): 0,7% - 2,5%. Tergantung pada apakah material tersebut memiliki campuran serat karbon atau kaca, penyusutannya dapat bervariasi secara drastis.',
+        'PETG: 0,2% - 0,5%. Sangat stabil secara dimensional, ideal untuk bagian mekanis yang tidak memerlukan ketahanan termal ABS.',
+        'PLA: 0,1% - 0,3%. Standar emas untuk kemudahan penggunaan; penyusutannya hampir dapat diabaikan untuk sebagian besar penggunaan.',
       ],
     },
     {

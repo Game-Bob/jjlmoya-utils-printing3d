@@ -3,11 +3,11 @@ import type { CategoryLocaleContent } from '../../types';
 export const content: CategoryLocaleContent = {
   slug: 'impression-3d',
   title: 'Outils et Calculateurs d\'Impression 3D',
-  description: 'Gérez votre ferme d\'impression ou vos projets personnels avec des outils en ligne gratuits. Calculateurs de coût réel d\'impression 3D : matériel, énergie et amortissement.',
+  description: 'Gérez votre ferme d\'impression ou vos projets personnels avec des outils en ligne gratuits. Calculateurs de coût réel d\'impression 3D: matériel, énergie et amortissement.',
   seo: [
     {
       type: 'title',
-      text: 'Fabrication Additive et Rentabilité : Le Coût de Créer',
+      text: 'Fabrication Additive et Rentabilité: Le Coût de Créer',
       level: 2,
     },
     {
@@ -20,12 +20,12 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'title',
-      text: 'Économie du Maker : Calculateur de Coût d\'Impression 3D',
+      text: 'Économie du Maker: Calculateur de Coût d\'Impression 3D',
       level: 2,
     },
     {
       type: 'paragraph',
-      html: 'Combien vaut réellement ce casque de Mandalorien ou cette pièce de rechange ? Notre <strong>calculateur de coût d\'impression 3D</strong> détaille le prix final en analysant quatre piliers fondamentaux : le coût du matériau (PLA, PETG, Résine), la consommation électrique de l\'imprimante, le temps de main-d\'œuvre et l\'amortissement de la machine par heure d\'utilisation.',
+      html: 'Combien vaut réellement ce casque de Mandalorien ou cette pièce de rechange ? Notre <strong>calculateur de coût d\'impression 3D</strong> détaille le prix final en analysant quatre piliers fondamentaux: le coût du matériau (PLA, PETG, Résine), la consommation électrique de l\'imprimante, le temps de main-d\'œuvre et l\'amortissement de la machine par heure d\'utilisation.',
     },
     {
       type: 'tool',
@@ -46,7 +46,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'title',
-      text: 'Technologies d\'Impression 3D : FDM, SLA, SLS et leurs Économies',
+      text: 'Technologies d\'Impression 3D: FDM, SLA, SLS et leurs Économies',
       level: 2,
     },
     {
@@ -73,7 +73,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'title',
-      text: 'Cas d\'Utilisation Pratiques : Quand l\'Impression 3D est-elle Rentable ?',
+      text: 'Cas d\'Utilisation Pratiques: Quand l\'Impression 3D est-elle Rentable ?',
       level: 2,
     },
     {
@@ -86,7 +86,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'title',
-      text: 'Passage à l\'Échelle : Du Passe-temps à l\'Entreprise',
+      text: 'Passage à l\'Échelle: Du Passe-temps à l\'Entreprise',
       level: 2,
     },
     {
@@ -99,16 +99,16 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'title',
-      text: 'Conception pour la Fabrication Additive : Optimisation Géométrique',
+      text: 'Conception pour la Fabrication Additive: Optimisation Géométrique',
       level: 2,
     },
     {
       type: 'paragraph',
-      html: 'Toutes les conceptions 3D ne sont pas également optimales pour l\'impression. Des parois trop minces échouent structurellement ; des parois trop épaisses gaspillent du matériau. L\'angle de dépouille (draft angle) dans les conceptions FDM affecte la facilité de retrait des supports. Concevoir spécifiquement pour l\'additif signifie comprendre comment le matériau est déposé couche par couche. Une courbe lisse en CAO devient de petits escaliers à l\'impression : vous pouvez minimiser cela avec une orientation stratégique du modèle ou un post-traitement.',
+      html: 'Toutes les conceptions 3D ne sont pas également optimales pour l\'impression. Des parois trop minces échouent structurellement ; des parois trop épaisses gaspillent du matériau. L\'angle de dépouille (draft angle) dans les conceptions FDM affecte la facilité de retrait des supports. Concevoir spécifiquement pour l\'additif signifie comprendre comment le matériau est déposé couche par couche. Une courbe lisse en CAO devient de petits escaliers à l\'impression: vous pouvez minimiser cela avec une orientation stratégique du modèle ou un post-traitement.',
     },
     {
       type: 'paragraph',
-      html: 'L\'industrie de la conception professionnelle (automobile, aérospatiale) investit des années à apprendre le DFM (Design for Manufacturability) additif. Nos calculateurs sont le fondement : quand vous comprenez le coût réel, vous concevez mieux pour minimiser le matériau et le temps. C\'est la différence entre un produit viable et un produit vendu à perte.',
+      html: 'L\'industrie de la conception professionnelle (automobile, aérospatiale) investit des années à apprendre le DFM (Design for Manufacturability) additif. Nos calculateurs sont le fondement: quand vous comprenez le coût réel, vous concevez mieux pour minimiser le matériau et le temps. C\'est la différence entre un produit viable et un produit vendu à perte.',
     },
     {
       type: 'title',

@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylonitril-butadieen-styreen): 0,8% – 2,0%. Het is een van de moeilijkste materialen vanwege de hoge krimp, wat vaak "warping" (vervorming van de hoeken) veroorzaakt.',
-        'ASA: 0,5% – 0,9%. Een UV-bestendig alternatief voor ABS met een wat meer beheerste krimp.',
-        'Nylon (PA): 0,7% – 2,5%. Afhankelijk van de vulling met koolstof- of glasvezel kan de krimp drastisch variëren.',
-        'PETG: 0,2% – 0,5%. Zeer dimensionaal stabiel, ideaal voor mechanische onderdelen die niet de thermische resistentie van ABS nodig hebben.',
-        'PLA: 0,1% – 0,3%. De gouden standaard voor gebruiksgemak; de krimp is bijna verwaarloosbaar voor de meeste toepassingen.',
+        'ABS (Acrylonitril-butadieen-styreen): 0,8% - 2,0%. Het is een van de moeilijkste materialen vanwege de hoge krimp, wat vaak "warping" (vervorming van de hoeken) veroorzaakt.',
+        'ASA: 0,5% - 0,9%. Een UV-bestendig alternatief voor ABS met een wat meer beheerste krimp.',
+        'Nylon (PA): 0,7% - 2,5%. Afhankelijk van de vulling met koolstof- of glasvezel kan de krimp drastisch variëren.',
+        'PETG: 0,2% - 0,5%. Zeer dimensionaal stabiel, ideaal voor mechanische onderdelen die niet de thermische resistentie van ABS nodig hebben.',
+        'PLA: 0,1% - 0,3%. De gouden standaard voor gebruiksgemak; de krimp is bijna verwaarloosbaar voor de meeste toepassingen.',
       ],
     },
     {

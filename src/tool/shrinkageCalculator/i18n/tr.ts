@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Akrilonitril Bütadien Stiren): %0,8 – %2,0. Yüksek çekme oranı nedeniyle en zor malzemelerden biridir ve genellikle "warping" (köşe kalkması/deformasyonu) neden olur.',
-        'ASA: %0,5 – %0,9. ABS\'ye göre daha kontrollü çekme gösteren, UV dirençli bir alternatif.',
-        'Naylon (PA): %0,7 – %2,5. Karbon veya cam elyaf dolgusuna bağlı olarak çekme oranı büyük ölçüde değişebilir.',
-        'PETG: %0,2 – %0,5. Boyutsal olarak çok kararlıdır, ABS\'nin termal direncinin gerekmediği mekanik parçalar için idealdir.',
-        'PLA: %0,1 – %0,3. Kullanım kolaylığı açısından altın standarttır; çoğu kullanım için çekme oranı ihmal edilebilir düzeydedir.',
+        'ABS (Akrilonitril Bütadien Stiren): %0,8 - %2,0. Yüksek çekme oranı nedeniyle en zor malzemelerden biridir ve genellikle "warping" (köşe kalkması/deformasyonu) neden olur.',
+        'ASA: %0,5 - %0,9. ABS\'ye göre daha kontrollü çekme gösteren, UV dirençli bir alternatif.',
+        'Naylon (PA): %0,7 - %2,5. Karbon veya cam elyaf dolgusuna bağlı olarak çekme oranı büyük ölçüde değişebilir.',
+        'PETG: %0,2 - %0,5. Boyutsal olarak çok kararlıdır, ABS\'nin termal direncinin gerekmediği mekanik parçalar için idealdir.',
+        'PLA: %0,1 - %0,3. Kullanım kolaylığı açısından altın standarttır; çoğu kullanım için çekme oranı ihmal edilebilir düzeydedir.',
       ],
     },
     {

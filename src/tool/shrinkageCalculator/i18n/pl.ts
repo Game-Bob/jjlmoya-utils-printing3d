@@ -113,7 +113,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Skurcz to nieuniknione zjawisko fizyczne, które występuje, gdy termoplasty przechodzą ze stanu stopionego (w wysokich temperaturach) do stanu stałego w temperaturze pokojowej. Podczas stygnięcia cząsteczki reorganizują się i „zacieśniają”, zmniejszając całkowitą objętość elementu. Nasz <strong>kalkulator skurczu</strong> został zaprojektowany, aby pomóc Ci przewidzieć tę zmianę i dostosować skalę w slicerze tak, aby elementy pasowały za pierwszym razem.',
+      html: 'Skurcz to nieuniknione zjawisko fizyczne, które występuje, gdy termoplasty przechodzą ze stanu stopionego (w wysokich temperaturach) do stanu stałego w temperaturze pokojowej. Podczas stygnięcia cząsteczki reorganizują się i "zacieśniają", zmniejszając całkowitą objętość elementu. Nasz <strong>kalkulator skurczu</strong> został zaprojektowany, aby pomóc Ci przewidzieć tę zmianę i dostosować skalę w slicerze tak, aby elementy pasowały za pierwszym razem.',
     },
     {
       type: 'title',
@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (akrylonitryl-butadien-styren): 0,8% – 2,0%. Jest to jeden z najtrudniejszych materiałów ze względu na duży skurcz, który często powoduje „warping” (odkształcanie narożników).',
-        'ASA: 0,5% – 0,9%. Odporna na promieniowanie UV alternatywa dla ABS z nieco mniejszym skurczem.',
-        'Nylon (PA): 0,7% – 2,5%. W zależności od tego, czy zawiera włókno węglowe, czy szklane, jego skurcz może się drastycznie różnić.',
-        'PETG: 0,2% – 0,5%. Bardzo stabilny wymiarowo, idealny do części mechanicznych, które nie wymagają odporności termicznej ABS.',
-        'PLA: 0,1% – 0,3%. Złoty standard łatwości użytkowania; jego skurcz jest niemal pomijalny w większości zastosowań.',
+        'ABS (akrylonitryl-butadien-styren): 0,8% - 2,0%. Jest to jeden z najtrudniejszych materiałów ze względu na duży skurcz, który często powoduje "warping" (odkształcanie narożników).',
+        'ASA: 0,5% - 0,9%. Odporna na promieniowanie UV alternatywa dla ABS z nieco mniejszym skurczem.',
+        'Nylon (PA): 0,7% - 2,5%. W zależności od tego, czy zawiera włókno węglowe, czy szklane, jego skurcz może się drastycznie różnić.',
+        'PETG: 0,2% - 0,5%. Bardzo stabilny wymiarowo, idealny do części mechanicznych, które nie wymagają odporności termicznej ABS.',
+        'PLA: 0,1% - 0,3%. Złoty standard łatwości użytkowania; jego skurcz jest niemal pomijalny w większości zastosowań.',
       ],
     },
     {
@@ -150,7 +150,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Wielu użytkowników popełnia błąd polegający na prostym „dodaniu procentów” (jeśli brakuje 2%, skalują do 102%). Jednak matematycznie, aby skompensować stratę, skala musi być nieco inna. Poprawny wzór używany przez nasz kalkulator to: <br><strong>Współczynnik skali = 1 / (1 - S)</strong>',
+      html: 'Wielu użytkowników popełnia błąd polegający na prostym "dodaniu procentów" (jeśli brakuje 2%, skalują do 102%). Jednak matematycznie, aby skompensować stratę, skala musi być nieco inna. Poprawny wzór używany przez nasz kalkulator to: <br><strong>Współczynnik skali = 1 / (1 - S)</strong>',
     },
     {
       type: 'paragraph',
@@ -177,7 +177,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'tip',
       title: 'Pro Tip',
-      html: '<p>Jeśli pracujesz z nylonem lub materiałami technicznymi, zawsze mierz element 24 godziny po wydrukowaniu. Niektóre tworzywa pochłaniają wilgoć z otoczenia i mogą nieznacznie „puchnąć” po wystygnięciu, zmieniając ostateczny wymiar.</p>',
+      html: '<p>Jeśli pracujesz z nylonem lub materiałami technicznymi, zawsze mierz element 24 godziny po wydrukowaniu. Niektóre tworzywa pochłaniają wilgoć z otoczenia i mogą nieznacznie "puchnąć" po wystygnięciu, zmieniając ostateczny wymiar.</p>',
     },
     {
       type: 'title',

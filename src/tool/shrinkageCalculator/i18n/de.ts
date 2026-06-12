@@ -136,11 +136,11 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'list',
       items: [
-        'ABS (Acrylnitril-Butadien-Styrol): 0,8% – 2,0%. Es ist eines der schwierigsten Materialien aufgrund seiner hohen Schrumpfung, die oft zu "Warping" (Verformung der Ecken) führt.',
-        'ASA: 0,5% – 0,9%. Eine UV-beständige Alternative zu ABS mit etwas geringerer Schrumpfung.',
-        'Nylon (PA): 0,7% – 2,5%. Je nachdem, ob es mit Kohle- oder Glasfaser verstärkt ist, kann die Schrumpfung drastisch variieren.',
-        'PETG: 0,2% – 0,5%. Sehr dimensionsstabil, ideal für mechanische Teile, die keine thermische Beständigkeit von ABS erfordern.',
-        'PLA: 0,1% – 0,3%. Der Goldstandard für einfache Handhabung; die Schrumpfung ist für die meisten Anwendungen fast vernachlässigbar.',
+        'ABS (Acrylnitril-Butadien-Styrol): 0,8% - 2,0%. Es ist eines der schwierigsten Materialien aufgrund seiner hohen Schrumpfung, die oft zu "Warping" (Verformung der Ecken) führt.',
+        'ASA: 0,5% - 0,9%. Eine UV-beständige Alternative zu ABS mit etwas geringerer Schrumpfung.',
+        'Nylon (PA): 0,7% - 2,5%. Je nachdem, ob es mit Kohle- oder Glasfaser verstärkt ist, kann die Schrumpfung drastisch variieren.',
+        'PETG: 0,2% - 0,5%. Sehr dimensionsstabil, ideal für mechanische Teile, die keine thermische Beständigkeit von ABS erfordern.',
+        'PLA: 0,1% - 0,3%. Der Goldstandard für einfache Handhabung; die Schrumpfung ist für die meisten Anwendungen fast vernachlässigbar.',
       ],
     },
     {
