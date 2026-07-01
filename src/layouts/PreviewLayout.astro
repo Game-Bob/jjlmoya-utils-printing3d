@@ -10,7 +10,12 @@ interface Props {
   hasSidebar?: boolean;
 }
 
-const { title, currentLocale = "es", localeUrls = {}, hasSidebar = false } = Astro.props;
+const {
+  title,
+  currentLocale = "es",
+  localeUrls = {},
+  hasSidebar = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -78,6 +83,7 @@ const { title, currentLocale = "es", localeUrls = {}, hasSidebar = false } = Ast
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+    font-family: Inter, sans-serif;
   }
 
   main {
@@ -114,4 +120,3 @@ const { title, currentLocale = "es", localeUrls = {}, hasSidebar = false } = Ast
     }
   }
 </style>
-
