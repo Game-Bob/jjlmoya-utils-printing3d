@@ -29,7 +29,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     modeLabel: 'Modus',
     modeValue: 'Industriell',
     curingTime: 'm:s',
-    startButton: 'Aushärtezyklus Start/Stopp',
+    startButton: 'Aushärtezyklus starten',
     intensityChart: 'UV-Intensität (Dosis)',
     nearLabel: 'Nah (2cm)',
     farLabel: 'Fern (30cm)',

@@ -29,7 +29,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     modeLabel: 'Läge',
     modeValue: 'Industriell',
     curingTime: 'm:s',
-    startButton: 'Starta/Stoppa härdningscykel',
+    startButton: 'Starta härdningscykel',
     intensityChart: 'UV-intensitet (Dos)',
     nearLabel: 'Nära (2cm)',
     farLabel: 'Långt (30cm)',

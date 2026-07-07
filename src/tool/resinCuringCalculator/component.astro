@@ -125,9 +125,8 @@ const brands = [
           <div class="rc-timer-display">
             <span id="final-time">02:30</span>
             <small>{t.curingTime || 'm:s'}</small>
-            <button id="start-btn" class="rc-btn-start" title={t.startButton || 'Start/Stop Curing'}>
+            <button id="start-btn" class="rc-btn-start" title={t.startButton || 'Start Curing'}>
               <Icon name="mdi:play" id="icon-play" size={20} />
-              <Icon name="mdi:stop" id="icon-stop" size={20} style="display:none" />
             </button>
           </div>
         </div>
@@ -160,6 +159,10 @@ const brands = [
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="rc-timer-toast" id="timer-toast" aria-live="polite" hidden>
+        <span>{t.timerToast || 'Press Escape to hide.'}</span>
       </div>
 
       <div class="rc-alerts" id="alerts-container">
@@ -203,6 +206,7 @@ const brands = [
   const chartPath = document.getElementById('chart-path');
   const chartDot = document.getElementById('chart-dot');
   const chartArea = document.getElementById('chart-area');
+  const root = document.getElementById('resin-calc-root');
 
   let audioCtx = null;
 
@@ -307,8 +311,9 @@ const brands = [
   }
 
   const startBtn = document.getElementById('start-btn');
-  const iconPlay = document.getElementById('icon-play');
-  const iconStop = document.getElementById('icon-stop');
+  const timerToast = document.getElementById('timer-toast');
+  let toastTimeout = null;
+  let lastToastInteraction = 0;
 
   function drawPowerChart(d, w) {
     if (!chartPath || !chartDot || !chartArea) return;
@@ -328,24 +333,47 @@ const brands = [
     chartDot.setAttribute('cy', dotY.toString());
   }
 
-  function stopTimer() {
+  function completeTimer() {
     if (!countdownInterval) return;
     clearInterval(countdownInterval);
     countdownInterval = null;
+    hideTimerToast();
     if (startBtn) {
-      startBtn.classList.remove('running');
-      if (iconPlay) iconPlay.style.display = 'block';
-      if (iconStop) iconStop.style.display = 'none';
+      startBtn.disabled = false;
     }
+    root?.classList.remove('is-timer-fullscreen');
     calculate();
+  }
+
+  function hideTimerToast() {
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+      toastTimeout = null;
+    }
+    if (timerToast) timerToast.hidden = true;
+  }
+
+  function showTimerToast() {
+    if (!countdownInterval || !timerToast) return;
+    if (toastTimeout) clearTimeout(toastTimeout);
+    timerToast.hidden = false;
+    toastTimeout = window.setTimeout(hideTimerToast, 3500);
+  }
+
+  function showTimerToastFromInteraction() {
+    if (!countdownInterval) return;
+    const now = Date.now();
+    if (now - lastToastInteraction < 700) return;
+    lastToastInteraction = now;
+    showTimerToast();
   }
 
   function runCountdown() {
     if (startBtn) {
-      startBtn.classList.add('running');
-      if (iconPlay) iconPlay.style.display = 'none';
-      if (iconStop) iconStop.style.display = 'block';
+      startBtn.disabled = true;
     }
+    root?.classList.add('is-timer-fullscreen');
+    showTimerToast();
 
     countdownInterval = window.setInterval(() => {
       secondsLeft -= 1;
@@ -353,7 +381,7 @@ const brands = [
       updateRing(secondsLeft, initialTotal);
 
       if (secondsLeft <= 0) {
-        stopTimer();
+        completeTimer();
         playBeep();
         setTimeout(() => {
           calculate();
@@ -363,14 +391,22 @@ const brands = [
   }
 
   function startTimer() {
-    if (countdownInterval) {
-      stopTimer();
-      return;
-    }
+    if (countdownInterval) return;
     runCountdown();
   }
 
   startBtn?.addEventListener('click', startTimer);
+
+  document.addEventListener('keydown', (event) => {
+    if (!countdownInterval) return;
+    if (event.key === 'Escape') {
+      hideTimerToast();
+      return;
+    }
+    showTimerToastFromInteraction();
+  });
+
+  document.addEventListener('pointermove', showTimerToastFromInteraction);
 
   brandIn?.addEventListener('change', () => {
     const option = brandIn.options[brandIn.selectedIndex];
@@ -387,4 +423,3 @@ const brands = [
 
   calculate();
 </script>
-

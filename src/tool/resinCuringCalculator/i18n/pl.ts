@@ -29,7 +29,7 @@ export const content: ToolLocaleContent<ResinCuringCalculatorUI> = {
     modeLabel: 'Tryb',
     modeValue: 'Przemysłowy',
     curingTime: 'm:s',
-    startButton: 'Start/Stop Cyklu Utwardzania',
+    startButton: 'Rozpocznij cykl utwardzania',
     intensityChart: 'Intensywność UV (Dawka)',
     nearLabel: 'Blisko (2cm)',
     farLabel: 'Daleko (30cm)',
