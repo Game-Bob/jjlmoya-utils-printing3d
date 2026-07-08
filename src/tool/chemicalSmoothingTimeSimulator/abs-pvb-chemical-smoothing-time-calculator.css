@@ -9,6 +9,7 @@
   --csts-vapor: #88d8c0;
   --csts-warn: #e29c2f;
   --csts-hot: #d8503f;
+
   color: var(--csts-ink);
 }
 
@@ -262,11 +263,13 @@
 
 .csts-jar i:nth-child(2) {
   --i: 2;
+
   animation-delay: .7s;
 }
 
 .csts-jar i:nth-child(3) {
   --i: 3;
+
   animation-delay: 1.4s;
 }
 
@@ -333,8 +336,14 @@
 }
 
 @keyframes csts-vapor {
-  0%, 100% { opacity: .22; transform: translateY(1rem) scaleY(.8); }
-  50% { opacity: .85; transform: translateY(-1.7rem) scaleY(1.08); }
+  0%, 100% {
+    opacity: .22;
+    transform: translateY(1rem) scaleY(.8);
+  }
+  50% {
+    opacity: .85;
+    transform: translateY(-1.7rem) scaleY(1.08);
+  }
 }
 
 @media (min-width: 880px) {

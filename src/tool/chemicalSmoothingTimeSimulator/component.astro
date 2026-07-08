@@ -107,19 +107,25 @@ const { ui } = Astro.props;
   class ChemicalSmoothingTimeSimulator {
     private units: 'metric' | 'imperial' = 'metric';
     private material: SmoothingMaterial = 'abs';
-    private labels = {
-      copy: document.getElementById('csts-copy')?.textContent || '',
-      copied: document.getElementById('csts-copied-label')?.textContent || '',
-      summary: document.getElementById('csts-summary-template')?.textContent || '',
-      gentle: document.getElementById('csts-rec-gentle')?.textContent || '',
-      standard: document.getElementById('csts-rec-standard')?.textContent || '',
-      aggressive: document.getElementById('csts-rec-aggressive')?.textContent || '',
-      fine: document.getElementById('csts-detail-fine')?.textContent || '',
-      balanced: document.getElementById('csts-detail-balanced')?.textContent || '',
-      coarse: document.getElementById('csts-detail-coarse')?.textContent || '',
-    };
+    private labels!: ReturnType<typeof this.readLabels>;
+
+    private readLabels() {
+      const g = (id: string) => document.getElementById(id)?.textContent || '';
+      return {
+        copy: g('csts-copy'),
+        copied: g('csts-copied-label'),
+        summary: g('csts-summary-template'),
+        gentle: g('csts-rec-gentle'),
+        standard: g('csts-rec-standard'),
+        aggressive: g('csts-rec-aggressive'),
+        fine: g('csts-detail-fine'),
+        balanced: g('csts-detail-balanced'),
+        coarse: g('csts-detail-coarse'),
+      };
+    }
 
     constructor() {
+      this.labels = this.readLabels();
       this.bind();
       this.update();
     }
@@ -161,21 +167,31 @@ const { ui } = Astro.props;
       this.update();
     }
 
+    private presets: Record<string, [number, number, number, number]> = {
+      mini: [3, 22, 18, 0],
+      enclosure: [18, 28, 160, 2],
+    };
+
     private applyPreset(button: HTMLElement) {
       document.querySelectorAll('[data-preset]').forEach((item) => item.classList.remove('active'));
       button.classList.add('active');
       const preset = button.dataset.preset;
-      const values = preset === 'mini' ? [3, 22, 18, 0] : preset === 'enclosure' ? [18, 28, 160, 2] : [8, 24, 60, 1];
+      const values = this.presets[preset] ?? [8, 24, 60, 1];
       this.fromMetricValues(values[0], values[1], values[2]);
       this.input('csts-detail').value = String(values[3]);
       this.update();
     }
 
+    private unitLabel(data: HTMLElement, key: 'chamber' | 'temp' | 'part'): string {
+      const suffix = this.units === 'metric' ? 'Metric' : 'Imperial';
+      return data.dataset[`${key}${suffix}` as keyof HTMLElement['dataset']] || '';
+    }
+
     private updateUnits() {
       const data = document.getElementById('csts-unit-data') as HTMLElement;
-      this.text('csts-chamber-unit', this.units === 'metric' ? data.dataset.chamberMetric || '' : data.dataset.chamberImperial || '');
-      this.text('csts-temp-unit', this.units === 'metric' ? data.dataset.tempMetric || '' : data.dataset.tempImperial || '');
-      this.text('csts-part-unit', this.units === 'metric' ? data.dataset.partMetric || '' : data.dataset.partImperial || '');
+      this.text('csts-chamber-unit', this.unitLabel(data, 'chamber'));
+      this.text('csts-temp-unit', this.unitLabel(data, 'temp'));
+      this.text('csts-part-unit', this.unitLabel(data, 'part'));
     }
 
     private toMetricChamber() {
@@ -213,17 +229,29 @@ const { ui } = Astro.props;
       };
     }
 
+    private detailLabel(detail: SurfaceDetail): string {
+      if (detail === 'fine') return this.labels.fine;
+      if (detail === 'coarse') return this.labels.coarse;
+      return this.labels.balanced;
+    }
+
+    private recommendationLabel(rec: 'gentle' | 'standard' | 'aggressive'): string {
+      if (rec === 'gentle') return this.labels.gentle;
+      if (rec === 'aggressive') return this.labels.aggressive;
+      return this.labels.standard;
+    }
+
     private update() {
       const result = calculateChemicalSmoothingTime(this.params());
       const detail = this.detail();
-      this.text('csts-detail-name', detail === 'fine' ? this.labels.fine : detail === 'coarse' ? this.labels.coarse : this.labels.balanced);
+      this.text('csts-detail-name', this.detailLabel(detail));
       this.text('csts-minutes', result.exposureMinutes.toFixed(1));
       this.text('csts-seconds', result.exposureSeconds.toFixed(0));
       this.text('csts-dry', result.dryHours.toFixed(1));
       this.text('csts-trial', result.trialSeconds.toFixed(0));
       this.text('csts-risk', result.riskScore.toFixed(0));
       this.text('csts-intensity', result.vaporIntensity.toFixed(1));
-      this.text('csts-recommendation', result.recommendation === 'gentle' ? this.labels.gentle : result.recommendation === 'aggressive' ? this.labels.aggressive : this.labels.standard);
+      this.text('csts-recommendation', this.recommendationLabel(result.recommendation));
       const fill = document.getElementById('csts-vapor-fill') as HTMLElement;
       if (fill) fill.style.height = `${Math.min(88, 24 + result.vaporIntensity * 22)}%`;
       const root = document.querySelector('.csts-root') as HTMLElement;

@@ -30,33 +30,58 @@ const MATERIAL_BASE: Record<SmoothingMaterial, { seconds: number; dryHours: numb
   pvb: { seconds: 390, dryHours: 10, tempRef: 22, tempSlope: 0.045 },
 };
 
+const clampChamber = (v: number) => Math.max(v, 0.5);
+const clampPart = (v: number) => Math.max(v, 1);
+const clampTemp = (v: number, ref: number) => Math.max(Math.min(v - ref, 18), -12);
+
+const computeRisk = (opts: { tempC: number; ref: number; detail: SurfaceDetail; chamberL: number; partCm3: number }): number =>
+  Math.min(
+    100,
+    Math.round(
+      28 +
+        Math.max(opts.tempC - opts.ref, 0) * 4.2 +
+        (DETAIL_FACTOR[opts.detail] - 0.72) * 28 +
+        Math.max(8 - opts.chamberL, 0) * 1.6 +
+        Math.max(opts.partCm3 - 120, 0) * 0.08,
+    ),
+  );
+
+const computeRecommendation = (score: number): 'gentle' | 'standard' | 'aggressive' => {
+  if (score >= 68) return 'aggressive';
+  if (score >= 42) return 'standard';
+  return 'gentle';
+};
+
+const computeDryHours = (base: number, partFactor: number, isFine: boolean): number =>
+  Math.round((base * (0.85 + partFactor * 0.25) * (isFine ? 1.15 : 1)) * 2) / 2;
+
+const computeExposure = (raw: number, material: SmoothingMaterial): number => {
+  const min = material === 'abs' ? 90 : 70;
+  const max = material === 'abs' ? 1500 : 1080;
+  return Math.round(Math.min(Math.max(raw, min), max) / 5) * 5;
+};
+
+const computeVaporIntensity = (tempC: number, ref: number, partCm3: number, chamberL: number): number =>
+  Math.min(Math.max((tempC / ref) * (partCm3 / (chamberL * 1000)) * 18, 0.15), 2.8);
+
+const computeTrial = (exposureSeconds: number): number =>
+  Math.max(30, Math.round(exposureSeconds * 0.32 / 5) * 5);
+
 export const calculateChemicalSmoothingTime = (params: ChemicalSmoothingParams): ChemicalSmoothingResult => {
   const material = MATERIAL_BASE[params.material] ?? MATERIAL_BASE.abs;
-  const chamberVolumeL = Math.max(params.chamberVolumeL, 0.5);
-  const partVolumeCm3 = Math.max(params.partVolumeCm3, 1);
-  const tempDelta = Math.max(Math.min(params.chamberTemperatureC - material.tempRef, 18), -12);
+  const chamberVolumeL = clampChamber(params.chamberVolumeL);
+  const partVolumeCm3 = clampPart(params.partVolumeCm3);
+  const tempDelta = clampTemp(params.chamberTemperatureC, material.tempRef);
   const temperatureFactor = Math.exp(-tempDelta * material.tempSlope);
   const chamberFactor = Math.pow(chamberVolumeL / 8, 0.18);
   const partFactor = Math.pow(partVolumeCm3 / 60, 0.14);
   const detailFactor = DETAIL_FACTOR[params.surfaceDetail] ?? 1;
   const rawSeconds = material.seconds * temperatureFactor * chamberFactor * partFactor * detailFactor;
-  const materialMin = params.material === 'abs' ? 90 : 70;
-  const materialMax = params.material === 'abs' ? 1500 : 1080;
-  const exposureSeconds = Math.round(Math.min(Math.max(rawSeconds, materialMin), materialMax) / 5) * 5;
-  const vaporIntensity = Math.min(Math.max((params.chamberTemperatureC / material.tempRef) * (partVolumeCm3 / (chamberVolumeL * 1000)) * 18, 0.15), 2.8);
-  const riskScore = Math.min(
-    100,
-    Math.round(
-      28 +
-        Math.max(params.chamberTemperatureC - material.tempRef, 0) * 4.2 +
-        (DETAIL_FACTOR[params.surfaceDetail] - 0.72) * 28 +
-        Math.max(8 - chamberVolumeL, 0) * 1.6 +
-        Math.max(partVolumeCm3 - 120, 0) * 0.08,
-    ),
-  );
-  const recommendation = riskScore >= 68 ? 'aggressive' : riskScore >= 42 ? 'standard' : 'gentle';
-  const dryHours = Math.round((material.dryHours * (0.85 + partFactor * 0.25) * (params.surfaceDetail === 'fine' ? 1.15 : 1)) * 2) / 2;
-
+  const exposureSeconds = computeExposure(rawSeconds, params.material);
+  const vaporIntensity = computeVaporIntensity(params.chamberTemperatureC, material.tempRef, partVolumeCm3, chamberVolumeL);
+  const riskScore = computeRisk({ tempC: params.chamberTemperatureC, ref: material.tempRef, detail: params.surfaceDetail, chamberL: chamberVolumeL, partCm3: partVolumeCm3 });
+  const recommendation = computeRecommendation(riskScore);
+  const dryHours = computeDryHours(material.dryHours, partFactor, params.surfaceDetail === 'fine');
   return {
     exposureSeconds,
     exposureMinutes: exposureSeconds / 60,
@@ -64,6 +89,6 @@ export const calculateChemicalSmoothingTime = (params: ChemicalSmoothingParams):
     vaporIntensity,
     riskScore,
     recommendation,
-    trialSeconds: Math.max(30, Math.round(exposureSeconds * 0.32 / 5) * 5),
+    trialSeconds: computeTrial(exposureSeconds),
   };
 };
