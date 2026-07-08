@@ -1,0 +1,34 @@
+export interface PowerSupplyEstimatorUI {
+  systemVoltageLabel: string;
+  bedPowerLabel: string;
+  hotendPowerLabel: string;
+  motorsLabel: string;
+  motorPowerLabel: string;
+  auxiliaryPowerLabel: string;
+  safetyMarginLabel: string;
+  totalLoadLabel: string;
+  psuRequiredLabel: string;
+  currentRequiredLabel: string;
+  recommendedPsuLabel: string;
+  utilizationLabel: string;
+  thermalMapLabel: string;
+  bedSegmentLabel: string;
+  hotendSegmentLabel: string;
+  motorsSegmentLabel: string;
+  auxiliarySegmentLabel: string;
+  headroomSegmentLabel: string;
+  scenarioLabel: string;
+  scenarioBedSlinger: string;
+  scenarioCoreXY: string;
+  scenarioLargeFormat: string;
+  copyButton: string;
+  copiedButton: string;
+  controlsAriaLabel: string;
+  resultsAriaLabel: string;
+  copiedSummaryTemplate: string;
+  wattsUnit: string;
+  ampsUnit: string;
+  voltsUnit: string;
+  percentUnit: string;
+  countUnit: string;
+}

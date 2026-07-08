@@ -1,22 +1,15 @@
-import type { Printing3dCategoryEntry } from '../types';
-import { printingCostCalculator } from '../tool/printingCostCalculator/entry';
-import { shrinkageCalculator } from '../tool/shrinkageCalculator/entry';
-import { flowCalculator } from '../tool/flowCalculator/entry';
-import { resinCuringCalculator } from '../tool/resinCuringCalculator/entry';
-import { powerSupplyEstimator } from '../tool/powerSupplyEstimator/entry';
+import type { Printing3dToolEntry } from '../../types';
+import type { PowerSupplyEstimatorUI } from './ui';
 
-export const printing3dCategory: Printing3dCategoryEntry = {
-  icon: 'mdi:printer-3d',
-  tools: [
-    printingCostCalculator,
-    shrinkageCalculator,
-    flowCalculator,
-    resinCuringCalculator,
-    powerSupplyEstimator,
-  ],
+export const powerSupplyEstimator: Printing3dToolEntry<PowerSupplyEstimatorUI> = {
+  id: 'power-supply-estimator',
+  icons: {
+    bg: 'mdi:power-plug',
+    fg: 'mdi:flash',
+  },
   i18n: {
-    es: () => import('./i18n/es').then((m) => m.content),
     en: () => import('./i18n/en').then((m) => m.content),
+    es: () => import('./i18n/es').then((m) => m.content),
     fr: () => import('./i18n/fr').then((m) => m.content),
     de: () => import('./i18n/de').then((m) => m.content),
     id: () => import('./i18n/id').then((m) => m.content),

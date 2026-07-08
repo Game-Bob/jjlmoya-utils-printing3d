@@ -1,0 +1,227 @@
+---
+import type { PowerSupplyEstimatorUI } from './ui';
+
+interface Props {
+  ui: PowerSupplyEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="pse-root" id="main-tool">
+  <div class="pse-panel">
+    <section class="pse-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="pse-scenarios">
+        <span>{ui.scenarioLabel}</span>
+        <button type="button" class="pse-scenario active" data-bed="220" data-hotend="40" data-motors="4" data-motor="10" data-aux="25" data-margin="25">{ui.scenarioBedSlinger}</button>
+        <button type="button" class="pse-scenario" data-bed="300" data-hotend="60" data-motors="5" data-motor="12" data-aux="45" data-margin="30">{ui.scenarioCoreXY}</button>
+        <button type="button" class="pse-scenario" data-bed="600" data-hotend="80" data-motors="6" data-motor="14" data-aux="80" data-margin="35">{ui.scenarioLargeFormat}</button>
+      </div>
+
+      <div class="pse-voltage" role="group" aria-label={ui.systemVoltageLabel}>
+        <span>{ui.systemVoltageLabel}</span>
+        <label><input type="radio" name="pse-voltage" value="12" /> 12{ui.voltsUnit}</label>
+        <label><input type="radio" name="pse-voltage" value="24" checked /> 24{ui.voltsUnit}</label>
+      </div>
+
+      <div class="pse-grid">
+        <label class="pse-input-card">
+          <span>{ui.bedPowerLabel}</span>
+          <span class="pse-field">
+            <input id="pse-bed" type="number" value="220" min="0" step="5" />
+            <b>{ui.wattsUnit}</b>
+          </span>
+        </label>
+        <label class="pse-input-card">
+          <span>{ui.hotendPowerLabel}</span>
+          <span class="pse-field">
+            <input id="pse-hotend" type="number" value="40" min="0" step="5" />
+            <b>{ui.wattsUnit}</b>
+          </span>
+        </label>
+        <label class="pse-input-card">
+          <span>{ui.motorsLabel}</span>
+          <span class="pse-field">
+            <input id="pse-motors" type="number" value="4" min="0" step="1" />
+            <b>{ui.countUnit}</b>
+          </span>
+        </label>
+        <label class="pse-input-card">
+          <span>{ui.motorPowerLabel}</span>
+          <span class="pse-field">
+            <input id="pse-motor-power" type="number" value="10" min="0" step="1" />
+            <b>{ui.wattsUnit}</b>
+          </span>
+        </label>
+        <label class="pse-input-card">
+          <span>{ui.auxiliaryPowerLabel}</span>
+          <span class="pse-field">
+            <input id="pse-aux" type="number" value="25" min="0" step="5" />
+            <b>{ui.wattsUnit}</b>
+          </span>
+        </label>
+        <label class="pse-range-card">
+          <span class="pse-range-title">{ui.safetyMarginLabel} <strong><span id="pse-margin-value">25</span>{ui.percentUnit}</strong></span>
+          <input id="pse-margin" type="range" min="0" max="80" step="1" value="25" />
+        </label>
+      </div>
+    </section>
+
+    <section class="pse-results" aria-label={ui.resultsAriaLabel}>
+      <div class="pse-main-result">
+        <span>{ui.psuRequiredLabel}</span>
+        <strong class="pse-value"><span id="pse-required">0</span><em>{ui.wattsUnit}</em></strong>
+        <small>{ui.recommendedPsuLabel}: <b><span id="pse-recommended">0</span>{ui.wattsUnit}</b></small>
+      </div>
+
+      <div class="pse-meter" aria-hidden="true">
+        <div id="pse-meter-fill"></div>
+      </div>
+
+      <div class="pse-stats">
+        <div><span>{ui.totalLoadLabel}</span><strong><span id="pse-load">0</span><em>{ui.wattsUnit}</em></strong></div>
+        <div><span>{ui.currentRequiredLabel}</span><strong><span id="pse-current">0</span><em>{ui.ampsUnit}</em></strong></div>
+        <div><span>{ui.utilizationLabel}</span><strong><span id="pse-utilization">0</span><em>{ui.percentUnit}</em></strong></div>
+      </div>
+
+      <div class="pse-thermal">
+        <div class="pse-thermal-head">{ui.thermalMapLabel}</div>
+        <div class="pse-stack">
+          <span id="pse-seg-bed">{ui.bedSegmentLabel}</span>
+          <span id="pse-seg-hotend">{ui.hotendSegmentLabel}</span>
+          <span id="pse-seg-motors">{ui.motorsSegmentLabel}</span>
+          <span id="pse-seg-aux">{ui.auxiliarySegmentLabel}</span>
+          <span id="pse-seg-headroom">{ui.headroomSegmentLabel}</span>
+        </div>
+      </div>
+
+      <button type="button" class="pse-copy" id="pse-copy">{ui.copyButton}</button>
+      <span id="pse-copied-label" hidden>{ui.copiedButton}</span>
+      <span id="pse-summary-template" hidden>{ui.copiedSummaryTemplate}</span>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculatePowerSupply } from './logic';
+
+  class PowerSupplyEstimator {
+    private voltage = 24;
+    private labels = {
+      copy: document.getElementById('pse-copy')?.textContent || '',
+      copied: document.getElementById('pse-copied-label')?.textContent || '',
+      summary: document.getElementById('pse-summary-template')?.textContent || '',
+    };
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLInputElement>('input[name="pse-voltage"]').forEach((radio) => {
+        radio.addEventListener('input', () => {
+          this.voltage = parseFloat(radio.value) || 24;
+          this.update();
+        });
+      });
+
+      ['pse-bed', 'pse-hotend', 'pse-motors', 'pse-motor-power', 'pse-aux', 'pse-margin'].forEach((id) => {
+        this.input(id)?.addEventListener('input', () => this.update());
+      });
+
+      document.querySelectorAll<HTMLElement>('.pse-scenario').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.pse-scenario').forEach((item) => item.classList.remove('active'));
+          button.classList.add('active');
+          this.input('pse-bed').value = button.dataset.bed || '220';
+          this.input('pse-hotend').value = button.dataset.hotend || '40';
+          this.input('pse-motors').value = button.dataset.motors || '4';
+          this.input('pse-motor-power').value = button.dataset.motor || '10';
+          this.input('pse-aux').value = button.dataset.aux || '25';
+          this.input('pse-margin').value = button.dataset.margin || '25';
+          this.update();
+        });
+      });
+
+      document.getElementById('pse-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private params() {
+      return {
+        voltage: this.voltage,
+        bedWatts: this.value('pse-bed'),
+        hotendWatts: this.value('pse-hotend'),
+        motors: this.value('pse-motors'),
+        motorWatts: this.value('pse-motor-power'),
+        auxiliaryWatts: this.value('pse-aux'),
+        safetyMargin: this.value('pse-margin'),
+      };
+    }
+
+    private update() {
+      const params = this.params();
+      const result = calculatePowerSupply(params);
+      this.text('pse-margin-value', params.safetyMargin.toFixed(0));
+      this.text('pse-load', result.loadWatts.toFixed(0));
+      this.text('pse-required', result.requiredWatts.toFixed(0));
+      this.text('pse-current', result.currentAmps.toFixed(1));
+      this.text('pse-recommended', result.recommendedPsuWatts.toFixed(0));
+      this.text('pse-utilization', result.utilizationAtRecommended.toFixed(0));
+      const fill = document.getElementById('pse-meter-fill') as HTMLElement;
+      if (fill) fill.style.width = `${Math.min(result.utilizationAtRecommended, 100)}%`;
+      this.updateStack(params, result.marginWatts);
+    }
+
+    private updateStack(params: ReturnType<PowerSupplyEstimator['params']>, marginWatts: number) {
+      const total = Math.max(params.bedWatts + params.hotendWatts + params.motors * params.motorWatts + params.auxiliaryWatts + marginWatts, 1);
+      const segments = [
+        ['pse-seg-bed', params.bedWatts],
+        ['pse-seg-hotend', params.hotendWatts],
+        ['pse-seg-motors', params.motors * params.motorWatts],
+        ['pse-seg-aux', params.auxiliaryWatts],
+        ['pse-seg-headroom', marginWatts],
+      ] as const;
+      segments.forEach(([id, watts]) => {
+        const el = document.getElementById(id) as HTMLElement;
+        if (el) el.style.setProperty('--seg', `${Math.max((watts / total) * 100, 4)}%`);
+      });
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (!el || el.textContent === value) return;
+      el.textContent = value;
+      el.classList.remove('pse-tick');
+      window.requestAnimationFrame(() => el.classList.add('pse-tick'));
+    }
+
+    private copy() {
+      const result = calculatePowerSupply(this.params());
+      const summary = this.labels.summary
+        .replace('{requiredWatts}', result.requiredWatts.toFixed(0))
+        .replace('{currentAmps}', result.currentAmps.toFixed(1))
+        .replace('{voltage}', this.voltage.toFixed(0))
+        .replace('{recommendedWatts}', result.recommendedPsuWatts.toFixed(0));
+      navigator.clipboard?.writeText(summary);
+      const button = document.getElementById('pse-copy');
+      if (!button) return;
+      button.textContent = this.labels.copied;
+      setTimeout(() => {
+        button.textContent = this.labels.copy;
+      }, 1200);
+    }
+  }
+
+  const initPowerSupplyEstimator = () => new PowerSupplyEstimator();
+  document.addEventListener('astro:page-load', initPowerSupplyEstimator);
+  initPowerSupplyEstimator();
+</script>
