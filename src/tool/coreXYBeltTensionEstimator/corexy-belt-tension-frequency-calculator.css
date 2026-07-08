@@ -1,6 +1,6 @@
 .beltlab {
   --lab-bg: #fff7ea;
-  --lab-panel: #ffffff;
+  --lab-panel: #fff;
   --lab-field: #fff1dc;
   --lab-ink: #21170e;
   --lab-soft: #7a654e;
@@ -10,6 +10,7 @@
   --lab-good: #4f9b55;
   --lab-bad: #d95445;
   --lab-glow: rgba(240, 121, 32, .18);
+
   display: grid;
   gap: .75rem;
   width: 100%;
@@ -35,6 +36,7 @@
   --lab-good: #8ac06b;
   --lab-bad: #ff7565;
   --lab-glow: rgba(255, 150, 54, .16);
+
   box-shadow: none;
 }
 
@@ -336,6 +338,7 @@
   width: 100%;
   min-width: 0;
   border: 0;
+  appearance: textfield;
   background: transparent;
   color: var(--lab-ink);
   font-size: 1.35rem;
@@ -348,10 +351,6 @@
 .beltlab input::-webkit-inner-spin-button {
   margin: 0;
   appearance: none;
-}
-
-.beltlab input[type="number"] {
-  appearance: textfield;
 }
 
 .beltlab b {
@@ -377,10 +376,10 @@
   font-weight: 750;
 }
 
-.beltlab-copy {
+.beltlab button.beltlab-copy {
   width: 100%;
-  background: var(--lab-ink) !important;
-  color: var(--lab-bg) !important;
+  background: var(--lab-ink);
+  color: var(--lab-bg);
   transition: transform .16s ease, box-shadow .16s ease;
 }
 
@@ -439,7 +438,7 @@
   .beltlab *,
   .beltlab *::before,
   .beltlab *::after {
-    animation-duration: .001ms !important;
-    transition-duration: .001ms !important;
+    animation-duration: .001ms;
+    transition-duration: .001ms;
   }
 }

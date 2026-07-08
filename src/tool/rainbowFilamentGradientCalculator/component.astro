@@ -1,0 +1,279 @@
+---
+import { Icon } from 'astro-icon/components';
+import './rainbow-filament-transition-calculator.css';
+
+interface Props {
+  ui?: Record<string, unknown>;
+}
+
+const { ui } = Astro.props;
+const t = (ui ?? {}) as Record<string, string>;
+---
+
+<section
+  class="rfg-root"
+  id="main-tool"
+  data-unit="metric"
+  data-copy-template={t.copyTemplate}
+  data-copy-cycles={t.copyCycles}
+  data-copy-used={t.copyUsed}
+  data-copy-zcycle={t.copyZCycle}
+>
+  <div class="rfg-stage">
+    <div class="rfg-spool" aria-hidden="true">
+      <div class="rfg-spool-rim">
+        <div class="rfg-spool-core"></div>
+        <div class="rfg-thread rfg-thread-a"></div>
+        <div class="rfg-thread rfg-thread-b"></div>
+        <div class="rfg-thread rfg-thread-c"></div>
+      </div>
+      <div class="rfg-phase">
+        <span>{t.phaseWindow}</span>
+        <strong id="rfg-phase">{t.emptyValue}% &gt; {t.emptyValue}%</strong>
+      </div>
+    </div>
+
+    <div class="rfg-z-panel">
+      <div class="rfg-z-head">
+        <span>{t.zMap}</span>
+        <button class="rfg-unit" id="rfg-unit" type="button" aria-pressed="false">
+          <span>{t.unitMetric}</span>
+          <strong>{t.unitImperial}</strong>
+        </button>
+      </div>
+      <div class="rfg-tower-wrap">
+        <div class="rfg-tower" id="rfg-tower"></div>
+        <div class="rfg-axis">
+          <span id="rfg-axis-top">180 mm</span>
+          <span id="rfg-axis-mid">90 mm</span>
+          <span>{t.emptyValue}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="rfg-controls">
+    <label class="rfg-field">
+      <span>{t.cycleLength}</span>
+      <input id="rfg-cycle" type="range" min="2" max="80" step="0.5" value="30" />
+      <output id="rfg-cycle-o">30.0 m</output>
+    </label>
+    <label class="rfg-field">
+      <span>{t.partWeight}</span>
+      <input id="rfg-weight" type="range" min="5" max="1200" step="1" value="180" />
+      <output id="rfg-weight-o">180 g</output>
+    </label>
+    <label class="rfg-field">
+      <span>{t.partHeight}</span>
+      <input id="rfg-height" type="range" min="5" max="450" step="1" value="160" />
+      <output id="rfg-height-o">160 mm</output>
+    </label>
+    <label class="rfg-field">
+      <span>{t.startOffset}</span>
+      <input id="rfg-offset" type="range" min="0" max="80" step="0.5" value="0" />
+      <output id="rfg-offset-o">0.0 m</output>
+    </label>
+    <label class="rfg-field">
+      <span>{t.density}</span>
+      <input id="rfg-density" type="range" min="0.9" max="1.45" step="0.01" value="1.24" />
+      <output id="rfg-density-o">1.24 g/cm3</output>
+    </label>
+    <label class="rfg-field">
+      <span>{t.diameter}</span>
+      <input id="rfg-diameter" type="range" min="1.65" max="2.95" step="0.01" value="1.75" />
+      <output id="rfg-diameter-o">1.75 mm</output>
+    </label>
+  </form>
+
+  <div class="rfg-presets" aria-label={t.presets}>
+    <button type="button" data-density="1.24" class="is-active">{t.pla}</button>
+    <button type="button" data-density="1.27">{t.petg}</button>
+    <button type="button" data-density="1.20">{t.silk}</button>
+  </div>
+
+  <div class="rfg-results">
+    <article>
+      <Icon name="mdi:palette" />
+      <span>{t.cyclesInPart}</span>
+      <strong id="rfg-cycles">0.00</strong>
+    </article>
+    <article>
+      <Icon name="mdi:ruler" />
+      <span>{t.usedFilament}</span>
+      <strong id="rfg-used">0 m</strong>
+    </article>
+    <article>
+      <Icon name="mdi:arrow-up-down" />
+      <span>{t.heightPerCycle}</span>
+      <strong id="rfg-zcycle">0 mm</strong>
+    </article>
+    <article>
+      <Icon name="mdi:scale-balance" />
+      <span>{t.gramsPerCycle}</span>
+      <strong id="rfg-gcycle">0 g</strong>
+    </article>
+  </div>
+
+  <div class="rfg-band-list">
+    <div class="rfg-band-title">{t.transitionBands}</div>
+    <div id="rfg-bands"></div>
+  </div>
+
+  <div class="rfg-actions">
+    <button id="rfg-copy" type="button"><Icon name="mdi:content-copy" />{t.copySummary}</button>
+    <button id="rfg-reset" type="button">{t.reset}</button>
+  </div>
+</section>
+
+<script>
+  import { calculateGradient, gToOz, mmToIn } from './logic';
+
+  const colors = ['#ff365e', '#ff9d00', '#ffe95c', '#1ec96b', '#168cff', '#9f54ff'];
+  const ids = ['cycle', 'weight', 'height', 'offset', 'density', 'diameter'];
+  const byId = (id: string) => document.getElementById(`rfg-${id}`) as HTMLInputElement;
+  const text = (id: string, value: string) => {
+    const el = document.getElementById(`rfg-${id}`);
+    if (el) el.textContent = value;
+  };
+
+  class RainbowGradientTool {
+    unit: 'metric' | 'imperial' = 'metric';
+    inputs: Record<string, HTMLInputElement>;
+
+    constructor() {
+      this.inputs = Object.fromEntries(ids.map((id) => [id, byId(id)]));
+      this.bind();
+      this.render();
+    }
+
+    bind() {
+      Object.values(this.inputs).forEach((input) => input.addEventListener('input', () => this.render()));
+      this.bindUnitButton();
+      this.bindPresets();
+      this.bindReset();
+      this.bindCopy();
+    }
+
+    bindUnitButton() {
+      document.getElementById('rfg-unit')?.addEventListener('click', () => {
+        this.unit = this.unit === 'metric' ? 'imperial' : 'metric';
+        document.getElementById('main-tool')?.setAttribute('data-unit', this.unit);
+        document.getElementById('rfg-unit')?.setAttribute('aria-pressed', String(this.unit === 'imperial'));
+        this.render();
+      });
+    }
+
+    bindPresets() {
+      document.querySelectorAll<HTMLButtonElement>('.rfg-presets button').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.rfg-presets button').forEach((item) => item.classList.remove('is-active'));
+          button.classList.add('is-active');
+          this.inputs.density.value = button.dataset.density || '1.24';
+          this.render();
+        });
+      });
+    }
+
+    bindReset() {
+      document.getElementById('rfg-reset')?.addEventListener('click', () => {
+        this.inputs.cycle.value = '30';
+        this.inputs.weight.value = '180';
+        this.inputs.height.value = '160';
+        this.inputs.offset.value = '0';
+        this.inputs.density.value = '1.24';
+        this.inputs.diameter.value = '1.75';
+        this.render();
+      });
+    }
+
+    bindCopy() {
+      document.getElementById('rfg-copy')?.addEventListener('click', async () => {
+        const result = this.result();
+        const root = document.getElementById('main-tool');
+        const intro = root?.dataset.copyTemplate;
+        const cycles = root?.dataset.copyCycles;
+        const used = root?.dataset.copyUsed;
+        const zCycle = root?.dataset.copyZcycle;
+        await navigator.clipboard?.writeText(`${intro}: ${result.cyclesInPart.toFixed(2)} ${cycles}, ${this.formatLongM(result.filamentUsedM)} ${used}, ${this.formatLengthMm(result.heightPerCycleMm)} ${zCycle}.`);
+      });
+    }
+
+    values() {
+      return {
+        colorCycleLengthM: Number(this.inputs.cycle.value),
+        partWeightG: Number(this.inputs.weight.value),
+        densityGcm3: Number(this.inputs.density.value),
+        filamentDiameterMm: Number(this.inputs.diameter.value),
+        partHeightMm: Number(this.inputs.height.value),
+        startOffsetM: Number(this.inputs.offset.value),
+      };
+    }
+
+    result() {
+      return calculateGradient(this.values());
+    }
+
+    formatLengthMm(mm: number) {
+      return this.unit === 'metric' ? `${mm.toFixed(0)} mm` : `${mmToIn(mm).toFixed(2)} in`;
+    }
+
+    formatLongM(m: number) {
+      return this.unit === 'metric' ? `${m.toFixed(1)} m` : `${(m * 3.28084).toFixed(1)} ft`;
+    }
+
+    formatMass(g: number) {
+      return this.unit === 'metric' ? `${g.toFixed(0)} g` : `${gToOz(g).toFixed(2)} oz`;
+    }
+
+    render() {
+      const input = this.values();
+      const result = this.result();
+      text('cycle-o', this.formatLongM(input.colorCycleLengthM));
+      text('weight-o', this.formatMass(input.partWeightG));
+      text('height-o', this.formatLengthMm(input.partHeightMm));
+      text('offset-o', this.formatLongM(input.startOffsetM));
+      text('density-o', `${input.densityGcm3.toFixed(2)} g/cm3`);
+      text('diameter-o', this.formatLengthMm(input.filamentDiameterMm));
+      text('cycles', result.cyclesInPart.toFixed(2));
+      text('used', this.formatLongM(result.filamentUsedM));
+      text('zcycle', result.heightPerCycleMm > 999 ? '>999 mm' : this.formatLengthMm(result.heightPerCycleMm));
+      text('gcycle', this.formatMass(result.gramsPerCycle));
+      text('phase', `${result.phaseStartPercent.toFixed(0)}% -> ${result.phaseEndPercent.toFixed(0)}%`);
+      text('axis-top', this.formatLengthMm(input.partHeightMm));
+      text('axis-mid', this.formatLengthMm(input.partHeightMm / 2));
+      this.drawTower(result.bands);
+      this.drawBandList(result.bands);
+    }
+
+    drawTower(bands: ReturnType<typeof calculateGradient>['bands']) {
+      const tower = document.getElementById('rfg-tower');
+      if (!tower) return;
+      tower.innerHTML = bands.map((band) => {
+        const height = Math.max(1.2, band.endPercent - band.startPercent);
+        return `<span style="bottom:${band.startPercent}%;height:${height}%;background:${colors[band.colorIndex]}"></span>`;
+      }).join('');
+    }
+
+    drawBandList(bands: ReturnType<typeof calculateGradient>['bands']) {
+      const list = document.getElementById('rfg-bands');
+      if (!list) return;
+      const visible = bands.slice(0, 8);
+      list.innerHTML = visible.map((band) => `
+        <div class="rfg-band-row">
+          <i style="background:${colors[band.colorIndex]}"></i>
+          <span>${this.formatLengthMm(band.startMm)} - ${this.formatLengthMm(band.endMm)}</span>
+          <strong>${(band.endPercent - band.startPercent).toFixed(1)}%</strong>
+        </div>
+      `).join('');
+    }
+  }
+
+  const boot = () => {
+    const root = document.getElementById('main-tool');
+    if (!root || root.dataset.ready === 'true') return;
+    root.dataset.ready = 'true';
+    new RainbowGradientTool();
+  };
+  document.addEventListener('astro:page-load', boot);
+  boot();
+</script>

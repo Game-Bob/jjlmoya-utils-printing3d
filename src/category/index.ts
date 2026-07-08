@@ -5,6 +5,7 @@ import { flowCalculator } from '../tool/flowCalculator/entry';
 import { resinCuringCalculator } from '../tool/resinCuringCalculator/entry';
 import { powerSupplyEstimator } from '../tool/powerSupplyEstimator/entry';
 import { coreXYBeltTensionEstimator } from '../tool/coreXYBeltTensionEstimator/entry';
+import { rainbowFilamentGradientCalculator } from '../tool/rainbowFilamentGradientCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -15,6 +16,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     resinCuringCalculator,
     powerSupplyEstimator,
     coreXYBeltTensionEstimator,
+    rainbowFilamentGradientCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

@@ -5,7 +5,7 @@ export type { SEOSection };
 
 export type KnownLocale =
   | 'ar' | 'da' | 'de' | 'en' | 'es' | 'fi'
-  | 'fr' | 'it' | 'ja' | 'ko' | 'nb' | 'nl'
+  | 'fr' | 'id' | 'it' | 'ja' | 'ko' | 'nb' | 'nl'
   | 'pl' | 'pt' | 'ru' | 'sv' | 'tr' | 'zh';
 
 export interface FAQItem {

@@ -28,3 +28,5 @@ export { RESIN_CURING_CALCULATOR_TOOL } from './tool/resinCuringCalculator/index
 export { POWER_SUPPLY_ESTIMATOR_TOOL } from './tool/powerSupplyEstimator/index';
 
 export { COREXY_BELT_TENSION_ESTIMATOR_TOOL } from './tool/coreXYBeltTensionEstimator/index';
+
+export { RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL } from './tool/rainbowFilamentGradientCalculator/index';

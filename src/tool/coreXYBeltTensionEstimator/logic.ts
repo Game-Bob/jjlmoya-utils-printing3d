@@ -34,6 +34,19 @@ export const BELT_PRESETS: Record<BeltPitch, { label: string; densityGm: number;
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
+const computeStatus = (tensionN: number, min: number, max: number): 'low' | 'ok' | 'high' => {
+  if (tensionN < min) return 'low';
+  if (tensionN > max) return 'high';
+  return 'ok';
+};
+
+const computeWearIndex = (tensionN: number, recommendedMinN: number, recommendedMaxN: number) => {
+  const normalizedLoad = clamp((tensionN - recommendedMinN) / Math.max(recommendedMaxN - recommendedMinN, 1), 0, 1);
+  const overload = tensionN > recommendedMaxN ? clamp((tensionN - recommendedMaxN) / recommendedMaxN, 0, 1.5) : 0;
+  const slackPenalty = tensionN < recommendedMinN ? clamp((recommendedMinN - tensionN) / recommendedMinN, 0, 1) * 18 : 0;
+  return clamp(28 + normalizedLoad * 42 + overload * 35 + slackPenalty, 0, 100);
+};
+
 export const calculateCoreXYBeltTension = (params: CoreXYBeltTensionParams): CoreXYBeltTensionResult => {
   const spanM = Math.max(params.spanMm, 1) / 1000;
   const linearDensityKgM = Math.max(params.linearDensityGm, 0.1) / 1000;
@@ -47,15 +60,10 @@ export const calculateCoreXYBeltTension = (params: CoreXYBeltTensionParams): Cor
   const recommendedMinN = Math.max(params.recommendedMinN ?? (params.linearDensityGm >= 5.2 ? 25 : 18), 1);
   const recommendedMaxN = Math.max(params.recommendedMaxN ?? (params.linearDensityGm >= 5.2 ? 45 : 32), recommendedMinN + 1);
   const targetN = (recommendedMinN + recommendedMaxN) / 2;
-  const frequencyAtTargetHz = Math.sqrt(targetN / linearDensityKgM) / (2 * spanM);
-  const frequencyMinHz = Math.sqrt(recommendedMinN / linearDensityKgM) / (2 * spanM);
-  const frequencyMaxHz = Math.sqrt(recommendedMaxN / linearDensityKgM) / (2 * spanM);
+  const freq = (t: number) => Math.sqrt(t / linearDensityKgM) / (2 * spanM);
   const deflectionAtTargetMm = ((forceN * spanM) / (4 * targetN)) * 1000;
-  const status = tensionN < recommendedMinN ? 'low' : tensionN > recommendedMaxN ? 'high' : 'ok';
-  const normalizedLoad = clamp((tensionN - recommendedMinN) / Math.max(recommendedMaxN - recommendedMinN, 1), 0, 1);
-  const overload = tensionN > recommendedMaxN ? clamp((tensionN - recommendedMaxN) / recommendedMaxN, 0, 1.5) : 0;
-  const slackPenalty = tensionN < recommendedMinN ? clamp((recommendedMinN - tensionN) / recommendedMinN, 0, 1) * 18 : 0;
-  const wearIndex = clamp(28 + normalizedLoad * 42 + overload * 35 + slackPenalty, 0, 100);
+  const status = computeStatus(tensionN, recommendedMinN, recommendedMaxN);
+  const wearIndex = computeWearIndex(tensionN, recommendedMinN, recommendedMaxN);
 
   return {
     tensionN,
@@ -63,9 +71,9 @@ export const calculateCoreXYBeltTension = (params: CoreXYBeltTensionParams): Cor
     recommendedMinN,
     recommendedMaxN,
     targetN,
-    frequencyAtTargetHz,
-    frequencyMinHz,
-    frequencyMaxHz,
+    frequencyAtTargetHz: freq(targetN),
+    frequencyMinHz: freq(recommendedMinN),
+    frequencyMaxHz: freq(recommendedMaxN),
     status,
     wearIndex,
     deflectionAtTargetMm,
