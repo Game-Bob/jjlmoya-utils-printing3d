@@ -83,17 +83,17 @@
   }
 
   .rc-root.is-timer-fullscreen .rc-timer-ring {
-    width: min(78vmin, 620px);
-    height: min(78vmin, 620px);
+    width: min(78vw, 78vh, 620px);
+    height: min(78vw, 78vh, 620px);
     margin: 0;
   }
 
   .rc-root.is-timer-fullscreen .rc-timer-display > span {
-    font-size: clamp(3rem, 14vmin, 8rem);
+    font-size: clamp(3rem, min(14vw, 14vh), 8rem);
   }
 
   .rc-root.is-timer-fullscreen .rc-timer-display small {
-    font-size: clamp(0.875rem, 2vmin, 1.25rem);
+    font-size: clamp(0.875rem, min(2vw, 2vh), 1.25rem);
   }
 
   .rc-root.is-timer-fullscreen .rc-btn-start {

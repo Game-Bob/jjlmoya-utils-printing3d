@@ -30,7 +30,7 @@ const { ui } = Astro.props;
           </div>
 
           <div class="form-group margin-top">
-            <label class="form-label">
+            <label class="form-label" for="shrinkage-input-field">
               {ui.labelEstimatedShrinkage}
               <span class="small-label">{ui.unitPercent}</span>
             </label>
@@ -40,11 +40,11 @@ const { ui } = Astro.props;
 
         <div id="calibration-view" class="hidden">
           <div class="form-group">
-            <label class="form-label">{ui.labelDesignSize} <span class="small-label">{ui.unitMm}</span></label>
+            <label class="form-label" for="design-size-field">{ui.labelDesignSize} <span class="small-label">{ui.unitMm}</span></label>
             <input type="number" id="design-size-field" value="100" step="0.1" class="numeric-input" />
           </div>
           <div class="form-group margin-top">
-            <label class="form-label">{ui.labelRealSize} <span class="small-label">{ui.unitMm}</span></label>
+            <label class="form-label" for="real-size-field">{ui.labelRealSize} <span class="small-label">{ui.unitMm}</span></label>
             <input type="number" id="real-size-field" value="98.6" step="0.1" class="numeric-input" />
           </div>
         </div>
@@ -53,11 +53,11 @@ const { ui } = Astro.props;
           <label class="form-label">{ui.labelAxesCompensation}</label>
           <div class="axes-row">
             <div class="axis-input-box">
-              <label class="axis-label">{ui.labelAxisXY}</label>
+              <label class="axis-label" for="axis-xy-read">{ui.labelAxisXY}</label>
               <input type="number" id="axis-xy-read" value="100" step="0.01" readonly class="numeric-input read-only" />
             </div>
             <div class="axis-input-box">
-              <label class="axis-label">{ui.labelAxisZ}</label>
+              <label class="axis-label" for="axis-z-field">{ui.labelAxisZ}</label>
               <input type="number" id="axis-z-field" value="100.1" step="0.01" class="numeric-input" />
             </div>
           </div>

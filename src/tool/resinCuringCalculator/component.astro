@@ -35,7 +35,7 @@ const brands = [
         </div>
 
         <div class="rc-input-item">
-          <label>{t.brandLabel || 'Equipment Brand'}</label>
+          <label for="input-brand">{t.brandLabel || 'Equipment Brand'}</label>
           <select id="input-brand" class="rc-select">
             {brands.map((b) => (
               <option value={b.multi} data-power={b.defaultPower}>
@@ -47,7 +47,7 @@ const brands = [
 
         <div class="rc-input-item">
           <div class="rc-label-row">
-            <label>{t.powerLabel || 'Lamp Power (W)'}</label>
+            <label for="input-power">{t.powerLabel || 'Lamp Power (W)'}</label>
             <span id="val-power">40 {t.powerUnit || 'W'}</span>
           </div>
           <input type="range" id="input-power" class="rc-range" min="6" max="100" value="40" />
@@ -55,14 +55,14 @@ const brands = [
 
         <div class="rc-input-item">
           <div class="rc-label-row">
-            <label>{t.distanceLabel || 'LED Distance (cm)'}</label>
+            <label for="input-dist">{t.distanceLabel || 'LED Distance (cm)'}</label>
             <span id="val-dist">10 {t.distanceUnit || 'cm'}</span>
           </div>
           <input type="range" id="input-dist" class="rc-range" min="2" max="30" value="10" />
         </div>
 
         <div class="rc-input-item">
-          <label>{t.materialLabel || 'Material Type'}</label>
+          <label for="input-type">{t.materialLabel || 'Material Type'}</label>
           <select id="input-type" class="rc-select">
             {resinTypes.map((r) => (
               <option value={r.factor}>{r.label}</option>
@@ -72,7 +72,7 @@ const brands = [
 
         <div class="rc-input-item">
           <div class="rc-label-row">
-            <label>{t.weightLabel || 'Estimated Weight (g)'}</label>
+            <label for="input-size">{t.weightLabel || 'Estimated Weight (g)'}</label>
             <span id="val-size">25 {t.weightUnit || 'g'}</span>
           </div>
           <input type="range" id="input-size" class="rc-range" min="1" max="500" value="25" />
