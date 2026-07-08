@@ -1,21 +1,12 @@
-import type { Printing3dCategoryEntry } from '../types';
-import { printingCostCalculator } from '../tool/printingCostCalculator/entry';
-import { shrinkageCalculator } from '../tool/shrinkageCalculator/entry';
-import { flowCalculator } from '../tool/flowCalculator/entry';
-import { resinCuringCalculator } from '../tool/resinCuringCalculator/entry';
-import { powerSupplyEstimator } from '../tool/powerSupplyEstimator/entry';
-import { coreXYBeltTensionEstimator } from '../tool/coreXYBeltTensionEstimator/entry';
+import type { Printing3dToolEntry } from '../../types';
+import type { CoreXYBeltTensionEstimatorUI } from './ui';
 
-export const printing3dCategory: Printing3dCategoryEntry = {
-  icon: 'mdi:printer-3d',
-  tools: [
-    printingCostCalculator,
-    shrinkageCalculator,
-    flowCalculator,
-    resinCuringCalculator,
-    powerSupplyEstimator,
-    coreXYBeltTensionEstimator,
-  ],
+export const coreXYBeltTensionEstimator: Printing3dToolEntry<CoreXYBeltTensionEstimatorUI> = {
+  id: 'corexy-belt-tension-estimator',
+  icons: {
+    bg: 'mdi:axis-arrow',
+    fg: 'mdi:waveform',
+  },
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),
     en: () => import('./i18n/en').then((m) => m.content),

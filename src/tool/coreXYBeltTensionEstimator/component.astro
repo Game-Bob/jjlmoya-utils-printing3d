@@ -1,0 +1,293 @@
+---
+import type { CoreXYBeltTensionEstimatorUI } from './ui';
+
+interface Props {
+  ui: CoreXYBeltTensionEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="beltlab"
+  id="main-tool"
+  data-copy={ui.copyButton}
+  data-copied={ui.copiedButton}
+  data-template={ui.copiedSummaryTemplate}
+  data-low={ui.statusLow}
+  data-ok={ui.statusOk}
+  data-high={ui.statusHigh}
+  data-mm={ui.mmUnit}
+  data-inch={ui.inchUnit}
+  data-newton={ui.newtonUnit}
+  data-lbf={ui.lbfUnit}
+>
+  <div class="beltlab-headline">
+    <div class="beltlab-chipset" role="group" aria-label={ui.presetLabel}>
+      <button type="button" class="active" data-preset="gt2-6" data-density="4.1" data-min="18" data-max="32">{ui.gt26Preset}</button>
+      <button type="button" data-preset="gt2-9" data-density="6.2" data-min="25" data-max="45">{ui.gt29Preset}</button>
+      <button type="button" data-preset="custom" data-density="4.1" data-min="18" data-max="32">{ui.customPreset}</button>
+    </div>
+
+    <div class="beltlab-units" role="group" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="active" data-units="metric">{ui.metricLabel}</button>
+      <button type="button" data-units="imperial">{ui.imperialLabel}</button>
+    </div>
+  </div>
+
+  <div class="beltlab-main">
+    <section class="beltlab-left" aria-label={ui.resultsAriaLabel}>
+      <div class="beltlab-result" data-state="low">
+        <span>{ui.tensionLabel}</span>
+        <strong><span id="beltlab-tension">0</span><small id="beltlab-tension-unit">{ui.newtonUnit}</small></strong>
+        <p id="beltlab-status">{ui.statusLow}</p>
+      </div>
+
+      <div class="beltlab-diagram" aria-hidden="true">
+        <div class="beltlab-wheel left"></div>
+        <div class="beltlab-wheel right"></div>
+        <div class="beltlab-belt top"></div>
+        <div class="beltlab-belt measured" id="beltlab-measured-belt"></div>
+        <div class="beltlab-note"><b id="beltlab-note">82</b><span>{ui.hzUnit}</span></div>
+        <div class="beltlab-span-tag" id="beltlab-span-tag">150 {ui.mmUnit}</div>
+      </div>
+
+      <div class="beltlab-scale" aria-hidden="true"><i id="beltlab-needle"></i></div>
+
+      <div class="beltlab-metrics">
+        <div><span>{ui.recommendedRangeLabel}</span><b><span id="beltlab-range">18-32</span><small id="beltlab-range-unit">{ui.newtonUnit}</small></b></div>
+        <div><span>{ui.targetFrequencyLabel}</span><b><span id="beltlab-target-note">0</span><small>{ui.hzUnit}</small></b></div>
+        <div><span>{ui.targetDeflectionLabel}</span><b><span id="beltlab-target-deflection">0</span><small id="beltlab-target-deflection-unit">{ui.mmUnit}</small></b></div>
+        <div><span>{ui.wearIndexLabel}</span><b><span id="beltlab-wear">0</span><small>{ui.percentUnit}</small></b></div>
+      </div>
+    </section>
+
+    <section class="beltlab-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="beltlab-mode" role="group" aria-label={ui.modeLabel}>
+        <button type="button" class="active" data-mode="frequency">{ui.frequencyMode}</button>
+        <button type="button" data-mode="deflection">{ui.deflectionMode}</button>
+      </div>
+
+      <label class="beltlab-slider">
+        <span>{ui.spanLabel}</span>
+        <input id="beltlab-span-range" type="range" min="40" max="500" step="1" value="150" />
+        <output><input id="beltlab-span" type="number" min="1" step="1" value="150" /><b id="beltlab-span-unit">{ui.mmUnit}</b></output>
+      </label>
+
+      <div class="beltlab-minirow">
+        <label>
+          <span>{ui.densityLabel}</span>
+          <input id="beltlab-density" type="number" min="0.1" step="0.1" value="4.1" />
+          <b>{ui.gmUnit}</b>
+        </label>
+        <label data-frequency-control>
+          <span>{ui.frequencyLabel}</span>
+          <input id="beltlab-frequency" type="number" min="1" step="1" value="82" />
+          <b>{ui.hzUnit}</b>
+        </label>
+      </div>
+
+      <div class="beltlab-minirow">
+        <label data-deflection-control>
+          <span>{ui.deflectionLabel}</span>
+          <input id="beltlab-deflection" type="number" min="0.01" step="0.1" value="2.0" />
+          <b id="beltlab-deflection-unit">{ui.mmUnit}</b>
+        </label>
+        <label data-deflection-control>
+          <span>{ui.forceLabel}</span>
+          <input id="beltlab-force" type="number" min="0" step="0.1" value="1.0" />
+          <b id="beltlab-force-unit">{ui.newtonUnit}</b>
+        </label>
+      </div>
+
+      <p>{ui.balanceHint}</p>
+      <button type="button" class="beltlab-copy" id="beltlab-copy">{ui.copyButton}</button>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateCoreXYBeltTension, type MeasurementMode } from './logic';
+
+  class BeltLab {
+    private mode: MeasurementMode = 'frequency';
+    private unitSystem: 'metric' | 'imperial' = 'metric';
+    private spanMm = 150;
+    private deflectionMm = 2;
+    private forceN = 1;
+    private range = { min: 18, max: 32 };
+    private root = document.getElementById('main-tool') as HTMLElement;
+    private labels = {
+      copy: this.root.dataset.copy || '',
+      copied: this.root.dataset.copied || '',
+      template: this.root.dataset.template || '',
+      low: this.root.dataset.low || '',
+      ok: this.root.dataset.ok || '',
+      high: this.root.dataset.high || '',
+      mm: this.root.dataset.mm || '',
+      inch: this.root.dataset.inch || '',
+      newton: this.root.dataset.newton || '',
+      lbf: this.root.dataset.lbf || '',
+    };
+
+    constructor() {
+      this.bind();
+      this.reflectMode();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.setActive('[data-preset]', button);
+          this.range = {
+            min: parseFloat(button.dataset.min || '18'),
+            max: parseFloat(button.dataset.max || '32'),
+          };
+          this.input('beltlab-density').value = button.dataset.density || '4.1';
+          this.update();
+        });
+      });
+
+      document.querySelectorAll<HTMLButtonElement>('[data-units]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.capturePhysical();
+          this.unitSystem = button.dataset.units === 'imperial' ? 'imperial' : 'metric';
+          this.setActive('[data-units]', button);
+          this.renderUnits();
+          this.update();
+        });
+      });
+
+      document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.mode = button.dataset.mode === 'deflection' ? 'deflection' : 'frequency';
+          this.setActive('[data-mode]', button);
+          this.reflectMode();
+          this.update();
+        });
+      });
+
+      this.input('beltlab-span-range').addEventListener('input', () => {
+        const rangeValue = this.value('beltlab-span-range');
+        this.input('beltlab-span').value = rangeValue.toFixed(0);
+        this.update();
+      });
+
+      ['beltlab-span', 'beltlab-density', 'beltlab-frequency', 'beltlab-deflection', 'beltlab-force'].forEach((id) => {
+        this.input(id).addEventListener('input', () => {
+          if (id === 'beltlab-span' && this.unitSystem === 'metric') this.input('beltlab-span-range').value = this.input(id).value;
+          this.update();
+        });
+      });
+
+      document.getElementById('beltlab-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private setActive(selector: string, active: HTMLElement) {
+      document.querySelectorAll(selector).forEach((item) => item.classList.toggle('active', item === active));
+    }
+
+    private capturePhysical() {
+      this.spanMm = this.unitSystem === 'imperial' ? this.value('beltlab-span') * 25.4 : this.value('beltlab-span');
+      this.deflectionMm = this.unitSystem === 'imperial' ? this.value('beltlab-deflection') * 25.4 : this.value('beltlab-deflection');
+      this.forceN = this.unitSystem === 'imperial' ? this.value('beltlab-force') / 0.224809 : this.value('beltlab-force');
+    }
+
+    private renderUnits() {
+      const span = this.unitSystem === 'imperial' ? this.spanMm / 25.4 : this.spanMm;
+      const deflection = this.unitSystem === 'imperial' ? this.deflectionMm / 25.4 : this.deflectionMm;
+      const force = this.unitSystem === 'imperial' ? this.forceN * 0.224809 : this.forceN;
+      this.input('beltlab-span').value = span.toFixed(this.unitSystem === 'imperial' ? 2 : 0);
+      this.input('beltlab-deflection').value = deflection.toFixed(this.unitSystem === 'imperial' ? 3 : 1);
+      this.input('beltlab-force').value = force.toFixed(this.unitSystem === 'imperial' ? 2 : 1);
+      this.input('beltlab-span-range').value = `${Math.min(Math.max(this.spanMm, 40), 500)}`;
+      this.text('beltlab-span-unit', this.unitSystem === 'imperial' ? this.labels.inch : this.labels.mm);
+      this.text('beltlab-deflection-unit', this.unitSystem === 'imperial' ? this.labels.inch : this.labels.mm);
+      this.text('beltlab-force-unit', this.unitSystem === 'imperial' ? this.labels.lbf : this.labels.newton);
+      this.text('beltlab-tension-unit', this.unitSystem === 'imperial' ? this.labels.lbf : this.labels.newton);
+      this.text('beltlab-range-unit', this.unitSystem === 'imperial' ? this.labels.lbf : this.labels.newton);
+      this.text('beltlab-target-deflection-unit', this.unitSystem === 'imperial' ? this.labels.inch : this.labels.mm);
+    }
+
+    private reflectMode() {
+      document.querySelectorAll<HTMLElement>('[data-frequency-control]').forEach((item) => item.classList.toggle('quiet', this.mode !== 'frequency'));
+      document.querySelectorAll<HTMLElement>('[data-deflection-control]').forEach((item) => item.classList.toggle('quiet', this.mode !== 'deflection'));
+    }
+
+    private params() {
+      this.capturePhysical();
+      return {
+        spanMm: this.spanMm,
+        linearDensityGm: this.value('beltlab-density'),
+        frequencyHz: this.value('beltlab-frequency'),
+        deflectionMm: this.deflectionMm,
+        forceN: this.forceN,
+        mode: this.mode,
+        recommendedMinN: this.range.min,
+        recommendedMaxN: this.range.max,
+      };
+    }
+
+    private update() {
+      const result = calculateCoreXYBeltTension(this.params());
+      const shownTension = this.unitSystem === 'imperial' ? result.tensionLbf : result.tensionN;
+      const min = this.unitSystem === 'imperial' ? result.recommendedMinN * 0.224809 : result.recommendedMinN;
+      const max = this.unitSystem === 'imperial' ? result.recommendedMaxN * 0.224809 : result.recommendedMaxN;
+      const targetDeflection = this.unitSystem === 'imperial' ? result.deflectionAtTargetMm / 25.4 : result.deflectionAtTargetMm;
+      const decimals = this.unitSystem === 'imperial' ? 1 : 0;
+      const span = this.unitSystem === 'imperial' ? `${(this.spanMm / 25.4).toFixed(2)} ${this.labels.inch}` : `${this.spanMm.toFixed(0)} ${this.labels.mm}`;
+      const ratio = Math.min(result.tensionN / (result.recommendedMaxN * 1.45), 1);
+
+      this.text('beltlab-tension', shownTension.toFixed(decimals));
+      this.text('beltlab-range', `${min.toFixed(decimals)}-${max.toFixed(decimals)}`);
+      this.text('beltlab-target-note', result.frequencyAtTargetHz.toFixed(0));
+      this.text('beltlab-target-deflection', targetDeflection.toFixed(this.unitSystem === 'imperial' ? 3 : 1));
+      this.text('beltlab-wear', result.wearIndex.toFixed(0));
+      this.text('beltlab-status', result.status === 'low' ? this.labels.low : result.status === 'high' ? this.labels.high : this.labels.ok);
+      this.text('beltlab-note', this.value('beltlab-frequency').toFixed(0));
+      this.text('beltlab-span-tag', span);
+
+      document.querySelector('.beltlab-result')?.setAttribute('data-state', result.status);
+      this.root.dataset.state = result.status;
+      const needle = document.getElementById('beltlab-needle') as HTMLElement;
+      if (needle) needle.style.left = `${ratio * 100}%`;
+      const belt = document.getElementById('beltlab-measured-belt') as HTMLElement;
+      if (belt) belt.style.setProperty('--sag', `${Math.max(2, 18 - ratio * 15)}px`);
+    }
+
+    private text(id: string, value: string) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    private copy() {
+      const result = calculateCoreXYBeltTension(this.params());
+      const text = this.labels.template
+        .replace('{tensionN}', result.tensionN.toFixed(1))
+        .replace('{tensionLbf}', result.tensionLbf.toFixed(1))
+        .replace('{frequencyMin}', result.frequencyMinHz.toFixed(0))
+        .replace('{frequencyMax}', result.frequencyMaxHz.toFixed(0))
+        .replace('{status}', result.status);
+      navigator.clipboard?.writeText(text);
+      const button = document.getElementById('beltlab-copy');
+      if (!button) return;
+      button.textContent = this.labels.copied;
+      setTimeout(() => {
+        button.textContent = this.labels.copy;
+      }, 1100);
+    }
+  }
+
+  const initBeltLab = () => new BeltLab();
+  document.addEventListener('astro:page-load', initBeltLab);
+  initBeltLab();
+</script>

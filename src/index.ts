@@ -26,3 +26,5 @@ export { FLOW_CALCULATOR_TOOL } from './tool/flowCalculator/index';
 export { RESIN_CURING_CALCULATOR_TOOL } from './tool/resinCuringCalculator/index';
 
 export { POWER_SUPPLY_ESTIMATOR_TOOL } from './tool/powerSupplyEstimator/index';
+
+export { COREXY_BELT_TENSION_ESTIMATOR_TOOL } from './tool/coreXYBeltTensionEstimator/index';
