@@ -1,0 +1,258 @@
+---
+import type { ChemicalSmoothingTimeSimulatorUI } from './ui';
+import './abs-pvb-chemical-smoothing-time-calculator.css';
+
+interface Props {
+  ui: ChemicalSmoothingTimeSimulatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="csts-root" id="main-tool">
+  <div class="csts-panel">
+    <section class="csts-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="csts-topline">
+        <div class="csts-toggle" role="group" aria-label={ui.unitSystemLabel}>
+          <span>{ui.unitSystemLabel}</span>
+          <button type="button" class="active" data-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <div class="csts-presets">
+          <span>{ui.presetsLabel}</span>
+          <button type="button" data-preset="mini">{ui.miniPresetLabel}</button>
+          <button type="button" data-preset="display" class="active">{ui.displayPresetLabel}</button>
+          <button type="button" data-preset="enclosure">{ui.enclosurePresetLabel}</button>
+        </div>
+      </div>
+
+      <div class="csts-material" role="group" aria-label={ui.materialLabel}>
+        <span>{ui.materialLabel}</span>
+        <label><input type="radio" name="csts-material" value="abs" checked /> {ui.absLabel}</label>
+        <label><input type="radio" name="csts-material" value="pvb" /> {ui.pvbLabel}</label>
+      </div>
+
+      <div class="csts-grid">
+        <label class="csts-field-card">
+          <span>{ui.chamberVolumeLabel}</span>
+          <span class="csts-input-row">
+            <input id="csts-chamber" type="number" min="0.5" step="0.1" value="8" />
+            <b id="csts-chamber-unit">{ui.chamberUnitMetric}</b>
+          </span>
+        </label>
+        <label class="csts-field-card">
+          <span>{ui.chamberTemperatureLabel}</span>
+          <span class="csts-input-row">
+            <input id="csts-temp" type="number" min="5" step="1" value="24" />
+            <b id="csts-temp-unit">{ui.temperatureUnitMetric}</b>
+          </span>
+        </label>
+        <label class="csts-field-card">
+          <span>{ui.partVolumeLabel}</span>
+          <span class="csts-input-row">
+            <input id="csts-part" type="number" min="1" step="1" value="60" />
+            <b id="csts-part-unit">{ui.partUnitMetric}</b>
+          </span>
+        </label>
+        <label class="csts-detail-card">
+          <span>{ui.surfaceDetailLabel}: <strong id="csts-detail-name">{ui.balancedDetailLabel}</strong></span>
+          <input id="csts-detail" type="range" min="0" max="2" step="1" value="1" />
+        </label>
+      </div>
+      <p class="csts-safety">{ui.safetyNote}</p>
+    </section>
+
+    <section class="csts-results" aria-label={ui.resultsAriaLabel}>
+      <div class="csts-main">
+        <span>{ui.exposureLabel}</span>
+        <strong><span id="csts-minutes">0.0</span><em>{ui.minutesUnit}</em></strong>
+        <small><span id="csts-seconds">0</span> {ui.secondsUnit}</small>
+      </div>
+
+      <div class="csts-vapor" aria-hidden="true">
+        <div class="csts-jar">
+          <span id="csts-vapor-fill"></span>
+          <i></i><i></i><i></i>
+        </div>
+        <div class="csts-risk">
+          <span>{ui.riskLabel}</span>
+          <b id="csts-risk">0</b>
+          <em id="csts-recommendation">{ui.recommendationStandard}</em>
+        </div>
+      </div>
+
+      <div class="csts-stats">
+        <div><span>{ui.firstTrialLabel}</span><strong><span id="csts-trial">0</span><em>{ui.secondsUnit}</em></strong></div>
+        <div><span>{ui.dryTimeLabel}</span><strong><span id="csts-dry">0</span><em>{ui.hoursUnit}</em></strong></div>
+        <div><span>{ui.vaporMapLabel}</span><strong><span id="csts-intensity">0.0</span><em>x</em></strong></div>
+      </div>
+
+      <button type="button" class="csts-copy" id="csts-copy">{ui.copyButton}</button>
+      <span id="csts-copied-label" hidden>{ui.copiedButton}</span>
+      <span id="csts-summary-template" hidden>{ui.copiedSummaryTemplate}</span>
+      <span id="csts-rec-gentle" hidden>{ui.recommendationGentle}</span>
+      <span id="csts-rec-standard" hidden>{ui.recommendationStandard}</span>
+      <span id="csts-rec-aggressive" hidden>{ui.recommendationAggressive}</span>
+      <span id="csts-detail-fine" hidden>{ui.fineDetailLabel}</span>
+      <span id="csts-detail-balanced" hidden>{ui.balancedDetailLabel}</span>
+      <span id="csts-detail-coarse" hidden>{ui.coarseDetailLabel}</span>
+      <span id="csts-unit-data" hidden data-chamber-metric={ui.chamberUnitMetric} data-chamber-imperial={ui.chamberUnitImperial} data-temp-metric={ui.temperatureUnitMetric} data-temp-imperial={ui.temperatureUnitImperial} data-part-metric={ui.partUnitMetric} data-part-imperial={ui.partUnitImperial}></span>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateChemicalSmoothingTime, type SurfaceDetail, type SmoothingMaterial } from './logic';
+
+  class ChemicalSmoothingTimeSimulator {
+    private units: 'metric' | 'imperial' = 'metric';
+    private material: SmoothingMaterial = 'abs';
+    private labels = {
+      copy: document.getElementById('csts-copy')?.textContent || '',
+      copied: document.getElementById('csts-copied-label')?.textContent || '',
+      summary: document.getElementById('csts-summary-template')?.textContent || '',
+      gentle: document.getElementById('csts-rec-gentle')?.textContent || '',
+      standard: document.getElementById('csts-rec-standard')?.textContent || '',
+      aggressive: document.getElementById('csts-rec-aggressive')?.textContent || '',
+      fine: document.getElementById('csts-detail-fine')?.textContent || '',
+      balanced: document.getElementById('csts-detail-balanced')?.textContent || '',
+      coarse: document.getElementById('csts-detail-coarse')?.textContent || '',
+    };
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.units === 'imperial' ? 'imperial' : 'metric'));
+      });
+      document.querySelectorAll<HTMLInputElement>('input[name="csts-material"]').forEach((radio) => {
+        radio.addEventListener('input', () => {
+          this.material = radio.value as SmoothingMaterial;
+          this.update();
+        });
+      });
+      ['csts-chamber', 'csts-temp', 'csts-part', 'csts-detail'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      document.querySelectorAll<HTMLElement>('[data-preset]').forEach((button) => {
+        button.addEventListener('click', () => this.applyPreset(button));
+      });
+      document.getElementById('csts-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private setUnits(units: 'metric' | 'imperial') {
+      if (units === this.units) return;
+      const chamber = this.toMetricChamber();
+      const temp = this.toMetricTemp();
+      const part = this.toMetricPart();
+      this.units = units;
+      document.querySelectorAll('[data-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.units === units));
+      this.fromMetricValues(chamber, temp, part);
+      this.updateUnits();
+      this.update();
+    }
+
+    private applyPreset(button: HTMLElement) {
+      document.querySelectorAll('[data-preset]').forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      const preset = button.dataset.preset;
+      const values = preset === 'mini' ? [3, 22, 18, 0] : preset === 'enclosure' ? [18, 28, 160, 2] : [8, 24, 60, 1];
+      this.fromMetricValues(values[0], values[1], values[2]);
+      this.input('csts-detail').value = String(values[3]);
+      this.update();
+    }
+
+    private updateUnits() {
+      const data = document.getElementById('csts-unit-data') as HTMLElement;
+      this.text('csts-chamber-unit', this.units === 'metric' ? data.dataset.chamberMetric || '' : data.dataset.chamberImperial || '');
+      this.text('csts-temp-unit', this.units === 'metric' ? data.dataset.tempMetric || '' : data.dataset.tempImperial || '');
+      this.text('csts-part-unit', this.units === 'metric' ? data.dataset.partMetric || '' : data.dataset.partImperial || '');
+    }
+
+    private toMetricChamber() {
+      const value = this.value('csts-chamber');
+      return this.units === 'metric' ? value : value * 3.78541;
+    }
+
+    private toMetricTemp() {
+      const value = this.value('csts-temp');
+      return this.units === 'metric' ? value : (value - 32) * 5 / 9;
+    }
+
+    private toMetricPart() {
+      const value = this.value('csts-part');
+      return this.units === 'metric' ? value : value * 16.3871;
+    }
+
+    private fromMetricValues(chamberL: number, tempC: number, partCm3: number) {
+      this.input('csts-chamber').value = this.units === 'metric' ? chamberL.toFixed(1) : (chamberL / 3.78541).toFixed(2);
+      this.input('csts-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+      this.input('csts-part').value = this.units === 'metric' ? partCm3.toFixed(0) : (partCm3 / 16.3871).toFixed(1);
+    }
+
+    private detail(): SurfaceDetail {
+      return (['fine', 'balanced', 'coarse'][Math.round(this.value('csts-detail'))] || 'balanced') as SurfaceDetail;
+    }
+
+    private params() {
+      return {
+        material: this.material,
+        chamberVolumeL: this.toMetricChamber(),
+        chamberTemperatureC: this.toMetricTemp(),
+        partVolumeCm3: this.toMetricPart(),
+        surfaceDetail: this.detail(),
+      };
+    }
+
+    private update() {
+      const result = calculateChemicalSmoothingTime(this.params());
+      const detail = this.detail();
+      this.text('csts-detail-name', detail === 'fine' ? this.labels.fine : detail === 'coarse' ? this.labels.coarse : this.labels.balanced);
+      this.text('csts-minutes', result.exposureMinutes.toFixed(1));
+      this.text('csts-seconds', result.exposureSeconds.toFixed(0));
+      this.text('csts-dry', result.dryHours.toFixed(1));
+      this.text('csts-trial', result.trialSeconds.toFixed(0));
+      this.text('csts-risk', result.riskScore.toFixed(0));
+      this.text('csts-intensity', result.vaporIntensity.toFixed(1));
+      this.text('csts-recommendation', result.recommendation === 'gentle' ? this.labels.gentle : result.recommendation === 'aggressive' ? this.labels.aggressive : this.labels.standard);
+      const fill = document.getElementById('csts-vapor-fill') as HTMLElement;
+      if (fill) fill.style.height = `${Math.min(88, 24 + result.vaporIntensity * 22)}%`;
+      const root = document.querySelector('.csts-root') as HTMLElement;
+      root?.setAttribute('data-risk', result.recommendation);
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private copy() {
+      const result = calculateChemicalSmoothingTime(this.params());
+      const summary = this.labels.summary
+        .replace('{minutes}', result.exposureMinutes.toFixed(1))
+        .replace('{seconds}', result.exposureSeconds.toFixed(0))
+        .replace('{dryHours}', result.dryHours.toFixed(1))
+        .replace('{trialSeconds}', result.trialSeconds.toFixed(0));
+      navigator.clipboard?.writeText(summary);
+      const button = document.getElementById('csts-copy');
+      if (!button) return;
+      button.textContent = this.labels.copied;
+      setTimeout(() => {
+        button.textContent = this.labels.copy;
+      }, 1200);
+    }
+  }
+
+  const initChemicalSmoothingTimeSimulator = () => new ChemicalSmoothingTimeSimulator();
+  document.addEventListener('astro:page-load', initChemicalSmoothingTimeSimulator);
+  initChemicalSmoothingTimeSimulator();
+</script>

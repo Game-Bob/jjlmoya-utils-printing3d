@@ -7,6 +7,7 @@ import { RESIN_CURING_CALCULATOR_TOOL } from './tool/resinCuringCalculator';
 import { POWER_SUPPLY_ESTIMATOR_TOOL } from './tool/powerSupplyEstimator';
 import { COREXY_BELT_TENSION_ESTIMATOR_TOOL } from './tool/coreXYBeltTensionEstimator';
 import { RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL } from './tool/rainbowFilamentGradientCalculator';
+import { CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL } from './tool/chemicalSmoothingTimeSimulator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -16,4 +17,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   POWER_SUPPLY_ESTIMATOR_TOOL,
   COREXY_BELT_TENSION_ESTIMATOR_TOOL,
   RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL,
+  CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL,
 ];
