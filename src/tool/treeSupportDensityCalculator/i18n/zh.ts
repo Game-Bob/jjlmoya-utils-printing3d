@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { TreeSupportDensityCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
-  slug: 'shu-zhi-zhi-cheng-mi-du-ji-suan-qi',
+  slug: 'tree-support-density-calculator',
   title: '树状支撑密度计算器',
   description: '根据支撑点高度、分支角度、分支密度和树干基部直径，估算树状支撑的树冠直径、支撑体积、分支数量、接触直径和稳定性。',
   ui: {

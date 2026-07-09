@@ -35,7 +35,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     resultsAriaLabel: 'Résultats de densité de support arborescent',
     copyButton: 'Copier la configuration',
     copiedButton: 'Copié',
-    copiedSummaryTemplate: 'Estimation support arbre : canopée {canopy}, volume {volume}, stabilité {stability} ({score}/100).',
+    copiedSummaryTemplate: 'Estimation support arbre: canopée {canopy}, volume {volume}, stabilité {stability} ({score}/100).',
     millimetersUnit: 'mm',
     inchesUnit: 'po',
     cubicCentimetersUnit: 'cm³',
@@ -53,7 +53,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Le calculateur estime trois valeurs difficiles à juger à l\'œil nu dans un aperçu slicer : le diamètre de la canopée supérieure, le volume de support et le score de stabilité. Le diamètre de la canopée supérieure indique la largeur de la couronne de branches près du modèle. Le volume de support estime le matériau imprimé nécessaire pour le tronc et les branches. La stabilité combine l\'angle, la densité, le diamètre basal, la hauteur et l\'étendue de la canopée en un score pratique. L\'objectif n\'est pas de remplacer le moteur du slicer ; l\'objectif est de choisir des valeurs de départ avant de slicer afin de passer moins de temps à itérer les aperçus de supports.',
+      html: 'Le calculateur estime trois valeurs difficiles à juger à l\'œil nu dans un aperçu slicer: le diamètre de la canopée supérieure, le volume de support et le score de stabilité. Le diamètre de la canopée supérieure indique la largeur de la couronne de branches près du modèle. Le volume de support estime le matériau imprimé nécessaire pour le tronc et les branches. La stabilité combine l\'angle, la densité, le diamètre basal, la hauteur et l\'étendue de la canopée en un score pratique. L\'objectif n\'est pas de remplacer le moteur du slicer ; l\'objectif est de choisir des valeurs de départ avant de slicer afin de passer moins de temps à itérer les aperçus de supports.',
     },
     {
       type: 'stats',
@@ -70,7 +70,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       title: 'Ceci est un calculateur de planification, pas une exportation géométrique de slicer',
       html: 'Chaque slicer génère les supports arborescents différemment. Cura, PrusaSlicer, Bambu Studio, OrcaSlicer et d\'autres outils utilisent des noms et algorithmes différents pour la génération de branches, l\'évitement de collisions, l\'interface de support et les points de contact. Utilise les résultats comme une direction de réglage, puis confirme la géométrie finale dans l\'aperçu du slicer avant d\'imprimer.',
     },
-    { type: 'title', text: 'Angle de Ramification : Portée, Chemin de Charge et Risque de Défaillance', level: 2 },
+    { type: 'title', text: 'Angle de Ramification: Portée, Chemin de Charge et Risque de Défaillance', level: 2 },
     {
       type: 'paragraph',
       html: 'L\'angle de ramification contrôle l\'agressivité avec laquelle un support arborescent s\'étend du tronc vers le modèle. Un angle plus faible maintient les branches plus verticales, ce qui améliore généralement la rigidité et réduit le balancement latéral. Un angle plus élevé atteint plus loin au-dessus de l\'espace vide, ce qui peut réduire le nombre de troncs nécessaires, mais augmente la charge de flexion et peut créer de longs segments de branche non soutenus. Pour les supports hauts, un petit changement de 50 à 60 degrés peut transformer un arbre stable en une structure flexible qui vibre lorsque la buse le touche.',
@@ -94,7 +94,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       title: 'Ne recherche pas la portée avec l\'angle seul',
       html: 'Si les branches doivent voyager loin, essaie d\'ajouter un tronc supplémentaire ou d\'augmenter la densité de la canopée avant de pousser l\'angle à la limite supérieure. Un second tronc proche utilise souvent moins de matériau qu\'un arbre surétendu qui a besoin d\'une base lourde pour survivre.',
     },
-    { type: 'title', text: 'Densité des Branches : Couverture de Contact Sans Cicatrices de Support', level: 2 },
+    { type: 'title', text: 'Densité des Branches: Couverture de Contact Sans Cicatrices de Support', level: 2 },
     {
       type: 'paragraph',
       html: 'La densité des branches décrit la quantité de structure de branches créée près de la zone supportée. Une faible densité réduit le filament et facilite le retrait, mais peut laisser les bords de surplomb sous-supportés. Une densité élevée améliore la couverture et distribue la charge sur plusieurs contacts, mais augmente le temps d\'impression, les cicatrices de contact et le risque que les supports fusionnent avec les surfaces délicates. La bonne densité n\'est donc pas le nombre le plus élevé qui semble sûr ; c\'est le nombre le plus bas qui empêche les surplombs de s\'affaisser tout en maintenant une rigidité suffisante.',
@@ -137,7 +137,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     { type: 'title', text: 'Diamètre Basal du Tronc et Pourquoi les Supports Arborescents Hauts Échouent', level: 2 },
     {
       type: 'paragraph',
-      html: 'Le diamètre basal du tronc est la fondation de l\'arbre. Un tronc fin peut être parfaitement adéquat pour un support court, mais le même diamètre devient risqué lorsque le point supporté est haut. La hauteur augmente l\'effet de levier : un petit impact de buse, un frôlement de déplacement ou une vibration de ventilateur de refroidissement produit plus de mouvement au niveau de la canopée. Si le tronc est trop fin pour la hauteur, le support peut ne pas se casser immédiatement ; il peut lentement s\'incliner, déplacer le point de contact ou se décoller du plateau avant que le surplomb ne soit terminé.',
+      html: 'Le diamètre basal du tronc est la fondation de l\'arbre. Un tronc fin peut être parfaitement adéquat pour un support court, mais le même diamètre devient risqué lorsque le point supporté est haut. La hauteur augmente l\'effet de levier: un petit impact de buse, un frôlement de déplacement ou une vibration de ventilateur de refroidissement produit plus de mouvement au niveau de la canopée. Si le tronc est trop fin pour la hauteur, le support peut ne pas se casser immédiatement ; il peut lentement s\'incliner, déplacer le point de contact ou se décoller du plateau avant que le surplomb ne soit terminé.',
     },
     {
       type: 'paragraph',
@@ -261,7 +261,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     { type: 'title', text: 'Quand les Supports Arborescents Sont Meilleurs Que les Supports Normaux', level: 2 },
     {
       type: 'paragraph',
-      html: 'Les supports arborescents sont les plus utiles lorsque le support est nécessaire dans des régions isolées : bras de figurines, casques, cornes de créatures, sculptures organiques, arcs décoratifs et surplombs courbés. Ils évitent de remplir toute la zone sous le modèle, donc ils utilisent souvent moins de filament et laissent moins de cicatrices que les supports en grille. Ils sont aussi utiles quand les supports standard créeraient un grand mur difficile à retirer d\'une surface courbe.',
+      html: 'Les supports arborescents sont les plus utiles lorsque le support est nécessaire dans des régions isolées: bras de figurines, casques, cornes de créatures, sculptures organiques, arcs décoratifs et surplombs courbés. Ils évitent de remplir toute la zone sous le modèle, donc ils utilisent souvent moins de filament et laissent moins de cicatrices que les supports en grille. Ils sont aussi utiles quand les supports standard créeraient un grand mur difficile à retirer d\'une surface courbe.',
     },
     {
       type: 'paragraph',

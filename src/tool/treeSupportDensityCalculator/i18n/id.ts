@@ -229,7 +229,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     },
     {
       type: 'tip',
-      title: 'PETG membutuhkan kehati-hatian ekstra',
+      title: 'PETG membutuhkan kewaspadaan ekstra',
       html: 'PETG merekat secara agresif ke material penyangga yang dicetak dari filamen yang sama. Kepadatan pohon sedang dengan jarak Z yang hati-hati seringkali lebih baik daripada kanopi sangat rapat dengan kontak besar.',
     },
     { type: 'title', text: 'Alur Kerja Awal yang Direkomendasikan untuk Penyangga Pohon di Slicer', level: 2 },

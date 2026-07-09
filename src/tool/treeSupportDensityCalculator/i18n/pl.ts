@@ -59,9 +59,9 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       type: 'stats',
       columns: 3,
       items: [
-        { value: '35–50°', label: 'typowy zakres kąta rozgałęzienia dla zrównoważonego zasięgu i wytrzymałości' },
-        { value: '25–55%', label: 'praktyczny zakres gęstości gałęzi dla wielu wydruków FDM' },
-        { value: '2–8 mm', label: 'typowy zakres średnicy podstawy pnia dla podpór drzewiastych w drukarkach hobbystycznych' },
+        { value: '35-50°', label: 'typowy zakres kąta rozgałęzienia dla zrównoważonego zasięgu i wytrzymałości' },
+        { value: '25-55%', label: 'praktyczny zakres gęstości gałęzi dla wielu wydruków FDM' },
+        { value: '2-8 mm', label: 'typowy zakres średnicy podstawy pnia dla podpór drzewiastych w drukarkach hobbystycznych' },
       ],
     },
     {
@@ -83,10 +83,10 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       type: 'table',
       headers: ['Kąt rozgałęzienia', 'Najlepsze zastosowanie', 'Ryzyko przy nadużyciu', 'Regulacja'],
       rows: [
-        ['20–35°', 'Wysokie podpory i wąskie wieże', 'Może wymagać więcej pni, bo zasięg jest ograniczony', 'Zwiększaj gęstość tylko tam, gdzie pokrycie kontaktem jest słabe'],
-        ['36–50°', 'Ogólne strojenie podpór drzewiastych', 'Zwykle zrównoważone, ale wciąż zależy od wysokości', 'Zacznij tutaj dla większości wydruków z PLA i PETG'],
-        ['51–65°', 'Szerokie nawisy o umiarkowanej wysokości', 'Gałęzie mogą uginać się podczas ruchów lub kontaktu', 'Użyj grubszej podstawy pnia i umiarkowanej gęstości'],
-        ['66–75°', 'Przypadki szczególne z bardzo szerokim zasięgiem', 'Wysokie obciążenie zginające i słabe nasady gałęzi', 'Sprawdzaj dokładnie w podglądzie i zwolnij drukowanie podpór'],
+        ['20-35°', 'Wysokie podpory i wąskie wieże', 'Może wymagać więcej pni, bo zasięg jest ograniczony', 'Zwiększaj gęstość tylko tam, gdzie pokrycie kontaktem jest słabe'],
+        ['36-50°', 'Ogólne strojenie podpór drzewiastych', 'Zwykle zrównoważone, ale wciąż zależy od wysokości', 'Zacznij tutaj dla większości wydruków z PLA i PETG'],
+        ['51-65°', 'Szerokie nawisy o umiarkowanej wysokości', 'Gałęzie mogą uginać się podczas ruchów lub kontaktu', 'Użyj grubszej podstawy pnia i umiarkowanej gęstości'],
+        ['66-75°', 'Przypadki szczególne z bardzo szerokim zasięgiem', 'Wysokie obciążenie zginające i słabe nasady gałęzi', 'Sprawdzaj dokładnie w podglądzie i zwolnij drukowanie podpór'],
       ],
     },
     {
@@ -252,8 +252,8 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       title: 'Szybka sekwencja strojenia',
       items: [
         'Wprowadź wysokość punktu podparcia, nie tylko wysokość modelu.',
-        'Zacznij od około 45–50° dla kąta rozgałęzienia.',
-        'Użyj 30–45% gęstości dla ogólnych wydruków z PLA, a następnie dostosuj na podstawie podglądu.',
+        'Zacznij od około 45-50° dla kąta rozgałęzienia.',
+        'Użyj 30-45% gęstości dla ogólnych wydruków z PLA, a następnie dostosuj na podstawie podglądu.',
         'Zwiększ średnicę pnia, zanim uczynisz wysokie podpory ekstremalnie gęstymi.',
         'Potwierdź średnicę kontaktu i luz w rzeczywistym podglądzie slicera.',
       ],
@@ -293,7 +293,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
   faq: [
     {
       question: 'Jaki jest dobry kąt rozgałęzienia dla podpór drzewiastych?',
-      answer: 'Praktyczny zakres początkowy to około 40–50°. Używaj niższych kątów dla wysokich podpór i wyższych kątów tylko wtedy, gdy potrzebujesz większego zasięgu, a pień jest wystarczająco wytrzymały.',
+      answer: 'Praktyczny zakres początkowy to około 40-50°. Używaj niższych kątów dla wysokich podpór i wyższych kątów tylko wtedy, gdy potrzebujesz większego zasięgu, a pień jest wystarczająco wytrzymały.',
     },
     {
       question: 'Czy wyższa gęstość podpór drzewiastych zawsze poprawia jakość wydruku?',
@@ -333,7 +333,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
           name: 'Jaki jest dobry kąt rozgałęzienia dla podpór drzewiastych?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Praktyczny zakres początkowy to około 40–50°, z niższymi kątami dla wysokich podpór i szerszymi kątami tylko wtedy, gdy potrzebny jest dodatkowy zasięg.',
+            text: 'Praktyczny zakres początkowy to około 40-50°, z niższymi kątami dla wysokich podpór i szerszymi kątami tylko wtedy, gdy potrzebny jest dodatkowy zasięg.',
           },
         },
       ],

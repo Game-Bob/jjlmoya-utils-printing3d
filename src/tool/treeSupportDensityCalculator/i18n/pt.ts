@@ -180,7 +180,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     },
     {
       type: 'card',
-      title: 'O diâmetro do dossel é um aviso de pré-visualização',
+      title: 'O diâmetro do dossel é um aviso de pré visualização',
       html: 'Um dossel estimado grande não é automaticamente mau. Significa que a pré-visualização do laminador merece atenção porque a copa de suporte pode tornar-se o principal desafio de remoção.',
     },
     { type: 'title', text: 'Volume de Suporte, Comprimento de Filamento e Tempo de Impressão', level: 2 },
@@ -244,7 +244,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     {
       type: 'diagnostic',
       variant: 'success',
-      title: 'Uma boa definição de suporte em árvore é aborrecida na pré-visualização',
+      title: 'Uma boa definição de suporte em árvore é aborrecida na pré visualização',
       html: 'A pré-visualização deve mostrar um tronco claro, percursos de ramo curtos, contactos suficientes sob a saliência e espaço aberto à volta dos detalhes. Se a árvore tem um aspeto visualmente dramático, pode estar a fazer demais.',
     },
     {

@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { TreeSupportDensityCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
-  slug: 'ju-shou-shien-mi-do-keisan',
+  slug: 'tree-support-density-calculator',
   title: 'ツリーサポート密度計算機',
   description: 'サポートポイントの高さ、ブランチ角度、ブランチ密度、ベーストランク直径から、ツリーサポートのキャノピー直径、サポート体積、ブランチ数、接触直径、安定性を推定します。',
   ui: {

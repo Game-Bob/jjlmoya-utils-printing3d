@@ -4,7 +4,7 @@ import type { TreeSupportDensityCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
   slug: 'baumstuetzen-dichte-rechner',
-  title: 'Baumstützen-Dichte-Rechner',
+  title: 'Baumstützen Dichte Rechner',
   description: 'Schätze den Kronendurchmesser, das Stützvolumen, die Astanzahl, den Kontaktdurchmesser und die Stabilität von Baumstützen anhand der Stützhöhe, des Astwinkels, der Astdichte und des Stammbasisdurchmessers.',
   ui: {
     unitSystemLabel: 'Einheiten',
@@ -67,7 +67,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     {
       type: 'diagnostic',
       variant: 'info',
-      title: 'Dies ist ein Planungsrechner, kein Slicer-Geometrie-Export',
+      title: 'Dies ist ein Planungsrechner, kein Slicer Geometrie Export',
       html: 'Jeder Slicer erzeugt Baumstützen anders. Cura, PrusaSlicer, Bambu Studio, OrcaSlicer und andere Werkzeuge verwenden unterschiedliche Namen und Algorithmen für Astgenerierung, Kollisionsvermeidung, Stützschnittstelle und Kontaktpunkte. Nutze die Ausgabe als Abstimmungsrichtung und bestätige die endgültige Geometrie in der Slicer-Vorschau vor dem Druck.',
     },
     { type: 'title', text: 'Astwinkel: Reichweite, Lastpfad und Ausfallrisiko', level: 2 },
@@ -156,7 +156,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     {
       type: 'diagnostic',
       variant: 'warning',
-      title: 'Eine hohe Krone auf einem dünnen Stamm ist die klassische Baumstützen-Versagensart',
+      title: 'Eine hohe Krone auf einem dünnen Stamm ist die klassische Baumstützen Versagensart',
       html: 'Wenn der Kronendurchmesser um ein Vielfaches größer ist als der Stammdurchmesser, verhält sich die Stütze wie eine kopflastige Struktur. Füge einen weiteren Stamm hinzu, reduziere den Astwinkel oder erhöhe den Basisdurchmesser, bevor du einfach mehr Astdichte hinzufügst.',
     },
     { type: 'title', text: 'Oberer Kronendurchmesser und Modellfreiheit', level: 2 },
@@ -244,7 +244,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     {
       type: 'diagnostic',
       variant: 'success',
-      title: 'Eine gute Baumstützen-Einstellung ist in der Vorschau langweilig',
+      title: 'Eine gute Baumstützen Einstellung ist in der Vorschau langweilig',
       html: 'Die Vorschau sollte einen klaren Stamm, kurze Astpfade, ausreichend Kontakte unter dem Überhang und offenen Raum um Details zeigen. Wenn der Baum visuell dramatisch aussieht, macht er möglicherweise zu viel.',
     },
     {

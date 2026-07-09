@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { TreeSupportDensityCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
-  slug: 'teori-seupoteu-mil-do-gye-san-gi',
+  slug: 'tree-support-density-calculator',
   title: '트리 서포트 밀도 계산기',
   description: '서포트 포인트 높이, 브랜치 각도, 브랜치 밀도, 베이스 트렁크 직경을 기반으로 트리 서포트의 캐노피 직경, 서포트 볼륨, 브랜치 수, 접촉 직경 및 안정성을 추정합니다.',
   ui: {

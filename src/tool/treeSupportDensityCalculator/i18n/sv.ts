@@ -253,7 +253,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       items: [
         'Ange stödpunktshöjd, inte bara modellhöjd.',
         'Börja nära 45-grader för grenvinkel.',
-        'Använd 30–45% densitet för allmänna PLA-utskrifter, justera sedan från förhandsvisning.',
+        'Använd 30-45% densitet för allmänna PLA-utskrifter, justera sedan från förhandsvisning.',
         'Öka stamdiameter innan du gör höga stöd extremt täta.',
         'Bekräfta kontaktdiameter och frigång på den faktiska skärförhandsvisningen.',
       ],

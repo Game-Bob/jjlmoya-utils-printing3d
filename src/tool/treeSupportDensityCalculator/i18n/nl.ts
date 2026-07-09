@@ -67,7 +67,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     {
       type: 'diagnostic',
       variant: 'info',
-      title: 'Dit is een planningscalculator, geen slicer geometrie-export',
+      title: 'Dit is een planningscalculator, geen slicer geometrie export',
       html: 'Elke slicer genereert boomondersteuning anders. Cura, PrusaSlicer, Bambu Studio, OrcaSlicer en andere tools gebruiken verschillende namen en algoritmen voor takgeneratie, botsingsvermijding, ondersteuningsinterface en contactpunten. Gebruik de uitvoer als afstemrichting en bevestig de uiteindelijke geometrie in de slicer-voorvertoning voordat je print.',
     },
     { type: 'title', text: 'Takhoek: Bereik, Lastpad en Faalrisico', level: 2 },

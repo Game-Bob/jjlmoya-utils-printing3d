@@ -53,7 +53,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Hesaplayıcı, dilimleyici önizlemesinde gözle değerlendirilmesi zor olan üç değeri tahmin eder: üst taç çapı, destek hacmi ve stabilite puanı. Üst taç çapı, dal tacının model yakınında ne kadar genişlediğini gösterir. Destek hacmi, gövde ve dallar için gereken basılı malzemeyi tahmin eder. Stabilite, açı, yoğunluk, taban çapı, yükseklik ve taç yayılımını pratik bir puanda birleştirir. Amaç dilimleyici motorunun yerini almak değil; dilimlemeden önce başlangıç ​​değerlerini seçmek, böylece destek önizlemelerini yineleyerek daha az zaman harcamaktır.',
+      html: 'Hesaplayıcı, dilimleyici önizlemesinde gözle değerlendirilmesi zor olan üç değeri tahmin eder: üst taç çapı, destek hacmi ve stabilite puanı. Üst taç çapı, dal tacının model yakınında ne kadar genişlediğini gösterir. Destek hacmi, gövde ve dallar için gereken basılı malzemeyi tahmin eder. Stabilite, açı, yoğunluk, taban çapı, yükseklik ve taç yayılımını pratik bir puanda birleştirir. Amaç dilimleyici motorunun yerini almak değil; dilimlemeden önce başlangıç değerlerini seçmek, böylece destek önizlemelerini yineleyerek daha az zaman harcamaktır.',
     },
     {
       type: 'stats',
@@ -190,7 +190,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Hacim, baskı süresine mükemmel şekilde karşılık gelmez çünkü dilimleyiciler farklı çizgi genişlikleri, duvar sayıları, dolgu desenleri, hızlanma limitleri ve destek hızları kullanır. Bununla birlikte, destek hacmi güçlü bir gösterge olmaya devam eder. İki ayar benzer stabilite sağlıyor ancak biri çok daha az hacim kullanıyorsa, düşük hacimli ayar genellikle daha iyi başlangıç ​​noktasıdır. Düşük hacimli ayar aynı zamanda düşük bir stabilite puanı üretiyorsa, baskı başarısız olduğunda veya alt yüzey yeniden işleme ihtiyaç duyduğunda tasarruf ortadan kalkabilir.',
+      html: 'Hacim, baskı süresine mükemmel şekilde karşılık gelmez çünkü dilimleyiciler farklı çizgi genişlikleri, duvar sayıları, dolgu desenleri, hızlanma limitleri ve destek hızları kullanır. Bununla birlikte, destek hacmi güçlü bir gösterge olmaya devam eder. İki ayar benzer stabilite sağlıyor ancak biri çok daha az hacim kullanıyorsa, düşük hacimli ayar genellikle daha iyi başlangıç noktasıdır. Düşük hacimli ayar aynı zamanda düşük bir stabilite puanı üretiyorsa, baskı başarısız olduğunda veya alt yüzey yeniden işleme ihtiyaç duyduğunda tasarruf ortadan kalkabilir.',
     },
     {
       type: 'summary',
@@ -232,7 +232,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
       title: 'PETG ekstra dikkat gerektirir',
       html: 'PETG, aynı filamentten basılan destek malzemesine agresif yapışır. Dikkatli bir Z mesafesi ile orta düzey bir ağaç yoğunluğu, geniş temaslara sahip çok yoğun bir taçtan genellikle daha iyi çalışır.',
     },
-    { type: 'title', text: 'Dilimleyici Ağaç Destekleri İçin Önerilen Başlangıç ​​İş Akışı', level: 2 },
+    { type: 'title', text: 'Dilimleyici Ağaç Destekleri İçin Önerilen Başlangıç İş Akışı', level: 2 },
     {
       type: 'paragraph',
       html: 'Toplam model yüksekliği yerine en yüksek destek noktasının yüksekliğini girerek başlayın. Bir model, desteklenen bölge tablaya yakınken uzun olabilir veya kritik bir çıkıntı dar bir adada yüksekteyken kısa olabilir. Ardından dengeli aralıkta bir dal açısı seçin ve ihtiyacınız olan yüzey kalitesine göre dal yoğunluğunu ayarlayın. Son olarak, yükseklik ve beklenen yüke dayalı olarak taban gövde çapını ayarlayın. Hesaplayıcı, kombinasyonun hacim açısından verimli, stabil veya riskli olup olmadığını gösterecektir.',
@@ -293,7 +293,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
   faq: [
     {
       question: 'Ağaç destekler için iyi bir dal açısı nedir?',
-      answer: 'Pratik bir başlangıç ​​aralığı yaklaşık 40-50 derecedir. Uzun destekler için daha düşük açılar ve yalnızca daha fazla erişime ihtiyacınız olduğunda ve gövde yeterince güçlüyse daha yüksek açılar kullanın.',
+      answer: 'Pratik bir başlangıç aralığı yaklaşık 40-50 derecedir. Uzun destekler için daha düşük açılar ve yalnızca daha fazla erişime ihtiyacınız olduğunda ve gövde yeterince güçlüyse daha yüksek açılar kullanın.',
     },
     {
       question: 'Daha yüksek ağaç destek yoğunluğu baskı kalitesini her zaman artırır mı?',
@@ -333,7 +333,7 @@ export const content: ToolLocaleContent<TreeSupportDensityCalculatorUI> = {
           name: 'Ağaç destekler için iyi bir dal açısı nedir?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Pratik bir başlangıç ​​aralığı yaklaşık 40-50 derecedir, uzun destekler için daha düşük açılar ve yalnızca ekstra erişim gerektiğinde daha geniş açılar kullanılır.',
+            text: 'Pratik bir başlangıç aralığı yaklaşık 40-50 derecedir, uzun destekler için daha düşük açılar ve yalnızca ekstra erişim gerektiğinde daha geniş açılar kullanılır.',
           },
         },
       ],
