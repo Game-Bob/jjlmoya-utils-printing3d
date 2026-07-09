@@ -11,6 +11,7 @@ export { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculato
 export { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
 export { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 export { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
+export { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -26,6 +27,7 @@ import { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculato
 import { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
 import { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 import { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
+import { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -41,4 +43,5 @@ export const ALL_ENTRIES = [
   stepperDriverMicrosteppingCalculator,
   peiSheetLifespanEstimator,
   infillWeightSimulator,
+  nozzleWearEstimator,
 ];

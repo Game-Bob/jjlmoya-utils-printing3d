@@ -13,6 +13,7 @@ import { TREE_SUPPORT_DENSITY_CALCULATOR_TOOL } from './tool/treeSupportDensityC
 import { STEPPER_DRIVER_MICROSTEPPING_CALCULATOR_TOOL } from './tool/stepperDriverMicrosteppingCalculator';
 import { PEI_SHEET_LIFESPAN_ESTIMATOR_TOOL } from './tool/peiSheetLifespanEstimator';
 import { INFILL_WEIGHT_SIMULATOR_TOOL } from './tool/infillWeightSimulator';
+import { NOZZLE_WEAR_ESTIMATOR_TOOL } from './tool/nozzleWearEstimator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -28,4 +29,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   STEPPER_DRIVER_MICROSTEPPING_CALCULATOR_TOOL,
   PEI_SHEET_LIFESPAN_ESTIMATOR_TOOL,
   INFILL_WEIGHT_SIMULATOR_TOOL,
+  NOZZLE_WEAR_ESTIMATOR_TOOL,
 ];

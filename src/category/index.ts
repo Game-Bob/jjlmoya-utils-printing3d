@@ -12,6 +12,7 @@ import { treeSupportDensityCalculator } from '../tool/treeSupportDensityCalculat
 import { stepperDriverMicrosteppingCalculator } from '../tool/stepperDriverMicrosteppingCalculator/entry';
 import { peiSheetLifespanEstimator } from '../tool/peiSheetLifespanEstimator/entry';
 import { infillWeightSimulator } from '../tool/infillWeightSimulator/entry';
+import { nozzleWearEstimator } from '../tool/nozzleWearEstimator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -29,6 +30,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     stepperDriverMicrosteppingCalculator,
     peiSheetLifespanEstimator,
     infillWeightSimulator,
+    nozzleWearEstimator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

@@ -5,7 +5,7 @@ import { printing3dCategory } from '../data';
 describe('Tool Validation Suite', () => {
   describe('Library Registration', () => {
     it('should have 7 tools registered', () => {
-      expect(ALL_TOOLS.length).toBe(13);
+      expect(ALL_TOOLS.length).toBe(14);
     });
 
     it('printing3dCategory should be defined', () => {

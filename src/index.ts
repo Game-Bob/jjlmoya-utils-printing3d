@@ -40,3 +40,5 @@ export { TREE_SUPPORT_DENSITY_CALCULATOR_TOOL } from './tool/treeSupportDensityC
 export { PEI_SHEET_LIFESPAN_ESTIMATOR_TOOL } from './tool/peiSheetLifespanEstimator/index';
 
 export { INFILL_WEIGHT_SIMULATOR_TOOL } from './tool/infillWeightSimulator/index';
+
+export { NOZZLE_WEAR_ESTIMATOR_TOOL } from './tool/nozzleWearEstimator/index';

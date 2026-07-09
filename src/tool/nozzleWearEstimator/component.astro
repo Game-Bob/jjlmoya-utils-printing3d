@@ -1,0 +1,286 @@
+---
+import type { NozzleWearEstimatorUI } from './ui';
+import './nozzle-wear-estimator.css';
+
+interface Props {
+  ui: NozzleWearEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="nwe-root" id="main-tool">
+  <section class="nwe-shell" aria-label={ui.controlsAriaLabel}>
+    <div class="nwe-visual" aria-label={ui.resultsAriaLabel}>
+      <div class="nwe-orifice" aria-hidden="true">
+        <span><i id="nwe-bore"></i></span>
+      </div>
+      <div class="nwe-life">
+        <span>{ui.remainingLifeLabel}</span>
+        <b><output id="nwe-life">0</output>%</b>
+        <i><em id="nwe-life-bar"></em></i>
+      </div>
+      <div class="nwe-grid">
+        <article>
+          <span>{ui.remainingMaterialLabel}</span>
+          <b><output id="nwe-remaining-kg">0</output> <small id="nwe-mass-unit-a">{ui.kgUnit}</small></b>
+        </article>
+        <article>
+          <span>{ui.equivalentWearLabel}</span>
+          <b><output id="nwe-equivalent-kg">0</output> <small id="nwe-mass-unit-b">{ui.kgUnit}</small></b>
+        </article>
+        <article>
+          <span>{ui.boreGrowthLabel}</span>
+          <b><output id="nwe-bore-growth">0</output> <small>um</small></b>
+        </article>
+        <article>
+          <span>{ui.riskLabel}</span>
+          <b id="nwe-risk-label">{ui.riskFresh}</b>
+        </article>
+      </div>
+      <footer>
+        <span>{ui.wearModeLabel}</span>
+        <b id="nwe-mode">{ui.wearNormal}</b>
+      </footer>
+    </div>
+
+    <form class="nwe-controls" onsubmit="return false;">
+      <fieldset>
+        <legend>{ui.nozzleGroupLabel}</legend>
+        <div class="nwe-units" role="group" aria-label={ui.unitSystemLabel}>
+          <button type="button" class="active" data-nwe-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-nwe-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <label>
+          <span>{ui.nozzleMaterialLabel}</span>
+          <select id="nwe-nozzle">
+            <option value="brass">{ui.brassLabel}</option>
+            <option value="platedBrass">{ui.platedBrassLabel}</option>
+            <option value="stainlessSteel">{ui.stainlessSteelLabel}</option>
+            <option value="hardenedSteel">{ui.hardenedSteelLabel}</option>
+            <option value="ruby">{ui.rubyLabel}</option>
+            <option value="tungstenCarbide">{ui.tungstenCarbideLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.nozzleDiameterLabel}</span>
+          <select id="nwe-diameter">
+            <option value="0.25">0.25 mm</option>
+            <option value="0.4" selected>0.40 mm</option>
+            <option value="0.6">0.60 mm</option>
+            <option value="0.8">0.80 mm</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.filamentGroupLabel}</legend>
+        <label>
+          <span>{ui.filamentLabel}</span>
+          <select id="nwe-filament">
+            <option value="standard">{ui.standardLabel}</option>
+            <option value="wood">{ui.woodLabel}</option>
+            <option value="glow">{ui.glowLabel}</option>
+            <option value="metalFill">{ui.metalFillLabel}</option>
+            <option value="carbonFiber" selected>{ui.carbonFiberLabel}</option>
+            <option value="glassFiber">{ui.glassFiberLabel}</option>
+            <option value="ceramic">{ui.ceramicLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.extrudedAmountLabel}</span>
+          <b><input id="nwe-amount" type="number" min="0" step="0.1" value="0.8" /><em id="nwe-mass-unit-input">{ui.kgUnit}</em></b>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.operatingGroupLabel}</legend>
+        <label class="nwe-range">
+          <span>{ui.abrasiveShareLabel}</span>
+          <output id="nwe-share-output">100%</output>
+          <input id="nwe-share" type="range" min="0" max="100" step="5" value="100" />
+        </label>
+        <label>
+          <span>{ui.printTemperatureLabel}</span>
+          <b><input id="nwe-temp" type="number" min="150" step="1" value="245" /><em id="nwe-temp-unit">{ui.tempMetricUnit}</em></b>
+        </label>
+      </fieldset>
+    </form>
+
+    <aside class="nwe-recommendation">
+      <span>{ui.recommendationLabel}</span>
+      <b id="nwe-rec">{ui.recKeepPrinting}</b>
+    </aside>
+
+    <span id="nwe-data" hidden data-kg={ui.kgUnit} data-lb={ui.lbUnit} data-temp-metric={ui.tempMetricUnit} data-temp-imperial={ui.tempImperialUnit}></span>
+    <span id="nwe-labels" hidden data-risk-fresh={ui.riskFresh} data-risk-watch={ui.riskWatch} data-risk-worn={ui.riskWorn} data-risk-replace={ui.riskReplace} data-wear-normal={ui.wearNormal} data-wear-abrasive={ui.wearAbrasive} data-wear-thermal={ui.wearThermal} data-wear-diameter-sensitive={ui.wearDiameterSensitive} data-wear-severe={ui.wearSevere} data-rec-keep-printing={ui.recKeepPrinting} data-rec-calibrate-flow={ui.recCalibrateFlow} data-rec-inspect-bore={ui.recInspectBore} data-rec-switch-nozzle={ui.recSwitchNozzle} data-rec-replace-now={ui.recReplaceNow}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateNozzleWear, type FilamentAbrasiveness, type NozzleDiameter, type NozzleMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class NozzleWearTool {
+    private readonly storageKey = 'jjlmoya-printing3d-nozzle-wear-v1';
+    private units: UnitSystem = 'metric';
+
+    constructor() {
+      this.restore();
+      this.bind();
+      this.syncUnits();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private select(id: string) {
+      return document.getElementById(id) as HTMLSelectElement;
+    }
+
+    private numberValue(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private labels() {
+      return (document.getElementById('nwe-labels') as HTMLElement).dataset;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-nwe-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.nweUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      ['nwe-amount', 'nwe-share', 'nwe-temp'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      ['nwe-nozzle', 'nwe-diameter', 'nwe-filament'].forEach((id) => this.select(id)?.addEventListener('input', () => this.update()));
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const kg = this.massKg();
+      const tempC = this.tempC();
+      this.units = units;
+      this.input('nwe-amount').value = this.units === 'metric' ? kg.toFixed(2) : (kg * 2.2046226218).toFixed(2);
+      this.input('nwe-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+      this.syncUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      const data = document.getElementById('nwe-data') as HTMLElement;
+      const mass = this.units === 'metric' ? data.dataset.kg || 'kg' : data.dataset.lb || 'lb';
+      this.text('nwe-mass-unit-a', mass);
+      this.text('nwe-mass-unit-b', mass);
+      this.text('nwe-mass-unit-input', mass);
+      this.text('nwe-temp-unit', this.units === 'metric' ? data.dataset.tempMetric || 'C' : data.dataset.tempImperial || 'F');
+      document.querySelectorAll('[data-nwe-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.nweUnits === this.units));
+    }
+
+    private massKg() {
+      const raw = this.numberValue('nwe-amount');
+      return this.units === 'metric' ? raw : raw / 2.2046226218;
+    }
+
+    private tempC() {
+      const raw = this.numberValue('nwe-temp');
+      return this.units === 'metric' ? raw : (raw - 32) * 5 / 9;
+    }
+
+    private displayMass(kg: number) {
+      return this.units === 'metric' ? kg.toFixed(1) : (kg * 2.2046226218).toFixed(1);
+    }
+
+    private params() {
+      return {
+        nozzleMaterial: this.select('nwe-nozzle').value as NozzleMaterial,
+        filament: this.select('nwe-filament').value as FilamentAbrasiveness,
+        nozzleDiameterMm: this.select('nwe-diameter').value as NozzleDiameter,
+        extrudedKg: this.massKg(),
+        abrasiveSharePercent: this.numberValue('nwe-share'),
+        printTemperatureC: this.tempC(),
+      };
+    }
+
+    private label(prefix: string, key: string) {
+      const attr = `${prefix}${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      return this.labels()[attr] || key;
+    }
+
+    private update() {
+      const result = calculateNozzleWear(this.params());
+      this.text('nwe-life', String(result.remainingLifePercent));
+      this.text('nwe-remaining-kg', this.displayMass(result.remainingKg));
+      this.text('nwe-equivalent-kg', this.displayMass(result.equivalentAbrasiveKg));
+      this.text('nwe-bore-growth', String(result.boreGrowthMicrons));
+      this.text('nwe-risk-label', this.label('risk', result.riskLevel));
+      this.text('nwe-mode', this.label('wear', result.wearMode));
+      this.text('nwe-rec', this.label('rec', result.recommendationKey));
+      this.text('nwe-share-output', `${this.input('nwe-share').value}%`);
+      const lifeBar = document.getElementById('nwe-life-bar') as HTMLElement;
+      const bore = document.getElementById('nwe-bore') as HTMLElement;
+      if (lifeBar) lifeBar.style.width = `${result.remainingLifePercent}%`;
+      if (bore) bore.style.transform = `scale(${1 + result.consumedLifePercent / 145})`;
+      document.querySelector('.nwe-root')?.setAttribute('data-risk', result.riskLevel);
+      this.save();
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private save() {
+      try {
+        window.localStorage?.setItem(this.storageKey, JSON.stringify({
+          units: this.units,
+          nozzle: this.select('nwe-nozzle').value,
+          diameter: this.select('nwe-diameter').value,
+          filament: this.select('nwe-filament').value,
+          amountKg: this.massKg(),
+          share: this.numberValue('nwe-share'),
+          tempC: this.tempC(),
+        }));
+      } catch {
+      }
+    }
+
+    private restoreField(id: string, value: string | number | undefined) {
+      if (value === undefined) return;
+      const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+      if (el) el.value = String(value);
+    }
+
+    private restore() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw) as Record<string, unknown>;
+        if (state.units === 'imperial') this.units = 'imperial';
+        this.restoreField('nwe-nozzle', state.nozzle as string);
+        this.restoreField('nwe-diameter', state.diameter as string);
+        this.restoreField('nwe-filament', state.filament as string);
+        this.restoreField('nwe-amount', this.formatAmount(state));
+        this.restoreField('nwe-temp', this.formatTemp(state));
+        this.restoreField('nwe-share', Number(state.share) || 100);
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+
+    private formatAmount(state: Record<string, unknown>): string {
+      const amountKg = Number(state.amountKg) || 0.8;
+      return this.units === 'metric' ? amountKg.toFixed(2) : (amountKg * 2.2046226218).toFixed(2);
+    }
+
+    private formatTemp(state: Record<string, unknown>): string {
+      const tempC = Number(state.tempC) || 245;
+      return this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+    }
+  }
+
+  const initNozzleWearTool = () => new NozzleWearTool();
+  document.addEventListener('astro:page-load', initNozzleWearTool);
+  initNozzleWearTool();
+</script>
