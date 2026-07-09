@@ -11,7 +11,7 @@
   --sdmc-rail-soft: #dce3ef;
   --sdmc-success: #10b981;
   --sdmc-success-soft: rgba(16, 185, 129, 0.1);
-  --sdmc-menu-bg: #ffffff;
+  --sdmc-menu-bg: #fff;
   --sdmc-menu-hover: #f1f5f9;
 
   color: var(--sdmc-ink);
@@ -241,7 +241,7 @@
 
 .sdmc-dropdown-option.active {
   background: var(--sdmc-accent);
-  color: #ffffff;
+  color: #fff;
 }
 
 .sdmc-simulation-container {
@@ -297,7 +297,6 @@
   border: 1px solid var(--sdmc-line);
   border-radius: 10px;
   background: var(--sdmc-panel-strong);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.82rem;
   display: grid;
   gap: 0.45rem;
@@ -317,7 +316,6 @@
   border: 1px solid var(--sdmc-line);
   border-radius: 10px;
   background: var(--sdmc-card);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.95rem;
   font-weight: 700;
 }
