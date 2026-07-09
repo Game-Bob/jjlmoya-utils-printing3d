@@ -34,3 +34,5 @@ export { RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL } from './tool/rainbowFilamen
 export { CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL } from './tool/chemicalSmoothingTimeSimulator/index';
 
 export { BED_THERMAL_INERTIA_STABILIZATION_CALCULATOR_TOOL } from './tool/bedThermalInertiaStabilizationCalculator/index';
+
+export { TREE_SUPPORT_DENSITY_CALCULATOR_TOOL } from './tool/treeSupportDensityCalculator/index';

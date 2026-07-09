@@ -8,6 +8,7 @@ import { coreXYBeltTensionEstimator } from '../tool/coreXYBeltTensionEstimator/e
 import { rainbowFilamentGradientCalculator } from '../tool/rainbowFilamentGradientCalculator/entry';
 import { chemicalSmoothingTimeSimulator } from '../tool/chemicalSmoothingTimeSimulator/entry';
 import { bedThermalInertiaStabilizationCalculator } from '../tool/bedThermalInertiaStabilizationCalculator/entry';
+import { treeSupportDensityCalculator } from '../tool/treeSupportDensityCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -21,6 +22,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     rainbowFilamentGradientCalculator,
     chemicalSmoothingTimeSimulator,
     bedThermalInertiaStabilizationCalculator,
+    treeSupportDensityCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

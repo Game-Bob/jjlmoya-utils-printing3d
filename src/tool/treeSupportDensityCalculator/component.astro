@@ -1,0 +1,314 @@
+---
+import type { TreeSupportDensityCalculatorUI } from './ui';
+import './tree-support-density-calculator.css';
+
+interface Props {
+  ui: TreeSupportDensityCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="tsdc-root" id="main-tool">
+  <div class="tsdc-shell">
+    <section class="tsdc-inputs" aria-label={ui.controlsAriaLabel}>
+      <div class="tsdc-topbar">
+        <div class="tsdc-toggle" role="group" aria-label={ui.unitSystemLabel}>
+          <span>{ui.unitSystemLabel}</span>
+          <button type="button" class="active" data-tsdc-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-tsdc-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <div class="tsdc-presets">
+          <span>{ui.presetsLabel}</span>
+          <button type="button" data-tsdc-preset="mini">{ui.miniaturePresetLabel}</button>
+          <button type="button" class="active" data-tsdc-preset="balanced">{ui.balancedPresetLabel}</button>
+          <button type="button" data-tsdc-preset="tall">{ui.tallPresetLabel}</button>
+        </div>
+      </div>
+
+      <div class="tsdc-fields">
+        <label>
+          <span>{ui.supportHeightLabel}</span>
+          <b><input id="tsdc-height" type="number" min="5" step="1" value="85" /><em id="tsdc-length-unit-a">{ui.millimetersUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.branchAngleLabel}</span>
+          <b><input id="tsdc-angle" type="number" min="15" max="70" step="1" value="42" /><em>{ui.degreesUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.branchDensityLabel}</span>
+          <b><input id="tsdc-density" type="number" min="5" max="90" step="1" value="38" /><em>{ui.percentUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.baseTrunkDiameterLabel}</span>
+          <b><input id="tsdc-diameter" type="number" min="1" step="0.1" value="5.2" /><em id="tsdc-length-unit-b">{ui.millimetersUnit}</em></b>
+        </label>
+      </div>
+    </section>
+
+    <section class="tsdc-visual" aria-label={ui.resultsAriaLabel}>
+      <div class="tsdc-slicer-map" id="tsdc-slicer-map" aria-hidden="true">
+        <div class="tsdc-buildplate"></div>
+        <div class="tsdc-shadow"></div>
+        <div class="tsdc-column" id="tsdc-column-shape"></div>
+        <div class="tsdc-fork tsdc-fork-a"></div>
+        <div class="tsdc-fork tsdc-fork-b"></div>
+        <div class="tsdc-fork tsdc-fork-c"></div>
+        <div class="tsdc-branch tsdc-branch-a"></div>
+        <div class="tsdc-branch tsdc-branch-b"></div>
+        <div class="tsdc-branch tsdc-branch-c"></div>
+        <div class="tsdc-branch tsdc-branch-d"></div>
+        <div class="tsdc-branch tsdc-branch-e"></div>
+        <div class="tsdc-branch tsdc-branch-f"></div>
+        <div class="tsdc-contact tsdc-contact-a"></div>
+        <div class="tsdc-contact tsdc-contact-b"></div>
+        <div class="tsdc-contact tsdc-contact-c"></div>
+        <div class="tsdc-contact tsdc-contact-d"></div>
+        <div class="tsdc-envelope" id="tsdc-envelope-shape"></div>
+        <div class="tsdc-density-band"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="tsdc-primary">
+        <span>{ui.canopyDiameterLabel}</span>
+        <strong><span id="tsdc-canopy-value">0</span><em id="tsdc-length-unit-c">{ui.millimetersUnit}</em></strong>
+        <small><span id="tsdc-stability-word">{ui.stabilityBalanced}</span> {ui.stabilityScoreSeparator} <b id="tsdc-stability-score">0</b>{ui.stabilityScoreSuffix}</small>
+      </div>
+      <div class="tsdc-metrics">
+        <div><span>{ui.supportVolumeLabel}</span><strong><span id="tsdc-volume">0</span><em id="tsdc-volume-unit">{ui.cubicCentimetersUnit}</em></strong></div>
+        <div><span>{ui.branchCountLabel}</span><strong><span id="tsdc-branches">0</span></strong></div>
+        <div><span>{ui.filamentMassLabel}</span><strong><span id="tsdc-mass">0</span><em id="tsdc-mass-unit">{ui.gramsUnit}</em></strong></div>
+        <div><span>{ui.contactDiameterLabel}</span><strong><span id="tsdc-contact">0</span><em id="tsdc-length-unit-d">{ui.millimetersUnit}</em></strong></div>
+        <div><span>{ui.trunkVolumeLabel}</span><strong><span id="tsdc-trunk-volume">0</span><em id="tsdc-volume-unit-b">{ui.cubicCentimetersUnit}</em></strong></div>
+        <div><span>{ui.branchVolumeLabel}</span><strong><span id="tsdc-branch-volume">0</span><em id="tsdc-volume-unit-c">{ui.cubicCentimetersUnit}</em></strong></div>
+      </div>
+      <button type="button" class="tsdc-copy" id="tsdc-copy">{ui.copyButton}</button>
+      <span id="tsdc-copied" hidden>{ui.copiedButton}</span>
+      <span id="tsdc-summary" hidden>{ui.copiedSummaryTemplate}</span>
+      <span id="tsdc-low" hidden>{ui.stabilityLow}</span>
+      <span id="tsdc-balanced" hidden>{ui.stabilityBalanced}</span>
+      <span id="tsdc-high" hidden>{ui.stabilityHigh}</span>
+      <span id="tsdc-unit-data" hidden data-mm={ui.millimetersUnit} data-in={ui.inchesUnit} data-cm3={ui.cubicCentimetersUnit} data-in3={ui.cubicInchesUnit} data-g={ui.gramsUnit} data-oz={ui.ouncesUnit}></span>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateTreeSupportDensity } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class TreeSupportDensityTool {
+    private readonly storageKey = 'jjlmoya-printing3d-tree-support-density-state-v1';
+    private units: UnitSystem = 'metric';
+    private labels = this.readLabels();
+
+    constructor() {
+      this.restore();
+      this.bind();
+      this.updateUnits();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private readLabels() {
+      const text = (id: string) => document.getElementById(id)?.textContent || '';
+      return {
+        copy: text('tsdc-copy'),
+        copied: text('tsdc-copied'),
+        summary: text('tsdc-summary'),
+        low: text('tsdc-low'),
+        balanced: text('tsdc-balanced'),
+        high: text('tsdc-high'),
+      };
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-tsdc-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.tsdcUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      document.querySelectorAll<HTMLElement>('[data-tsdc-preset]').forEach((button) => button.addEventListener('click', () => this.applyPreset(button)));
+      ['tsdc-height', 'tsdc-angle', 'tsdc-density', 'tsdc-diameter'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      document.getElementById('tsdc-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private metricValues() {
+      return {
+        supportHeightMm: this.units === 'metric' ? this.value('tsdc-height') : this.value('tsdc-height') * 25.4,
+        branchAngleDeg: this.value('tsdc-angle'),
+        branchDensityPercent: this.value('tsdc-density'),
+        baseTrunkDiameterMm: this.units === 'metric' ? this.value('tsdc-diameter') : this.value('tsdc-diameter') * 25.4,
+      };
+    }
+
+    private setMetricValues(values: ReturnType<TreeSupportDensityTool['metricValues']>) {
+      this.input('tsdc-height').value = this.units === 'metric' ? values.supportHeightMm.toFixed(0) : (values.supportHeightMm / 25.4).toFixed(2);
+      this.input('tsdc-angle').value = values.branchAngleDeg.toFixed(0);
+      this.input('tsdc-density').value = values.branchDensityPercent.toFixed(0);
+      this.input('tsdc-diameter').value = this.units === 'metric' ? values.baseTrunkDiameterMm.toFixed(1) : (values.baseTrunkDiameterMm / 25.4).toFixed(3);
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const values = this.metricValues();
+      this.units = units;
+      this.setMetricValues(values);
+      this.syncUnits();
+      this.updateUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      document.querySelectorAll('[data-tsdc-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.tsdcUnits === this.units));
+    }
+
+    private updateUnits() {
+      const data = document.getElementById('tsdc-unit-data') as HTMLElement;
+      const unitLabels = this.units === 'metric'
+        ? { length: data.dataset.mm || '', volume: data.dataset.cm3 || '', mass: data.dataset.g || '' }
+        : { length: data.dataset.in || '', volume: data.dataset.in3 || '', mass: data.dataset.oz || '' };
+      this.applyUnitLabels(unitLabels);
+    }
+
+    private applyUnitLabels(labels: { length: string; volume: string; mass: string }) {
+      ['tsdc-length-unit-a', 'tsdc-length-unit-b', 'tsdc-length-unit-c', 'tsdc-length-unit-d'].forEach((id) => this.text(id, labels.length));
+      ['tsdc-volume-unit', 'tsdc-volume-unit-b', 'tsdc-volume-unit-c'].forEach((id) => this.text(id, labels.volume));
+      this.text('tsdc-mass-unit', labels.mass);
+    }
+
+    private applyPreset(button: HTMLElement) {
+      document.querySelectorAll('[data-tsdc-preset]').forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      const presets: Record<string, ReturnType<TreeSupportDensityTool['metricValues']>> = {
+        mini: { supportHeightMm: 36, branchAngleDeg: 35, branchDensityPercent: 24, baseTrunkDiameterMm: 3.2 },
+        balanced: { supportHeightMm: 85, branchAngleDeg: 42, branchDensityPercent: 38, baseTrunkDiameterMm: 5.2 },
+        tall: { supportHeightMm: 150, branchAngleDeg: 48, branchDensityPercent: 58, baseTrunkDiameterMm: 8.5 },
+      };
+      this.setMetricValues((presets[button.dataset.tsdcPreset || 'balanced'] || presets.balanced)!);
+      this.update();
+    }
+
+    private stabilityLabel(stability: 'low' | 'balanced' | 'high') {
+      if (stability === 'low') return this.labels.low;
+      if (stability === 'high') return this.labels.high;
+      return this.labels.balanced;
+    }
+
+    private formatLength(mm: number) {
+      return this.units === 'metric' ? mm.toFixed(1) : (mm / 25.4).toFixed(3);
+    }
+
+    private formatVolume(cm3: number) {
+      return this.units === 'metric' ? cm3.toFixed(2) : (cm3 * 0.0610237).toFixed(3);
+    }
+
+    private update() {
+      const values = this.metricValues();
+      const result = calculateTreeSupportDensity(values);
+      this.updateResultText(result);
+      document.querySelector('.tsdc-root')?.setAttribute('data-stability', result.stability);
+      this.updateSlicerMap(values, result);
+      this.save();
+    }
+
+    private updateResultText(result: ReturnType<typeof calculateTreeSupportDensity>) {
+      this.text('tsdc-canopy-value', this.formatLength(result.topCanopyDiameterMm));
+      this.text('tsdc-volume', this.formatVolume(result.estimatedSupportVolumeCm3));
+      this.text('tsdc-branches', String(result.branchCount));
+      this.text('tsdc-mass', this.units === 'metric' ? result.filamentMassG.toFixed(1) : (result.filamentMassG * 0.035274).toFixed(2));
+      this.text('tsdc-contact', this.formatLength(result.contactDiameterMm));
+      this.text('tsdc-trunk-volume', this.formatVolume(result.trunkVolumeCm3));
+      this.text('tsdc-branch-volume', this.formatVolume(result.branchVolumeCm3));
+      this.text('tsdc-stability-score', result.stabilityScore.toFixed(0));
+      this.text('tsdc-stability-word', this.stabilityLabel(result.stability));
+    }
+
+    private updateSlicerMap(values: ReturnType<TreeSupportDensityTool['metricValues']>, result: ReturnType<typeof calculateTreeSupportDensity>) {
+      const map = document.getElementById('tsdc-slicer-map');
+      if (!map) return;
+      const spread = Math.min(88, Math.max(34, result.topCanopyDiameterMm * 0.82));
+      const height = Math.min(88, Math.max(38, values.supportHeightMm / 2.4));
+      this.setMapGeometry({ map, values, result, spread, height });
+    }
+
+    private setMapGeometry(opts: { map: HTMLElement; values: ReturnType<TreeSupportDensityTool['metricValues']>; result: ReturnType<typeof calculateTreeSupportDensity>; spread: number; height: number }) {
+      const { map, values, result, spread, height } = opts;
+      map.style.setProperty('--spread', `${spread}%`);
+      map.style.setProperty('--spread-a', `${spread * 0.52}%`);
+      map.style.setProperty('--spread-b', `${spread * 0.44}%`);
+      map.style.setProperty('--spread-c', `${spread * 0.36}%`);
+      map.style.setProperty('--contact-left-a', `${50 - spread * 0.42}%`);
+      map.style.setProperty('--contact-right-b', `${50 - spread * 0.42}%`);
+      map.style.setProperty('--contact-left-c', `${50 + spread * 0.23}%`);
+      map.style.setProperty('--contact-right-d', `${50 + spread * 0.12}%`);
+      map.style.setProperty('--density', `${Math.min(100, Math.max(8, values.branchDensityPercent))}%`);
+      map.style.setProperty('--branch-opacity', `${Math.min(0.94, Math.max(0.38, 0.34 + values.branchDensityPercent / 160))}`);
+      map.style.setProperty('--branch-width', `${Math.min(11, Math.max(5, values.baseTrunkDiameterMm * 0.9))}px`);
+      map.style.setProperty('--contact', `${Math.min(22, Math.max(10, values.branchDensityPercent * 0.22))}px`);
+      map.style.setProperty('--angle', `${values.branchAngleDeg}deg`);
+      map.style.setProperty('--angle-neg', `${-values.branchAngleDeg}deg`);
+      map.style.setProperty('--angle-soft', `${values.branchAngleDeg * 0.58}deg`);
+      map.style.setProperty('--angle-soft-neg', `${values.branchAngleDeg * -0.62}deg`);
+      map.style.setProperty('--height', `${height}%`);
+      map.style.setProperty('--arm-low', `${height * 0.54}%`);
+      map.style.setProperty('--arm-mid', `${height * 0.72}%`);
+      map.style.setProperty('--arm-high', `${height * 0.86}%`);
+      map.style.setProperty('--trunk', `${Math.min(30, Math.max(8, values.baseTrunkDiameterMm * 1.75))}px`);
+      map.style.setProperty('--score', `${result.stabilityScore}%`);
+    }
+
+    private save() {
+      try {
+        window.localStorage?.setItem(this.storageKey, JSON.stringify({ units: this.units, ...this.metricValues() }));
+      } catch {
+      }
+    }
+
+    private restore() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        const validUnits = state.units === 'metric' || state.units === 'imperial';
+        const values = [state.supportHeightMm, state.branchAngleDeg, state.branchDensityPercent, state.baseTrunkDiameterMm].map(Number);
+        if (!validUnits || !values.every(Number.isFinite)) return;
+        this.units = state.units;
+        this.setMetricValues(state);
+        this.syncUnits();
+        document.querySelectorAll('[data-tsdc-preset]').forEach((item) => item.classList.remove('active'));
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+
+    private copy() {
+      const result = calculateTreeSupportDensity(this.metricValues());
+      const summary = this.labels.summary
+        .replace('{canopy}', this.formatLength(result.topCanopyDiameterMm))
+        .replace('{volume}', this.formatVolume(result.estimatedSupportVolumeCm3))
+        .replace('{stability}', this.stabilityLabel(result.stability))
+        .replace('{score}', result.stabilityScore.toFixed(0));
+      navigator.clipboard?.writeText(summary);
+      const button = document.getElementById('tsdc-copy');
+      if (!button) return;
+      button.textContent = this.labels.copied;
+      setTimeout(() => {
+        button.textContent = this.labels.copy;
+      }, 1200);
+    }
+  }
+
+  const initTreeSupportDensityTool = () => new TreeSupportDensityTool();
+  document.addEventListener('astro:page-load', initTreeSupportDensityTool);
+  initTreeSupportDensityTool();
+</script>

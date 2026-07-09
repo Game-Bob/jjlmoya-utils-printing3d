@@ -7,6 +7,7 @@ export { coreXYBeltTensionEstimator } from './tool/coreXYBeltTensionEstimator/en
 export { rainbowFilamentGradientCalculator } from './tool/rainbowFilamentGradientCalculator/entry';
 export { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimulator/entry';
 export { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
+export { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
 export { printing3dCategory } from './category';
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
 import { flowCalculator } from './tool/flowCalculator/entry';
@@ -17,4 +18,5 @@ import { coreXYBeltTensionEstimator } from './tool/coreXYBeltTensionEstimator/en
 import { rainbowFilamentGradientCalculator } from './tool/rainbowFilamentGradientCalculator/entry';
 import { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimulator/entry';
 import { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
-export const ALL_ENTRIES = [printingCostCalculator, flowCalculator, resinCuringCalculator, shrinkageCalculator, powerSupplyEstimator, coreXYBeltTensionEstimator, rainbowFilamentGradientCalculator, chemicalSmoothingTimeSimulator, bedThermalInertiaStabilizationCalculator];
+import { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
+export const ALL_ENTRIES = [printingCostCalculator, flowCalculator, resinCuringCalculator, shrinkageCalculator, powerSupplyEstimator, coreXYBeltTensionEstimator, rainbowFilamentGradientCalculator, chemicalSmoothingTimeSimulator, bedThermalInertiaStabilizationCalculator, treeSupportDensityCalculator];
