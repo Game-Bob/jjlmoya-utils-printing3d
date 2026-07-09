@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { ChemicalSmoothingTimeSimulatorUI } from './ui';
 import './abs-pvb-chemical-smoothing-time-calculator.css';
 
@@ -65,8 +66,24 @@ const { ui } = Astro.props;
     <section class="csts-results" aria-label={ui.resultsAriaLabel}>
       <div class="csts-main">
         <span>{ui.exposureLabel}</span>
-        <strong><span id="csts-minutes">0.0</span><em>{ui.minutesUnit}</em></strong>
-        <small><span id="csts-seconds">0</span> {ui.secondsUnit}</small>
+        <div class="csts-time-row">
+          <strong><span id="csts-minutes">0.0</span><em>{ui.minutesUnit}</em></strong>
+          <span class="csts-time-orbit" aria-hidden="true"><Icon name="mdi:flask-round-bottom-outline" size={22} /></span>
+        </div>
+        <button type="button" class="csts-live-timer" id="csts-live-timer" aria-label={ui.exposureLabel} aria-pressed="false">
+          <i id="csts-timer-ring"></i>
+          <span class="csts-timer-icon csts-timer-idle"><Icon name="mdi:timer-sand" size={19} /></span>
+          <span class="csts-timer-icon csts-timer-play"><Icon name="mdi:play" size={19} /></span>
+          <span class="csts-timer-icon csts-timer-pause"><Icon name="mdi:pause" size={19} /></span>
+          <span class="csts-timer-value">
+            <span id="csts-seconds">0</span>
+            <em id="csts-seconds-unit">{ui.secondsUnit}</em>
+          </span>
+          <span class="csts-timer-spark" aria-hidden="true">
+            <Icon name="mdi:play" class="csts-spark-play" size={18} />
+            <Icon name="mdi:progress-clock" class="csts-spark-clock" size={18} />
+          </span>
+        </button>
       </div>
 
       <div class="csts-vapor" aria-hidden="true">
@@ -108,6 +125,10 @@ const { ui } = Astro.props;
     private units: 'metric' | 'imperial' = 'metric';
     private material: SmoothingMaterial = 'abs';
     private labels!: ReturnType<typeof this.readLabels>;
+    private timerTotal = 0;
+    private timerRemaining = 0;
+    private timerStarted = false;
+    private timerId = 0;
 
     private readLabels() {
       const g = (id: string) => document.getElementById(id)?.textContent || '';
@@ -153,6 +174,7 @@ const { ui } = Astro.props;
         button.addEventListener('click', () => this.applyPreset(button));
       });
       document.getElementById('csts-copy')?.addEventListener('click', () => this.copy());
+      document.getElementById('csts-live-timer')?.addEventListener('click', () => this.toggleTimer());
     }
 
     private setUnits(units: 'metric' | 'imperial') {
@@ -246,7 +268,7 @@ const { ui } = Astro.props;
       const detail = this.detail();
       this.text('csts-detail-name', this.detailLabel(detail));
       this.text('csts-minutes', result.exposureMinutes.toFixed(1));
-      this.text('csts-seconds', result.exposureSeconds.toFixed(0));
+      this.resetTimer(result.exposureSeconds);
       this.text('csts-dry', result.dryHours.toFixed(1));
       this.text('csts-trial', result.trialSeconds.toFixed(0));
       this.text('csts-risk', result.riskScore.toFixed(0));
@@ -256,6 +278,68 @@ const { ui } = Astro.props;
       if (fill) fill.style.height = `${Math.min(88, 24 + result.vaporIntensity * 22)}%`;
       const root = document.querySelector('.csts-root') as HTMLElement;
       root?.setAttribute('data-risk', result.recommendation);
+    }
+
+    private resetTimer(seconds: number) {
+      window.clearInterval(this.timerId);
+      this.timerId = 0;
+      this.timerTotal = seconds;
+      this.timerRemaining = seconds;
+      this.timerStarted = false;
+      document.getElementById('csts-live-timer')?.classList.remove('running', 'ready');
+      document.getElementById('csts-live-timer')?.setAttribute('aria-pressed', 'false');
+      const unit = document.getElementById('csts-seconds-unit') as HTMLElement;
+      if (unit) unit.hidden = false;
+      this.text('csts-seconds', seconds.toFixed(0));
+      this.updateTimerRing();
+    }
+
+    private toggleTimer() {
+      if (this.timerId) {
+        this.stopTimer();
+        return;
+      }
+      this.startTimer();
+    }
+
+    private startTimer() {
+      if (!this.timerStarted || this.timerRemaining <= 0) {
+        this.timerRemaining = this.timerTotal;
+      }
+      this.timerStarted = true;
+      const unit = document.getElementById('csts-seconds-unit') as HTMLElement;
+      if (unit) unit.hidden = true;
+      document.getElementById('csts-live-timer')?.classList.add('running', 'ready');
+      document.getElementById('csts-live-timer')?.setAttribute('aria-pressed', 'true');
+      this.renderTimer();
+      this.timerId = window.setInterval(() => this.tickTimer(), 1000);
+    }
+
+    private stopTimer() {
+      window.clearInterval(this.timerId);
+      this.timerId = 0;
+      document.getElementById('csts-live-timer')?.classList.remove('running');
+      document.getElementById('csts-live-timer')?.setAttribute('aria-pressed', 'false');
+    }
+
+    private tickTimer() {
+      this.timerRemaining = Math.max(0, this.timerRemaining - 1);
+      this.renderTimer();
+      if (this.timerRemaining <= 0) this.stopTimer();
+    }
+
+    private renderTimer() {
+      const minutes = Math.floor(this.timerRemaining / 60);
+      const seconds = Math.round(this.timerRemaining % 60).toString().padStart(2, '0');
+      this.text('csts-seconds', `${minutes}:${seconds}`);
+      this.updateTimerRing();
+    }
+
+    private updateTimerRing() {
+      const ring = document.getElementById('csts-timer-ring') as HTMLElement;
+      if (!ring) return;
+      const elapsed = this.timerTotal > 0 ? 1 - this.timerRemaining / this.timerTotal : 0;
+      ring.style.setProperty('--timer-progress', `${Math.max(0, Math.min(1, elapsed)) * 360}deg`);
     }
 
     private text(id: string, value: string) {

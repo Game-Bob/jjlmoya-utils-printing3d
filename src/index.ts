@@ -32,3 +32,5 @@ export { COREXY_BELT_TENSION_ESTIMATOR_TOOL } from './tool/coreXYBeltTensionEsti
 export { RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL } from './tool/rainbowFilamentGradientCalculator/index';
 
 export { CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL } from './tool/chemicalSmoothingTimeSimulator/index';
+
+export { BED_THERMAL_INERTIA_STABILIZATION_CALCULATOR_TOOL } from './tool/bedThermalInertiaStabilizationCalculator/index';

@@ -1,0 +1,317 @@
+---
+import type { BedThermalInertiaStabilizationCalculatorUI } from './ui';
+import './bed-thermal-inertia-stabilization-calculator.css';
+
+interface Props {
+  ui: BedThermalInertiaStabilizationCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="btisc-root" id="main-tool">
+  <div class="btisc-panel">
+    <section class="btisc-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="btisc-rail">
+        <div class="btisc-toggle" role="group" aria-label={ui.unitSystemLabel}>
+          <span>{ui.unitSystemLabel}</span>
+          <button type="button" class="active" data-btisc-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-btisc-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <div class="btisc-presets">
+          <span>{ui.presetsLabel}</span>
+          <button type="button" class="active" data-btisc-preset="ender">{ui.enderPresetLabel}</button>
+          <button type="button" data-btisc-preset="voron">{ui.voronPresetLabel}</button>
+          <button type="button" data-btisc-preset="large">{ui.largePresetLabel}</button>
+        </div>
+      </div>
+
+      <div class="btisc-materials" role="group" aria-label={ui.materialLabel}>
+        <label><input type="radio" name="btisc-material" value="borosilicateGlass" checked /> <span>{ui.borosilicateGlassLabel}</span></label>
+        <label><input type="radio" name="btisc-material" value="peiSpringSteel" /> <span>{ui.peiSpringSteelLabel}</span></label>
+        <label><input type="radio" name="btisc-material" value="aluminum" /> <span>{ui.aluminumLabel}</span></label>
+      </div>
+
+      <div class="btisc-grid">
+        <label class="btisc-field">
+          <span>{ui.thicknessLabel}</span>
+          <b><input id="btisc-thickness" type="number" min="0.1" step="0.1" value="4" /><em id="btisc-thickness-unit">{ui.thicknessUnitMetric}</em></b>
+        </label>
+        <label class="btisc-field">
+          <span>{ui.targetTemperatureLabel}</span>
+          <b><input id="btisc-temp" type="number" min="30" step="1" value="60" /><em id="btisc-temp-unit">{ui.temperatureUnitMetric}</em></b>
+        </label>
+        <label class="btisc-field">
+          <span>{ui.heaterPowerLabel}</span>
+          <b><input id="btisc-power" type="number" min="20" step="5" value="220" /><em>{ui.wattsUnit}</em></b>
+        </label>
+        <label class="btisc-field btisc-size">
+          <span>{ui.bedSizeLabel}</span>
+          <b><input id="btisc-length" type="number" min="120" step="5" value="235" /><em>x</em><input id="btisc-width" type="number" min="120" step="5" value="235" /><em id="btisc-size-unit">{ui.bedSizeUnitMetric}</em></b>
+        </label>
+      </div>
+    </section>
+
+    <section class="btisc-results" aria-label={ui.resultsAriaLabel}>
+      <div class="btisc-dial" aria-hidden="true">
+        <span id="btisc-dial-fill"></span>
+        <i></i>
+        <b data-label={ui.delayMarkerLabel}></b>
+      </div>
+      <div class="btisc-main">
+        <span>{ui.recommendedDelayLabel}</span>
+        <strong><span id="btisc-delay">0</span><em>{ui.secondsUnit}</em></strong>
+        <small><span id="btisc-delay-min">0.0</span> {ui.minutesUnit} - <b id="btisc-readiness">{ui.readinessBalanced}</b></small>
+      </div>
+      <div class="btisc-stats">
+        <div><span>{ui.warmupTimeLabel}</span><strong><span id="btisc-warmup">0</span><em>{ui.minutesUnit}</em></strong></div>
+        <div><span>{ui.plateMassLabel}</span><strong><span id="btisc-mass">0.00</span><em id="btisc-mass-unit">{ui.kilogramsUnit}</em></strong></div>
+        <div><span>{ui.energyStoredLabel}</span><strong><span id="btisc-energy">0</span><em>{ui.wattHoursUnit}</em></strong></div>
+        <div><span>{ui.conductionLagLabel}</span><strong><span id="btisc-lag">0</span><em>{ui.secondsUnit}</em></strong></div>
+        <div><span>{ui.conductivityLabel}</span><strong><span id="btisc-k">0</span><em>{ui.conductivityUnit}</em></strong></div>
+      </div>
+      <button type="button" class="btisc-copy" id="btisc-copy">{ui.copyButton}</button>
+      <span id="btisc-copied" hidden>{ui.copiedButton}</span>
+      <span id="btisc-summary" hidden>{ui.copiedSummaryTemplate}</span>
+      <span id="btisc-ready-quick" hidden>{ui.readinessQuick}</span>
+      <span id="btisc-ready-balanced" hidden>{ui.readinessBalanced}</span>
+      <span id="btisc-ready-slow" hidden>{ui.readinessSlow}</span>
+      <span id="btisc-unit-data" hidden data-thickness-metric={ui.thicknessUnitMetric} data-thickness-imperial={ui.thicknessUnitImperial} data-temp-metric={ui.temperatureUnitMetric} data-temp-imperial={ui.temperatureUnitImperial} data-size-metric={ui.bedSizeUnitMetric} data-size-imperial={ui.bedSizeUnitImperial} data-mass-metric={ui.kilogramsUnit} data-mass-imperial={ui.poundsUnit}></span>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateBedThermalInertia, type BedPlateMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+  type StoredBedThermalInertiaState = {
+    units: UnitSystem;
+    material: BedPlateMaterial;
+    thicknessMm: number;
+    tempC: number;
+    heaterPowerW: number;
+    lengthMm: number;
+    widthMm: number;
+  };
+
+  class BedThermalInertiaTool {
+    private readonly storageKey = 'jjlmoya-printing3d-bed-thermal-inertia-state-v1';
+    private units: UnitSystem = 'metric';
+    private material: BedPlateMaterial = 'borosilicateGlass';
+    private labels = this.readLabels();
+
+    constructor() {
+      this.restoreState();
+      this.bind();
+      this.updateUnits();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private readLabels() {
+      const text = (id: string) => document.getElementById(id)?.textContent || '';
+      return {
+        copy: text('btisc-copy'),
+        copied: text('btisc-copied'),
+        summary: text('btisc-summary'),
+        quick: text('btisc-ready-quick'),
+        balanced: text('btisc-ready-balanced'),
+        slow: text('btisc-ready-slow'),
+      };
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-btisc-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.btiscUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      document.querySelectorAll<HTMLInputElement>('input[name="btisc-material"]').forEach((radio) => {
+        radio.addEventListener('input', () => {
+          this.material = radio.value as BedPlateMaterial;
+          this.update();
+        });
+      });
+      ['btisc-thickness', 'btisc-temp', 'btisc-power', 'btisc-length', 'btisc-width'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      document.querySelectorAll<HTMLElement>('[data-btisc-preset]').forEach((button) => button.addEventListener('click', () => this.applyPreset(button)));
+      document.getElementById('btisc-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const values = this.metricValues();
+      this.units = units;
+      this.syncUnitButtons();
+      this.fromMetricValues(values);
+      this.updateUnits();
+      this.update();
+    }
+
+    private applyPreset(button: HTMLElement) {
+      document.querySelectorAll('[data-btisc-preset]').forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      const preset = button.dataset.btiscPreset || 'ender';
+      const data: Record<string, [BedPlateMaterial, number, number, number, number, number]> = {
+        ender: ['borosilicateGlass', 4, 60, 220, 235, 235],
+        voron: ['peiSpringSteel', 0.5, 110, 600, 300, 300],
+        large: ['aluminum', 6, 90, 750, 350, 350],
+      };
+      const [material, thickness, temp, power, length, width] = data[preset] || data.ender;
+      this.material = material;
+      const radio = document.querySelector<HTMLInputElement>(`input[name="btisc-material"][value="${material}"]`);
+      if (radio) radio.checked = true;
+      this.input('btisc-power').value = String(power);
+      this.fromMetricValues({ thicknessMm: thickness, tempC: temp, lengthMm: length, widthMm: width });
+      this.update();
+    }
+
+    private metricValues() {
+      return {
+        thicknessMm: this.units === 'metric' ? this.value('btisc-thickness') : this.value('btisc-thickness') * 25.4,
+        tempC: this.units === 'metric' ? this.value('btisc-temp') : (this.value('btisc-temp') - 32) * 5 / 9,
+        lengthMm: this.units === 'metric' ? this.value('btisc-length') : this.value('btisc-length') * 25.4,
+        widthMm: this.units === 'metric' ? this.value('btisc-width') : this.value('btisc-width') * 25.4,
+      };
+    }
+
+    private fromMetricValues(values: ReturnType<BedThermalInertiaTool['metricValues']>) {
+      this.input('btisc-thickness').value = this.units === 'metric' ? values.thicknessMm.toFixed(1) : (values.thicknessMm / 25.4).toFixed(3);
+      this.input('btisc-temp').value = this.units === 'metric' ? values.tempC.toFixed(0) : ((values.tempC * 9 / 5) + 32).toFixed(0);
+      this.input('btisc-length').value = this.units === 'metric' ? values.lengthMm.toFixed(0) : (values.lengthMm / 25.4).toFixed(2);
+      this.input('btisc-width').value = this.units === 'metric' ? values.widthMm.toFixed(0) : (values.widthMm / 25.4).toFixed(2);
+    }
+
+    private updateUnits() {
+      const data = document.getElementById('btisc-unit-data') as HTMLElement;
+      const suffix = this.units === 'metric' ? 'Metric' : 'Imperial';
+      this.text('btisc-thickness-unit', data.dataset[`thickness${suffix}`] || '');
+      this.text('btisc-temp-unit', data.dataset[`temp${suffix}`] || '');
+      this.text('btisc-size-unit', data.dataset[`size${suffix}`] || '');
+      this.text('btisc-mass-unit', data.dataset[`mass${suffix}`] || '');
+    }
+
+    private syncUnitButtons() {
+      document.querySelectorAll('[data-btisc-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.btiscUnits === this.units));
+    }
+
+    private syncMaterialRadio() {
+      const radio = document.querySelector<HTMLInputElement>(`input[name="btisc-material"][value="${this.material}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    private isValidState(state: Partial<StoredBedThermalInertiaState>) {
+      const values = [state.thicknessMm, state.tempC, state.heaterPowerW, state.lengthMm, state.widthMm].map(Number);
+      const validUnits = state.units === 'metric' || state.units === 'imperial';
+      const validMaterial = state.material === 'borosilicateGlass' || state.material === 'peiSpringSteel' || state.material === 'aluminum';
+      return validUnits && validMaterial && values.every(Number.isFinite);
+    }
+
+    private applyStoredState(state: StoredBedThermalInertiaState) {
+      this.units = state.units;
+      this.material = state.material;
+      this.input('btisc-power').value = String(state.heaterPowerW);
+      this.fromMetricValues({
+        thicknessMm: state.thicknessMm,
+        tempC: state.tempC,
+        lengthMm: state.lengthMm,
+        widthMm: state.widthMm,
+      });
+      this.syncUnitButtons();
+      this.syncMaterialRadio();
+      document.querySelectorAll('[data-btisc-preset]').forEach((item) => item.classList.remove('active'));
+    }
+
+    private restoreState() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw) as Partial<StoredBedThermalInertiaState>;
+        if (this.isValidState(state)) this.applyStoredState(state as StoredBedThermalInertiaState);
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+
+    private saveState() {
+      try {
+        const values = this.metricValues();
+        const state: StoredBedThermalInertiaState = {
+          units: this.units,
+          material: this.material,
+          thicknessMm: values.thicknessMm,
+          tempC: values.tempC,
+          heaterPowerW: this.value('btisc-power'),
+          lengthMm: values.lengthMm,
+          widthMm: values.widthMm,
+        };
+        window.localStorage?.setItem(this.storageKey, JSON.stringify(state));
+      } catch {
+      }
+    }
+
+    private params() {
+      const values = this.metricValues();
+      return {
+        material: this.material,
+        thicknessMm: values.thicknessMm,
+        targetTemperatureC: values.tempC,
+        heaterPowerW: this.value('btisc-power'),
+        bedLengthMm: values.lengthMm,
+        bedWidthMm: values.widthMm,
+      };
+    }
+
+    private readinessLabel(readiness: 'quick' | 'balanced' | 'slow') {
+      if (readiness === 'quick') return this.labels.quick;
+      if (readiness === 'slow') return this.labels.slow;
+      return this.labels.balanced;
+    }
+
+    private update() {
+      const result = calculateBedThermalInertia(this.params());
+      this.text('btisc-delay', result.recommendedDelaySeconds.toFixed(0));
+      this.text('btisc-delay-min', (result.recommendedDelaySeconds / 60).toFixed(1));
+      this.text('btisc-readiness', this.readinessLabel(result.readiness));
+      this.text('btisc-warmup', (result.warmupSeconds / 60).toFixed(1));
+      this.text('btisc-mass', this.units === 'metric' ? result.plateMassKg.toFixed(2) : (result.plateMassKg * 2.20462).toFixed(2));
+      this.text('btisc-energy', result.thermalEnergyWh.toFixed(0));
+      this.text('btisc-lag', result.diffusionLagSeconds.toFixed(0));
+      this.text('btisc-k', result.materialConductivityWmK.toFixed(1));
+      const fill = document.getElementById('btisc-dial-fill') as HTMLElement;
+      if (fill) fill.style.setProperty('--delay', `${Math.min(100, result.recommendedDelaySeconds / 3.6)}%`);
+      document.querySelector('.btisc-root')?.setAttribute('data-readiness', result.readiness);
+      this.saveState();
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private copy() {
+      const result = calculateBedThermalInertia(this.params());
+      const summary = this.labels.summary
+        .replace('{delay}', result.recommendedDelaySeconds.toFixed(0))
+        .replace('{minutes}', (result.recommendedDelaySeconds / 60).toFixed(1))
+        .replace('{warmup}', (result.warmupSeconds / 60).toFixed(1))
+        .replace('{readiness}', this.readinessLabel(result.readiness));
+      navigator.clipboard?.writeText(summary);
+      const button = document.getElementById('btisc-copy');
+      if (!button) return;
+      button.textContent = this.labels.copied;
+      setTimeout(() => {
+        button.textContent = this.labels.copy;
+      }, 1200);
+    }
+  }
+
+  const initBedThermalInertiaTool = () => new BedThermalInertiaTool();
+  document.addEventListener('astro:page-load', initBedThermalInertiaTool);
+  initBedThermalInertiaTool();
+</script>
