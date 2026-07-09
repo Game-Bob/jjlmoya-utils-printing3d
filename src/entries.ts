@@ -10,6 +10,7 @@ export { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInert
 export { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
 export { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
 export { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
+export { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -24,6 +25,7 @@ import { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInert
 import { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
 import { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
 import { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
+import { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -38,4 +40,5 @@ export const ALL_ENTRIES = [
   treeSupportDensityCalculator,
   stepperDriverMicrosteppingCalculator,
   peiSheetLifespanEstimator,
+  infillWeightSimulator,
 ];

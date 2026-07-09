@@ -11,6 +11,7 @@ import { bedThermalInertiaStabilizationCalculator } from '../tool/bedThermalIner
 import { treeSupportDensityCalculator } from '../tool/treeSupportDensityCalculator/entry';
 import { stepperDriverMicrosteppingCalculator } from '../tool/stepperDriverMicrosteppingCalculator/entry';
 import { peiSheetLifespanEstimator } from '../tool/peiSheetLifespanEstimator/entry';
+import { infillWeightSimulator } from '../tool/infillWeightSimulator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -27,6 +28,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     treeSupportDensityCalculator,
     stepperDriverMicrosteppingCalculator,
     peiSheetLifespanEstimator,
+    infillWeightSimulator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

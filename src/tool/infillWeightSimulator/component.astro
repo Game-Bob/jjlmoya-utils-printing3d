@@ -1,0 +1,154 @@
+---
+import type { InfillWeightSimulatorUI } from './ui';
+import './3d-print-weight-infill-percentage-calculator.css';
+
+interface Props {
+  ui: InfillWeightSimulatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="iws-root"
+  data-iws-root
+  data-insight-low={ui.insightLow}
+  data-insight-balanced={ui.insightBalanced}
+  data-insight-high={ui.insightHigh}
+  data-gram-unit={ui.gramUnit}
+  data-ounce-unit={ui.ounceUnit}
+  data-pound-unit={ui.poundUnit}
+  data-kilogram-unit={ui.kilogramUnit}
+  data-percent-unit={ui.percentUnit}
+>
+  <div class="iws-board">
+    <section class="iws-controls" aria-label={ui.inputsAriaLabel}>
+      <div class="iws-unit-toggle" aria-label={ui.unitSystemLabel}>
+        <span>{ui.unitSystemLabel}</span>
+        <div class="iws-segment">
+          <button type="button" class="is-active" data-unit="metric">{ui.metricLabel}</button>
+          <button type="button" data-unit="imperial">{ui.imperialLabel}</button>
+        </div>
+      </div>
+
+      <label class="iws-field" for="iws-currency">
+        <span>{ui.currencyLabel}</span>
+        <select id="iws-currency">
+          {
+            ui.currencyOptions.map((option) => (
+              <option value={option.code} data-symbol={option.symbol} selected={option.code === 'USD'}>
+                {option.label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+
+      <label class="iws-field" for="iws-full-weight">
+        <span>{ui.fullWeightLabel}</span>
+        <small>{ui.fullWeightHint}</small>
+        <div class="iws-input-row">
+          <input id="iws-full-weight" type="number" min="1" step="1" value="240" data-base-unit="g" />
+          <b data-weight-unit>{ui.gramUnit}</b>
+        </div>
+      </label>
+
+      <label class="iws-field iws-range" for="iws-infill">
+        <span><span>{ui.infillLabel}</span><strong><output id="iws-infill-output">20</output>{ui.percentUnit}</strong></span>
+        <input id="iws-infill" type="range" min="0" max="100" value="20" />
+      </label>
+
+      <label class="iws-field" for="iws-pattern">
+        <span>{ui.patternLabel}</span>
+        <select id="iws-pattern">
+          {
+            ui.patternOptions.map((option) => (
+              <option value={option.value} selected={option.value === 'gyroid'}>
+                {option.label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+
+      <label class="iws-field iws-range" for="iws-shell">
+        <span><span>{ui.shellShareLabel}</span><strong><output id="iws-shell-output">28</output>{ui.percentUnit}</strong></span>
+        <small>{ui.shellShareHint}</small>
+        <input id="iws-shell" type="range" min="5" max="70" value="28" />
+      </label>
+
+      <div class="iws-economy">
+        <label class="iws-field" for="iws-spool-price">
+          <span>{ui.spoolPriceLabel}</span>
+          <div class="iws-input-row">
+            <input id="iws-spool-price" type="number" min="0" step="0.5" value="24" />
+            <b><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span>/<span data-price-mass-unit>{ui.kilogramUnit}</span></b>
+          </div>
+        </label>
+        <label class="iws-field" for="iws-waste">
+          <span>{ui.wasteLabel}</span>
+          <div class="iws-input-row">
+            <input id="iws-waste" type="number" min="0" max="100" step="1" value="6" />
+            <b>{ui.percentUnit}</b>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <section class="iws-visual" aria-label={ui.resultsAriaLabel}>
+      <div class="iws-result-grid">
+        <article class="iws-result iws-primary">
+          <span>{ui.estimatedWeightLabel}</span>
+          <strong><output id="iws-weight">0</output> <em data-result-unit>{ui.gramUnit}</em></strong>
+        </article>
+        <article class="iws-result">
+          <span>{ui.filamentSavedLabel}</span>
+          <strong><output id="iws-saved">0</output> <em data-result-unit>{ui.gramUnit}</em></strong>
+        </article>
+        <article class="iws-result">
+          <span>{ui.materialCostLabel}</span>
+          <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="iws-cost">0.00</output></strong>
+        </article>
+        <article class="iws-result">
+          <span>{ui.costSavedLabel}</span>
+          <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="iws-cost-saved">0.00</output></strong>
+        </article>
+      </div>
+
+      <div class="iws-breakdown">
+        <div class="iws-meter">
+          <span>{ui.effectiveDensityLabel}</span>
+          <b><output id="iws-effective-density">0</output>{ui.percentUnit}</b>
+          <i id="iws-density-bar"></i>
+        </div>
+        <div class="iws-duo">
+          <span>{ui.shellLabel}: <b id="iws-shell-weight">0 {ui.gramUnit}</b></span>
+          <span>{ui.infillCoreLabel}: <b id="iws-core-weight">0 {ui.gramUnit}</b></span>
+        </div>
+        <p id="iws-insight">{ui.insightBalanced}</p>
+      </div>
+
+      <div class="iws-comparison">
+        <span>{ui.comparisonLabel}</span>
+        <div class="iws-compare-row">
+          <b>{ui.fullInfillLabel}</b>
+          <i><span id="iws-full-bar"></span></i>
+          <em id="iws-full-weight-label">0 {ui.gramUnit}</em>
+        </div>
+        <div class="iws-compare-row">
+          <b>{ui.targetInfillLabel}</b>
+          <i><span id="iws-target-bar"></span></i>
+          <em id="iws-target-weight-label">0 {ui.gramUnit}</em>
+        </div>
+        <small>{ui.patternImpactLabel}: <strong id="iws-pattern-impact">1.00x</strong></small>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { initInfillWeightSimulator } from './app';
+
+  document.addEventListener('astro:page-load', initInfillWeightSimulator);
+  initInfillWeightSimulator();
+</script>

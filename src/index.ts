@@ -38,3 +38,5 @@ export { BED_THERMAL_INERTIA_STABILIZATION_CALCULATOR_TOOL } from './tool/bedThe
 export { TREE_SUPPORT_DENSITY_CALCULATOR_TOOL } from './tool/treeSupportDensityCalculator/index';
 
 export { PEI_SHEET_LIFESPAN_ESTIMATOR_TOOL } from './tool/peiSheetLifespanEstimator/index';
+
+export { INFILL_WEIGHT_SIMULATOR_TOOL } from './tool/infillWeightSimulator/index';

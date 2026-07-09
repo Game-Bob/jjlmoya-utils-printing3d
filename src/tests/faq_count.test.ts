@@ -16,6 +16,6 @@ describe('FAQ Content Validation', () => {
   });
 
   it('should have 7 tools registered', () => {
-    expect(ALL_TOOLS.length).toBe(12);
+    expect(ALL_TOOLS.length).toBe(13);
   });
 });
