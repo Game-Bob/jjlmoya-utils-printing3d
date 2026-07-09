@@ -57,11 +57,13 @@ export interface Printing3dToolEntry<TUI = Record<string, string>> {
 
 export interface Printing3dCategoryEntry {
   icon: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tools: Printing3dToolEntry<any>[];
   i18n: LocaleMap<CategoryLocaleContent>;
 }
 
 export interface ToolDefinition {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   entry: Printing3dToolEntry<any>;
   Component: unknown;
   SEOComponent: unknown;

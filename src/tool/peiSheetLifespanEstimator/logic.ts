@@ -91,12 +91,12 @@ const getRecommendation = (opts: {
   if (opts.weakZones >= 5 || opts.risk >= 86) return 'replaceCriticalZone';
   if (opts.lowZOffsetFrequency >= 60) return 'raiseZ';
   if (opts.petgOverbondIncidents >= 1) return 'releaseLayer';
-  if (opts.weakZones >= 2 || opts.remaining <= 42) return 'zoneMap';
+  if (opts.remaining <= 42) return 'zoneMap';
   if (opts.wearMode === 'mechanical' || opts.wearMode === 'combined') return 'gentleRelease';
   return 'soapWash';
 };
 
-export const calculatePEISheetLifespan = (params: PEISheetLifespanParams): PEISheetLifespanResult => {
+const computeProfileParams = (params: PEISheetLifespanParams) => {
   const profile = SHEET_PROFILES[params.sheetType] ?? SHEET_PROFILES.textured;
   const printCount = clamp(params.printCount, 0, 10000);
   const bedTemperatureC = clamp(params.bedTemperatureC, 20, 140);
@@ -106,20 +106,37 @@ export const calculatePEISheetLifespan = (params: PEISheetLifespanParams): PEISh
   const thermalPenalty = 1 + (overToleranceC / 45) * 0.75 + Math.max(0, bedTemperatureC - 75) / 260;
   const spatulaPenalty = params.metalSpatulaUse ? 1 + 0.42 * profile.abrasionSensitivity : 1;
   const chemicalAdjusted = 1 + (cleaningPenalty - 1) * profile.chemicalSensitivity;
+  return { profile, printCount, materialFactor, thermalPenalty, spatulaPenalty, chemicalAdjusted, bedTemperatureC };
+};
+
+const computeIncidents = (params: PEISheetLifespanParams) => {
   const weakZones = clamp(params.weakZones ?? 0, 0, 16);
   const nozzleCrashIncidents = clamp(params.nozzleCrashIncidents ?? 0, 0, 20);
   const petgOverbondIncidents = clamp(params.petgOverbondIncidents ?? 0, 0, 20);
   const lowZOffsetFrequency = clamp(params.lowZOffsetFrequency ?? 0, 0, 100);
   const incidentCycles = weakZones * 32 + nozzleCrashIncidents * 68 + petgOverbondIncidents * 52 + lowZOffsetFrequency * 1.35;
+  return { weakZones, nozzleCrashIncidents, petgOverbondIncidents, lowZOffsetFrequency, incidentCycles };
+};
+
+const computeWearMode = (weakZones: number, nozzleCrashIncidents: number, petgOverbondIncidents: number, baseWearMode: PEISheetLifespanResult['wearMode']): PEISheetLifespanResult['wearMode'] => {
+  if (weakZones >= 3) return 'localized';
+  if (nozzleCrashIncidents + petgOverbondIncidents >= 2) return 'mechanical';
+  return baseWearMode;
+};
+
+export const calculatePEISheetLifespan = (params: PEISheetLifespanParams): PEISheetLifespanResult => {
+  const { profile, printCount, materialFactor, thermalPenalty, spatulaPenalty, chemicalAdjusted } = computeProfileParams(params);
+  const { weakZones, nozzleCrashIncidents, petgOverbondIncidents, lowZOffsetFrequency, incidentCycles } = computeIncidents(params);
+
   const equivalentCycles = printCount * materialFactor * thermalPenalty * spatulaPenalty * chemicalAdjusted + incidentCycles;
   const consumedLifePercent = clamp((equivalentCycles / profile.baselineCycles) * 100, 0, 155);
   const remainingLifePercent = clamp(100 - consumedLifePercent, 0, 100);
   const fatigueRisk = Math.pow(consumedLifePercent / 100, 1.45) * 72;
   const materialReleaseRisk = Math.max(0, materialFactor - 1) * 18;
   const incidentRisk = weakZones * 5.5 + nozzleCrashIncidents * 8 + petgOverbondIncidents * 7 + lowZOffsetFrequency * 0.18;
-  const adhesionRiskPercent = clamp(fatigueRisk + materialReleaseRisk + incidentRisk + Math.max(0, cleaningPenalty - 1) * 22 + (params.metalSpatulaUse ? 10 : 0), 3, 98);
+  const adhesionRiskPercent = clamp(fatigueRisk + materialReleaseRisk + incidentRisk + Math.max(0, chemicalAdjusted - 1) * 22 + (params.metalSpatulaUse ? 10 : 0), 3, 98);
   const baseWearMode = getWearMode({ thermalPenalty, cleaningPenalty: chemicalAdjusted, spatulaPenalty });
-  const wearMode = weakZones >= 3 ? 'localized' : nozzleCrashIncidents + petgOverbondIncidents >= 2 ? 'mechanical' : baseWearMode;
+  const wearMode = computeWearMode(weakZones, nozzleCrashIncidents, petgOverbondIncidents, baseWearMode);
 
   return {
     remainingLifePercent: round(remainingLifePercent),

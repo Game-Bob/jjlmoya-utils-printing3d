@@ -1,6 +1,6 @@
 .psle-root {
   --psle-bg: #f4f5f2;
-  --psle-panel: #ffffff;
+  --psle-panel: #fff;
   --psle-input: #ecefeb;
   --psle-border: #d5dad3;
   --psle-ink: #1d211f;
@@ -11,6 +11,7 @@
   --psle-good: #10b981;
   --psle-cell: #e8ebe6;
   --psle-cell-active: #fee2e2;
+
   color: var(--psle-ink);
 }
 
@@ -339,7 +340,7 @@
 }
 
 .psle-check {
-  display: flex !important;
+  display: flex;
   align-items: center;
   gap: 0.55rem;
 }

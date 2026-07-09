@@ -287,28 +287,54 @@ const { ui } = Astro.props;
       }
     }
 
+    private restoreField(id: string, value: string | number | boolean | undefined, fallback?: string) {
+      const val = value ?? fallback;
+      if (val !== undefined) {
+        const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+        if (el) {
+          if (el.type === 'checkbox') (el as HTMLInputElement).checked = Boolean(val);
+          else el.value = String(val);
+        }
+      }
+    }
+
     private restore() {
       try {
         const raw = window.localStorage?.getItem(this.storageKey);
         if (!raw) return;
-        const state = JSON.parse(raw);
-        if (state.units === 'imperial') this.units = 'imperial';
-        if (state.sheetType) this.sheetType = state.sheetType;
-        this.select('psle-sheet-select').value = this.sheetType;
-        this.input('psle-prints-number').value = String(Number(state.prints) || 180);
-        const tempC = Number(state.tempC) || 70;
-        this.input('psle-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
-        this.select('psle-material').value = state.material || 'pla';
-        this.select('psle-cleaning').value = state.cleaning || 'ipa';
-        this.input('psle-spatula').checked = Boolean(state.spatula);
-        this.weakZones = new Set(Array.isArray(state.weakZones) ? state.weakZones.map(Number).filter(Number.isFinite) : []);
-        this.input('psle-crashes').value = String(Number(state.crashes) || 0);
-        this.input('psle-petg-overbond').value = String(Number(state.petgOverbond) || 0);
-        this.input('psle-low-z').value = String(Number(state.lowZ) || 0);
-        this.syncZones();
+        this.applyRestoredState(JSON.parse(raw));
       } catch {
         window.localStorage?.removeItem(this.storageKey);
       }
+    }
+
+    private applyRestoredState(state: Record<string, unknown>) {
+      this.restoreUnits(state);
+      this.restorePrintFields(state);
+      this.restoreIncidentFields(state);
+      this.syncZones();
+    }
+
+    private restoreUnits(state: Record<string, unknown>) {
+      if (state.units === 'imperial') this.units = 'imperial';
+      if (state.sheetType) this.sheetType = state.sheetType as string;
+      this.restoreField('psle-sheet-select', this.sheetType);
+    }
+
+    private restorePrintFields(state: Record<string, unknown>) {
+      this.restoreField('psle-prints-number', Number(state.prints) || 180);
+      const tempC = Number(state.tempC) || 70;
+      this.restoreField('psle-temp', this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0));
+      this.restoreField('psle-material', state.material || 'pla');
+      this.restoreField('psle-cleaning', state.cleaning || 'ipa');
+      this.restoreField('psle-spatula', Boolean(state.spatula));
+    }
+
+    private restoreIncidentFields(state: Record<string, unknown>) {
+      this.weakZones = new Set(Array.isArray(state.weakZones) ? state.weakZones.map(Number).filter(Number.isFinite) : []);
+      this.restoreField('psle-crashes', Number(state.crashes) || 0);
+      this.restoreField('psle-petg-overbond', Number(state.petgOverbond) || 0);
+      this.restoreField('psle-low-z', Number(state.lowZ) || 0);
     }
   }
 

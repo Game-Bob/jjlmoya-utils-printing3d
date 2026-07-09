@@ -1,18 +1,18 @@
+function pickLabel(units: 'metric' | 'imperial', imp: string | undefined, met: string | undefined, fallbacks: [string, string]): string {
+  return units === 'imperial' ? (imp ?? fallbacks[0]) : (met ?? fallbacks[1]);
+}
+
+function applyUnitLabels(units: 'metric' | 'imperial', textFn: (id: string, val: string) => void, locData: DOMStringMap): void {
+  textFn('sdmc-pitch-unit', pickLabel(units, locData.pitchImperial, locData.pitchMetric, ['in', 'mm']));
+  textFn('sdmc-lead-unit', pickLabel(units, locData.pitchImperial, locData.pitchMetric, ['in', 'mm']));
+  textFn('sdmc-res-steps-label', pickLabel(units, locData.stepsImperial, locData.stepsMetric, ['steps/in', 'steps/mm']));
+  textFn('sdmc-res-res-label', pickLabel(units, locData.resImperial, locData.resMetric, ['mm', 'mm']));
+}
+
 export function updateUnitLabels(units: 'metric' | 'imperial', textFn: (id: string, val: string) => void): void {
   const locEl = document.getElementById('sdmc-localization-data');
   if (!locEl) return;
-  const locData = locEl.dataset;
-  if (units === 'imperial') {
-    textFn('sdmc-pitch-unit', locData.pitchImperial ?? 'in');
-    textFn('sdmc-lead-unit', locData.pitchImperial ?? 'in');
-    textFn('sdmc-res-steps-label', locData.stepsImperial ?? 'steps/in');
-    textFn('sdmc-res-res-label', locData.resImperial ?? 'mm');
-  } else {
-    textFn('sdmc-pitch-unit', locData.pitchMetric ?? 'mm');
-    textFn('sdmc-lead-unit', locData.pitchMetric ?? 'mm');
-    textFn('sdmc-res-steps-label', locData.stepsMetric ?? 'steps/mm');
-    textFn('sdmc-res-res-label', locData.resMetric ?? 'mm');
-  }
+  applyUnitLabels(units, textFn, locEl.dataset);
 }
 
 export function convertInputs(units: 'metric' | 'imperial', inputFn: (id: string) => HTMLInputElement | HTMLSelectElement | null): void {
