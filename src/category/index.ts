@@ -9,6 +9,7 @@ import { rainbowFilamentGradientCalculator } from '../tool/rainbowFilamentGradie
 import { chemicalSmoothingTimeSimulator } from '../tool/chemicalSmoothingTimeSimulator/entry';
 import { bedThermalInertiaStabilizationCalculator } from '../tool/bedThermalInertiaStabilizationCalculator/entry';
 import { treeSupportDensityCalculator } from '../tool/treeSupportDensityCalculator/entry';
+import { stepperDriverMicrosteppingCalculator } from '../tool/stepperDriverMicrosteppingCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -23,6 +24,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     chemicalSmoothingTimeSimulator,
     bedThermalInertiaStabilizationCalculator,
     treeSupportDensityCalculator,
+    stepperDriverMicrosteppingCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

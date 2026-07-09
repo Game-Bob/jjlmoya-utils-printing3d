@@ -10,6 +10,7 @@ import { RAINBOW_FILAMENT_GRADIENT_CALCULATOR_TOOL } from './tool/rainbowFilamen
 import { CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL } from './tool/chemicalSmoothingTimeSimulator';
 import { BED_THERMAL_INERTIA_STABILIZATION_CALCULATOR_TOOL } from './tool/bedThermalInertiaStabilizationCalculator';
 import { TREE_SUPPORT_DENSITY_CALCULATOR_TOOL } from './tool/treeSupportDensityCalculator';
+import { STEPPER_DRIVER_MICROSTEPPING_CALCULATOR_TOOL } from './tool/stepperDriverMicrosteppingCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -22,4 +23,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   CHEMICAL_SMOOTHING_TIME_SIMULATOR_TOOL,
   BED_THERMAL_INERTIA_STABILIZATION_CALCULATOR_TOOL,
   TREE_SUPPORT_DENSITY_CALCULATOR_TOOL,
+  STEPPER_DRIVER_MICROSTEPPING_CALCULATOR_TOOL,
 ];

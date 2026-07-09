@@ -1,0 +1,190 @@
+---
+import type { StepperDriverMicrosteppingCalculatorUI } from './ui';
+import './stepper-driver-microstepping-calculator.css';
+
+interface Props {
+  ui: StepperDriverMicrosteppingCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="sdmc-root" id="main-tool">
+  <div id="sdmc-localization-data" style="display: none;"
+    data-pitch-metric={ui.pitchUnitMetric}
+    data-pitch-imperial={ui.pitchUnitImperial}
+    data-steps-metric={ui.stepsPerUnitUnitMetric}
+    data-steps-imperial={ui.stepsPerUnitUnitImperial}
+    data-res-metric={ui.mechanicalResolutionUnitMetric}
+    data-res-imperial={ui.mechanicalResolutionUnitImperial}
+    data-copied={ui.copiedButton}
+  ></div>
+  <div class="sdmc-shell">
+    <section class="sdmc-inputs">
+      <div class="sdmc-topbar">
+        <div class="sdmc-toggle">
+          <span>{ui.unitSystemLabel}</span>
+          <button type="button" class="active" data-sdmc-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-sdmc-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <div class="sdmc-presets">
+          <span>{ui.presetsLabel}</span>
+          <button type="button" data-sdmc-preset="belt16">{ui.presetBelt16}</button>
+          <button type="button" class="active" data-sdmc-preset="belt20">{ui.presetBelt20}</button>
+          <button type="button" data-sdmc-preset="zlead8">{ui.presetZLead8}</button>
+          <button type="button" data-sdmc-preset="zlead2">{ui.presetZLead2}</button>
+        </div>
+      </div>
+
+      <div class="sdmc-fields">
+        <div class="sdmc-field-group">
+          <label>
+            <span>{ui.motorStepAngleLabel}</span>
+            <div class="sdmc-custom-dropdown" id="sdmc-dropdown-step-angle">
+              <input type="hidden" id="sdmc-step-angle" value="1.8" />
+              <button type="button" class="sdmc-dropdown-trigger">
+                <span class="sdmc-trigger-text">{ui.stepAngle18}</span>
+                <span class="sdmc-arrow"></span>
+              </button>
+              <div class="sdmc-dropdown-menu">
+                <div class="sdmc-dropdown-option active" data-value="1.8">{ui.stepAngle18}</div>
+                <div class="sdmc-dropdown-option" data-value="0.9">{ui.stepAngle09}</div>
+                <div class="sdmc-dropdown-option" data-value="7.5">{ui.stepAngle75}</div>
+                <div class="sdmc-dropdown-option" data-value="15">{ui.stepAngle15}</div>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="sdmc-field-group">
+          <label>
+            <span>{ui.driverMicrosteppingLabel}</span>
+            <div class="sdmc-custom-dropdown" id="sdmc-dropdown-microsteps">
+              <input type="hidden" id="sdmc-microsteps" value="16" />
+              <button type="button" class="sdmc-dropdown-trigger">
+                <span class="sdmc-trigger-text">{ui.microstep16}</span>
+                <span class="sdmc-arrow"></span>
+              </button>
+              <div class="sdmc-dropdown-menu">
+                <div class="sdmc-dropdown-option" data-value="1">{ui.microstep1}</div>
+                <div class="sdmc-dropdown-option" data-value="2">{ui.microstep2}</div>
+                <div class="sdmc-dropdown-option" data-value="4">{ui.microstep4}</div>
+                <div class="sdmc-dropdown-option" data-value="8">{ui.microstep8}</div>
+                <div class="sdmc-dropdown-option active" data-value="16">{ui.microstep16}</div>
+                <div class="sdmc-dropdown-option" data-value="32">{ui.microstep32}</div>
+                <div class="sdmc-dropdown-option" data-value="64">{ui.microstep64}</div>
+                <div class="sdmc-dropdown-option" data-value="128">{ui.microstep128}</div>
+                <div class="sdmc-dropdown-option" data-value="256">{ui.microstep256}</div>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="sdmc-field-group">
+          <label>
+            <span>{ui.transmissionModeLabel}</span>
+            <div class="sdmc-custom-dropdown" id="sdmc-dropdown-transmission">
+              <input type="hidden" id="sdmc-transmission" value="belt" />
+              <button type="button" class="sdmc-dropdown-trigger">
+                <span class="sdmc-trigger-text">{ui.transmissionBelt}</span>
+                <span class="sdmc-arrow"></span>
+              </button>
+              <div class="sdmc-dropdown-menu">
+                <div class="sdmc-dropdown-option active" data-value="belt">{ui.transmissionBelt}</div>
+                <div class="sdmc-dropdown-option" data-value="leadscrew">{ui.transmissionLeadScrew}</div>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="sdmc-field-group" id="sdmc-panel-belt">
+          <label>
+            <span>{ui.beltPitchLabel}</span>
+            <b>
+              <input id="sdmc-belt-pitch" type="number" min="0.1" step="0.001" value="2.0" />
+              <em id="sdmc-pitch-unit">{ui.pitchUnitMetric}</em>
+            </b>
+          </label>
+          <label>
+            <span>{ui.pulleyTeethLabel}</span>
+            <b>
+              <input id="sdmc-pulley-teeth" type="number" min="1" step="1" value="20" />
+              <em>{ui.teethUnit}</em>
+            </b>
+          </label>
+        </div>
+
+        <div class="sdmc-field-group" id="sdmc-panel-leadscrew" style="display: none;">
+          <label>
+            <span>{ui.leadScrewPitchLabel}</span>
+            <b>
+              <input id="sdmc-leadscrew-lead" type="number" min="0.1" step="0.001" value="8.0" />
+              <em id="sdmc-lead-unit">{ui.pitchUnitMetric}</em>
+            </b>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="sdmc-visual">
+      <div class="sdmc-simulation-container">
+        <svg id="sdmc-svg-canvas" viewBox="0 0 400 180" width="100%" height="180">
+          <rect x="10" y="40" width="80" height="80" rx="8" fill="var(--sdmc-panel-strong)" stroke="var(--sdmc-line)" stroke-width="2"></rect>
+          <rect x="25" y="55" width="50" height="50" rx="4" fill="var(--sdmc-card)" stroke="var(--sdmc-line)" stroke-width="1"></rect>
+          <line x1="10" y1="80" x2="90" y2="80" stroke="var(--sdmc-line)" stroke-width="1"></line>
+          <line x1="50" y1="40" x2="50" y2="120" stroke="var(--sdmc-line)" stroke-width="1"></line>
+          
+          <circle id="sdmc-svg-pulley" cx="130" cy="80" r="32" fill="var(--sdmc-panel-strong)" stroke="var(--sdmc-accent)" stroke-width="3"></circle>
+          <line id="sdmc-svg-shaft-mark" x1="130" y1="80" x2="162" y2="80" stroke="var(--sdmc-accent)" stroke-width="4" stroke-linecap="round"></line>
+          
+          <g id="sdmc-svg-belt-group">
+            <line x1="130" y1="48" x2="330" y2="48" stroke="var(--sdmc-ink)" stroke-width="4" stroke-dasharray="6,4"></line>
+            <line x1="130" y1="112" x2="330" y2="112" stroke="var(--sdmc-ink)" stroke-width="4" stroke-dasharray="6,4"></line>
+            <circle cx="330" cy="80" r="32" fill="none" stroke="var(--sdmc-line)" stroke-width="2"></circle>
+            <rect id="sdmc-svg-belt-carriage" x="220" y="36" width="30" height="24" rx="4" fill="var(--sdmc-accent)" stroke="var(--sdmc-ink)" stroke-width="2"></rect>
+          </g>
+
+          <g id="sdmc-svg-leadscrew-group" style="display: none;">
+            <rect id="sdmc-svg-leadscrew-rod" x="90" y="74" width="220" height="12" fill="var(--sdmc-panel-strong)" stroke="var(--sdmc-line)" stroke-width="2"></rect>
+            <line x1="90" y1="80" x2="310" y2="80" stroke="var(--sdmc-accent)" stroke-width="2" stroke-dasharray="8,4"></line>
+            <rect id="sdmc-svg-leadscrew-nut" x="180" y="60" width="24" height="40" rx="4" fill="var(--sdmc-accent)" stroke="var(--sdmc-ink)" stroke-width="2"></rect>
+          </g>
+        </svg>
+      </div>
+
+      <div class="sdmc-results-container">
+        <div class="sdmc-result-card">
+          <span class="sdmc-result-value" id="sdmc-res-steps">0.00</span>
+          <span class="sdmc-result-label" id="sdmc-res-steps-label">{ui.stepsPerUnitUnitMetric}</span>
+          <span class="sdmc-result-desc">{ui.stepsPerUnitLabel}</span>
+        </div>
+
+        <div class="sdmc-result-card">
+          <span class="sdmc-result-value" id="sdmc-res-resolution">0.00</span>
+          <span class="sdmc-result-label" id="sdmc-res-res-label">{ui.mechanicalResolutionUnitMetric}</span>
+          <span class="sdmc-result-desc">{ui.mechanicalResolutionLabel}</span>
+        </div>
+      </div>
+
+      <div class="sdmc-formula-box">
+        <div id="sdmc-formula-1">{ui.formulaStepsPerRevolution}</div>
+        <div id="sdmc-formula-2">{ui.formulaMicrostepsPerRev}</div>
+        <div id="sdmc-formula-3">{ui.formulaDistancePerRev}</div>
+        <div id="sdmc-formula-4">{ui.formulaStepsPerUnit}</div>
+        <div id="sdmc-formula-5">{ui.formulaResolution}</div>
+      </div>
+
+      <div class="sdmc-copy-container">
+        <div class="sdmc-copy-command">
+          <span id="sdmc-cmd-text">M92 X80.00</span>
+          <button type="button" class="sdmc-btn-copy" id="sdmc-btn-copy">{ui.copyButton}</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { StepperCalculatorTool } from './tool';
+  new StepperCalculatorTool();
+</script>

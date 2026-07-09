@@ -8,7 +8,9 @@ export { rainbowFilamentGradientCalculator } from './tool/rainbowFilamentGradien
 export { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimulator/entry';
 export { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
 export { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
+export { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
 export { printing3dCategory } from './category';
+
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
 import { flowCalculator } from './tool/flowCalculator/entry';
 import { resinCuringCalculator } from './tool/resinCuringCalculator/entry';
@@ -19,4 +21,18 @@ import { rainbowFilamentGradientCalculator } from './tool/rainbowFilamentGradien
 import { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimulator/entry';
 import { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
 import { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
-export const ALL_ENTRIES = [printingCostCalculator, flowCalculator, resinCuringCalculator, shrinkageCalculator, powerSupplyEstimator, coreXYBeltTensionEstimator, rainbowFilamentGradientCalculator, chemicalSmoothingTimeSimulator, bedThermalInertiaStabilizationCalculator, treeSupportDensityCalculator];
+import { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
+
+export const ALL_ENTRIES = [
+  printingCostCalculator,
+  flowCalculator,
+  resinCuringCalculator,
+  shrinkageCalculator,
+  powerSupplyEstimator,
+  coreXYBeltTensionEstimator,
+  rainbowFilamentGradientCalculator,
+  chemicalSmoothingTimeSimulator,
+  bedThermalInertiaStabilizationCalculator,
+  treeSupportDensityCalculator,
+  stepperDriverMicrosteppingCalculator,
+];
