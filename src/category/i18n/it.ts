@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Controllo Finanziario:</strong> Stima i margini di profitto reali per i tuoi servizi di stampa 3D.',
         '<strong>Efficienza Energetica:</strong> Visualizza l\'impatto del consumo del piatto riscaldato e dell\'hotend sulla tua bolletta elettrica.',

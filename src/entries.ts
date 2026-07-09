@@ -9,6 +9,7 @@ export { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimu
 export { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
 export { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
 export { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
+export { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -22,6 +23,7 @@ import { chemicalSmoothingTimeSimulator } from './tool/chemicalSmoothingTimeSimu
 import { bedThermalInertiaStabilizationCalculator } from './tool/bedThermalInertiaStabilizationCalculator/entry';
 import { treeSupportDensityCalculator } from './tool/treeSupportDensityCalculator/entry';
 import { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicrosteppingCalculator/entry';
+import { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -35,4 +37,5 @@ export const ALL_ENTRIES = [
   bedThermalInertiaStabilizationCalculator,
   treeSupportDensityCalculator,
   stepperDriverMicrosteppingCalculator,
+  peiSheetLifespanEstimator,
 ];

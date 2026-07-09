@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>財務管理：</strong> 3Dプリントサービスの真の利益率を推定します。',
         '<strong>エネルギー効率：</strong> ヒートベッドやホットエンドの消費電力が電気代に与える影響を可視化します。',

@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Finanzkontrolle:</strong> Schätzen Sie reale Gewinnmargen für Ihre 3D-Druckdienste.',
         '<strong>Energieeffizienz:</strong> Visualisieren Sie die Auswirkungen des Verbrauchs von Heizbett und Hotend auf Ihre Stromrechnung.',

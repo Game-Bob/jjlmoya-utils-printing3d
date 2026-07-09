@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Materiał i Straty: Obejmuje wagę części, ale także plastik zużyty na podpory, obramowania i czyszczenie dyszy. Zawsze zalecamy dodanie 5-10% marginesu na możliwe niepowodzenia druku.',
         'Zużycie Energii: Drukarka 3D nie zużywa tyle samo energii drukując PLA (stół 60°C), co ABS czy Nylon (stół 100°C+). Cena za kWh może robić różnicę przy dużych elementach.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Wycena według czasu: Idealna dla czystych usług drukowania.',
         'Wycena według wagi: Powszechna dla masywnych, ale prostych elementów.',

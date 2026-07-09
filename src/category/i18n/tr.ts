@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Finansal Kontrol:</strong> 3D baskı hizmetleriniz için gerçek kâr marjlarını tahmin edin.',
         '<strong>Enerji Verimliliği:</strong> Isıtıcı yatak ve hotend tüketiminin elektrik faturanız üzerindeki etkisini görselleştirin.',

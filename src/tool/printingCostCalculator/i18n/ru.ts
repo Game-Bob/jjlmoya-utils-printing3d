@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Материал и потери: включает не только вес самой детали, но и пластик для поддержек, юбок и калибровки. Мы всегда рекомендуем добавлять 5-10% запаса на возможные неудачные попытки.',
         'Потребление электроэнергии: 3D-принтер тратит разное количество энергии при печати PLA (стол 60°C) и ABS или нейлона (стол 100°C+). Цена за кВт·ч может быть существенным фактором для длительных заказов.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Цена по времени: идеально для чистых услуг по 3D-печати.',
         'Цена за грамм: популярна для массивных, но простых деталей.',

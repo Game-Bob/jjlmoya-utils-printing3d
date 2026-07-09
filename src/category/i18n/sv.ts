@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Finansiell kontroll:</strong> Uppskatta verkliga vinstmarginaler för dina 3D-utskriftstjänster.',
         '<strong>Energieffektivitet:</strong> Visualisera hur förbrukningen från den uppvärmda byggplattan och hotenden påverkar din elräkning.',

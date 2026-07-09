@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Materiaal en Afval: Bevat het gewicht van het onderdeel, maar ook het plastic gebruikt in supports, skirts en purges. We raden altijd aan om een marge van 5-10% toe te voegen voor mogelijke printfouten.',
         'Elektriciteitsverbruik: Een 3D-printer verbruikt niet hetzelfde bij het printen van PLA (bed op 60°C) als bij ABS of Nylon (bed op 100°C+). De prijs per kWh kan het verschil maken bij grote onderdelen.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Prijs per tijd: Ideaal voor pure printdiensten.',
         'Prijs per gram: Gangbaar voor massieve maar eenvoudige onderdelen.',

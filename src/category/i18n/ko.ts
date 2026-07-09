@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>재무 관리:</strong> 3D 프린팅 서비스의 실제 이익률을 추정합니다.',
         '<strong>에너지 효율:</strong> 히트베드와 핫엔드 소비량이 전기세에 미치는 영향을 시각화합니다.',

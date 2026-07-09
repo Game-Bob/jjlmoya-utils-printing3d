@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Matériel et Perte: Comprend le poids de la pièce, mais aussi le plastique utilisé dans les supports, les jupes et les purges. Nous recommandons toujours d\'ajouter une marge de 5 à 10 % pour les échecs d\'impression possibles.',
         'Consommation Électrique: Une imprimante 3D ne dépense pas la même chose en imprimant du PLA (plateau à 60°C) que de l\'ABS ou du Nylon (plateau à 100°C+). Le prix du kWh peut faire la différence sur les pièces longues.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Tarification au temps: Idéal pour les services d\'impression purs.',
         'Tarification au gramme: Commun pour les pièces massives mais simples.',

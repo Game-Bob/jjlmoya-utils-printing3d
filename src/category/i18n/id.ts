@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Kontrol Keuangan:</strong> Estimasi margin keuntungan nyata untuk layanan pencetakan 3D Anda.',
         '<strong>Efisiensi Energi:</strong> Visualisasikan dampak konsumsi heated bed dan hotend pada tagihan listrik Anda.',

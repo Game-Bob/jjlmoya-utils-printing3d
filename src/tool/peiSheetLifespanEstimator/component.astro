@@ -1,0 +1,318 @@
+---
+import type { PEISheetLifespanEstimatorUI } from './ui';
+import './pei-sheet-lifespan-estimator.css';
+
+interface Props {
+  ui: PEISheetLifespanEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="psle-root" id="main-tool">
+  <section class="psle-shell" aria-label={ui.controlsAriaLabel}>
+    <div class="psle-diagnostics" aria-label={ui.resultsAriaLabel}>
+      <div class="psle-primary-data">
+        <article>
+          <b><span id="psle-remaining">0</span></b>
+          <span>{ui.remainingPrintsLabel}</span>
+        </article>
+        <article>
+          <b><span id="psle-cycles">0</span></b>
+          <span>{ui.equivalentCyclesLabel}</span>
+        </article>
+      </div>
+
+      <div class="psle-kpis">
+        <article class="psle-kpi psle-kpi-life">
+          <span>{ui.remainingLifeLabel}</span>
+          <b><span id="psle-life">0</span>%</b>
+          <i><em id="psle-life-bar"></em></i>
+          <small id="psle-risk-label">{ui.riskLow}</small>
+        </article>
+        <article class="psle-kpi psle-kpi-risk">
+          <span>{ui.adhesionRiskLabel}</span>
+          <b><span id="psle-risk">0</span>%</b>
+          <i><em id="psle-risk-bar"></em></i>
+        </article>
+      </div>
+
+      <div class="psle-zone-map">
+        <div>
+          <span>{ui.weakZoneMapLabel}</span>
+          <small>{ui.weakZoneMapHint}</small>
+        </div>
+        <div id="psle-zone-grid" role="group" aria-label={ui.weakZoneMapLabel}>
+          {Array.from({ length: 16 }, (_, index) => <button type="button" data-psle-zone={index} aria-pressed="false"></button>)}
+        </div>
+      </div>
+
+      <div class="psle-support">
+        <article class="psle-signal">
+          <span>{ui.wearModeLabel}</span>
+          <b id="psle-mode">{ui.wearNormal}</b>
+        </article>
+      </div>
+    </div>
+
+    <form class="psle-inputs" onsubmit="return false;">
+      <fieldset>
+        <legend>{ui.configurationGroupLabel}</legend>
+        <div class="psle-units" role="group" aria-label={ui.unitSystemLabel}>
+          <button type="button" class="active" data-psle-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-psle-units="imperial">{ui.imperialLabel}</button>
+        </div>
+        <label>
+          <span>{ui.sheetTypeLabel}</span>
+          <select id="psle-sheet-select">
+            <option value="smooth">{ui.smoothLabel}</option>
+            <option value="textured">{ui.texturedLabel}</option>
+            <option value="satin">{ui.satinLabel}</option>
+            <option value="powderCoated">{ui.powderCoatedLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.materialLabel}</span>
+          <select id="psle-material">
+            <option value="pla">{ui.plaLabel}</option>
+            <option value="petg">{ui.petgLabel}</option>
+            <option value="absAsa">{ui.absAsaLabel}</option>
+            <option value="tpu">{ui.tpuLabel}</option>
+            <option value="nylonPc">{ui.nylonPcLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.usageGroupLabel}</legend>
+        <label>
+          <span>{ui.printCountLabel}</span>
+          <input id="psle-prints-number" type="number" min="0" step="1" value="180" />
+        </label>
+        <label>
+          <span>{ui.bedTemperatureLabel}</span>
+          <b><input id="psle-temp" type="number" min="20" step="1" value="70" /><em id="psle-temp-unit">{ui.temperatureUnitMetric}</em></b>
+        </label>
+        <label>
+          <span>{ui.cleaningMethodLabel}</span>
+          <select id="psle-cleaning">
+            <option value="ipa">{ui.ipaLabel}</option>
+            <option value="dishSoap">{ui.dishSoapLabel}</option>
+            <option value="acetoneOccasional">{ui.acetoneOccasionalLabel}</option>
+            <option value="abrasivePad">{ui.abrasivePadLabel}</option>
+            <option value="mixed">{ui.mixedLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.observedStateGroupLabel}</legend>
+        <label>
+          <span>{ui.nozzleCrashLabel}</span>
+          <input id="psle-crashes" type="number" min="0" step="1" value="0" />
+        </label>
+        <label>
+          <span>{ui.petgOverbondLabel}</span>
+          <input id="psle-petg-overbond" type="number" min="0" step="1" value="0" />
+        </label>
+        <label class="psle-range">
+          <span>{ui.lowZOffsetLabel}</span>
+          <output id="psle-low-z-output">0%</output>
+          <input id="psle-low-z" type="range" min="0" max="100" step="5" value="0" />
+        </label>
+        <label class="psle-check">
+          <input id="psle-spatula" type="checkbox" />
+          <span>{ui.metalSpatulaLabel}</span>
+        </label>
+      </fieldset>
+    </form>
+
+    <footer class="psle-action">
+      <span>{ui.recommendationLabel}</span>
+      <b id="psle-rec">{ui.recSoapWash}</b>
+    </footer>
+
+    <span id="psle-data" hidden data-temp-metric={ui.temperatureUnitMetric} data-temp-imperial={ui.temperatureUnitImperial}></span>
+    <span id="psle-labels" hidden data-risk-low={ui.riskLow} data-risk-moderate={ui.riskModerate} data-risk-high={ui.riskHigh} data-risk-critical={ui.riskCritical} data-wear-normal={ui.wearNormal} data-wear-thermal={ui.wearThermal} data-wear-chemical={ui.wearChemical} data-wear-mechanical={ui.wearMechanical} data-wear-localized={ui.wearLocalized} data-wear-combined={ui.wearCombined} data-rec-soap-wash={ui.recSoapWash} data-rec-raise-z={ui.recRaiseZ} data-rec-zone-map={ui.recZoneMap} data-rec-release-layer={ui.recReleaseLayer} data-rec-gentle-release={ui.recGentleRelease} data-rec-replace-critical-zone={ui.recReplaceCriticalZone}></span>
+  </section>
+</div>
+
+<script>
+  import { calculatePEISheetLifespan, type CleaningMethod, type PEISheetType, type PrintedMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class PEISheetLifespanTool {
+    private readonly storageKey = 'jjlmoya-printing3d-pei-sheet-lifespan-v3';
+    private units: UnitSystem = 'metric';
+    private sheetType: PEISheetType = 'smooth';
+    private weakZones = new Set<number>();
+
+    constructor() {
+      this.restore();
+      this.bind();
+      this.syncUnits();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private select(id: string) {
+      return document.getElementById(id) as HTMLSelectElement;
+    }
+
+    private numberValue(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private labels() {
+      return (document.getElementById('psle-labels') as HTMLElement).dataset;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-psle-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.psleUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      this.select('psle-sheet-select').addEventListener('input', () => {
+        this.sheetType = this.select('psle-sheet-select').value as PEISheetType;
+        this.update();
+      });
+      document.querySelectorAll<HTMLButtonElement>('[data-psle-zone]').forEach((button) => {
+        button.addEventListener('click', () => this.toggleZone(button));
+      });
+      ['psle-prints-number', 'psle-temp', 'psle-spatula', 'psle-crashes', 'psle-petg-overbond', 'psle-low-z'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      ['psle-material', 'psle-cleaning'].forEach((id) => this.select(id)?.addEventListener('input', () => this.update()));
+    }
+
+    private toggleZone(button: HTMLButtonElement) {
+      const zone = Number(button.dataset.psleZone);
+      if (this.weakZones.has(zone)) this.weakZones.delete(zone);
+      else this.weakZones.add(zone);
+      this.syncZones();
+      this.update();
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const tempC = this.tempC();
+      this.units = units;
+      this.input('psle-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+      this.syncUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      const data = document.getElementById('psle-data') as HTMLElement;
+      this.text('psle-temp-unit', this.units === 'metric' ? data.dataset.tempMetric || 'C' : data.dataset.tempImperial || 'F');
+      document.querySelectorAll('[data-psle-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.psleUnits === this.units));
+    }
+
+    private tempC() {
+      const raw = this.numberValue('psle-temp');
+      return this.units === 'metric' ? raw : (raw - 32) * 5 / 9;
+    }
+
+    private params() {
+      return {
+        sheetType: this.sheetType,
+        printCount: this.numberValue('psle-prints-number'),
+        bedTemperatureC: this.tempC(),
+        primaryMaterial: this.select('psle-material').value as PrintedMaterial,
+        metalSpatulaUse: this.input('psle-spatula').checked,
+        cleaningMethod: this.select('psle-cleaning').value as CleaningMethod,
+        weakZones: this.weakZones.size,
+        nozzleCrashIncidents: this.numberValue('psle-crashes'),
+        petgOverbondIncidents: this.numberValue('psle-petg-overbond'),
+        lowZOffsetFrequency: this.numberValue('psle-low-z'),
+      };
+    }
+
+    private label(prefix: string, key: string) {
+      const attr = `${prefix}${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      return this.labels()[attr] || key;
+    }
+
+    private update() {
+      const result = calculatePEISheetLifespan(this.params());
+      this.text('psle-life', String(result.remainingLifePercent));
+      this.text('psle-risk', String(result.adhesionRiskPercent));
+      this.text('psle-risk-label', this.label('risk', result.riskLevel));
+      this.text('psle-remaining', String(result.remainingPrints));
+      this.text('psle-cycles', String(result.equivalentCycles));
+      this.text('psle-mode', this.label('wear', result.wearMode));
+      this.text('psle-rec', this.label('rec', result.recommendationKey));
+      this.text('psle-low-z-output', `${this.input('psle-low-z').value}%`);
+      const lifeBar = document.getElementById('psle-life-bar') as HTMLElement;
+      const riskBar = document.getElementById('psle-risk-bar') as HTMLElement;
+      if (lifeBar) lifeBar.style.width = `${result.remainingLifePercent}%`;
+      if (riskBar) riskBar.style.width = `${result.adhesionRiskPercent}%`;
+      const root = document.querySelector('.psle-root');
+      root?.setAttribute('data-risk', result.riskLevel);
+      root?.setAttribute('data-sheet', this.sheetType);
+      root?.setAttribute('data-weak-zones', String(this.weakZones.size));
+      this.save();
+    }
+
+    private syncZones() {
+      document.querySelectorAll<HTMLButtonElement>('[data-psle-zone]').forEach((button) => {
+        const active = this.weakZones.has(Number(button.dataset.psleZone));
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private save() {
+      try {
+        window.localStorage?.setItem(this.storageKey, JSON.stringify({
+          units: this.units,
+          sheetType: this.sheetType,
+          prints: this.numberValue('psle-prints-number'),
+          tempC: this.tempC(),
+          material: this.select('psle-material').value,
+          cleaning: this.select('psle-cleaning').value,
+          spatula: this.input('psle-spatula').checked,
+          weakZones: [...this.weakZones],
+          crashes: this.numberValue('psle-crashes'),
+          petgOverbond: this.numberValue('psle-petg-overbond'),
+          lowZ: this.numberValue('psle-low-z'),
+        }));
+      } catch {
+      }
+    }
+
+    private restore() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        if (state.units === 'imperial') this.units = 'imperial';
+        if (state.sheetType) this.sheetType = state.sheetType;
+        this.select('psle-sheet-select').value = this.sheetType;
+        this.input('psle-prints-number').value = String(Number(state.prints) || 180);
+        const tempC = Number(state.tempC) || 70;
+        this.input('psle-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+        this.select('psle-material').value = state.material || 'pla';
+        this.select('psle-cleaning').value = state.cleaning || 'ipa';
+        this.input('psle-spatula').checked = Boolean(state.spatula);
+        this.weakZones = new Set(Array.isArray(state.weakZones) ? state.weakZones.map(Number).filter(Number.isFinite) : []);
+        this.input('psle-crashes').value = String(Number(state.crashes) || 0);
+        this.input('psle-petg-overbond').value = String(Number(state.petgOverbond) || 0);
+        this.input('psle-low-z').value = String(Number(state.lowZ) || 0);
+        this.syncZones();
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+  }
+
+  const initPEISheetLifespanTool = () => new PEISheetLifespanTool();
+  document.addEventListener('astro:page-load', initPEISheetLifespanTool);
+  initPEISheetLifespanTool();
+</script>

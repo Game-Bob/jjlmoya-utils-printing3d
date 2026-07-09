@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>财务控制：</strong> 估算您的 3D 打印服务的真实利润率。',
         '<strong>能源效率：</strong> 可视化热床和热端消耗对电费的影响。',

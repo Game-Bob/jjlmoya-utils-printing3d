@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Control Financiero:</strong> Estima márgenes de beneficio reales para tus servicios de impresión 3D.',
         '<strong>Eficiencia Energética:</strong> Visualiza el impacto del consumo de la cama caliente y el fusor en tu factura eléctrica.',

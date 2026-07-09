@@ -1,8 +1,7 @@
 import type { Printing3dToolEntry } from '../../types';
+import type { PrintingCostCalculatorUI } from './ui';
 
-
-
-export const printingCostCalculator: Printing3dToolEntry = {
+export const printingCostCalculator: Printing3dToolEntry<PrintingCostCalculatorUI> = {
   id: 'calculadora-coste-impresion-3d',
   icons: {
     bg: 'mdi:printer-3d',

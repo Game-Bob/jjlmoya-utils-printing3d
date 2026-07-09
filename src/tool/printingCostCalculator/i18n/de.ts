@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Material und Verschnitt: Beinhaltet das Gewicht des Teils sowie den für Stützen, Skirts und Reinigung verwendeten Kunststoff. Wir empfehlen immer eine Marge von 5-10% für mögliche Fehldrucke.',
         'Stromverbrauch: Ein 3D-Drucker verbraucht beim Drucken von PLA (Bett bei 60°C) nicht dasselbe wie bei ABS oder Nylon (Bett bei 100°C+). Der kWh-Preis kann bei großen Teilen einen Unterschied machen.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Preise nach Zeit: Ideal für reine Druckdienstleistungen.',
         'Preise nach Gramm: Gebräuchlich für massive, aber einfache Teile.',

@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Material e Desperdício: Inclui o peso da peça, mas também o plástico usado em suportes, skirts e purgas. Recomendamos sempre adicionar uma margem de 5-10% para possíveis falhas de impressão.',
         'Consumo de Eletricidade: Uma impressora 3D não gasta o mesmo a imprimir PLA (mesa a 60°C) que a imprimir ABS ou Nylon (mesa a 100°C+). O preço do kWh pode fazer a diferença em peças longas.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Preço por tempo: Ideal para serviços puros de impressão.',
         'Preço por grama: Comum para peças massivas mas simples.',

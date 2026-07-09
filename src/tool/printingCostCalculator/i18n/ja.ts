@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '材料費と廃棄分：パーツ自体の重量だけでなく、サポート、スカート、パージに使用されるプラスチックも含みます。プリント失敗の可能性を考慮して、常に5〜10%のマージンを追加することをお勧めします。',
         '消費電力：3DプリンターがPLAを印刷する場合（ベッド温度60°C）と、ABSやナイロンを印刷する場合（ベッド温度100°C以上）では、消費電力が異なります。大きなパーツの場合、kWhあたりの価格が大きな違いを生むことがあります。',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '時間に基づく価格設定：純粋なプリント受託サービスに最適です。',
         'グラムに基づく価格設定：大量生産されるが単純なパーツに適しています。',

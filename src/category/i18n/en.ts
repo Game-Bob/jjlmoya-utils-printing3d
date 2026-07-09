@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Financial Control:</strong> Estimate real profit margins for your 3D printing services.',
         '<strong>Energy Efficiency:</strong> Visualize the impact of heated bed and hotend consumption on your electricity bill.',

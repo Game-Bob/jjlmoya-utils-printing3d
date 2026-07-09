@@ -10,6 +10,7 @@ import { chemicalSmoothingTimeSimulator } from '../tool/chemicalSmoothingTimeSim
 import { bedThermalInertiaStabilizationCalculator } from '../tool/bedThermalInertiaStabilizationCalculator/entry';
 import { treeSupportDensityCalculator } from '../tool/treeSupportDensityCalculator/entry';
 import { stepperDriverMicrosteppingCalculator } from '../tool/stepperDriverMicrosteppingCalculator/entry';
+import { peiSheetLifespanEstimator } from '../tool/peiSheetLifespanEstimator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -25,6 +26,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     bedThermalInertiaStabilizationCalculator,
     treeSupportDensityCalculator,
     stepperDriverMicrosteppingCalculator,
+    peiSheetLifespanEstimator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

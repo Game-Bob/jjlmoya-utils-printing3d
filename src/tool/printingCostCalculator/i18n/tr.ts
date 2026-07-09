@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Malzeme ve Fire: Parçanın ağırlığını değil, aynı zamanda desteklerde, skirtlerde ve temizleme işlemlerinde kullanılan plastiği de içerir. Olası baskı hataları için her zaman %5-10 marj eklemenizi öneririz.',
         'Elektrik Tüketimi: 3D yazıcı PLA (yatak 60°C) basarken ABS veya Naylon (yatak 100°C+) basarken harcadığı enerjiyi harcamaz. kWh fiyatı büyük parçalarda fark yaratabilir.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Süreye göre fiyatlandırma: Saf baskı hizmetleri için idealdir.',
         'Grama göre fiyatlandırma: Büyük ama basit parçalar için yaygındır.',

@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { ShrinkageCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -105,7 +105,7 @@ export const content: ToolLocaleContent<ShrinkageCalculatorUI> = {
     {
       type: 'title',
       text: '3D 프린팅 수축률 계산기: 정밀한 치수 정확도 확보',
-      level: 1,
+      level: 2,
     },
     {
       type: 'paragraph',

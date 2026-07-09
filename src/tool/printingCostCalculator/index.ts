@@ -1,3 +1,4 @@
+import type { ToolDefinition } from '../../types';
 import { printingCostCalculator } from './entry';
 export * from './entry';
 export const PRINTING_COST_CALCULATOR_TOOL: ToolDefinition = {

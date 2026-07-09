@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Controlo Financeiro:</strong> Estime margens de lucro reais para seus serviços de impressão 3D.',
         '<strong>Eficiência Energética:</strong> Visualize o impacto do consumo da mesa aquecida e do hotend em sua conta de eletricidade.',

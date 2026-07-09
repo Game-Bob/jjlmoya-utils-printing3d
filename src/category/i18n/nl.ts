@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Financiële controle:</strong> Schat de werkelijke winstmarges voor je 3D-printservices.',
         '<strong>Energie-efficiëntie:</strong> Visualiseer de impact van het verbruik van het verwarmde bed en de hotend op je elektriciteitsrekening.',

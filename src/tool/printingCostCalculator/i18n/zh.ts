@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '材料与损耗：包括零件本身的重量，但也包括支撑、裙边和校准废料所使用的塑料。我们始终建议增加 5-10% 的利润率以应对可能的打印失败。',
         '电力消耗：打印 PLA (热床 60°C) 与打印 ABS 或尼龙 (热床 100°C 以上) 消耗的电力不同。对于大型零件，每度电 (kWh) 的价格可能会产生显着差异。',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '按时间定价：非常适合纯打印代工服务。',
         '按克定价：常见于大体积但结构简单的零件。',

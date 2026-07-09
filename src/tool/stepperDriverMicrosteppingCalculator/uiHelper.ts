@@ -3,15 +3,15 @@ export function updateUnitLabels(units: 'metric' | 'imperial', textFn: (id: stri
   if (!locEl) return;
   const locData = locEl.dataset;
   if (units === 'imperial') {
-    textFn('sdmc-pitch-unit', locData.pitchImperial);
-    textFn('sdmc-lead-unit', locData.pitchImperial);
-    textFn('sdmc-res-steps-label', locData.stepsImperial);
-    textFn('sdmc-res-res-label', locData.resImperial);
+    textFn('sdmc-pitch-unit', locData.pitchImperial ?? 'in');
+    textFn('sdmc-lead-unit', locData.pitchImperial ?? 'in');
+    textFn('sdmc-res-steps-label', locData.stepsImperial ?? 'steps/in');
+    textFn('sdmc-res-res-label', locData.resImperial ?? 'mm');
   } else {
-    textFn('sdmc-pitch-unit', locData.pitchMetric);
-    textFn('sdmc-lead-unit', locData.pitchMetric);
-    textFn('sdmc-res-steps-label', locData.stepsMetric);
-    textFn('sdmc-res-res-label', locData.resMetric);
+    textFn('sdmc-pitch-unit', locData.pitchMetric ?? 'mm');
+    textFn('sdmc-lead-unit', locData.pitchMetric ?? 'mm');
+    textFn('sdmc-res-steps-label', locData.stepsMetric ?? 'steps/mm');
+    textFn('sdmc-res-res-label', locData.resMetric ?? 'mm');
   }
 }
 

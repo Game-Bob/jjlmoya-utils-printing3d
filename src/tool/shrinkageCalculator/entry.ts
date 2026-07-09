@@ -1,6 +1,7 @@
 import type { Printing3dToolEntry } from '../../types';
+import type { ShrinkageCalculatorUI } from './ui';
 
-export const shrinkageCalculator: Printing3dToolEntry = {
+export const shrinkageCalculator: Printing3dToolEntry<ShrinkageCalculatorUI> = {
   id: 'shrinkageCalculator',
   icons: {
     bg: 'mdi:ruler',

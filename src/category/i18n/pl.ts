@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Kontrola Finansowa:</strong> Szacuj realne marże zysku dla swoich usług druku 3D.',
         '<strong>Efektywność Energetyczna:</strong> Wizualizuj wpływ zużycia energii przez stół grzejny i hotend na rachunek za prąd.',

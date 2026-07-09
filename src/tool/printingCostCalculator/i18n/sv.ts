@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Material och spill: Inkluderar delens vikt, men även plasten som används i stöd, skirts och rensning. Vi rekommenderar alltid att du lägger till en marginal på 5-10 % för eventuella utskriftsfel.',
         'Elförbrukning: En 3D-skrivare drar inte lika mycket när den skriver ut PLA (platta på 60°C) som ABS eller nylon (platta på 100°C+). Priset på kilowattimme kan göra skillnad för stora delar.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         'Prissättning efter tid: Idealiskt för rena utskriftstjänster.',
         'Prissättning efter gram: Vanligt för massiva men enkla delar.',

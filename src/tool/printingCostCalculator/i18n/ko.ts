@@ -1,5 +1,5 @@
 import { bibliography } from '../bibliography';
-import type { WithContext, FAQPage, HowToThing, SoftwareApplication } from 'schema-dts';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
 import type { ToolLocaleContent } from '../../../types';
 import type { PrintingCostCalculatorUI } from '../ui';
 
@@ -47,7 +47,7 @@ const faqSchema: WithContext<FAQPage> = {
   })),
 };
 
-const howToSchema: WithContext<HowToThing> = {
+const howToSchema: WithContext<HowTo> = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: title,
@@ -124,6 +124,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '재료와 손실: 부품의 무게뿐만 아니라 서포트, 스커트, 퍼지에 사용되는 플라스틱도 포함됩니다. 출력 실패 가능성에 대비해 항상 5-10%의 마진을 추가하는 것이 좋습니다.',
         '전력 소비: 3D 프린터는 PLA(베드 60°C)를 출력할 때와 ABS 또는 나일론(베드 100°C 이상)을 출력할 때 소모되는 전력이 다릅니다. 큰 출력물의 경우 kWh당 가격이 큰 차이를 만들 수 있습니다.',
@@ -156,6 +157,7 @@ export const content: ToolLocaleContent<PrintingCostCalculatorUI> = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '시간 기준 가격: 순수한 출력 대행 서비스에 적합합니다.',
         '무게(그램) 기준 가격: 대량으로 생산되는 단순한 부품에 흔히 사용됩니다.',

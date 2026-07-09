@@ -59,6 +59,7 @@ export const content: CategoryLocaleContent = {
     },
     {
       type: 'summary',
+      title: 'Key Points',
       items: [
         '<strong>Contrôle Financier :</strong> Estimez les marges bénéficiaires réelles pour vos services d\'impression 3D.',
         '<strong>Efficacité Énergétique :</strong> Visualisez l\'impact de la consommation du plateau chauffant et de la buse sur votre facture d\'électricité.',
