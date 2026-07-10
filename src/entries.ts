@@ -13,6 +13,7 @@ export { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entr
 export { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 export { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 export { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
+export { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -30,6 +31,7 @@ import { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entr
 import { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 import { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 import { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
+import { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -47,4 +49,5 @@ export const ALL_ENTRIES = [
   infillWeightSimulator,
   nozzleWearEstimator,
   mechanicalAxisStrengthEstimator,
+  printTimeWorkflowOptimizer,
 ];

@@ -14,6 +14,7 @@ import { peiSheetLifespanEstimator } from '../tool/peiSheetLifespanEstimator/ent
 import { infillWeightSimulator } from '../tool/infillWeightSimulator/entry';
 import { nozzleWearEstimator } from '../tool/nozzleWearEstimator/entry';
 import { mechanicalAxisStrengthEstimator } from '../tool/mechanicalAxisStrengthEstimator/entry';
+import { printTimeWorkflowOptimizer } from '../tool/printTimeWorkflowOptimizer/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -33,6 +34,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     infillWeightSimulator,
     nozzleWearEstimator,
     mechanicalAxisStrengthEstimator,
+    printTimeWorkflowOptimizer,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

@@ -1,0 +1,177 @@
+---
+import type { PrintTimeWorkflowOptimizerUI } from './ui';
+import './3d-print-time-workflow-optimizer.css';
+
+interface Props {
+  ui: PrintTimeWorkflowOptimizerUI;
+}
+
+const { ui } = Astro.props;
+
+const scenarioDefaults = [
+  { id: 'a', label: ui.scenarioALabel, layer: '0.20', speed: '60', infill: '20' },
+  { id: 'b', label: ui.scenarioBLabel, layer: '0.12', speed: '54', infill: '20' },
+];
+---
+
+<div
+  class="ptwo-root"
+  data-ptwo-root
+  data-metric-volume-unit={ui.metricVolumeUnit}
+  data-imperial-volume-unit={ui.imperialVolumeUnit}
+  data-gram-unit={ui.gramUnit}
+  data-ounce-unit={ui.ounceUnit}
+  data-hour-unit={ui.hourUnit}
+  data-minute-unit={ui.minuteUnit}
+  data-millimeter-unit={ui.millimeterUnit}
+  data-inch-unit={ui.inchUnit}
+  data-winner-badge={ui.winnerBadge}
+  data-scenario-prefix={ui.scenarioPrefix}
+  data-in-scenario-label={ui.inScenarioLabel}
+  data-faster-direction={ui.fasterDirection}
+  data-cheaper-direction={ui.cheaperDirection}
+  data-lighter-direction={ui.lighterDirection}
+  data-criterion-aligned-label={ui.criterionAlignedLabel}
+  data-criterion-tradeoff-label={ui.criterionTradeoffLabel}
+  data-flow-unit={ui.flowUnit}
+  data-metric-speed-unit={ui.metricSpeedUnit}
+  data-imperial-speed-unit={ui.imperialSpeedUnit}
+  data-speed-reduction-label={ui.speedReductionLabel}
+  data-speed-reduction-adds-label={ui.speedReductionAddsLabel}
+  data-speed-reduction-minutes-label={ui.speedReductionMinutesLabel}
+  data-quality-gain-label={ui.qualityGainLabel}
+>
+  <div class="ptwo-toolbar">
+    <div class="ptwo-segment" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="is-active" data-ptwo-unit="metric">{ui.metricLabel}</button>
+      <button type="button" data-ptwo-unit="imperial">{ui.imperialLabel}</button>
+    </div>
+    <label class="ptwo-currency" for="ptwo-currency">
+      <span>{ui.currencyLabel}</span>
+      <select id="ptwo-currency" data-ptwo-currency>
+        {
+          ui.currencyOptions.map((option) => (
+            <option value={option.code} data-symbol={option.symbol} selected={option.code === 'USD'}>
+              {option.label}
+            </option>
+          ))
+        }
+      </select>
+    </label>
+  </div>
+
+  <section class="ptwo-scoreboard" aria-label={ui.resultsAriaLabel}>
+    <article class="ptwo-score-main">
+      <span>{ui.bestValueLabel}</span>
+      <strong data-ptwo-output="best-value">-</strong>
+    </article>
+    <article>
+      <span>{ui.timeDeltaLabel}</span>
+      <strong data-ptwo-output="time-delta"><i data-ptwo-output="time-arrow"></i><span data-ptwo-output="time-delta-text">-</span></strong>
+    </article>
+    <article>
+      <span>{ui.costDeltaLabel}</span>
+      <strong data-ptwo-output="cost-delta"><i data-ptwo-output="cost-arrow"></i><span data-ptwo-output="cost-delta-text">-</span></strong>
+    </article>
+    <article>
+      <span>{ui.materialDeltaLabel}</span>
+      <strong data-ptwo-output="material-delta"><i data-ptwo-output="material-arrow"></i><span data-ptwo-output="material-delta-text">-</span></strong>
+    </article>
+  </section>
+
+  <div class="ptwo-mobile-tabs" role="tablist" aria-label={ui.resultsAriaLabel}>
+    <button type="button" class="is-active" data-ptwo-tab="a" role="tab" aria-selected="true">{ui.scenarioALabel}</button>
+    <button type="button" data-ptwo-tab="b" role="tab" aria-selected="false">{ui.scenarioBLabel}</button>
+  </div>
+
+  <div class="ptwo-grid">
+    {
+      scenarioDefaults.map((scenario) => (
+        <section class="ptwo-scenario" data-ptwo-scenario={scenario.id} aria-label={`${ui.inputsAriaLabel} ${scenario.label}`}>
+          <div class="ptwo-scenario-label"><span>{scenario.label}</span><b data-ptwo-output={`badge-${scenario.id}`}></b></div>
+
+          <div class="ptwo-fields">
+            <label>
+              <span>{ui.modelHeightLabel}</span>
+              <div><input data-ptwo-input={`height-${scenario.id}`} type="number" min="1" step="1" value="80" /><b data-ptwo-length-unit>{ui.millimeterUnit}</b></div>
+            </label>
+            <label>
+              <span>{ui.modelVolumeLabel}</span>
+              <div><input data-ptwo-input={`volume-${scenario.id}`} type="number" min="1" step="1" value="120" /><b data-ptwo-volume-unit>{ui.metricVolumeUnit}</b></div>
+            </label>
+            <label>
+              <span>{ui.lineWidthLabel}</span>
+              <div><input data-ptwo-input={`width-${scenario.id}`} type="number" min="0.1" step="0.01" value="0.42" /><b data-ptwo-length-unit>{ui.millimeterUnit}</b></div>
+            </label>
+            <label>
+              <span>{ui.filamentPriceLabel}</span>
+              <div><input data-ptwo-input={`price-${scenario.id}`} type="number" min="0" step="0.5" value="24" /><b><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span>/{ui.kilogramUnit}</b></div>
+            </label>
+          </div>
+
+          <label class="ptwo-slider">
+            <span><em>{ui.layerHeightLabel}</em><strong><output>{scenario.layer}</output> <b data-ptwo-length-unit>{ui.millimeterUnit}</b></strong></span>
+            <input data-ptwo-input={`layer-${scenario.id}`} type="range" min="0.08" max="0.32" step="0.01" value={scenario.layer} oninput="this.previousElementSibling.querySelector('output').textContent=this.value" />
+          </label>
+
+          <label class="ptwo-slider">
+            <span><em>{ui.speedLabel}</em><strong><output>{scenario.speed}</output> <b data-ptwo-speed-unit>{ui.metricSpeedUnit}</b></strong></span>
+            <input data-ptwo-input={`speed-${scenario.id}`} type="range" min="20" max="180" step="1" value={scenario.speed} oninput="this.previousElementSibling.querySelector('output').textContent=this.value" />
+          </label>
+
+          <label class="ptwo-slider">
+            <span><em>{ui.infillLabel}</em><strong><output>{scenario.infill}</output>{ui.percentUnit}</strong></span>
+            <input data-ptwo-input={`infill-${scenario.id}`} type="range" min="0" max="100" step="1" value={scenario.infill} oninput="this.previousElementSibling.querySelector('output').textContent=this.value" />
+          </label>
+
+          <div class="ptwo-selects">
+            <label>
+              <span>{ui.complexityLabel}<button type="button" class="ptwo-info" aria-label={ui.complexityTooltip} data-tooltip={ui.complexityTooltip}>{ui.infoGlyph}</button></span>
+              <select data-ptwo-input={`complexity-${scenario.id}`}>
+                <option value="low">{ui.lowComplexity}</option>
+                <option value="medium" selected>{ui.mediumComplexity}</option>
+                <option value="high">{ui.highComplexity}</option>
+              </select>
+            </label>
+            <label>
+              <span>{ui.pieceTypeLabel}</span>
+              <select data-ptwo-input={`piece-${scenario.id}`}>
+                <option value="solid" selected>{ui.solidPieceLabel}</option>
+                <option value="hollow">{ui.hollowPieceLabel}</option>
+              </select>
+            </label>
+            <label>
+              <span>{ui.materialLabel}</span>
+              <select data-ptwo-input={`material-${scenario.id}`}>
+                {ui.materials.map((material) => <option value={material.value}>{material.label}</option>)}
+              </select>
+            </label>
+          </div>
+
+          <div class="ptwo-results" aria-label={`${ui.resultsAriaLabel} ${scenario.label}`}>
+            <article class="ptwo-time"><span>{ui.estimatedTimeLabel}</span><strong data-ptwo-output={`time-${scenario.id}`}>0{ui.minuteUnit}</strong></article>
+            <article><span>{ui.filamentLabel}</span><strong data-ptwo-output={`filament-${scenario.id}`}>0 {ui.gramUnit}</strong></article>
+            <article><span>{ui.costLabel}</span><strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output data-ptwo-output={`cost-${scenario.id}`}>0.00</output></strong></article>
+            <article><span>{ui.layersLabel}</span><strong data-ptwo-output={`layers-${scenario.id}`}>0</strong></article>
+          </div>
+
+          <div class="ptwo-meter">
+            <span>{ui.efficiencyLabel}: <b data-ptwo-output={`efficiency-${scenario.id}`}>0/100</b></span>
+            <i data-ptwo-output={`meter-${scenario.id}`}></i>
+          </div>
+          <p class="ptwo-flow">{ui.flowLabel}<button type="button" class="ptwo-info" aria-label={ui.flowTooltip} data-tooltip={ui.flowTooltip}>{ui.infoGlyph}</button>: <strong data-ptwo-output={`flow-${scenario.id}`}>0 {ui.flowUnit}</strong></p>
+          <p class="ptwo-tradeoff"><span>{ui.qualityTradeoffLabel}</span> <strong data-ptwo-output={`tradeoff-${scenario.id}`}></strong></p>
+          <p class="ptwo-flow-warning" data-ptwo-output={`flow-warning-${scenario.id}`}>{ui.flowWarning}</p>
+          <p class="ptwo-warning" data-ptwo-output={`warning-${scenario.id}`}>{ui.hardwareWarning}</p>
+        </section>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { initPrintTimeWorkflowOptimizer } from './app';
+
+  document.addEventListener('astro:page-load', initPrintTimeWorkflowOptimizer);
+  initPrintTimeWorkflowOptimizer();
+</script>

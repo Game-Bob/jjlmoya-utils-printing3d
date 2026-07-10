@@ -44,3 +44,5 @@ export { INFILL_WEIGHT_SIMULATOR_TOOL } from './tool/infillWeightSimulator/index
 export { NOZZLE_WEAR_ESTIMATOR_TOOL } from './tool/nozzleWearEstimator/index';
 
 export { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisStrengthEstimator/index';
+
+export { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOptimizer/index';
