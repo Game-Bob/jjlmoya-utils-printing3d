@@ -63,46 +63,84 @@ const positive = (value: number, fallback: number) => {
   return value;
 };
 
-export const calculatePrintTimeScenario = (params: PrintTimeScenarioParams): PrintTimeScenarioResult => {
-  const modelHeightMm = positive(params.modelHeightMm, 1);
-  const estimatedVolumeCm3 = positive(params.estimatedVolumeCm3, 1);
-  const layerHeightMm = positive(params.layerHeightMm, 0.2);
-  const speedMmS = positive(params.speedMmS, 50);
-  const lineWidthMm = positive(params.lineWidthMm, 0.42);
-  const infillPercent = clamp(params.infillPercent, 0, 100);
-  const overheadCoefficient = COMPLEXITY_COEFFICIENTS[params.complexity] ?? COMPLEXITY_COEFFICIENTS.medium;
-  const travelMultiplier = PIECE_TYPE_TRAVEL_MULTIPLIERS[params.pieceType] ?? PIECE_TYPE_TRAVEL_MULTIPLIERS.solid;
-  const density = MATERIAL_DENSITIES[params.material] ?? MATERIAL_DENSITIES.pla;
+interface CleanedParams extends PrintTimeScenarioParams {
+  overheadCoefficient: number;
+  travelMultiplier: number;
+  density: number;
+}
 
-  const layers = Math.max(Math.ceil(modelHeightMm / layerHeightMm), 1);
+const cleanParams = (params: PrintTimeScenarioParams): CleanedParams => {
+  return {
+    ...params,
+    modelHeightMm: positive(params.modelHeightMm, 1),
+    estimatedVolumeCm3: positive(params.estimatedVolumeCm3, 1),
+    layerHeightMm: positive(params.layerHeightMm, 0.2),
+    speedMmS: positive(params.speedMmS, 50),
+    lineWidthMm: positive(params.lineWidthMm, 0.42),
+    infillPercent: clamp(params.infillPercent, 0, 100),
+    overheadCoefficient: COMPLEXITY_COEFFICIENTS[params.complexity] ?? COMPLEXITY_COEFFICIENTS.medium,
+    travelMultiplier: PIECE_TYPE_TRAVEL_MULTIPLIERS[params.pieceType] ?? PIECE_TYPE_TRAVEL_MULTIPLIERS.solid,
+    density: MATERIAL_DENSITIES[params.material] ?? MATERIAL_DENSITIES.pla,
+  };
+};
+
+interface CalcIntermediate {
+  layers: number;
+  correctedVolumeCm3: number;
+  correctedVolumeMm3: number;
+  extrusionRateMm3S: number;
+  baseSeconds: number;
+  retractionSeconds: number;
+  accelerationTravelShare: number;
+  totalSeconds: number;
+  slowerQualitySeconds: number;
+}
+
+const computeIntermediate = (p: CleanedParams): CalcIntermediate => {
+  const layers = Math.max(Math.ceil(p.modelHeightMm / p.layerHeightMm), 1);
   const shellShare = 0.28;
-  const correctedVolumeCm3 = estimatedVolumeCm3 * (shellShare + (1 - shellShare) * (infillPercent / 100));
+  const correctedVolumeCm3 = p.estimatedVolumeCm3 * (shellShare + (1 - shellShare) * (p.infillPercent / 100));
   const correctedVolumeMm3 = correctedVolumeCm3 * 1000;
-  const extrusionRateMm3S = speedMmS * lineWidthMm * layerHeightMm;
+  const extrusionRateMm3S = p.speedMmS * p.lineWidthMm * p.layerHeightMm;
   const baseSeconds = correctedVolumeMm3 / extrusionRateMm3S;
-  const extrusionSeconds = baseSeconds * overheadCoefficient;
   const retractionSeconds = layers * RETRACTION_SECONDS_PER_LAYER;
-  const accelerationTravelShare = baseSeconds * (overheadCoefficient - 1) * travelMultiplier;
+  const accelerationTravelShare = baseSeconds * (p.overheadCoefficient - 1) * p.travelMultiplier;
   const totalSeconds = baseSeconds + accelerationTravelShare + retractionSeconds;
-  const slowerSpeed = speedMmS * 0.9;
+  const slowerSpeed = p.speedMmS * 0.9;
   const slowerTotalSeconds =
-    correctedVolumeMm3 / (slowerSpeed * lineWidthMm * layerHeightMm) + accelerationTravelShare + retractionSeconds;
-
+    correctedVolumeMm3 / (slowerSpeed * p.lineWidthMm * p.layerHeightMm) + accelerationTravelShare + retractionSeconds;
   return {
     layers,
-    totalSeconds,
-    extrusionSeconds,
-    overheadSeconds: accelerationTravelShare,
-    retractionSeconds,
-    filamentGrams: correctedVolumeCm3 * density,
-    filamentCost: (correctedVolumeCm3 * density * Math.max(params.filamentPricePerKg, 0)) / 1000,
-    efficiencyScore: clamp((correctedVolumeMm3 / Math.max(totalSeconds, 1)) * (100 / STANDARD_SPEED_LIMIT_MM_S), 0, 100),
-    slowerQualitySeconds: Math.max(slowerTotalSeconds - totalSeconds, 0),
-    slowerQualityMinutes: Math.max(slowerTotalSeconds - totalSeconds, 0) / 60,
-    qualityGainPercent: 8,
-    volumetricFlowMm3S: extrusionRateMm3S,
-    hardwareWarning: speedMmS > STANDARD_SPEED_LIMIT_MM_S,
     correctedVolumeCm3,
-    overheadCoefficient,
+    correctedVolumeMm3,
+    extrusionRateMm3S,
+    baseSeconds,
+    retractionSeconds,
+    accelerationTravelShare,
+    totalSeconds,
+    slowerQualitySeconds: Math.max(slowerTotalSeconds - totalSeconds, 0),
+  };
+};
+
+export const calculatePrintTimeScenario = (params: PrintTimeScenarioParams): PrintTimeScenarioResult => {
+  const p = cleanParams(params);
+  const i = computeIntermediate(p);
+
+  return {
+    layers: i.layers,
+    totalSeconds: i.totalSeconds,
+    extrusionSeconds: i.baseSeconds * p.overheadCoefficient,
+    overheadSeconds: i.accelerationTravelShare,
+    retractionSeconds: i.retractionSeconds,
+    filamentGrams: i.correctedVolumeCm3 * p.density,
+    filamentCost: (i.correctedVolumeCm3 * p.density * Math.max(p.filamentPricePerKg, 0)) / 1000,
+    efficiencyScore: clamp((i.correctedVolumeMm3 / Math.max(i.totalSeconds, 1)) * (100 / STANDARD_SPEED_LIMIT_MM_S), 0, 100),
+    slowerQualitySeconds: i.slowerQualitySeconds,
+    slowerQualityMinutes: i.slowerQualitySeconds / 60,
+    qualityGainPercent: 8,
+    volumetricFlowMm3S: i.extrusionRateMm3S,
+    hardwareWarning: p.speedMmS > STANDARD_SPEED_LIMIT_MM_S,
+    correctedVolumeCm3: i.correctedVolumeCm3,
+    overheadCoefficient: p.overheadCoefficient,
   };
 };

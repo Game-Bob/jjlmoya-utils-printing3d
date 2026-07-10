@@ -1,10 +1,10 @@
 .ptwo-root {
   --ptwo-ink: #162033;
   --ptwo-muted: #526173;
-  --ptwo-card: #ffffff;
+  --ptwo-card: #fff;
   --ptwo-panel: #f8fafc;
   --ptwo-soft: #eef2f7;
-  --ptwo-control: #ffffff;
+  --ptwo-control: #fff;
   --ptwo-line: #cfd8e3;
   --ptwo-accent: #315fdc;
   --ptwo-accent-strong: #2348aa;
@@ -13,6 +13,7 @@
   --ptwo-good: #166534;
   --ptwo-bad: #b91c1c;
   --ptwo-shadow: 0 24px 70px rgba(26, 37, 60, 0.14);
+
   border: 1px solid var(--ptwo-line);
   border-radius: 8px;
   padding: clamp(14px, 3vw, 22px);
@@ -37,6 +38,7 @@
   --ptwo-good: #86efac;
   --ptwo-bad: #fca5a5;
   --ptwo-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+
   color-scheme: dark;
 }
 
@@ -49,11 +51,11 @@
 }
 
 .ptwo-currency {
-  display: flex !important;
+  display: flex;
   width: min(220px, 100%);
   align-items: center;
-  grid-template-columns: none !important;
-  gap: 8px !important;
+  grid-template-columns: none;
+  gap: 8px;
 }
 
 .ptwo-currency span {
@@ -183,9 +185,9 @@
   background: var(--ptwo-accent-strong);
 }
 
-.ptwo-score-main {
-  border-color: color-mix(in srgb, var(--ptwo-good) 60%, var(--ptwo-line)) !important;
-  background: color-mix(in srgb, var(--ptwo-good) 12%, var(--ptwo-panel)) !important;
+.ptwo-scoreboard article.ptwo-score-main {
+  border-color: color-mix(in srgb, var(--ptwo-good) 60%, var(--ptwo-line));
+  background: color-mix(in srgb, var(--ptwo-good) 12%, var(--ptwo-panel));
 }
 
 .ptwo-grid {

@@ -120,14 +120,12 @@ class PrintTimeWorkflowApp {
   }
 
   private isValidState(state: Partial<StoredPrintTimeWorkflowState>): state is StoredPrintTimeWorkflowState {
-    return (
-      (state.unit === 'metric' || state.unit === 'imperial') &&
-      typeof state.currency === 'string' &&
-      state.currency in CURRENCY_RATES &&
-      (state.activeTab === undefined || state.activeTab === 'a' || state.activeTab === 'b') &&
-      !!state.values &&
-      typeof state.values === 'object'
-    );
+    const hasValues = !!state.values && typeof state.values === 'object';
+    const hasUnit = ['metric', 'imperial'].includes(state.unit as string);
+    const hasCurrency = typeof state.currency === 'string' && state.currency in CURRENCY_RATES;
+    const hasTab = ([undefined, 'a', 'b'] as unknown[]).includes(state.activeTab);
+
+    return hasValues && hasUnit && hasCurrency && hasTab;
   }
 
   private saveState() {
