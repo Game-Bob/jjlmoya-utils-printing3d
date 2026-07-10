@@ -1,0 +1,14 @@
+---
+import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';
+import { resinRealCostCalculator } from './index';
+import type { KnownLocale } from '../../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await resinRealCostCalculator.i18n[locale]?.();
+---
+
+{content && <SharedBibliography links={content.bibliography} />}

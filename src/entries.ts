@@ -15,6 +15,7 @@ export { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 export { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
 export { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 export { printDurationEstimator } from './tool/printDurationEstimator/entry';
+export { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -34,6 +35,7 @@ import { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
 import { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
 import { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 import { printDurationEstimator } from './tool/printDurationEstimator/entry';
+import { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -53,4 +55,5 @@ export const ALL_ENTRIES = [
   mechanicalAxisStrengthEstimator,
   printTimeWorkflowOptimizer,
   printDurationEstimator,
+  resinRealCostCalculator,
 ];

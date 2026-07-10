@@ -16,6 +16,7 @@ import { nozzleWearEstimator } from '../tool/nozzleWearEstimator/entry';
 import { mechanicalAxisStrengthEstimator } from '../tool/mechanicalAxisStrengthEstimator/entry';
 import { printTimeWorkflowOptimizer } from '../tool/printTimeWorkflowOptimizer/entry';
 import { printDurationEstimator } from '../tool/printDurationEstimator/entry';
+import { resinRealCostCalculator } from '../tool/resinRealCostCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -37,6 +38,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     mechanicalAxisStrengthEstimator,
     printTimeWorkflowOptimizer,
     printDurationEstimator,
+    resinRealCostCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

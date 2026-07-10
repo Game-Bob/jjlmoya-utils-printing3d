@@ -1,0 +1,426 @@
+---
+import type { ResinRealCostCalculatorUI } from './ui';
+import './real-resin-cost-calculator-sla-dlp.css';
+
+interface Props {
+  ui: ResinRealCostCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="rrc-root"
+  data-resin-real-cost
+  data-ml-unit={ui.mlUnit}
+  data-fluid-ounce-unit={ui.fluidOunceUnit}
+  data-grams-unit={ui.gramsUnit}
+  data-ounce-unit={ui.ounceUnit}
+  data-net-from-slicer-label={ui.netFromSlicerLabel}
+>
+  <section class="rrc-inputs" aria-label={ui.bottlePanel}>
+    <div class="rrc-panel rrc-panel-bottle">
+      <h3>{ui.bottlePanel}</h3>
+      <div class="rrc-switch-row">
+        <label class="rrc-select-label" for="rrc-currency">
+          <span>{ui.currencyLabel}</span>
+          <select id="rrc-currency">
+            {
+              ui.currencyOptions.map((option) => (
+                <option value={option.code} data-symbol={option.symbol} selected={option.code === 'EUR'}>
+                  {option.label}
+                </option>
+              ))
+            }
+          </select>
+        </label>
+        <div class="rrc-mini-toggle" aria-label={ui.unitSystemLabel}>
+          <span>{ui.unitSystemLabel}</span>
+          <div class="rrc-segment rrc-segment-tight">
+            <button type="button" class="is-active" data-system="metric">{ui.metricLabel}</button>
+            <button type="button" data-system="imperial">{ui.imperialLabel}</button>
+          </div>
+        </div>
+      </div>
+      <label>
+        <span>{ui.bottlePriceLabel}</span>
+        <div class="rrc-input-row">
+          <input id="rrc-bottle-price" type="number" min="0" step="0.01" value="42.00" />
+          <b data-currency-symbol>{ui.currencyOptions[0]?.symbol}</b>
+        </div>
+      </label>
+      <label>
+        <span>{ui.bottleVolumeLabel}</span>
+        <div class="rrc-input-row">
+          <input id="rrc-bottle-volume" type="number" min="0.1" step="10" value="1000" />
+          <b data-volume-unit>{ui.mlUnit}</b>
+        </div>
+      </label>
+      <label class="rrc-select-label" for="rrc-resin-preset">
+        <span>{ui.resinPresetLabel}</span>
+        <select id="rrc-resin-preset">
+          {
+            ui.resinPresetOptions.map((option, index) => (
+              <option value={index.toString()} data-density={option.density} selected={index === 1}>
+                {option.label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
+        <span>{ui.densityLabel}</span>
+        <input id="rrc-density" type="number" min="0.1" step="0.01" value="1.10" />
+      </label>
+      <p class="rrc-note">{ui.persistenceNote}</p>
+    </div>
+
+    <div class="rrc-panel rrc-panel-model">
+      <h3>{ui.modelPanel}</h3>
+      <label>
+        <span>{ui.modelAmountLabel}</span>
+        <div class="rrc-input-row">
+          <input id="rrc-model-amount" type="number" min="0" step="0.1" value="85" />
+          <b data-model-unit>{ui.mlUnit}</b>
+        </div>
+      </label>
+      <div class="rrc-segment" role="group" aria-label={ui.unitLabel}>
+        <button type="button" id="rrc-unit-ml" class="is-active" data-unit="ml">{ui.mlUnit}</button>
+        <button type="button" id="rrc-unit-g" data-unit="g">{ui.gramsUnit}</button>
+      </div>
+      <div class="rrc-complexity" aria-label={ui.complexityLabel}>
+        <button type="button" data-complexity="low">
+          <strong>{ui.lowComplexity}</strong>
+          <span>{ui.lowHint}</span>
+        </button>
+        <button type="button" class="is-active" data-complexity="medium">
+          <strong>{ui.mediumComplexity}</strong>
+          <span>{ui.mediumHint}</span>
+        </button>
+        <button type="button" data-complexity="high" title={ui.hollowPartTip}>
+          <strong>{ui.highComplexity}</strong>
+          <span>{ui.highHint}</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="rrc-results" aria-label={ui.resultPanel}>
+    <div class="rrc-total">
+      <span>{ui.realCostLabel}</span>
+      <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="rrc-real-cost">0.00</output></strong>
+      <small id="rrc-conversion">{ui.conversionLabel}</small>
+    </div>
+    <div class="rrc-meter" aria-hidden="true">
+      <span id="rrc-theoretical-bar"></span>
+      <span id="rrc-waste-bar"></span>
+    </div>
+    <div class="rrc-stats">
+      <div>
+        <span>{ui.theoreticalCostLabel}</span>
+        <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="rrc-theoretical-cost">0.00</output></strong>
+      </div>
+      <div>
+        <span>{ui.wasteCostLabel}</span>
+        <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="rrc-waste-cost">0.00</output></strong>
+      </div>
+      <div>
+        <span>{ui.correctedVolumeLabel}</span>
+        <strong id="rrc-corrected-volume">0 {ui.mlUnit}</strong>
+      </div>
+      <div>
+        <span>{ui.costPerMlLabel}</span>
+        <strong><span data-currency-symbol>{ui.currencyOptions[0]?.symbol}</span><output id="rrc-cost-per-ml">0.000/{ui.mlUnit}</output></strong>
+      </div>
+      <div>
+        <span>{ui.bottlePrintsLabel}</span>
+        <strong id="rrc-bottle-prints">0</strong>
+      </div>
+      <div>
+        <span>{ui.savedSettingsLabel}</span>
+        <strong id="rrc-waste-factor">12.5%</strong>
+      </div>
+    </div>
+    <p class="rrc-tip" title={ui.hollowPartTip}>{ui.hollowPartTip}</p>
+  </section>
+</div>
+
+<script>
+  import {
+    calculateResinRealCost,
+    gramsToMilliliters,
+    millilitersToGrams,
+    type ResinComplexity,
+    type ResinModelUnit,
+  } from './logic';
+
+  const ML_PER_FLUID_OUNCE = 29.5735295625;
+  const GRAMS_PER_OUNCE = 28.349523125;
+  const CURRENCY_RATES = {
+    USD: 1, EUR: 0.92, GBP: 0.78, CAD: 1.36, AUD: 1.52, CHF: 0.9,
+    CNY: 7.25, INR: 83.5, BRL: 5.45, MXN: 18.1, RUB: 88, PLN: 3.95,
+    SEK: 10.55, NOK: 10.65, DKK: 6.85, TRY: 33, JPY: 157,
+  } as const;
+
+  type UnitSystem = 'metric' | 'imperial';
+  type CurrencyCode = keyof typeof CURRENCY_RATES;
+
+  class ResinRealCostApp {
+    private root: HTMLElement;
+    private unit: ResinModelUnit = 'ml';
+    private system: UnitSystem = 'metric';
+    private currency: CurrencyCode = 'EUR';
+    private complexity: ResinComplexity = 'medium';
+    private storageKey = 'resin-real-cost-settings';
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.restore();
+      this.bind();
+      this.calculate();
+    }
+
+    private input(id: string) {
+      return this.root.querySelector<HTMLInputElement>(`#${id}`) as HTMLInputElement;
+    }
+
+    private output(id: string) {
+      return this.root.querySelector<HTMLElement>(`#${id}`) as HTMLElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private select(id: string) {
+      return this.root.querySelector<HTMLSelectElement>(`#${id}`) as HTMLSelectElement;
+    }
+
+    private restore() {
+      const raw = window.localStorage.getItem(this.storageKey);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw) as Record<string, number | string>;
+        this.applySavedState(data);
+      } catch {
+        window.localStorage.removeItem(this.storageKey);
+      }
+    }
+
+    private applySavedState(data: Record<string, number | string>) {
+      if (data.system === 'imperial') this.system = 'imperial';
+      if (typeof data.currency === 'string' && data.currency in CURRENCY_RATES) this.currency = data.currency as CurrencyCode;
+      this.restoreField('rrc-bottle-price', data.bottlePrice);
+      this.restoreField('rrc-bottle-volume', data.bottleVolume);
+      this.restoreField('rrc-density', data.density);
+      if (data.resinPreset) this.select('rrc-resin-preset').value = String(data.resinPreset);
+      this.select('rrc-currency').value = this.currency;
+      this.syncSystemButtons();
+      this.updateUnitLabels();
+      this.updateCurrencySymbols();
+    }
+
+    private restoreField(id: string, value: number | string | undefined) {
+      if (value) this.input(id).value = String(value);
+    }
+
+    private save() {
+      window.localStorage.setItem(this.storageKey, JSON.stringify({
+        bottlePrice: this.value('rrc-bottle-price'),
+        bottleVolume: this.value('rrc-bottle-volume'),
+        density: this.value('rrc-density'),
+        resinPreset: this.select('rrc-resin-preset').value,
+        system: this.system,
+        currency: this.currency,
+      }));
+    }
+
+    private bind() {
+      this.bindInputs();
+      this.bindUnitControls();
+      this.bindSelects();
+      this.bindComplexity();
+    }
+
+    private bindInputs() {
+      this.root.querySelectorAll('input').forEach((input) => {
+        input.addEventListener('input', () => {
+          if (input.id === 'rrc-density') this.select('rrc-resin-preset').value = '0';
+          this.save();
+          this.calculate();
+        });
+      });
+    }
+
+    private bindUnitControls() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-unit]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnit(button.dataset.unit as ResinModelUnit));
+      });
+      this.root.querySelectorAll<HTMLButtonElement>('[data-system]').forEach((button) => {
+        button.addEventListener('click', () => this.setSystem(button.dataset.system === 'imperial' ? 'imperial' : 'metric'));
+      });
+    }
+
+    private bindSelects() {
+      this.select('rrc-currency').addEventListener('change', (event) => {
+        this.setCurrency((event.currentTarget as HTMLSelectElement).value as CurrencyCode);
+      });
+      this.select('rrc-resin-preset').addEventListener('change', (event) => {
+        const option = (event.currentTarget as HTMLSelectElement).selectedOptions[0];
+        const density = option?.dataset.density;
+        if (density) this.input('rrc-density').value = density;
+        this.save();
+        this.calculate();
+      });
+    }
+
+    private bindComplexity() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-complexity]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.complexity = button.dataset.complexity as ResinComplexity;
+          this.root.querySelectorAll('[data-complexity]').forEach((item) => item.classList.remove('is-active'));
+          button.classList.add('is-active');
+          this.calculate();
+        });
+      });
+    }
+
+    private setUnit(nextUnit: ResinModelUnit) {
+      if (this.unit === nextUnit) return;
+      const amount = this.modelAmountInInternalUnit();
+      const density = this.value('rrc-density');
+      const converted = nextUnit === 'g'
+        ? millilitersToGrams(amount, density)
+        : gramsToMilliliters(amount, density);
+      this.unit = nextUnit;
+      this.input('rrc-model-amount').value = this.displayModelAmount(converted, nextUnit).toFixed(2);
+      this.root.querySelectorAll('[data-unit]').forEach((item) => item.classList.remove('is-active'));
+      this.root.querySelector(`[data-unit="${nextUnit}"]`)?.classList.add('is-active');
+      this.updateUnitLabels();
+      this.calculate();
+    }
+
+    private setSystem(nextSystem: UnitSystem) {
+      if (this.system === nextSystem) return;
+      const bottleVolumeMl = this.bottleVolumeMl();
+      const modelAmount = this.modelAmountInInternalUnit();
+      this.system = nextSystem;
+      this.input('rrc-bottle-volume').value = this.displayVolume(bottleVolumeMl).toFixed(nextSystem === 'imperial' ? 2 : 1);
+      this.input('rrc-model-amount').value = this.displayModelAmount(modelAmount, this.unit).toFixed(2);
+      this.syncSystemButtons();
+      this.updateUnitLabels();
+      this.save();
+      this.calculate();
+    }
+
+    private setCurrency(nextCurrency: CurrencyCode) {
+      if (!(nextCurrency in CURRENCY_RATES) || nextCurrency === this.currency) return;
+      const converted = (this.value('rrc-bottle-price') / CURRENCY_RATES[this.currency]) * CURRENCY_RATES[nextCurrency];
+      this.currency = nextCurrency;
+      this.input('rrc-bottle-price').value = this.formatCurrencyInput(converted);
+      this.updateCurrencySymbols();
+      this.save();
+      this.calculate();
+    }
+
+    private formatCurrencyInput(value: number) {
+      return ['JPY', 'INR', 'RUB', 'TRY'].includes(this.currency) ? value.toFixed(0) : value.toFixed(2);
+    }
+
+    private formatMoneyAmount(value: number, digits = 2) {
+      return ['JPY', 'INR', 'RUB', 'TRY'].includes(this.currency) ? value.toFixed(0) : value.toFixed(digits);
+    }
+
+    private currencySymbol() {
+      return this.root.querySelector<HTMLOptionElement>(`#rrc-currency option[value="${this.currency}"]`)?.dataset.symbol || '';
+    }
+
+    private updateCurrencySymbols() {
+      this.root.querySelectorAll<HTMLElement>('[data-currency-symbol]').forEach((element) => {
+        element.textContent = this.currencySymbol();
+      });
+    }
+
+    private updateUnitLabels() {
+      const volumeUnit = this.system === 'imperial' ? this.text('fluidOunceUnit') : this.text('mlUnit');
+      const massUnit = this.system === 'imperial' ? this.text('ounceUnit') : this.text('gramsUnit');
+      this.root.querySelectorAll<HTMLElement>('[data-volume-unit]').forEach((element) => {
+        element.textContent = volumeUnit;
+      });
+      this.root.querySelectorAll<HTMLElement>('[data-model-unit]').forEach((element) => {
+        element.textContent = this.unit === 'ml' ? volumeUnit : massUnit;
+      });
+      this.root.querySelector<HTMLButtonElement>('[data-unit="ml"]')!.textContent = volumeUnit;
+      this.root.querySelector<HTMLButtonElement>('[data-unit="g"]')!.textContent = massUnit;
+    }
+
+    private syncSystemButtons() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-system]').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.system === this.system);
+      });
+    }
+
+    private bottleVolumeMl() {
+      const visible = this.value('rrc-bottle-volume');
+      return this.system === 'imperial' ? visible * ML_PER_FLUID_OUNCE : visible;
+    }
+
+    private displayVolume(ml: number) {
+      return this.system === 'imperial' ? ml / ML_PER_FLUID_OUNCE : ml;
+    }
+
+    private modelAmountInInternalUnit() {
+      const visible = this.value('rrc-model-amount');
+      if (this.unit === 'ml') return this.system === 'imperial' ? visible * ML_PER_FLUID_OUNCE : visible;
+      return this.system === 'imperial' ? visible * GRAMS_PER_OUNCE : visible;
+    }
+
+    private displayModelAmount(amount: number, unit: ResinModelUnit) {
+      if (unit === 'ml') return this.displayVolume(amount);
+      return this.system === 'imperial' ? amount / GRAMS_PER_OUNCE : amount;
+    }
+
+    private formatVolume(ml: number) {
+      return this.system === 'imperial'
+        ? `${(ml / ML_PER_FLUID_OUNCE).toFixed(2)} ${this.text('fluidOunceUnit')}`
+        : `${ml.toFixed(1)} ${this.text('mlUnit')}`;
+    }
+
+    private calculate() {
+      const result = calculateResinRealCost({
+        bottlePrice: this.value('rrc-bottle-price'),
+        bottleVolumeMl: this.bottleVolumeMl(),
+        resinDensity: this.value('rrc-density'),
+        modelAmount: this.modelAmountInInternalUnit(),
+        modelUnit: this.unit,
+        complexity: this.complexity,
+      });
+
+      this.output('rrc-real-cost').textContent = this.formatMoneyAmount(result.realCost);
+      this.output('rrc-theoretical-cost').textContent = this.formatMoneyAmount(result.theoreticalCost);
+      this.output('rrc-waste-cost').textContent = this.formatMoneyAmount(result.wasteCost);
+      this.output('rrc-corrected-volume').textContent = this.formatVolume(result.correctedVolumeMl);
+      this.output('rrc-cost-per-ml').textContent = this.system === 'imperial'
+        ? `${this.formatMoneyAmount(result.costPerMl * ML_PER_FLUID_OUNCE, 3)}/${this.text('fluidOunceUnit')}`
+        : `${this.formatMoneyAmount(result.costPerMl, 3)}/${this.text('mlUnit')}`;
+      this.output('rrc-bottle-prints').textContent = result.usableBottlePrints.toFixed(1);
+      this.output('rrc-waste-factor').textContent = `${(result.wasteFactor * 100).toFixed(1)}%`;
+      this.output('rrc-conversion').textContent = `${this.formatVolume(result.modelVolumeMl)} ${this.text('netFromSlicerLabel')}`;
+
+      const real = Math.max(result.realCost, 0.01);
+      this.output('rrc-theoretical-bar').style.width = `${Math.min(100, (result.theoreticalCost / real) * 100)}%`;
+      this.output('rrc-waste-bar').style.width = `${Math.min(100, (result.wasteCost / real) * 100)}%`;
+    }
+
+    private text(key: string) {
+      return this.root.dataset[key] || '';
+    }
+  }
+
+  const initResinRealCost = () => {
+    document.querySelectorAll<HTMLElement>('[data-resin-real-cost]').forEach((root) => new ResinRealCostApp(root));
+  };
+
+  document.addEventListener('astro:page-load', initResinRealCost);
+  initResinRealCost();
+</script>

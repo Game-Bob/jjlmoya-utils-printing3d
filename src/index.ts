@@ -48,3 +48,5 @@ export { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisSt
 export { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOptimizer/index';
 
 export { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator/index';
+
+export { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator/index';

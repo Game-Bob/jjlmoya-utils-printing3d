@@ -17,6 +17,7 @@ import { NOZZLE_WEAR_ESTIMATOR_TOOL } from './tool/nozzleWearEstimator';
 import { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisStrengthEstimator';
 import { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOptimizer';
 import { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator';
+import { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -36,4 +37,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL,
   PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL,
   PRINT_DURATION_ESTIMATOR_TOOL,
+  RESIN_REAL_COST_CALCULATOR_TOOL,
 ];
