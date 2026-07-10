@@ -15,6 +15,7 @@ import { infillWeightSimulator } from '../tool/infillWeightSimulator/entry';
 import { nozzleWearEstimator } from '../tool/nozzleWearEstimator/entry';
 import { mechanicalAxisStrengthEstimator } from '../tool/mechanicalAxisStrengthEstimator/entry';
 import { printTimeWorkflowOptimizer } from '../tool/printTimeWorkflowOptimizer/entry';
+import { printDurationEstimator } from '../tool/printDurationEstimator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -35,6 +36,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     nozzleWearEstimator,
     mechanicalAxisStrengthEstimator,
     printTimeWorkflowOptimizer,
+    printDurationEstimator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

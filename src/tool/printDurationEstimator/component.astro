@@ -1,0 +1,130 @@
+---
+import type { PrintDurationEstimatorUI } from './ui';
+import './3d-print-time-estimator-layer-height-speed.css';
+
+interface Props {
+  ui: PrintDurationEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="pde-root"
+  data-pde-root
+  data-minutes-unit={ui.minutesUnit}
+  data-hours-unit={ui.hoursUnit}
+  data-gram-unit={ui.gramUnit}
+  data-ounce-unit={ui.ounceUnit}
+  data-meter-unit={ui.meterUnit}
+  data-foot-unit={ui.footUnit}
+  data-mm-unit={ui.mmUnit}
+  data-inch-unit={ui.inchUnit}
+  data-mm2-unit={ui.mm2Unit}
+  data-in2-unit={ui.in2Unit}
+  data-mm-s-unit={ui.mmSUnit}
+  data-in-s-unit={ui.inSUnit}
+  data-cm3-unit={ui.cm3Unit}
+  data-low-insight={ui.lowInsight}
+  data-balanced-insight={ui.balancedInsight}
+  data-high-insight={ui.highInsight}
+>
+  <div class="pde-panel">
+    <section class="pde-controls" aria-label={ui.inputsAriaLabel}>
+      <div class="pde-unit-toggle" aria-label={ui.unitSystemLabel}>
+        <span>{ui.unitSystemLabel}</span>
+        <div>
+          <button type="button" class="is-active" data-unit="metric">{ui.metricLabel}</button>
+          <button type="button" data-unit="imperial">{ui.imperialLabel}</button>
+        </div>
+      </div>
+
+      <label class="pde-field" for="pde-height">
+        <span>{ui.modelHeightLabel}</span>
+        <small>{ui.modelHeightHint}</small>
+        <div><input id="pde-height" type="number" min="1" step="1" value="80" /><b data-height-unit>{ui.mmUnit}</b></div>
+      </label>
+
+      <label class="pde-field" for="pde-layer">
+        <span>{ui.layerHeightLabel}</span>
+        <div><input id="pde-layer" type="number" min="0.04" step="0.02" value="0.2" /><b data-layer-unit>{ui.mmUnit}</b></div>
+      </label>
+
+      <label class="pde-field" for="pde-speed">
+        <span>{ui.speedLabel}</span>
+        <div><input id="pde-speed" type="number" min="1" step="1" value="60" /><b data-speed-unit>{ui.mmSUnit}</b></div>
+      </label>
+
+      <label class="pde-field" for="pde-area">
+        <span>{ui.footprintLabel}</span>
+        <small>{ui.footprintHint}</small>
+        <div><input id="pde-area" type="number" min="1" step="10" value="1600" /><b data-area-unit>{ui.mm2Unit}</b></div>
+      </label>
+
+      <label class="pde-range" for="pde-infill">
+        <span>{ui.infillLabel}<strong><output id="pde-infill-output">20</output>{ui.percentUnit}</strong></span>
+        <input id="pde-infill" type="range" min="0" max="100" value="20" />
+      </label>
+
+      <label class="pde-range" for="pde-complexity">
+        <span>{ui.complexityLabel}<strong><output id="pde-complexity-output">1.00</output>{ui.multiplierUnit}</strong></span>
+        <small>{ui.complexityHint}</small>
+        <input id="pde-complexity" type="range" min="0.8" max="1.2" step="0.01" value="1" />
+      </label>
+
+      <label class="pde-range" for="pde-overhead">
+        <span>{ui.overheadLabel}<strong><output id="pde-overhead-output">18</output>{ui.percentUnit}</strong></span>
+        <input id="pde-overhead" type="range" min="0" max="45" value="18" />
+      </label>
+
+      <div class="pde-two">
+        <label class="pde-field" for="pde-filament">
+          <span>{ui.filamentDiameterLabel}</span>
+          <div><input id="pde-filament" type="number" min="1" step="0.1" value="1.75" /><b>{ui.mmUnit}</b></div>
+        </label>
+        <label class="pde-field" for="pde-density">
+          <span>{ui.densityLabel}</span>
+          <div><input id="pde-density" type="number" min="0.5" step="0.01" value="1.24" /><b>{ui.densityUnit}</b></div>
+        </label>
+      </div>
+    </section>
+
+    <section class="pde-results" aria-label={ui.resultsAriaLabel}>
+      <article class="pde-hero">
+        <span>{ui.timeLabel}</span>
+        <strong id="pde-time">0 {ui.minutesUnit}</strong>
+        <p id="pde-insight">{ui.balancedInsight}</p>
+      </article>
+
+      <div class="pde-cards">
+        <article><span>{ui.layersLabel}</span><strong><output id="pde-layers">0</output> {ui.layersUnit}</strong></article>
+        <article><span>{ui.materialLabel}</span><strong id="pde-material">0 {ui.cm3Unit}</strong></article>
+        <article><span>{ui.filamentLabel}</span><strong id="pde-filament-length">0 {ui.meterUnit}</strong></article>
+        <article><span>{ui.effectiveSpeedLabel}</span><strong id="pde-effective-speed">0 {ui.mmSUnit}</strong></article>
+      </div>
+
+      <div class="pde-breakdown">
+        <div><span>{ui.baseTimeLabel}</span><b id="pde-base">0 {ui.minutesUnit}</b></div>
+        <div><span>{ui.overheadTimeLabel}</span><b id="pde-overhead-time">0 {ui.minutesUnit}</b></div>
+      </div>
+
+      <div class="pde-scenarios">
+        <h3>{ui.comparisonLabel}</h3>
+        {[0, 1, 2].map(() => (
+          <div class="pde-scenario" data-scenario>
+            <span data-scenario-speed>0 {ui.mmSUnit}</span>
+            <i><em></em></i>
+            <strong data-scenario-time>0 {ui.minutesUnit}</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { initPrintDurationEstimator } from './app';
+
+  document.addEventListener('astro:page-load', initPrintDurationEstimator);
+  initPrintDurationEstimator();
+</script>
