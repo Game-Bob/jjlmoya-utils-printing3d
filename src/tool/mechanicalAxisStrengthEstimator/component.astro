@@ -1,0 +1,321 @@
+---
+import type { MechanicalAxisStrengthEstimatorUI } from './ui';
+import './mechanical-axis-strength-estimator.css';
+
+interface Props {
+  ui: MechanicalAxisStrengthEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="mase-root" id="main-tool" data-state="blocked">
+  <div class="mase-panel">
+    <section class="mase-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="mase-materials" role="group" aria-label={ui.materialLabel}>
+        <button type="button" class="active" data-mase-material="pla">{ui.plaLabel}</button>
+        <button type="button" data-mase-material="petg">{ui.petgLabel}</button>
+        <button type="button" data-mase-material="abs">{ui.absLabel}</button>
+        <button type="button" data-mase-material="pc">{ui.pcLabel}</button>
+        <button type="button" data-mase-material="nylon">{ui.nylonLabel}</button>
+      </div>
+
+      <div class="mase-grid">
+        <label class="mase-field">
+          <span>{ui.infillPercentLabel}</span>
+          <b><input id="mase-infill" type="number" value="40" min="0" max="100" step="1" /><em>{ui.percentUnit}</em></b>
+        </label>
+        <label class="mase-field">
+          <span>{ui.perimetersLabel}</span>
+          <b><input id="mase-perimeters" type="number" value="4" min="1" max="12" step="1" /><em>{ui.countUnit}</em></b>
+        </label>
+        <label class="mase-field">
+          <span>{ui.sectionWidthLabel}</span>
+          <b><input id="mase-width" type="number" value="20" min="1" max="500" step="0.1" /><em>{ui.millimeterUnit}</em></b>
+        </label>
+        <label class="mase-field">
+          <span>{ui.sectionHeightLabel}</span>
+          <b><input id="mase-height" type="number" value="10" min="1" max="500" step="0.1" /><em>{ui.millimeterUnit}</em></b>
+        </label>
+        <label class="mase-field">
+          <span>{ui.lineWidthLabel}</span>
+          <b><input id="mase-line-width" type="number" value="0.45" min="0.2" max="1.2" step="0.01" /><em>{ui.millimeterUnit}</em></b>
+        </label>
+        <label class="mase-field">
+          <span>{ui.printQualityLabel}</span>
+          <select id="mase-quality">
+            <option value="draft">{ui.draftQualityLabel}</option>
+            <option value="standard" selected>{ui.standardQualityLabel}</option>
+            <option value="highStrength">{ui.highStrengthQualityLabel}</option>
+          </select>
+        </label>
+        <label class="mase-field">
+          <span>{ui.infillPatternLabel}</span>
+          <select id="mase-pattern">
+            <option value="grid">{ui.gridLabel}</option>
+            <option value="gyroid" selected>{ui.gyroidLabel}</option>
+            <option value="cubic">{ui.cubicLabel}</option>
+          </select>
+        </label>
+        <label class="mase-field mase-required">
+          <span>{ui.loadAxisLabel}</span>
+          <select id="mase-axis" required>
+            <option value="" selected>{ui.loadAxisPlaceholder}</option>
+            <option value="x">{ui.xAxisLabel}</option>
+            <option value="y">{ui.yAxisLabel}</option>
+            <option value="z">{ui.zAxisLabel}</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="mase-results" aria-label={ui.resultsAriaLabel}>
+      <div class="mase-blocker" id="mase-blocker">
+        <strong>{ui.orientationRequiredTitle}</strong>
+        <span>{ui.orientationRequiredText}</span>
+      </div>
+
+      <div class="mase-cube" aria-hidden="true">
+        <span class="mase-axis-x">{ui.xAxisShortLabel}</span>
+        <span class="mase-axis-y">{ui.yAxisShortLabel}</span>
+        <span class="mase-axis-z">{ui.zAxisShortLabel}</span>
+        <i></i>
+      </div>
+
+      <div class="mase-main">
+        <span>{ui.maxLoadLabel}</span>
+        <strong><span id="mase-load">0</span><em>{ui.kilogramForceUnit}</em></strong>
+        <small><span id="mase-force">0</span> {ui.newtonUnit} - <span id="mase-strength">0</span> {ui.mpaUnit}</small>
+        <small><span id="mase-relation">{ui.parallelLabel}</span> - {ui.layerRelationLabel}</small>
+      </div>
+
+      <div class="mase-metrics">
+        <div><span>{ui.elasticModulusLabel}</span><strong><span id="mase-modulus">0</span><em>{ui.gpaUnit}</em></strong></div>
+        <div><span>{ui.criticalAxisLabel}</span><strong id="mase-critical">{ui.zAxisShortLabel}</strong></div>
+        <div><span>{ui.anisotropyPenaltyLabel}</span><strong><span id="mase-penalty">0</span><em>{ui.percentUnit}</em></strong></div>
+        <div><span>{ui.effectiveAreaLabel}</span><strong><span id="mase-area">0</span><em>{ui.squareMillimeterUnit}</em></strong></div>
+        <div><span>{ui.failureModeLabel}</span><strong id="mase-failure">-</strong></div>
+      </div>
+
+      <div class="mase-wall-compare">
+        <span>{ui.wallComparisonLabel}</span>
+        <div id="mase-current-wall-card"><b>{ui.currentWallsLabel}</b><strong><span id="mase-current-wall-load">0</span><em>{ui.kilogramForceUnit}</em></strong></div>
+        <div id="mase-four-wall-card"><b>{ui.fourWallsLabel}</b><strong><span id="mase-four-wall-load">0</span><em>{ui.kilogramForceUnit}</em></strong></div>
+      </div>
+
+      <div class="mase-warning" id="mase-delamination-warning">{ui.delaminationWarning}</div>
+
+      <div class="mase-axis-map">
+        <span>{ui.axisMapLabel}</span>
+        <div><b>{ui.xAxisShortLabel}</b><meter id="mase-x" min="0" max="100" value="0"></meter><em id="mase-x-value">0</em></div>
+        <div><b>{ui.yAxisShortLabel}</b><meter id="mase-y" min="0" max="100" value="0"></meter><em id="mase-y-value">0</em></div>
+        <div><b>{ui.zAxisShortLabel}</b><meter id="mase-z" min="0" max="100" value="0"></meter><em id="mase-z-value">0</em></div>
+      </div>
+
+      <button type="button" class="mase-copy" id="mase-copy">{ui.copyButton}</button>
+      <span id="mase-copied" hidden>{ui.copiedButton}</span>
+      <span id="mase-summary" hidden>{ui.copiedSummaryTemplate}</span>
+      <span id="mase-parallel" hidden>{ui.parallelLabel}</span>
+      <span id="mase-perpendicular" hidden>{ui.perpendicularLabel}</span>
+      <span id="mase-road-fracture" hidden>{ui.roadFractureLabel}</span>
+      <span id="mase-layer-delamination" hidden>{ui.layerDelaminationLabel}</span>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateMechanicalAxisStrength, type InfillPattern, type LoadAxis, type PrintQuality, type StructuralMaterial } from './logic';
+
+  type StoredMechanicalAxisState = {
+    material: StructuralMaterial;
+    infillPercent: number;
+    infillPattern: InfillPattern;
+    perimeters: number;
+    sectionWidthMm: number;
+    sectionHeightMm: number;
+    lineWidthMm: number;
+    printQuality: PrintQuality;
+    loadAxis?: LoadAxis;
+  };
+
+  class MechanicalAxisStrengthTool {
+    private readonly storageKey = 'jjlmoya-printing3d-mechanical-axis-strength-v1';
+    private material: StructuralMaterial = 'pla';
+    private labels = this.readLabels();
+
+    constructor() {
+      this.restoreState();
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private select(id: string) {
+      return document.getElementById(id) as HTMLSelectElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private readLabels() {
+      const text = (id: string) => document.getElementById(id)?.textContent || '';
+      return {
+        copy: text('mase-copy'),
+        copied: text('mase-copied'),
+        summary: text('mase-summary'),
+        parallel: text('mase-parallel'),
+        perpendicular: text('mase-perpendicular'),
+        roadFracture: text('mase-road-fracture'),
+        layerDelamination: text('mase-layer-delamination'),
+      };
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-mase-material]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.material = (button.dataset.maseMaterial || 'pla') as StructuralMaterial;
+          document.querySelectorAll('[data-mase-material]').forEach((item) => item.classList.remove('active'));
+          button.classList.add('active');
+          this.update();
+        });
+      });
+      ['mase-infill', 'mase-perimeters', 'mase-width', 'mase-height', 'mase-line-width'].forEach((id) => this.input(id).addEventListener('input', () => this.update()));
+      ['mase-pattern', 'mase-axis', 'mase-quality'].forEach((id) => this.select(id).addEventListener('change', () => this.update()));
+      document.getElementById('mase-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private params() {
+      const axisValue = this.select('mase-axis').value;
+      const params = {
+        material: this.material,
+        infillPercent: this.value('mase-infill'),
+        infillPattern: this.select('mase-pattern').value as InfillPattern,
+        perimeters: this.value('mase-perimeters'),
+        sectionWidthMm: this.value('mase-width'),
+        sectionHeightMm: this.value('mase-height'),
+        lineWidthMm: this.value('mase-line-width'),
+        printQuality: this.select('mase-quality').value as PrintQuality,
+      };
+      return axisValue ? { ...params, loadAxis: axisValue as LoadAxis } : params;
+    }
+
+    private update() {
+      try {
+        const result = calculateMechanicalAxisStrength(this.params());
+        document.querySelector('.mase-root')?.setAttribute('data-state', result.layerRelation);
+        this.text('mase-load', result.maxLoadKg.toFixed(1));
+        this.text('mase-force', result.maxForceN.toFixed(0));
+        this.text('mase-strength', result.tensileStrengthMpa.toFixed(1));
+        this.text('mase-modulus', result.elasticModulusGpa.toFixed(2));
+        this.text('mase-critical', result.criticalDelaminationAxis.toUpperCase());
+        this.text('mase-penalty', result.anisotropyPenaltyPercent.toFixed(0));
+        this.text('mase-area', result.effectiveAreaMm2.toFixed(1));
+        this.text('mase-failure', result.failureMode === 'layer delamination' ? this.labels.layerDelamination : this.labels.roadFracture);
+        this.text('mase-current-wall-load', result.currentWallLoadKg.toFixed(1));
+        this.text('mase-four-wall-load', result.fourWallLoadKg.toFixed(1));
+        const wallMax = Math.max(result.currentWallLoadKg, result.fourWallLoadKg, 1);
+        this.bar('mase-current-wall-card', (result.currentWallLoadKg / wallMax) * 100);
+        this.bar('mase-four-wall-card', (result.fourWallLoadKg / wallMax) * 100);
+        this.text('mase-relation', result.layerRelation === 'perpendicular' ? this.labels.perpendicular : this.labels.parallel);
+        this.axis('x', result.xStrengthMpa);
+        this.axis('y', result.yStrengthMpa);
+        this.axis('z', result.zStrengthMpa);
+        document.querySelector('.mase-cube')?.setAttribute('data-axis', this.select('mase-axis').value);
+        this.saveState();
+      } catch {
+        document.querySelector('.mase-root')?.setAttribute('data-state', 'blocked');
+        this.saveState();
+      }
+    }
+
+    private axis(axis: 'x' | 'y' | 'z', value: number) {
+      const meter = document.getElementById(`mase-${axis}`) as HTMLMeterElement;
+      if (meter) meter.value = Math.min(value, 100);
+      this.text(`mase-${axis}-value`, value.toFixed(1));
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    private bar(id: string, value: number) {
+      const el = document.getElementById(id) as HTMLElement;
+      if (el) el.style.setProperty('--load', `${Math.max(4, Math.min(value, 100))}%`);
+    }
+
+    private syncMaterialButton() {
+      document.querySelectorAll<HTMLElement>('[data-mase-material]').forEach((button) => {
+        button.classList.toggle('active', button.dataset.maseMaterial === this.material);
+      });
+    }
+
+    private isValidState(state: Partial<StoredMechanicalAxisState>) {
+      const validMaterial = ['pla', 'petg', 'abs', 'pc', 'nylon'].includes(String(state.material));
+      const validPattern = ['grid', 'gyroid', 'cubic'].includes(String(state.infillPattern));
+      const validQuality = ['draft', 'standard', 'highStrength'].includes(String(state.printQuality));
+      const validAxis = state.loadAxis === undefined || ['x', 'y', 'z'].includes(String(state.loadAxis));
+      const values = [state.infillPercent, state.perimeters, state.sectionWidthMm, state.sectionHeightMm, state.lineWidthMm].map(Number);
+      return validMaterial && validPattern && validQuality && validAxis && values.every(Number.isFinite);
+    }
+
+    private restoreState() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw) as Partial<StoredMechanicalAxisState>;
+        if (!this.isValidState(state)) return;
+        this.material = state.material as StructuralMaterial;
+        this.input('mase-infill').value = String(state.infillPercent);
+        this.input('mase-perimeters').value = String(state.perimeters);
+        this.input('mase-width').value = String(state.sectionWidthMm);
+        this.input('mase-height').value = String(state.sectionHeightMm);
+        this.input('mase-line-width').value = String(state.lineWidthMm);
+        this.select('mase-pattern').value = state.infillPattern as InfillPattern;
+        this.select('mase-quality').value = state.printQuality as PrintQuality;
+        this.select('mase-axis').value = state.loadAxis || '';
+        this.syncMaterialButton();
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+
+    private saveState() {
+      try {
+        const params = this.params();
+        window.localStorage?.setItem(this.storageKey, JSON.stringify(params));
+      } catch {
+      }
+    }
+
+    private copy() {
+      try {
+        const result = calculateMechanicalAxisStrength(this.params());
+        const summary = this.labels.summary
+          .replace('{axis}', (this.select('mase-axis').value || '?').toUpperCase())
+          .replace('{strength}', result.tensileStrengthMpa.toFixed(1))
+          .replace('{force}', result.maxForceN.toFixed(0))
+          .replace('{load}', result.maxLoadKg.toFixed(1))
+          .replace('{modulus}', result.elasticModulusGpa.toFixed(2))
+          .replace('{critical}', result.criticalDelaminationAxis.toUpperCase())
+          .replace('{relation}', result.layerRelation === 'perpendicular' ? this.labels.perpendicular : this.labels.parallel);
+        navigator.clipboard?.writeText(summary);
+        const button = document.getElementById('mase-copy');
+        if (!button) return;
+        button.textContent = this.labels.copied;
+        setTimeout(() => {
+          button.textContent = this.labels.copy;
+        }, 1200);
+      } catch {
+      }
+    }
+  }
+
+  const initMechanicalAxisStrengthTool = () => new MechanicalAxisStrengthTool();
+  document.addEventListener('astro:page-load', initMechanicalAxisStrengthTool);
+  initMechanicalAxisStrengthTool();
+</script>

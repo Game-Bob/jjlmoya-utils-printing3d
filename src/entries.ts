@@ -12,6 +12,7 @@ export { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicros
 export { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 export { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 export { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
+export { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -28,6 +29,7 @@ import { stepperDriverMicrosteppingCalculator } from './tool/stepperDriverMicros
 import { peiSheetLifespanEstimator } from './tool/peiSheetLifespanEstimator/entry';
 import { infillWeightSimulator } from './tool/infillWeightSimulator/entry';
 import { nozzleWearEstimator } from './tool/nozzleWearEstimator/entry';
+import { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEstimator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -44,4 +46,5 @@ export const ALL_ENTRIES = [
   peiSheetLifespanEstimator,
   infillWeightSimulator,
   nozzleWearEstimator,
+  mechanicalAxisStrengthEstimator,
 ];

@@ -42,3 +42,5 @@ export { PEI_SHEET_LIFESPAN_ESTIMATOR_TOOL } from './tool/peiSheetLifespanEstima
 export { INFILL_WEIGHT_SIMULATOR_TOOL } from './tool/infillWeightSimulator/index';
 
 export { NOZZLE_WEAR_ESTIMATOR_TOOL } from './tool/nozzleWearEstimator/index';
+
+export { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisStrengthEstimator/index';

@@ -13,6 +13,7 @@ import { stepperDriverMicrosteppingCalculator } from '../tool/stepperDriverMicro
 import { peiSheetLifespanEstimator } from '../tool/peiSheetLifespanEstimator/entry';
 import { infillWeightSimulator } from '../tool/infillWeightSimulator/entry';
 import { nozzleWearEstimator } from '../tool/nozzleWearEstimator/entry';
+import { mechanicalAxisStrengthEstimator } from '../tool/mechanicalAxisStrengthEstimator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -31,6 +32,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     peiSheetLifespanEstimator,
     infillWeightSimulator,
     nozzleWearEstimator,
+    mechanicalAxisStrengthEstimator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),
