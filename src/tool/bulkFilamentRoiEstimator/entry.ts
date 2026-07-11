@@ -4,7 +4,7 @@ import type { BulkFilamentRoiEstimatorUI } from './ui';
 export const bulkFilamentRoiEstimator: Printing3dToolEntry<BulkFilamentRoiEstimatorUI> = {
   id: 'bulk-filament-roi-estimator',
   icons: {
-    bg: 'mdi:spool',
+    bg: 'mdi:cylinder',
     fg: 'mdi:chart-line',
   },
   i18n: {
