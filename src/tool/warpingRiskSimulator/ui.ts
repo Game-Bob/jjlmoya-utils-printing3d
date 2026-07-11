@@ -1,0 +1,73 @@
+export interface WarpingRiskSimulatorUI {
+  unitSystemLabel: string;
+  unitMetric: string;
+  unitImperial: string;
+  unitCelsius: string;
+  unitFahrenheit: string;
+  unitMillimeter: string;
+  unitInch: string;
+  noBrim: string;
+  materialLabels: Record<string, string>;
+  material: string;
+  footprintArea: string;
+  footprintHelp: string;
+  diagonal: string;
+  diagonalHelp: string;
+  bedTemperature: string;
+  bedTemperatureWarning: string;
+  ambientTemperature: string;
+  chamber: string;
+  chamberOn: string;
+  chamberOff: string;
+  riskLow: string;
+  riskMedium: string;
+  riskHigh: string;
+  riskCritical: string;
+  riskIndex: string;
+  thermalIndex: string;
+  deltaT: string;
+  brimRecommendation: string;
+  adhesionDiagnosis: string;
+  adhesionStrength: string;
+  criticalWarnings: string;
+  whyDiagonalMatters: string;
+  recommendedSettings: string;
+  copySettings: string;
+  copied: string;
+  simulatorNotice: string;
+  warnings: {
+    openTechnicalMaterial: string;
+    bedTemperatureHigh: string;
+    bedTemperatureLow: string;
+    narrowFootprint: string;
+    highDeltaT: string;
+  };
+  diagnosis: {
+    critical: string;
+    highEnclosed: string;
+    highOpen: string;
+    mediumEasyMaterial: string;
+    medium: string;
+    low: string;
+  };
+  adhesionOptions: {
+    low: string[];
+    medium: string[];
+    high: string[];
+    criticalDefault: string[];
+    criticalTechnical: string[];
+  };
+  slicerSettings: {
+    brimWidth: string;
+    bedAdhesion: string;
+    lowAdhesion: string;
+    highAdhesion: string;
+    cooling: string;
+    normalCooling: string;
+    technicalCooling: string;
+    enclosedChamber: string;
+    openChamber: string;
+    skirtEnough: string;
+  };
+  diagonalExplanation: string;
+}

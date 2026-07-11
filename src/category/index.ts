@@ -23,6 +23,7 @@ import { bedMeshAnalyzer } from '../tool/bedMeshAnalyzer/entry';
 import { bridgingOptimizer } from '../tool/bridgingOptimizer/entry';
 import { bulkFilamentRoiEstimator } from '../tool/bulkFilamentRoiEstimator/entry';
 import { wallPerimeterOptimizer } from '../tool/wallPerimeterOptimizer/entry';
+import { warpingRiskSimulator } from '../tool/warpingRiskSimulator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -51,6 +52,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     bridgingOptimizer,
     bulkFilamentRoiEstimator,
     wallPerimeterOptimizer,
+    warpingRiskSimulator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

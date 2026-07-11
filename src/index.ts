@@ -62,3 +62,5 @@ export { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer/index';
 export { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimator/index';
 
 export { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer/index';
+
+export { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator/index';

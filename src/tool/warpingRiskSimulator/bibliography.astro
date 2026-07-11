@@ -1,0 +1,14 @@
+---
+import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';
+import { WARPING_RISK_SIMULATOR_TOOL } from './index';
+import type { KnownLocale } from '../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await WARPING_RISK_SIMULATOR_TOOL.entry.i18n[locale as keyof typeof WARPING_RISK_SIMULATOR_TOOL.entry.i18n]?.();
+---
+
+{content && <SharedBibliography links={content.bibliography} />}

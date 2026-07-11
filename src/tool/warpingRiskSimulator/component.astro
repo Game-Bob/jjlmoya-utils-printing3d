@@ -1,0 +1,326 @@
+---
+import type { WarpingRiskSimulatorUI } from './ui';
+import './warping-risk-simulator.css';
+
+interface Props {
+  ui: WarpingRiskSimulatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="wrs-root">
+  <div class="wrs-tool" data-ui={JSON.stringify(ui)}>
+    <div class="wrs-inputs">
+      <div class="wrs-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button class="wrs-unit is-active" type="button" data-unit="metric">{ui.unitMetric}</button>
+        <button class="wrs-unit" type="button" data-unit="imperial">{ui.unitImperial}</button>
+      </div>
+
+      <label class="wrs-field">
+        <span>{ui.material}</span>
+        <select id="wrs-material">
+          <option value="PLA">{ui.materialLabels.PLA}</option>
+          <option value="PETG">{ui.materialLabels.PETG}</option>
+          <option value="ABS">{ui.materialLabels.ABS}</option>
+          <option value="ASA">{ui.materialLabels.ASA}</option>
+          <option value="Nylon">{ui.materialLabels.Nylon}</option>
+          <option value="PC">{ui.materialLabels.PC}</option>
+          <option value="TPU">{ui.materialLabels.TPU}</option>
+        </select>
+      </label>
+
+      <div class="wrs-pair">
+        <label class="wrs-field">
+          <span>{ui.footprintArea}<button class="wrs-help" type="button" title={ui.footprintHelp}>?</button></span>
+          <input id="wrs-area" type="number" min="1" step="0.1" value="40" />
+        </label>
+        <label class="wrs-field">
+          <span>{ui.diagonal}<button class="wrs-help" type="button" title={ui.diagonalHelp}>?</button></span>
+          <input id="wrs-diagonal" type="number" min="1" step="1" value="180" />
+        </label>
+      </div>
+
+      <div class="wrs-pair">
+        <label class="wrs-field">
+          <span>{ui.bedTemperature}</span>
+          <input id="wrs-bed-temp" type="number" step="1" value="100" />
+          <em class="wrs-field-warning is-hidden" id="wrs-bed-warning"></em>
+        </label>
+        <label class="wrs-field">
+          <span>{ui.ambientTemperature}</span>
+          <input id="wrs-ambient-temp" type="number" step="1" value="24" />
+        </label>
+      </div>
+
+      <label class="wrs-switch">
+        <input id="wrs-chamber" type="checkbox" />
+        <span class="wrs-slider"></span>
+        <span>
+          <strong>{ui.chamber}</strong>
+          <em id="wrs-chamber-label">{ui.chamberOff}</em>
+        </span>
+      </label>
+
+      <p class="wrs-notice">{ui.simulatorNotice}</p>
+    </div>
+
+    <div class="wrs-output">
+      <div class="wrs-gauge" aria-live="polite">
+        <div class="wrs-risk-row">
+          <span>{ui.riskIndex}</span>
+          <strong id="wrs-risk-value">0%</strong>
+        </div>
+        <div class="wrs-track"><span id="wrs-risk-bar"></span></div>
+        <div class="wrs-meter-labels"><span>{ui.riskLow}</span><span>{ui.riskMedium}</span><span>{ui.riskHigh}</span><span>{ui.riskCritical}</span></div>
+      </div>
+
+      <div class="wrs-stat-grid">
+        <div class="wrs-stat"><span>{ui.thermalIndex}</span><strong id="wrs-itt">0.00</strong></div>
+        <div class="wrs-stat"><span>{ui.deltaT}</span><strong id="wrs-delta">0 {ui.unitCelsius}</strong></div>
+        <div class="wrs-stat"><span>{ui.brimRecommendation}</span><strong id="wrs-brim">0 {ui.unitMillimeter}</strong></div>
+      </div>
+
+      <div class="wrs-diagnosis" id="wrs-diagnosis">
+        <span>{ui.adhesionDiagnosis}</span>
+        <p id="wrs-diagnosis-text"></p>
+        <div class="wrs-adhesion-ladder">
+          <strong>{ui.adhesionStrength}</strong>
+          <ol id="wrs-adhesion-list"></ol>
+        </div>
+      </div>
+
+      <div class="wrs-warning is-hidden" id="wrs-warning">
+        <strong>{ui.criticalWarnings}</strong>
+        <ul id="wrs-warning-list"></ul>
+      </div>
+
+      <div class="wrs-education">
+        <strong>{ui.whyDiagonalMatters}</strong>
+        <p id="wrs-why"></p>
+      </div>
+
+      <div class="wrs-settings">
+        <div class="wrs-settings-head">
+          <strong>{ui.recommendedSettings}</strong>
+          <button type="button" id="wrs-copy">{ui.copySettings}</button>
+        </div>
+        <ul id="wrs-settings-list"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    calculateWarpingRisk,
+    celsiusToFahrenheit,
+    cm2ToSquareInches,
+    fahrenheitToCelsius,
+    inchesToMm,
+    mmToInches,
+    squareInchesToCm2,
+    type UnitSystem,
+    type WarpingMaterial,
+  } from './logic';
+  import type { WarpingRiskSimulatorUI } from './ui';
+
+  class WarpingRiskSimulator {
+    private root: HTMLElement;
+    private unit: UnitSystem = 'metric';
+    private values = {
+      areaCm2: 40,
+      diagonalMm: 180,
+      bedC: 100,
+      ambientC: 24,
+    };
+    private ui: WarpingRiskSimulatorUI;
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.ui = JSON.parse(root.dataset.ui || '{}') as WarpingRiskSimulatorUI;
+      this.bind();
+      this.renderInputs();
+      this.update();
+    }
+
+    private qs<T extends HTMLElement>(selector: string) {
+      return this.root.querySelector(selector) as T;
+    }
+
+    private bind() {
+      this.root.querySelectorAll('.wrs-unit').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.captureInputs();
+          this.unit = (button as HTMLButtonElement).dataset.unit as UnitSystem;
+          this.root.querySelectorAll('.wrs-unit').forEach((item) => item.classList.toggle('is-active', item === button));
+          this.renderInputs();
+          this.update();
+        });
+      });
+
+      ['#wrs-material', '#wrs-area', '#wrs-diagonal', '#wrs-bed-temp', '#wrs-ambient-temp', '#wrs-chamber'].forEach((selector) => {
+        this.qs<HTMLInputElement>(selector).addEventListener('input', () => {
+          this.captureInputs();
+          this.update();
+        });
+      });
+
+      this.qs<HTMLButtonElement>('#wrs-copy').addEventListener('click', () => this.copySettings());
+    }
+
+    private safeParse(id: string, fallback: number): number {
+      return parseFloat(this.qs<HTMLInputElement>(id).value) || fallback;
+    }
+
+    private captureInputs() {
+      const area = this.safeParse('#wrs-area', 1);
+      const diagonal = this.safeParse('#wrs-diagonal', 1);
+      const bed = this.safeParse('#wrs-bed-temp', 0);
+      const ambient = this.safeParse('#wrs-ambient-temp', 0);
+      const toMetric = this.unit === 'metric';
+      this.values.areaCm2 = toMetric ? area : squareInchesToCm2(area);
+      this.values.diagonalMm = toMetric ? diagonal : inchesToMm(diagonal);
+      this.values.bedC = toMetric ? bed : fahrenheitToCelsius(bed);
+      this.values.ambientC = toMetric ? ambient : fahrenheitToCelsius(ambient);
+    }
+
+    private renderInputs() {
+      this.qs<HTMLInputElement>('#wrs-area').value = (this.unit === 'metric' ? this.values.areaCm2 : cm2ToSquareInches(this.values.areaCm2)).toFixed(1);
+      this.qs<HTMLInputElement>('#wrs-diagonal').value = (this.unit === 'metric' ? this.values.diagonalMm : mmToInches(this.values.diagonalMm)).toFixed(1);
+      this.qs<HTMLInputElement>('#wrs-bed-temp').value = (this.unit === 'metric' ? this.values.bedC : celsiusToFahrenheit(this.values.bedC)).toFixed(0);
+      this.qs<HTMLInputElement>('#wrs-ambient-temp').value = (this.unit === 'metric' ? this.values.ambientC : celsiusToFahrenheit(this.values.ambientC)).toFixed(0);
+    }
+
+    private update() {
+      const chamber = this.qs<HTMLInputElement>('#wrs-chamber').checked;
+      this.qs<HTMLElement>('#wrs-chamber-label').textContent = chamber ? this.ui.chamberOn : this.ui.chamberOff;
+      const result = calculateWarpingRisk({
+        material: this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial,
+        footprintAreaCm2: this.values.areaCm2,
+        diagonalMm: this.values.diagonalMm,
+        bedTemperatureC: this.values.bedC,
+        ambientTemperatureC: this.values.ambientC,
+        enclosedChamber: chamber,
+      });
+      const tempUnit = this.unit === 'metric' ? this.ui.unitCelsius : this.ui.unitFahrenheit;
+      const brim = this.unit === 'metric' ? result.brimWidthMm : mmToInches(result.brimWidthMm);
+      this.qs<HTMLElement>('#wrs-risk-value').textContent = `${result.riskPercent}%`;
+      this.qs<HTMLElement>('#wrs-risk-bar').style.width = `${result.riskPercent}%`;
+      this.qs<HTMLElement>('#wrs-risk-bar').dataset.level = result.riskLevel;
+      this.qs<HTMLElement>('#wrs-itt').textContent = result.thermalTensionIndex.toFixed(2);
+      this.qs<HTMLElement>('#wrs-delta').textContent = `${(this.unit === 'metric' ? result.deltaTemperatureC : result.deltaTemperatureC * 1.8).toFixed(0)} ${tempUnit}`;
+      this.qs<HTMLElement>('#wrs-brim').textContent = result.brimWidthMm > 0 ? `${brim.toFixed(1)} ${this.unit === 'metric' ? this.ui.unitMillimeter : this.ui.unitInch}` : this.ui.noBrim;
+      this.qs<HTMLElement>('#wrs-diagnosis-text').textContent = this.getDiagnosis(result.riskLevel, this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial, chamber);
+      this.renderBedWarning(this.getBedWarning(this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial, this.values.bedC));
+      this.renderList('#wrs-adhesion-list', this.getAdhesionOptions(result.riskLevel, this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial));
+      this.qs<HTMLElement>('#wrs-why').textContent = this.ui.diagonalExplanation;
+      this.renderList('#wrs-settings-list', this.getSlicerSettings(result.riskLevel, this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial, result.brimWidthMm, chamber));
+      this.renderWarnings(this.getWarnings(result, this.qs<HTMLSelectElement>('#wrs-material').value as WarpingMaterial, chamber));
+    }
+
+    private renderList(selector: string, items: string[]) {
+      const list = this.qs<HTMLUListElement>(selector);
+      list.innerHTML = '';
+      items.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.append(li);
+      });
+    }
+
+    private renderWarnings(items: string[]) {
+      const box = this.qs<HTMLElement>('#wrs-warning');
+      box.classList.toggle('is-hidden', items.length === 0);
+      this.renderList('#wrs-warning-list', items);
+    }
+
+    private formatTemplate(template: string, values: Record<string, string>) {
+      return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, value), template);
+    }
+
+    private getBedRange(material: WarpingMaterial) {
+      const ranges: Record<WarpingMaterial, { min: number; max: number }> = {
+        PLA: { min: 45, max: 65 },
+        PETG: { min: 70, max: 90 },
+        ABS: { min: 90, max: 115 },
+        ASA: { min: 90, max: 110 },
+        Nylon: { min: 70, max: 100 },
+        PC: { min: 105, max: 125 },
+        TPU: { min: 30, max: 60 },
+      };
+      return ranges[material];
+    }
+
+    private getBedWarning(material: WarpingMaterial, bedTemperatureC: number) {
+      const range = this.getBedRange(material);
+      const values = { material, min: String(range.min), max: String(range.max), unit: this.ui.unitCelsius };
+      if (bedTemperatureC > range.max) return this.formatTemplate(this.ui.warnings.bedTemperatureHigh, values);
+      if (bedTemperatureC < range.min) return this.formatTemplate(this.ui.warnings.bedTemperatureLow, values);
+      return null;
+    }
+
+    private getDiagnosis(riskLevel: string, material: WarpingMaterial, enclosed: boolean) {
+      if (riskLevel === 'critical') return this.ui.diagnosis.critical;
+      if (riskLevel === 'high') return enclosed ? this.ui.diagnosis.highEnclosed : this.ui.diagnosis.highOpen;
+      if (riskLevel === 'medium') return material === 'PLA' || material === 'TPU' ? this.ui.diagnosis.mediumEasyMaterial : this.ui.diagnosis.medium;
+      return this.ui.diagnosis.low;
+    }
+
+    private getAdhesionOptions(riskLevel: string, material: WarpingMaterial) {
+      if (riskLevel === 'low') return this.ui.adhesionOptions.low;
+      if (riskLevel === 'medium') return this.ui.adhesionOptions.medium;
+      if (riskLevel === 'high') return this.ui.adhesionOptions.high;
+      return material === 'Nylon' || material === 'PC' ? this.ui.adhesionOptions.criticalTechnical : this.ui.adhesionOptions.criticalDefault;
+    }
+
+    private getSlicerSettings(riskLevel: string, material: WarpingMaterial, brimWidthMm: number, enclosed: boolean) {
+      const brim = brimWidthMm > 0 ? `${brimWidthMm.toFixed(1)} ${this.ui.unitMillimeter}` : this.ui.slicerSettings.skirtEnough;
+      const cooling = material === 'PLA' || material === 'PETG' || material === 'TPU' ? this.ui.slicerSettings.normalCooling : this.ui.slicerSettings.technicalCooling;
+      const chamber = enclosed ? this.ui.slicerSettings.enclosedChamber : this.ui.slicerSettings.openChamber;
+      return [
+        this.formatTemplate(this.ui.slicerSettings.brimWidth, { value: brim }),
+        this.formatTemplate(this.ui.slicerSettings.bedAdhesion, { value: riskLevel === 'low' ? this.ui.slicerSettings.lowAdhesion : this.ui.slicerSettings.highAdhesion }),
+        this.formatTemplate(this.ui.slicerSettings.cooling, { value: cooling }),
+        chamber,
+      ];
+    }
+
+    private getWarnings(result: { chamberMultiplier: number; deltaTemperatureC: number }, material: WarpingMaterial, chamber: boolean) {
+      const warnings: string[] = [];
+      const bedWarning = this.getBedWarning(material, this.values.bedC);
+      if (!chamber && result.chamberMultiplier > 1) warnings.push(this.formatTemplate(this.ui.warnings.openTechnicalMaterial, { material }));
+      if (bedWarning) warnings.push(bedWarning);
+      if (this.values.areaCm2 < 12 && this.values.diagonalMm > 120) warnings.push(this.ui.warnings.narrowFootprint);
+      if (result.deltaTemperatureC > 80) warnings.push(this.ui.warnings.highDeltaT);
+      return warnings;
+    }
+
+    private renderBedWarning(message: string | null) {
+      const input = this.qs<HTMLInputElement>('#wrs-bed-temp');
+      const warning = this.qs<HTMLElement>('#wrs-bed-warning');
+      input.classList.toggle('has-warning', Boolean(message));
+      warning.classList.toggle('is-hidden', !message);
+      warning.textContent = message || '';
+    }
+
+    private copySettings() {
+      const text = Array.from(this.root.querySelectorAll('#wrs-settings-list li')).map((item) => `- ${item.textContent}`).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        const button = this.qs<HTMLButtonElement>('#wrs-copy');
+        const previous = button.textContent || '';
+        button.textContent = this.ui.copied;
+        setTimeout(() => { button.textContent = previous; }, 1600);
+      });
+    }
+  }
+
+  const start = () => document.querySelectorAll('.wrs-tool').forEach((root) => {
+    const element = root as HTMLElement;
+    if (element.dataset.ready === 'true') return;
+    element.dataset.ready = 'true';
+    new WarpingRiskSimulator(element);
+  });
+  document.addEventListener('astro:page-load', start);
+  start();
+</script>
