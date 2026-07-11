@@ -17,6 +17,9 @@ export { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/en
 export { printDurationEstimator } from './tool/printDurationEstimator/entry';
 export { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
 export { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
+export { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
+export { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
+export { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -38,6 +41,9 @@ import { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/en
 import { printDurationEstimator } from './tool/printDurationEstimator/entry';
 import { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
 import { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
+import { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
+import { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
+import { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -59,4 +65,7 @@ export const ALL_ENTRIES = [
   printDurationEstimator,
   resinRealCostCalculator,
   retractionStringingCalibrator,
+  overhangSafeAngleSimulator,
+  bedMeshAnalyzer,
+  bridgingOptimizer,
 ];

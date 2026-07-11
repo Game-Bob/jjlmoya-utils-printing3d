@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'calculateur-angle-surplomb-securise',
+  title: 'Calculateur d\'Angle de Surplomb Sécurisé pour Impression 3D',
+  description: 'Estimez l\'angle de surplomb maximal sans support que votre imprimante FDM peut atteindre selon la hauteur de couche, la largeur de ligne, le refroidissement, le matériau et la vitesse d\'impression.',
+  ui: {
+    controlsAriaLabel: 'Paramètres de l\'angle de surplomb sécurisé',
+    resultsAriaLabel: 'Résultats de l\'angle de surplomb sécurisé',
+    unitSystemLabel: 'Unités',
+    metricLabel: 'Métrique',
+    imperialLabel: 'US',
+    profileLabel: 'Profil d\'imprimante',
+    defaultProfileLabel: 'Configuration non enregistrée',
+    saveProfileLabel: 'Enregistrer le profil',
+    geometryGroupLabel: 'Géométrie d\'extrusion',
+    coolingGroupLabel: 'Refroidissement des couches',
+    materialGroupLabel: 'Matériau',
+    speedGroupLabel: 'Déplacement',
+    layerHeightLabel: 'Hauteur de couche',
+    layerHeightHelp: 'La hauteur de couche détermine la quantité de nouveau plastique qui doit être soutenue par la ligne précédente. Des couches plus hautes réduisent généralement la tolérance au surplomb.',
+    lineWidthLabel: 'Largeur de ligne',
+    lineWidthHelp: 'La largeur de ligne est la largeur d\'extrusion du slicer, pas seulement le diamètre de la buse. Des lignes plus larges offrent à la couche suivante plus de surface d\'appui.',
+    coolingLabel: 'Refroidissement de la pièce',
+    coolingHelp: 'Le refroidissement décrit la rapidité avec laquelle le filament fraîchement extrudé devient assez rigide pour conserver sa forme avant de s\'affaisser.',
+    lowCoolingLabel: 'Faible',
+    mediumCoolingLabel: 'Moyen',
+    highCoolingLabel: 'Élevé',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Vitesse d\'impression',
+    overhangHelp: 'L\'angle de surplomb est indiqué par rapport à la paroi verticale. Des valeurs plus élevées signifient que le filament s\'étend davantage vers l\'extérieur sans support.',
+    angleLabel: 'Angle sécurisé estimé',
+    vectorLabel: 'Vecteur de surplomb par rapport à la verticale',
+    riskLabel: 'Évaluation du risque',
+    safeRiskLabel: 'Vert: sécurisé',
+    cautiousRiskLabel: 'Jaune: prudent',
+    supportsRiskLabel: 'Rouge: supports nécessaires',
+    reportButtonLabel: 'Enregistrer la configuration comme profil',
+    savedNoticeLabel: 'Profil enregistré dans ce navigateur.',
+    coolingFactorLabel: 'Facteur de refroidissement',
+    speedFactorLabel: 'Facteur de vitesse',
+    materialFactorLabel: 'Facteur de matériau',
+    geometryFactorLabel: 'Facteur de géométrie',
+    ratioLabel: 'Rapport couche / ligne',
+    educationLabel: 'Note pédagogique',
+    tipIncreaseCooling: 'Augmenter le refroidissement de la pièce à près de 100 % sur les périmètres extérieurs améliore souvent le surplomb sécurisé d\'environ 5 à 10 degrés, surtout avec le PLA.',
+    tipSlowDown: 'Une vitesse de périmètre élevée laisse moins de temps au filament pour se figer. Essayez de ralentir les parois extérieures avant d\'ajouter des supports partout.',
+    tipLowerLayer: 'Le rapport couche/ligne est élevé. Réduire la hauteur de couche ou augmenter la largeur de ligne offre à chaque nouveau filament plus de soutien.',
+    tipPetgCaution: 'Le PETG retient la chaleur et reste collant plus longtemps que le PLA. Un bon refroidissement aide, mais trop de ventilation peut réduire l\'adhésion des couches sur les pièces fonctionnelles.',
+    tipBaseline: 'Ceci est une estimation heuristique, pas une simulation CFD. Confirmez les profils critiques avec une petite tour de test de surplomb avant de lancer une impression longue.',
+    optimizeOverhangsLabel: 'Optimiser pour les surplombs',
+    validationRangeLabel: 'Rapport couche / ligne',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Comment estimer un angle de surplomb sécurisé en impression 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Un surplomb FDM fonctionne lorsque chaque nouveau filament a suffisamment de contact avec la couche précédente pour rester attaché pendant qu\'il refroidit. La règle courante dit qu\'une imprimante peut gérer environ <strong>45 degrés</strong> sans supports, mais ce chiffre n\'est qu\'un point de départ. Un profil PLA bien refroidi avec une faible hauteur de couche, une extrusion large et une vitesse modérée peut imprimer proprement au-delà de 55 degrés. Un profil PETG, ABS ou TPU chaud avec un faible refroidissement peut s\'affaisser en dessous de 45 degrés. Ce calculateur traite la capacité de surplomb comme une estimation thermique et géométrique pratique plutôt qu\'un angle universel fixe.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Le résultat est volontairement heuristique. Ce n\'est ni un modèle de dynamique des fluides numérique, ni une simulation d\'affaissement par éléments finis, ni un remplacement du tranchage d\'une tour de calibrage. Il fournit une première réponse crédible à partir de variables qu\'un maker peut réellement contrôler sur l\'imprimante: hauteur de couche, largeur de ligne, refroidissement de la pièce, matériau et vitesse. La valeur est limitée à une plage d\'imprimante domestique afin de ne pas recommander des angles irréalistes au-dessus de 75 degrés, même lorsque toutes les entrées sont favorables.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'règle de départ traditionnelle sans support' },
+        { value: '55-60°', label: 'souvent possible avec un PLA optimisé et un bon refroidissement' },
+        { value: '75°', label: 'plafond du calculateur pour imprimantes FDM domestiques' },
+        { value: '0,08-0,32 mm', label: 'plage de hauteur de couche validée' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Lisez correctement la direction de l\'angle',
+      html: 'Cet outil indique l\'angle de surplomb par rapport à la paroi verticale, comme de nombreux paramètres de support sont décrits dans les slicers. Un nombre plus grand signifie que le trajet s\'incline davantage vers l\'extérieur de la verticale et est plus difficile à imprimer sans support.',
+    },
+    { type: 'title', text: 'Pourquoi la règle des 45 degrés est utile mais incomplète', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La règle des 45 degrés survit parce qu\'elle décrit une condition géométrique simple: à environ 45 degrés, environ la moitié d\'une nouvelle ligne d\'extrusion repose encore sur le matériau de la couche précédente. Ce chevauchement donne au filament une base sur laquelle adhérer pendant que le bord non supporté refroidit. Si la ligne suivante se déplace plus vers l\'extérieur, la portion non supportée grandit et la gravité a plus d\'effet avant que le polymère ne devienne assez rigide pour conserver sa forme.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Les imprimantes réelles ajoutent plusieurs complications. Un slicer peut utiliser une largeur de ligne supérieure au diamètre de la buse, ce qui modifie le chevauchement. Une couche de 0,20 mm imprimée avec une ligne de 0,45 mm a un rapport de support différent d\'une couche de 0,28 mm imprimée avec une ligne de 0,40 mm. Le flux d\'air de refroidissement, la vitesse de la tête, la température de la buse, la température de l\'enceinte, la viscosité du matériau et l\'ordre des périmètres changent tous si le filament se solidifie sur place ou s\'affaisse.',
+    },
+    {
+      type: 'table',
+      headers: ['Variable', 'Pourquoi elle modifie les surplombs', 'Ajustement typique'],
+      rows: [
+        ['Hauteur de couche', 'Des couches plus hautes déplacent le filament plus agressivement vers l\'extérieur pour le même angle de paroi.', 'Réduisez la hauteur de couche des parois extérieures quand les détails comptent.'],
+        ['Largeur de ligne', 'Des lignes plus larges augmentent la surface de contact et peuvent supporter un décalage légèrement plus grand.', 'Utilisez une largeur de ligne extérieure modérément plus large, par exemple 0,44 à 0,48 mm sur une buse de 0,4 mm.'],
+        ['Refroidissement', 'Un filament qui se rigidifie rapidement a moins de temps pour s\'affaisser.', 'Augmentez la vitesse du ventilateur pour les zones de surplomb en PLA.'],
+        ['Vitesse', 'Un mouvement rapide dépose du plastique chaud rapidement et réduit le temps de refroidissement par millimètre.', 'Ralentissez les périmètres extérieurs et les parois en surplomb.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Utilisez le calculateur comme outil de décision du slicer',
+      html: 'Si le modèle a un dessous à 58 degrés et que le calculateur estime 52 degrés pour le profil PETG actuel, activez les supports uniquement pour cette zone ou ajustez le refroidissement et la vitesse avant d\'imprimer la pièce entière.',
+    },
+    { type: 'title', text: 'Hauteur de couche et largeur de ligne: la géométrie derrière l\'affaissement des surplombs', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La hauteur de couche et la largeur de ligne définissent le gradin physique de la paroi. Des hauteurs de couche plus faibles facilitent les surplombs car chaque nouvelle couche ne se déplace que d\'une petite distance vers l\'extérieur. Des lignes d\'extrusion plus larges aident également car elles créent une base de contact plus large. Le signal pratique important est le <strong>rapport hauteur de couche / largeur de ligne</strong>. Un rapport faible signifie qu\'il y a plus de matière horizontale disponible pour porter le filament suivant. Un rapport élevé signifie que le nouveau filament est perché sur un bord plus étroit.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Pour une buse de 0,4 mm, les largeurs de ligne courantes du slicer sont d\'environ 0,42 mm à 0,48 mm. Une couche de 0,16 mm avec une ligne de 0,45 mm est conservatrice pour les surplombs ; une couche de 0,30 mm avec une ligne de 0,40 mm exige beaucoup plus du polymère et du refroidissement. Le calculateur récompense une géométrie favorable car elle réduit la fraction non supportée de chaque cordon, mais il limite aussi le résultat car la géométrie seule ne peut pas vaincre la chaleur, le flux d\'air et les limites d\'accélération.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Rapport faible',
+          description: 'Une petite hauteur de couche par rapport à la largeur de ligne donne le comportement de surplomb sans support le plus net.',
+          points: ['Meilleure surface sous les pentes', 'Risque d\'affaissement plus faible', 'Plus de temps d\'impression'],
+        },
+        {
+          title: 'Rapport équilibré',
+          description: 'Les réglages de production typiques fonctionnent bien lorsque le refroidissement et le matériau sont également raisonnables.',
+          highlight: true,
+          points: ['Bon compromis vitesse-qualité', 'Fonctionne pour de nombreuses pièces en PLA', 'Nécessite encore des tests près de 60 degrés'],
+        },
+        {
+          title: 'Rapport élevé',
+          description: 'De grandes couches et des lignes étroites réduisent la base sous chaque nouveau cordon.',
+          points: ['Marche d\'escalier plus visible', 'Risque plus élevé de curling du dessous', 'Les supports deviennent utiles plus tôt'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Largeur de ligne', definition: 'La largeur d\'extrusion prévue dans le slicer. Elle peut être légèrement plus large que le diamètre physique de la buse.' },
+        { term: 'Hauteur de couche', definition: 'L\'épaisseur verticale de chaque couche imprimée.' },
+        { term: 'Fraction non supportée', definition: 'La partie d\'un nouveau cordon d\'extrusion qui s\'étend au-delà de la couche précédente.' },
+        { term: 'Affaissement', definition: 'Déformation vers le bas d\'un filament chaud avant qu\'il ne devienne rigide.' },
+      ],
+    },
+    { type: 'title', text: 'Refroidissement: pourquoi l\'air du ventilateur ajoute souvent 5 à 10 degrés', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Le refroidissement est le levier le plus rapide pour les surplombs en PLA. Un filament fraîchement extrudé sort de la buse mou, brillant et facile à déformer. Un flux d\'air fort et bien dirigé augmente la vitesse à laquelle la peau extérieure se rigidifie. Lorsque le filament devient autoportant rapidement, il peut franchir une plus grande distance non supportée avant que la gravité ne laisse un affaissement visible. C\'est pourquoi la conception de la buse de ventilateur, l\'état du ventilateur et l\'orientation d\'impression peuvent modifier les résultats de surplomb même lorsque les valeurs du G-code sont identiques.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Plus de ventilateur n\'est pas automatiquement mieux pour tous les matériaux. Le PLA bénéficie généralement d\'un refroidissement élevé sur les périmètres en surplomb. Le PETG peut utiliser le refroidissement, mais un excès de ventilateur peut réduire l\'adhésion des couches ou rendre les surfaces troubles. L\'ABS nécessite souvent un refroidissement limité et un environnement chaud pour éviter le gauchissement, donc son angle de surplomb est généralement plus faible à moins que la machine ne soit réglée pour un flux d\'air contrôlé. Le TPU peut s\'affaisser car il reste caoutchouteux et flexible même après refroidissement par rapport aux matériaux rigides.',
+    },
+    {
+      type: 'proscons',
+      title: 'Augmenter le refroidissement de la pièce pour les surplombs',
+      items: [
+        { pro: 'Peut figer les filaments PLA avant que le bord non supporté ne s\'affaisse.', con: 'Peut affaiblir l\'adhésion des couches sur les matériaux qui nécessitent une rétention de chaleur.' },
+        { pro: 'Améliore les détails nets du dessous et les petites caractéristiques en surplomb.', con: 'Des buses mal orientées peuvent refroidir un côté et laisser l\'opposé désordonné.' },
+        { pro: 'Souvent plus rapide que de reconcevoir des supports pour de petites caractéristiques.', con: 'Peut créer du bruit de ventilateur, une charge électrique et un gauchissement sur les grandes pièces plates.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Vérifiez la direction du flux d\'air avant de vous fier au pourcentage du ventilateur',
+      html: 'Une valeur de ventilateur de 100 % dans le slicer ne garantit pas un refroidissement utile au niveau du cordon. Un conduit obstrué, un ventilateur faible, la forme du cache en silicone ou une modification de la tête peuvent laisser un côté de la buse avec beaucoup moins de flux d\'air.',
+    },
+    { type: 'title', text: 'Différences entre matériaux: PLA, PETG, ABS et TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Le PLA est le matériau de référence le plus facile pour les tests de surplomb car il se rigidifie rapidement et accepte un fort refroidissement de la pièce. C\'est pourquoi les profils PLA optimisés impriment souvent des parois non supportées plus inclinées que la règle traditionnelle des 45 degrés. Le PETG est plus collant et retient la chaleur plus longtemps. Il peut produire des pièces fonctionnelles solides, mais les dessous non supportés peuvent sembler brillants, filandreux ou recourbés si la vitesse et le refroidissement ne sont pas contrôlés. Les surplombs en PETG bénéficient souvent d\'un ralentissement des parois extérieures avant de pousser le ventilateur au maximum.',
+    },
+    {
+      type: 'paragraph',
+      html: 'L\'ABS se comporte différemment car une enceinte chaude et un refroidissement limité sont souvent utilisés pour éviter le gauchissement et les fissures de couche. Ces mêmes conditions rendent les pentes non supportées plus difficiles. Le TPU apporte un autre défi: le matériau reste flexible, donc un filament peut s\'affaisser ou baver même lorsqu\'il n\'est plus aussi chaud qu\'à la buse. Le calculateur donne à chaque matériau un comportement de base et un multiplicateur séparés pour refléter ces différences pratiques.',
+    },
+    {
+      type: 'table',
+      headers: ['Matériau', 'Comportement en surplomb', 'Premier ajustement recommandé'],
+      rows: [
+        ['PLA', 'Bonne rigidité et forte tolérance au refroidissement.', 'Augmentez le refroidissement et ralentissez les périmètres extérieurs.'],
+        ['PETG', 'Collant, retient la chaleur, sujet à l\'affaissement brillant.', 'Réduisez la vitesse et utilisez un refroidissement modéré.'],
+        ['ABS', 'Nécessite une rétention de chaleur, donc les pentes non supportées sont moins indulgentes.', 'Ajustez l\'orientation ou utilisez des supports sélectifs.'],
+        ['TPU', 'Le filament flexible peut se déformer après le dépôt.', 'Utilisez des angles conservateurs et un mouvement lent.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Pourquoi un filament humide peut imiter un mauvais réglage de surplomb',
+      html: 'L\'humidité peut créer de petites bulles de vapeur et une extrusion irrégulière. Si le dessous semble mousseux, irrégulier ou poilu, séchez le filament avant de supposer que l\'estimation de l\'angle sécurisé est erronée.',
+    },
+    { type: 'title', text: 'Vitesse d\'impression et temps thermique', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La vitesse d\'impression affecte les surplombs car elle modifie le temps thermique. À des vitesses plus élevées, plus de matière chaude est déposée par seconde, et chaque point du filament a moins de temps sous un flux d\'air utile avant que la section suivante ne soit déposée. Les parois extérieures rapides peuvent sembler acceptables sur les surfaces verticales mais échouer sous les surplombs car le cordon est encore mou pendant qu\'il est non supporté. Ralentir uniquement le périmètre en surplomb est souvent plus efficace que de ralentir tout le modèle.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Un slicer peut avoir des contrôles séparés pour la vitesse de la paroi extérieure, la vitesse de pont, la vitesse des petits périmètres, la vitesse de surplomb et le temps de couche minimum. Le calculateur utilise la vitesse d\'impression principale comme entrée pratique, puis pénalise progressivement les vitesses élevées. Si un modèle a des couches courtes, le temps de couche minimum et le comportement du ventilateur peuvent dominer. Si le surplomb est un long mur continu, la vitesse du périmètre et la direction du conduit de refroidissement deviennent plus importantes.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Ralentissez d\'abord les parois extérieures car ce sont les surfaces que l\'utilisateur inspectera.',
+        'Utilisez un ralentissement spécifique aux surplombs lorsque le slicer le supporte.',
+        'Gardez les déplacements assez rapides pour éviter l\'échauffement des petites caractéristiques.',
+        'Ne jugez pas la vitesse uniquement à partir d\'une petite tour ; les grandes pièces retiennent la chaleur différemment.',
+        'Retestez après avoir changé la taille de la buse car le débit modifie la charge thermique.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Ordre pratique de réglage',
+      html: 'Pour une pente non supportée limite, essayez d\'abord un refroidissement plus fort, une vitesse de paroi extérieure plus faible et une hauteur de couche plus basse avant d\'activer des supports denses partout.',
+    },
+    { type: 'title', text: 'Quand les supports restent la bonne réponse', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Le but n\'est pas d\'éliminer les supports à tout prix. Les supports sont utiles lorsqu\'un dessous doit être dimensionnellement précis, lorsque le matériau est sensible à la chaleur, lorsqu\'une face esthétique pointe vers le bas, ou lorsque le surplomb commence en l\'air sans contact avec la couche précédente. Une capacité calculée de 60 degrés ne signifie pas que chaque caractéristique à 60 degrés sera belle. Les petites îles, les rebords abrupts, les trous, le texte en relief et les dessous concaves peuvent échouer plus tôt qu\'une rampe de calibrage lisse.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Les supports sélectifs sont généralement meilleurs que les supports globaux. Si une seule région dépasse l\'angle sécurisé calculé, peignez des bloqueurs et des forceurs de support, tournez la pièce, chanfreinez le dessous, divisez le modèle ou ajoutez une petite nervure sacrificielle. Les supports arborescents, les supports organiques et les couches d\'interface peuvent réduire les cicatrices tout en maintenant les premiers filaments critiques non supportés. Pour les supports fonctionnels, un petit changement de conception permet souvent d\'économiser plus de matière qu\'un réglage agressif du slicer.',
+    },
+    {
+      type: 'summary',
+      title: 'Utilisez des supports lorsque',
+      items: [
+        'L\'angle sécurisé calculé est inférieur à l\'angle du dessous du modèle.',
+        'Le dessous doit être lisse, plat ou dimensionnellement précis.',
+        'La caractéristique commence comme une île sans couche précédente à laquelle se fixer.',
+        'Le matériau ne peut pas utiliser assez de refroidissement sans se déformer ou affaiblir l\'adhésion.',
+        'Un surplomb échoué ruinerait une longue impression tard dans le travail.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Risque rouge ne signifie pas impossible',
+      html: 'Un résultat rouge signifie que les supports sont l\'option la plus sûre pour un profil grand public normal. Les utilisateurs experts peuvent encore réussir avec des conduits personnalisés, une vitesse de surplomb ajustée, des parcours de slicer spéciaux ou une reconception du modèle, mais la marge est étroite.',
+    },
+    { type: 'title', text: 'Comment valider l\'estimation avec une tour de surplomb', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Une petite tour de test de surplomb est la meilleure façon de valider l\'estimation pour une imprimante spécifique. Imprimez une tour qui passe de 35 à 75 degrés par paliers en utilisant le même filament, la même buse, la même température, le même ventilateur et la même vitesse de paroi que ceux prévus pour la pièce réelle. Inspectez le dessous de côté et par le bas. Recherchez le curling, les boucles rugueuses, les bords de périmètre séparés et l\'affaissement brillant. La dernière marche propre est votre angle sécurisé réel pour ce profil.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Ne changez pas cinq variables entre les passages de la tour. Si la première tour échoue à 48 degrés, augmentez le refroidissement ou réduisez la vitesse de surplomb et répétez. Si la deuxième tour atteint 55 degrés, vous savez quel levier a aidé. Si la tour s\'améliore d\'un côté mais pas de l\'autre, inspectez la symétrie du conduit du ventilateur. Si chaque marche semble mauvaise, vérifiez la température de la buse, le multiplicateur d\'extrusion, le filament humide et le matériel de refroidissement avant de supposer que les supports sont inévitables.',
+    },
+    {
+      type: 'table',
+      headers: ['Observation', 'Cause probable', 'Action suivante'],
+      rows: [
+        ['Le bord inférieur se recourbe vers le haut', 'Déséquilibre chaleur/refroidissement', 'Ralentissez le périmètre et améliorez la direction du ventilateur.'],
+        ['Les boucles s\'affaissent vers le bas', 'Fraction non supportée trop élevée', 'Réduisez la hauteur de couche ou utilisez un support.'],
+        ['Un côté plus propre que l\'autre', 'Flux d\'air asymétrique', 'Inspectez le conduit et le chemin du ventilateur.'],
+        ['Dessous rugueux et mousseux', 'Humidité ou filament surchauffé', 'Séchez la bobine ou réduisez la température de la buse.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Notez le nom du profil',
+      html: 'Enregistrez un profil séparé pour chaque buse, matériau et configuration de refroidissement. Un profil PLA de 0,16 mm et un profil PETG de 0,28 mm ne devraient pas partager la même hypothèse de surplomb sécurisé.',
+    },
+    { type: 'title', text: 'Concevoir des pièces pour éviter les supports', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La solution la plus économique pour les surplombs se trouve souvent dans la CAO. Remplacez un angle de dessous à 90 degrés par un chanfrein, ajoutez une forme en larme aux trous horizontaux, tournez la pièce pour que la surface la plus raide pointe vers le haut, ou divisez le modèle en deux moitiés imprimables. Un chanfrein de 45 degrés peut éliminer complètement le besoin de support tout en préservant la résistance. Pour les trous de vis, les profils en larme et en diamant s\'impriment plus proprement que les cercles parfaits lorsque le haut du trou deviendrait sinon un pont.',
+    },
+    {
+      type: 'paragraph',
+      html: 'La conception adaptée à la fabrication réduit également le post-traitement. Les supports consomment de la matière, augmentent le temps d\'impression, marquent les surfaces et peuvent casser les caractéristiques délicates lors du retrait. Un modèle qui respecte l\'angle sécurisé de l\'imprimante imprime plus rapidement et plus régulièrement. Le calculateur aide lors de la révision de conception: comparez l\'angle du dessous du modèle avec l\'angle sécurisé estimé, puis décidez de reconcevoir, d\'ajuster le profil ou de ne supporter que la zone risquée.',
+    },
+    {
+      type: 'proscons',
+      title: 'Reconcevoir plutôt que supporter',
+      items: [
+        { pro: 'Réduit le matériau et le temps de post-traitement.', con: 'Peut modifier la forme visuelle ou fonctionnelle de la pièce.' },
+        { pro: 'Améliore la répétabilité dans les fermes d\'impression.', con: 'Nécessite l\'accès à la source CAO ou à des outils d\'édition de maillage.' },
+        { pro: 'Peut renforcer les pièces en alignant mieux les couches.', con: 'Certaines géométries nécessitent encore des supports pour la précision.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Meilleures actions de conception sans support',
+      items: [
+        'Utilisez des chanfreins de 45 degrés sous les rebords horizontaux.',
+        'Transformez les trous horizontaux circulaires en larmes lorsque c\'est possible.',
+        'Orientez les faces esthétiques vers le haut ou sur les côtés.',
+        'Divisez les pièces le long de joints cachés plutôt que de supporter un grand dessous.',
+        'Utilisez des supports uniquement là où l\'angle du modèle dépasse le profil testé.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Les 45 degrés sont-ils toujours sûrs pour les surplombs en impression 3D ?',
+      answer: 'Non. C\'est une règle par défaut utile, mais le matériau, le refroidissement, la hauteur de couche, la largeur de ligne, la vitesse et les performances du conduit de ventilateur peuvent déplacer la limite pratique vers le bas ou vers le haut.',
+    },
+    {
+      question: 'Pourquoi le calculateur limite-t-il les résultats à 75 degrés ?',
+      answer: 'Les imprimantes FDM domestiques peuvent parfois imprimer des formes de test de surplomb très inclinées, mais recommander des valeurs au-dessus de 75 degrés n\'est pas fiable pour des pièces normales, donc l\'outil limite l\'estimation à une plage domestique conservative.',
+    },
+    {
+      question: 'Quel matériau imprime les meilleurs surplombs sans support ?',
+      answer: 'Le PLA est généralement le plus facile car il se rigidifie rapidement et tolère un fort refroidissement de la pièce. Le PETG, l\'ABS et le TPU nécessitent généralement des hypothèses de surplomb plus conservatives.',
+    },
+    {
+      question: 'Dois-je d\'abord augmenter la vitesse du ventilateur ou réduire la vitesse d\'impression ?',
+      answer: 'Pour le PLA, augmentez le refroidissement et ralentissez les parois extérieures en surplomb. Pour le PETG, l\'ABS ou les pièces fonctionnelles, équilibrez le refroidissement avec l\'adhésion des couches et le risque de gauchissement.',
+    },
+    {
+      question: 'Cela peut-il remplacer une tour de calibrage de surplomb ?',
+      answer: 'Non. Il fournit une estimation heuristique et un bon point de départ. Une petite tour reste la meilleure validation pour une imprimante, un filament et un profil de slicer spécifiques.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Entrez la géométrie d\'extrusion', text: 'Définissez la hauteur de couche et la largeur de ligne du slicer utilisées par le profil.' },
+    { name: 'Choisissez le matériau et le refroidissement', text: 'Sélectionnez PLA, PETG, ABS ou TPU et le niveau de refroidissement actuel de la pièce.' },
+    { name: 'Ajoutez la vitesse d\'impression', text: 'Entrez la vitesse de paroi extérieure ou la vitesse d\'impression pratique pour la zone de surplomb.' },
+    { name: 'Comparez le résultat', text: 'Utilisez l\'angle sécurisé et l\'évaluation du risque pour décider d\'ajuster, de reconcevoir ou d\'activer les supports.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Calculateur d\'Angle de Surplomb Sécurisé pour Impression 3D',
+      description: 'Estimez l\'angle de surplomb FDM sans support à partir de la hauteur de couche, de la largeur de ligne, du refroidissement, du matériau et de la vitesse.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Les 45 degrés sont-ils toujours sûrs pour les surplombs en impression 3D ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Non. C\'est une règle par défaut utile, mais le matériau, le refroidissement, la hauteur de couche, la largeur de ligne, la vitesse et les performances du conduit de ventilateur peuvent déplacer la limite pratique vers le bas ou vers le haut.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Comment estimer un angle de surplomb sécurisé pour imprimante 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Entrez la hauteur de couche et la largeur de ligne.' },
+        { '@type': 'HowToStep', text: 'Sélectionnez le matériau et le niveau de refroidissement.' },
+        { '@type': 'HowToStep', text: 'Entrez la vitesse d\'impression.' },
+        { '@type': 'HowToStep', text: 'Comparez le résultat avec l\'angle du dessous du modèle.' },
+      ],
+    },
+  ],
+};

@@ -1,0 +1,297 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { OverhangSafeAngleSimulatorUI } from './ui';
+import './safe-overhang-angle-calculator.css';
+
+interface Props {
+  ui: OverhangSafeAngleSimulatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="ohs-root" id="main-tool">
+  <section class="ohs-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="ohs-controls" onsubmit="return false;">
+      <div class="ohs-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-ohs-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-ohs-units="imperial">{ui.imperialLabel}</button>
+      </div>
+      <fieldset>
+        <legend>{ui.profileLabel}</legend>
+        <label>
+          <span>{ui.profileLabel}</span>
+          <select id="ohs-profile">
+            <option value="default">{ui.defaultProfileLabel}</option>
+          </select>
+        </label>
+        <button type="button" class="ohs-secondary" id="ohs-save">{ui.saveProfileLabel}</button>
+        <p class="ohs-saved" id="ohs-saved" hidden>{ui.savedNoticeLabel}</p>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.geometryGroupLabel}</legend>
+        <label class="ohs-tip">
+          <span>{ui.layerHeightLabel}<small title={ui.layerHeightHelp}>?</small></span>
+          <b><input id="ohs-layer" type="number" min="0.08" max="0.32" step="0.01" value="0.20" /><em id="ohs-length-unit-a">{ui.mmUnit}</em></b>
+        </label>
+        <label class="ohs-tip">
+          <span>{ui.lineWidthLabel}<small title={ui.lineWidthHelp}>?</small></span>
+          <b><input id="ohs-line" type="number" min="0.3" max="0.8" step="0.01" value="0.42" /><em id="ohs-length-unit-b">{ui.mmUnit}</em></b>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.coolingGroupLabel}</legend>
+        <label class="ohs-tip">
+          <span>{ui.coolingLabel}<small title={ui.coolingHelp}>?</small></span>
+          <select id="ohs-cooling">
+            <option value="low">{ui.lowCoolingLabel}</option>
+            <option value="medium" selected>{ui.mediumCoolingLabel}</option>
+            <option value="high">{ui.highCoolingLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.materialGroupLabel}</legend>
+        <label>
+          <span>{ui.materialLabel}</span>
+          <select id="ohs-material">
+            <option value="pla" selected>{ui.plaLabel}</option>
+            <option value="petg">{ui.petgLabel}</option>
+            <option value="abs">{ui.absLabel}</option>
+            <option value="tpu">{ui.tpuLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.speedGroupLabel}</legend>
+        <label>
+          <span>{ui.printSpeedLabel}</span>
+          <b><input id="ohs-speed" type="number" min="20" max="150" step="1" value="60" /><em id="ohs-speed-unit">{ui.mmsUnit}</em></b>
+        </label>
+      </fieldset>
+    </form>
+
+    <div class="ohs-results" aria-label={ui.resultsAriaLabel}>
+      <div class="ohs-hero">
+        <span>{ui.angleLabel}</span>
+        <b><output id="ohs-angle">0</output><small>{ui.degreeUnit}</small></b>
+        <p class="ohs-tipline" title={ui.overhangHelp}>{ui.vectorLabel}</p>
+      </div>
+      <svg class="ohs-vector" viewBox="0 0 320 230" role="img" aria-label={ui.vectorLabel}>
+        <path class="ohs-grid" d="M62 196H286M62 156H286M62 116H286M62 76H286M62 36H286" />
+        <path class="ohs-vertical" d="M92 196V28" />
+        <path class="ohs-base" d="M92 196H286" />
+        <path class="ohs-part" d="M92 196L92 56" />
+        <path class="ohs-overhang" id="ohs-overhang-line" d="M92 56L198 120" />
+        <path class="ohs-arc" id="ohs-arc" d="M92 88A32 32 0 0 0 120 72" />
+        <circle class="ohs-joint" cx="92" cy="56" r="7" />
+        <text class="ohs-angle-text" id="ohs-angle-svg" x="118" y="82">0{ui.degreeUnit}</text>
+      </svg>
+      <aside class="ohs-risk">
+        <span>{ui.riskLabel}</span>
+        <b id="ohs-risk-label">{ui.safeRiskLabel}</b>
+      </aside>
+      <div class="ohs-factors">
+        <article><i aria-hidden="true"><Icon name="mdi:fan" size={18} /></i><span>{ui.coolingFactorLabel}</span><b id="ohs-cooling-factor">1.0x</b></article>
+        <article><i aria-hidden="true"><Icon name="mdi:speedometer" size={18} /></i><span>{ui.speedFactorLabel}</span><b id="ohs-speed-factor">1.0x</b></article>
+        <article><i aria-hidden="true"><Icon name="mdi:layers-triple-outline" size={18} /></i><span>{ui.materialFactorLabel}</span><b id="ohs-material-factor">1.0x</b></article>
+        <article><i aria-hidden="true"><Icon name="mdi:cube-outline" size={18} /></i><span>{ui.geometryFactorLabel}</span><b id="ohs-geometry-factor">1.0x</b></article>
+      </div>
+      <div class="ohs-education">
+        <span>{ui.educationLabel}</span>
+        <p id="ohs-tip-text">{ui.tipBaseline}</p>
+        <button type="button" class="ohs-optimize" id="ohs-optimize" hidden>{ui.optimizeOverhangsLabel}</button>
+      </div>
+      <div class="ohs-validation">
+        <span>{ui.validationRangeLabel}</span>
+        <b id="ohs-ratio">0</b>
+      </div>
+      <button type="button" class="ohs-report" id="ohs-report">{ui.reportButtonLabel}</button>
+    </div>
+
+    <span id="ohs-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-mms={ui.mmsUnit} data-ips={ui.ipsUnit} data-degree={ui.degreeUnit} data-default-profile={ui.defaultProfileLabel}></span>
+    <span id="ohs-labels" hidden data-risk-safe={ui.safeRiskLabel} data-risk-cautious={ui.cautiousRiskLabel} data-risk-supports={ui.supportsRiskLabel} data-tip-increase-cooling={ui.tipIncreaseCooling} data-tip-slow-down={ui.tipSlowDown} data-tip-lower-layer={ui.tipLowerLayer} data-tip-petg-caution={ui.tipPetgCaution} data-tip-baseline={ui.tipBaseline}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateOverhangSafeAngle, type CoolingLevel, type OverhangMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class OverhangSafeAngleTool {
+    private readonly storageKey = 'jjlmoya-printing3d-overhang-profiles-v1';
+    private units: UnitSystem = 'metric';
+
+    constructor() {
+      this.loadProfiles();
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private select(id: string) { return document.getElementById(id) as HTMLSelectElement; }
+    private data() { return (document.getElementById('ohs-data') as HTMLElement).dataset; }
+    private labels() { return (document.getElementById('ohs-labels') as HTMLElement).dataset; }
+    private numberValue(id: string) { return parseFloat(this.input(id).value) || 0; }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-ohs-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.ohsUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      ['ohs-layer', 'ohs-line', 'ohs-speed'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      ['ohs-cooling', 'ohs-material'].forEach((id) => this.select(id)?.addEventListener('input', () => this.update()));
+      this.select('ohs-profile')?.addEventListener('input', () => this.applyProfile());
+      this.input('ohs-save')?.addEventListener('click', () => this.saveProfile());
+      this.input('ohs-report')?.addEventListener('click', () => this.saveProfile());
+      this.input('ohs-optimize')?.addEventListener('click', () => this.optimizeForOverhangs());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const layerMm = this.lengthMm('ohs-layer');
+      const lineMm = this.lengthMm('ohs-line');
+      const speedMms = this.speedMms();
+      this.units = units;
+      this.input('ohs-layer').value = this.formatLength(layerMm);
+      this.input('ohs-line').value = this.formatLength(lineMm);
+      this.input('ohs-speed').value = this.formatSpeed(speedMms);
+      this.syncUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      const lengthUnit = this.units === 'metric' ? this.data().mm || '' : this.data().inch || '';
+      this.text('ohs-length-unit-a', lengthUnit);
+      this.text('ohs-length-unit-b', lengthUnit);
+      this.text('ohs-speed-unit', this.units === 'metric' ? this.data().mms || '' : this.data().ips || '');
+      document.querySelectorAll('[data-ohs-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.ohsUnits === this.units));
+    }
+
+    private lengthMm(id: string) {
+      const raw = this.numberValue(id);
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private speedMms() {
+      const raw = this.numberValue('ohs-speed');
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private formatLength(mm: number) {
+      return this.units === 'metric' ? mm.toFixed(2) : (mm / 25.4).toFixed(3);
+    }
+
+    private formatSpeed(mms: number) {
+      return this.units === 'metric' ? mms.toFixed(0) : (mms / 25.4).toFixed(2);
+    }
+
+    private currentParams() {
+      return {
+        layerHeightMm: this.lengthMm('ohs-layer'),
+        lineWidthMm: this.lengthMm('ohs-line'),
+        cooling: this.select('ohs-cooling').value as CoolingLevel,
+        material: this.select('ohs-material').value as OverhangMaterial,
+        printSpeedMms: this.speedMms(),
+      };
+    }
+
+    private update() {
+      this.syncUnits();
+      const result = calculateOverhangSafeAngle(this.currentParams());
+      this.text('ohs-angle', result.safeAngleDeg.toFixed(1));
+      this.text('ohs-angle-svg', `${result.safeAngleDeg.toFixed(0)}${this.data().degree || ''}`);
+      this.text('ohs-cooling-factor', `${result.coolingMultiplier.toFixed(1)}x`);
+      this.text('ohs-speed-factor', `${result.speedMultiplier.toFixed(1)}x`);
+      this.text('ohs-material-factor', `${result.materialMultiplier.toFixed(1)}x`);
+      this.text('ohs-geometry-factor', `${result.geometryMultiplier.toFixed(1)}x`);
+      this.text('ohs-ratio', result.bridgeRatio.toFixed(2));
+      this.renderRisk(result.riskLevel);
+      this.renderTip(result.educationalTipKey);
+      this.renderVector(result.safeAngleDeg);
+    }
+
+    private renderRisk(risk: string) {
+      document.querySelector('.ohs-root')?.setAttribute('data-risk', risk);
+      const label = this.labels()[`risk${risk.charAt(0).toUpperCase()}${risk.slice(1)}`] || risk;
+      this.text('ohs-risk-label', label);
+      document.getElementById('ohs-optimize')?.toggleAttribute('hidden', risk !== 'cautious');
+    }
+
+    private renderTip(key: string) {
+      const attr = `tip${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      this.text('ohs-tip-text', this.labels()[attr] || '');
+    }
+
+    private renderVector(angleDeg: number) {
+      const length = 126;
+      const radians = angleDeg * Math.PI / 180;
+      const x = 92 + Math.sin(radians) * length;
+      const y = 56 + Math.cos(radians) * length;
+      document.getElementById('ohs-overhang-line')?.setAttribute('d', `M92 56L${x.toFixed(1)} ${y.toFixed(1)}`);
+    }
+
+    private storedProfiles(): Record<string, ReturnType<OverhangSafeAngleTool['currentParams']>> {
+      try {
+        return JSON.parse(window.localStorage?.getItem(this.storageKey) || '{}') as Record<string, ReturnType<OverhangSafeAngleTool['currentParams']>>;
+      } catch {
+        return {};
+      }
+    }
+
+    private loadProfiles() {
+      const select = document.getElementById('ohs-profile') as HTMLSelectElement | null;
+      if (!select) return;
+      Object.keys(this.storedProfiles()).forEach((name) => select.add(new Option(name, name)));
+    }
+
+    private applyProfile() {
+      const profile = this.storedProfiles()[this.select('ohs-profile').value];
+      if (!profile) return;
+      this.select('ohs-cooling').value = profile.cooling;
+      this.select('ohs-material').value = profile.material;
+      this.input('ohs-layer').value = this.formatLength(profile.layerHeightMm);
+      this.input('ohs-line').value = this.formatLength(profile.lineWidthMm);
+      this.input('ohs-speed').value = this.formatSpeed(profile.printSpeedMms);
+      this.update();
+    }
+
+    private optimizeForOverhangs() {
+      this.select('ohs-cooling').value = 'high';
+      this.input('ohs-speed').value = this.formatSpeed(40);
+      this.update();
+    }
+
+    private profileName(params: ReturnType<OverhangSafeAngleTool['currentParams']>) {
+      const material = this.select('ohs-material').selectedOptions[0]?.textContent || params.material;
+      const cooling = this.select('ohs-cooling').selectedOptions[0]?.textContent || params.cooling;
+      const unit = this.units === 'metric' ? this.data().mm : this.data().inch;
+      return `${material} ${cooling} ${this.formatLength(params.layerHeightMm)} ${unit || ''}`;
+    }
+
+    private syncProfileOption(name: string) {
+      const select = this.select('ohs-profile');
+      if (!Array.from(select.options).some((option) => option.value === name)) select.add(new Option(name, name));
+      select.value = name;
+    }
+
+    private saveProfile() {
+      const params = this.currentParams();
+      const name = this.profileName(params);
+      const profiles = this.storedProfiles();
+      profiles[name] = params;
+      window.localStorage?.setItem(this.storageKey, JSON.stringify(profiles));
+      this.syncProfileOption(name);
+      document.getElementById('ohs-saved')?.removeAttribute('hidden');
+    }
+
+    private text(id: string, value: string) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
+  }
+
+  const initOverhangSafeAngleTool = () => new OverhangSafeAngleTool();
+  document.addEventListener('astro:page-load', initOverhangSafeAngleTool);
+  initOverhangSafeAngleTool();
+</script>

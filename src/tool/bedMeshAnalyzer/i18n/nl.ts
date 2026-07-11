@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'bedmesh-analyzer',
+  title: '3D printer bed mesh analyser',
+  description: 'Pars Marlin- of Klipper-bedmeshgegevens, visualiseer het oppervlak, stel helling of kromming vast en zet Z-fouten om in instructies voor schroefdraaien.',
+  ui: {
+    controlsAriaLabel: 'Invoervelden voor bedmesh-analyse',
+    resultsAriaLabel: 'Resultaten van bedmesh-analyse',
+    dataLabel: 'Ruwe meshgegevens',
+    dataPlaceholder: 'Plak hier het resultaat van je G29-commando...',
+    sampleButtonLabel: 'Gebruik voorbeeldmesh',
+    levelingPointsLabel: 'Nivelleerpunten',
+    threePointLabel: '3 punten',
+    fourPointLabel: '4 punten',
+    screwTypeLabel: 'Type schroef',
+    customScrewLabel: 'Anders',
+    pitchLabel: 'Draadspoed',
+    unitSystemLabel: 'Eenheden',
+    metricLabel: 'Metrisch',
+    imperialLabel: 'US',
+    heatmapLabel: 'Interactieve bedtopografie',
+    lowScaleLabel: 'Laag',
+    flatScaleLabel: 'Vlak',
+    highScaleLabel: 'Hoog',
+    healthLabel: 'Vlakheid',
+    rangeLabel: 'Totale variatie',
+    meshSizeLabel: 'Meshgrootte',
+    meanLabel: 'Gemiddelde Z',
+    diagnosisLabel: 'Diagnose',
+    instructionsLabel: 'Instructies voor mechanische aanpassing',
+    cornerHeader: 'Hoek',
+    deltaHeader: 'Correctie',
+    actionHeader: 'Actie',
+    frontLeft: 'Linksvoor',
+    frontRight: 'Rechtsvoor',
+    rearLeft: 'Linksachter',
+    rearRight: 'Rechtsachter',
+    rearCenter: 'Middenachter',
+    clockwiseLabel: 'met de klok mee draaien',
+    counterClockwiseLabel: 'tegen de klok in draaien',
+    noTurnLabel: 'deze schroef laten zoals hij is',
+    raiseLabel: 'Bed omhoog met',
+    lowerLabel: 'Bed omlaag met',
+    warningWarped: 'Overmatige kromming: het probleem zit waarschijnlijk in het oppervlak, niet alleen in het waterpas stellen. Overweeg de bouwplaat te vervangen of vlak te maken.',
+    parseError: 'De mesh kon niet worden verwerkt. Plak rijen decimale Z-waarden uit G29, M420 V of Klipper BED_MESH_OUTPUT.',
+    notEnoughNumbers: 'Er zijn niet genoeg meshgetallen gevonden. Een geldige mesh heeft minimaal twee rijen en twee kolommen.',
+    raggedRows: 'De gevonden rijen hebben niet dezelfde lengte. Controleer op afgekapte of beschadigde meshuitvoer.',
+    badPitch: 'De draadspoed moet groter zijn dan nul.',
+    diagnosisFlat: 'Het bed is al nagenoeg vlak. Alleen fijnafstelling van de eerste laag zou nodig moeten zijn.',
+    diagnosisFrontHigh: 'De voorzijde is hoger dan de achterzijde. Corrigeer eerst de voorste schroeven voordat je individuele punten najaagt.',
+    diagnosisRearHigh: 'De achterzijde is hoger dan de voorzijde. Corrigeer eerst de achterste schroeven.',
+    diagnosisLeftHigh: 'De linkerzijde is hoger dan de rechterzijde. Dit is voornamelijk een X-as-helling over het bed.',
+    diagnosisRightHigh: 'De rechterzijde is hoger dan de linkerzijde. Dit is voornamelijk een X-as-helling over het bed.',
+    diagnosisTwisted: 'De tegenoverliggende hoeken verschillen. Het bed is verdraaid of de gantry is niet consistent waterpas gesteld.',
+    diagnosisConcave: 'Het midden is lager dan de hoeken. Nivelleerschroeven kunnen deze holle vorm niet volledig opheffen.',
+    diagnosisConvex: 'Het midden is hoger dan de hoeken. Controleer magneten, clips, plaatspanning of thermische kromming.',
+    diagnosisWarped: 'Het Z-bereik ligt boven 0,5 mm, wat wijst op overmatige oppervlaktekromming in plaats van een gewone nivelleerfout.',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    degreeUnit: 'gr',
+  },
+  seo: [
+    { type: 'title', text: 'Hoe lees je een 3D-printerbedmesh', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Een bedmesh is een raster van gemeten Z-verschillen dat door een probe of nozzlesensor over het bedoppervlak wordt verzameld. Firmware zoals Marlin en Klipper gebruikt dat raster om kleine hoogteverschillen te compenseren tijdens het printen van de eerste lagen. De getallen worden meestal in millimeters uitgedrukt: een positieve waarde betekent dat het gemeten punt hoog ligt ten opzichte van het gekozen referentievlak, een negatieve waarde dat het laag ligt. De praktische vraag is niet alleen of de firmware dit kan compenseren. De belangrijke vraag is of het fysieke bed, de gantry en de nivelleerschroeven dicht genoeg bij elkaar liggen zodat de compensatie niet te hard hoeft te werken.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Deze analyser zet ruwe meshuitvoer om in drie beslissingen: hoeveel totale Z-variatie is er, of de vorm op een helling of op vervorming lijkt, en welke schroeven moeten worden bijgesteld. Dat onderscheid is belangrijk omdat een gekanteld bed en een krom bed verschillende reparaties nodig hebben. Een helling kan vaak worden verholpen door de hoekschroeven bij te draaien. Een holle glasplaat, een gebogen magnetische plaat, een losse Y-wagen of een gedraaide gantry kunnen nog steeds een slechte eerste laag opleveren, zelfs nadat elke hoek perfect is genivelleerd.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'ideaal bereik, zelden haalbaar op echte bedden' },
+        { value: '0,10 mm', label: 'meestal uitstekend voor gangbare FDM-eerste lagen' },
+        { value: '0,30 mm', label: 'merkbaar maar vaak printbaar met mesh-compensatie' },
+        { value: '0,50 mm+', label: 'oppervlak of mechanica moet worden onderzocht' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Meshwaarden zijn op zichzelf geen schroefinstructies',
+      html: 'De firmware rapporteert een hoogtekaart. Een schroefinstructie wordt afgeleid uit hoekgemiddelden, draadspoed en de mechanische draairichting. Maak altijd kleine aanpassingen, ga opnieuw naar home en meet opnieuw.',
+    },
+    { type: 'title', text: 'Wat G29- en BED_MESH_OUTPUT-waarden betekenen', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Marlin-gebruikers krijgen bedgegevens vaak via <code>G29</code>, <code>M420 V</code> of een nivelleerrapport in de terminal. Klipper-gebruikers kunnen de mesh bekijken met <code>BED_MESH_OUTPUT</code>, de webinterface of opgeslagen profielgegevens. De uitvoerformaten verschillen, maar de belangrijke gegevens zijn hetzelfde: rijen en kolommen met decimale Z-metingen. Sommige rapporten bevatten labels, coördinaten, haakjes, indexnummers of firmwaretekst. Een goede parser moet de omliggende tekst negeren en alleen de meetgetallen extraheren die de mesh vormen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'De meest betrouwbare mesh-plak is een rechthoekig blok waarin elke rij hetzelfde aantal waarden heeft. Een 3×3-mesh heeft 9 waarden, een 5×5-mesh 25 waarden en een 7×7-mesh 49 waarden. Rechthoekige meshes kunnen ook geldig zijn als het meetraster verschillende X- en Y-aantallen gebruikt. Als rijen een ongelijke lengte hebben, zijn de gegevens waarschijnlijk onvolledig of vermengd met niet-gerelateerde getallen zoals coördinaten, feedsnelheden of commandotellers. Voer in dat geval het rapport opnieuw uit en plak alleen het numerieke raster.',
+    },
+    {
+      type: 'table',
+      headers: ['Kenmerk uitvoer', 'Wat het aangeeft', 'Wat te doen'],
+      rows: [
+        ['Rijen hebben gelijke lengte', 'De mesh is waarschijnlijk compleet.', 'Analyseer direct en vergelijk de totale variatie.'],
+        ['Eén rij is korter', 'Terminal-kopie kan zijn afgekapt.', 'Kopieer het rapport opnieuw vanaf het begin.'],
+        ['Veel extra gehele getallen', 'De plak bevat index- of coördinaatlabels.', 'Plak waar mogelijk alleen het matrixgedeelte.'],
+        ['Slechts één lange regel', 'Het gereedschap kan vierkant reconstructie proberen.', 'Gebruik 9, 25, 49 of een ander vierkant aantal.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Meet na het verwarmen',
+      html: 'Verwarm het bed voor zinvolle gegevens tot de printtemperatuur en wacht op thermische stabilisatie voordat je meet. Aluminium platen en magnetische platen kunnen na enkele minuten op temperatuur nog van vorm veranderen.',
+    },
+    { type: 'title', text: 'Totale variatie: het getal dat problemen met de eerste laag voorspelt', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Totale variatie is het absolute verschil tussen de hoogste en laagste meshwaarde. Als het maximum +0,180 mm is en het minimum -0,120 mm, dan is de totale variatie 0,300 mm. Dit ene getal is makkelijk te begrijpen omdat het de volledige verticale correctie beschrijft die de firmware over het hele bed moet absorberen. Een kleine variatie betekent dat de nozzleopening van voor naar achter en van links naar rechts ongeveer gelijk blijft. Een grote variatie betekent dat het ene gebied mogelijk wordt platgedrukt terwijl een ander gebied nog moeite heeft met hechting.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Het acceptabele bereik hangt af van laaghoogte, nozzlemaat, filament, oppervlaktetextuur en hoe agressief de eerste laag wordt aangedrukt. Bij een eerste laag van 0,20 mm is een oppervlaktebereik van 0,10 mm meestal comfortabel. Een bereik van 0,30 mm kan nog printen als mesh-compensatie is ingeschakeld en de fade-hoogte verstandig is ingesteld, maar het laat minder marge. Boven 0,50 mm moet de gebruiker mechanische of oppervlakteproblemen vermoeden, omdat het bed dan niet meer alleen licht uit waterpas is.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Onder 0,10 mm',
+          description: 'Uitstekend voor de meeste consumenten-FDM-printers. Eerste-laag-afstelling draait vooral om Z-offset en een schoon oppervlak.',
+          highlight: true,
+          points: ['Minimale schroefcorrectie', 'Lage compensatiebelasting', 'Goede herhaalbaarheid'],
+        },
+        {
+          title: '0,10 tot 0,30 mm',
+          description: 'Gebruikelijk bij hobbyprinters. Mesh-compensatie kan helpen, maar hoekwaterpassing kan de hechting verbeteren.',
+          points: ['Herhaalbaarheid van probe is belangrijk', 'Let op randen en hoeken', 'Stel schroeven in kleine stappen bij'],
+        },
+        {
+          title: 'Boven 0,50 mm',
+          description: 'Waarschijnlijk kromming, wagenbeweging, plaatspanning of gantryfout. Alleen schroefnivellering lost dit mogelijk niet op.',
+          points: ['Inspecteer hardware', 'Controleer verwarmde toestand', 'Overweeg nieuwe plaat'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Een goed bereik kan nog slecht printen',
+      html: 'Als het bereik klein is maar de eerste laag mislukt, controleer dan Z-offset, extrusie, vuil PEI, probe-herhaalbaarheid, nozzle-verstopping en of het mesh-profiel daadwerkelijk is geladen voor het printen.',
+    },
+    { type: 'title', text: 'Helling, verdraaiing, hol en bol', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Een bedmesh is meer dan alleen een maximum- en minimumwaarde. De verdeling vertelt wat voor correctie realistisch is. Als de hele voorste rij hoog is en de achterste rij laag, is het bed globaal van voor naar achter gekanteld. Als de linkerkant hoog is en de rechterkant laag, is het bed over de X-as gekanteld. Dit zijn ideale gevallen voor schroefaanpassing omdat het fysieke bedvlak eenvoudigweg niet is uitgelijnd met het bewegingsvlak van de nozzle.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Een verdraaide mesh is anders: het ene diagonale paar is hoog terwijl het tegenoverliggende diagonale paar laag is. Dit kan komen door ongelijke schroefdruk, een kromme Y-wagen, een X-gantry die niet haaks staat of een bedsteunplaat die doorbuigt. Een holle mesh heeft een midden dat lager is dan de hoeken, terwijl een bolle mesh een midden heeft dat hoger is dan de hoeken. Schroeven aan de randen kunnen een bolling in het midden niet volledig wegnemen omdat ze het midden van de bouwplaat niet direct beïnvloeden.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Helling', definition: 'Een grotendeels vlak hoogteverschil waarbij de ene kant van het bed hoger is dan de tegenoverliggende kant.' },
+        { term: 'Verdraaiing', definition: 'Een diagonaal verschil waarbij tegenoverliggende hoeken niet overeenkomen, vaak veroorzaakt door ongelijke ondersteuning of framelijnig.' },
+        { term: 'Hol bed', definition: 'Een oppervlak waarbij het midden lager is dan de omliggende hoeken of randen.' },
+        { term: 'Bol bed', definition: 'Een oppervlak waarbij het midden hoger is dan de omliggende hoeken of randen.' },
+        { term: 'Kromming', definition: 'Een niet-vlakke vorm die groot genoeg is dat normale schroefwaterpassing haar niet kan verhelpen.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Waarom een bult in het midden moeilijk te verhelpen is met hoekschroeven',
+      html: 'Hoekschroeven bepalen het steunvlak aan de rand van het bed. Als het midden omhoog wordt gedrukt door warmte, magneten, clips of plaatspanning, kan het verlagen van de hoeken de randen verslechteren terwijl het midden hoog blijft.',
+    },
+    { type: 'title', text: 'Z-fout omzetten naar schroefrotatie', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'De mechanische omrekening is gebaseerd op draadspoed. Draadspoed is de verticale verplaatsing die één volledige schroefomwenteling oplevert. Een gangbare M3-grove schroef heeft een spoed van 0,50 mm, M4-grove ongeveer 0,70 mm en M5-grove ongeveer 0,80 mm. Als een hoek 0,125 mm moet verplaatsen op een M3-schroef, is de rotatie <code>0,125 × 360 / 0,50 = 90 graden</code>, oftewel een kwartslag. Dit is veel makkelijker uit te voeren dan een abstract Z-getal.',
+    },
+    {
+      type: 'paragraph',
+      html: 'De richting hangt af van de printermechanica. Bij veel printers met veerbed wordt het bed naar de nozzle toe verhoogd wanneer de knop van onderaf tegen de klok in wordt gedraaid, maar machines verschillen. De analyser gebruikt een conventionele instructiestijl en geeft aan of de hoek omhoog of omlaag moet. Als de draairichting van jouw printerknop is omgekeerd, behoud dan de millimetercorrectie en de fractie van een omwenteling, maar keer de richting om. De veiligste werkwijze is om één schroef met de helft van de aanbevolen hoeveelheid te verstellen, opnieuw te meten en dan te herhalen.',
+    },
+    {
+      type: 'table',
+      headers: ['Schroef', 'Gebruikelijke grove spoed', '0,10 mm correctie', '0,20 mm correctie'],
+      rows: [
+        ['M3', '0,50 mm/omw', '72 graden', '144 graden'],
+        ['M4', '0,70 mm/omw', '51 graden', '103 graden'],
+        ['M5', '0,80 mm/omw', '45 graden', '90 graden'],
+        ['Eigen', 'Eigen waarde', '360 × 0,10 / spoed', '360 × 0,20 / spoed'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Jaag mechanisch niet de laatste 0,02 mm na',
+      html: 'De herhaalbaarheid van de probe, de bedtemperatuur en de veerdruk kunnen makkelijk honderdsten van een millimeter variëren. Stop wanneer de mesh binnen een praktisch bereik valt en gebruik Z-offset voor de uiteindelijke eerste-laag-aanvoeling.',
+    },
+    { type: 'title', text: 'Driepunts- versus vierpuntsbednivellering', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Driepuntsnivellering is mechanisch elegant omdat drie punten een vlak bepalen zonder het te overbepalen. Een bed met drie schroeven heeft normaal twee schroeven voor en één schroef middenachter, of een vergelijkbare driehoekige opstelling. Vierpuntsnivellering komt veel voor op Cartesische bedden, maar vier schroeven kunnen elkaar tegenwerken: het aandraaien van één hoek kan het bed doen buigen of de belasting op de tegenoverliggende hoek veranderen. De analyser ondersteunt beide omdat de juiste instructieset afhangt van de machine.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Voor bedden met vier punten vergelijkt de analyser de vier hoeken en geeft voor elke hoek een instructie. Voor bedden met drie punten gebruikt hij linksvoor, rechtsvoor en middenachter. Dit kan niet de exacte fysieke positie van elk printermodel weten, dus behandel de labels als een kaart: voor is de rand die het dichtst bij de gebruiker ligt op de meeste bedden, en achter is de achterrand. Als jouw coördinatensysteem is omgekeerd, draai de instructie dan in gedachten om zodat deze overeenkomt met jouw machine voordat je de schroeven aanraakt.',
+    },
+    {
+      type: 'proscons',
+      title: 'Afwegingen nivelleersystemen',
+      items: [
+        { pro: 'Drie schroeven bepalen een stabiel vlak met minder interacties.', con: 'Niet elke printer is gebouwd voor een driehoekig steunpatroon.' },
+        { pro: 'Vier schroeven passen bij veel standaard printerbedden en zijn makkelijk te begrijpen.', con: 'Ze kunnen een dunne plaat overbepalen en verdraaiing veroorzaken.' },
+        { pro: 'Mesh-compensatie kan kleine restfouten verbergen.', con: 'Het kan losse mechanica, kromme platen of slechte probedata niet wegnemen.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Aanbevolen aanpasvolgorde',
+      html: 'Corrigeer eerst de globale helling, dan de diagonale verdraaiing en voer daarna een nieuwe mesh uit. Vermijd grote veranderingen aan alle schroeven tegelijk, omdat elke schroef het vlak verandert waarop de anderen werken.',
+    },
+    { type: 'title', text: 'Waarom mesh-compensatie geen vervanging is voor mechanica', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Mesh-compensatie beweegt Z tijdens het printen zodat de nozzle het gemeten oppervlak volgt. Dit is krachtig, maar heeft grenzen. Een groot meshbereik veroorzaakt zichtbare Z-beweging, kan de extrusiedruk op de eerste laag beïnvloeden en kan ervoor zorgen dat de onderkant van het object de vorm van het bed overneemt. Als de mesh over enkele millimeters uitfade, kunnen de onderste lagen geleidelijk overgaan van de bedvorm naar de nominale modelvorm. Dat is acceptabel voor kleine correcties, maar ongewenst bij ernstige kromming.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Goede mechanica vermindert de benodigde correctie. Controleer of de bedwagenwielen of -rails geen speling hebben, de probebevestiging stijf is, de nozzle schoon is vóór het meten, de bouwplaat consistent zit en de gantry haaks staat. Bij bedden met veren kunnen sterkere veren of siliconen afstandsbusjes de herhaalbaarheid verbeteren. Bij magnetische PEI-systemen kan vuil onder de plaat een lokale verhoging veroorzaken die als een mysterieuze bult in de mesh verschijnt.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Maak de nozzle schoon vóór het meten als de nozzle het oppervlak raakt.',
+        'Verwarm het bed en wacht lang genoeg tot de plaat thermisch tot rust is gekomen.',
+        'Bevestig dat de opgeslagen mesh is geladen in de printstartreeks.',
+        'Inspecteer bedclips, magneten en de plaatligging op lokale verhogingen.',
+        'Controleer de haaksheid van de gantry opnieuw als de mesh diagonale verdraaiing vertoont.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Boven 0,5 mm is hardwareonderzoek nodig',
+      html: 'Als de totale variatie hoger is dan 0,5 mm, blijf dan niet eindeloos schroeven bijdraaien. Zoek naar een kromme plaat, een losse wagen, ongelijke afstandsbusjes, een offsetfout van de probe of een oppervlak dat van vorm verandert bij verhitting.',
+    },
+    { type: 'title', text: 'Een praktische werkwijze voor betere eerste lagen', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Begin met een mechanisch stabiele printer. Verwarm het bed, wacht, home alle assen en voer de mesh uit. Plak de gegevens in de analyser en lees eerst de totale variatie. Als het bereik extreem is, stop dan en inspecteer de hardware. Als het bereik matig is en de diagnose zegt dat de voor-, achter-, linker- of rechterkant hoog is, pas dan de schroefaanbevelingen in kleine stappen toe. Meet opnieuw na elke ronde. Twee voorzichtige rondes zijn meestal beter dan één agressieve, omdat veerdruk en bedbuiging niet perfect lineair zijn.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Zodra de mesh redelijk is, stop je met het verstellen van schroeven en stem je de eerste laag af met Z-offset, extrusiebreedte, snelheid en oppervlaktevoorbereiding. Een perfect waterpas bed met een verkeerde Z-offset faalt nog steeds. Een licht onvolmaakt bed met een schoon PEI-vel, correcte Z-offset en actieve mesh-compensatie kan prachtig printen. De analyser is ontworpen om eerst de mechanische vraag te beantwoorden: waar moet de gebruiker draaien, hoe ver, en of schroeven draaien wel de juiste reparatie is.',
+    },
+    {
+      type: 'summary',
+      title: 'Beste werkwijze voor bedmesh',
+      items: [
+        'Meet op printtemperatuur, niet koud.',
+        'Gebruik totale variatie om te bepalen of de mesh normaal of buitensporig is.',
+        'Classificeer de vorm voordat je schroeven bijstelt.',
+        'Zet hoekfout om in rotatie op basis van draadspoed.',
+        'Meet opnieuw na kleine correcties en stop wanneer de resterende fout praktisch aanvaardbaar is.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Het doel is geen mooie grafiek',
+      html: 'Het nuttige resultaat is een betere eerste laag. Een mesh-afbeelding helpt je het oppervlak te zien, maar de schroeftabel is het onderdeel dat meting omzet in reparatie.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Kan ik zowel Marlin- als Klipper-meshgegevens plakken?',
+      answer: 'Ja. De parser haalt decimale Z-waarden uit meerregelige tekst, dus hij werkt met gangbare G29-, M420 V- en BED_MESH_OUTPUT-rapporten zolang het numerieke raster aanwezig is.',
+    },
+    {
+      question: 'Welke bedmesh-variatie is acceptabel?',
+      answer: 'Onder 0,10 mm is uitstekend, 0,10 tot 0,30 mm is gebruikelijk en meestal printbaar met mesh-compensatie, en boven 0,50 mm duidt op een oppervlakte- of mechanisch probleem.',
+    },
+    {
+      question: 'Waarom waarschuwt het gereedschap bij kromming boven 0,5 mm?',
+      answer: 'Bij dat bereik is schroefnivellering vaak niet langer het hoofdprobleem. De bouwplaat, wagen, probe of gantry kan krom, los of thermisch vervormd zijn.',
+    },
+    {
+      question: 'Zijn de draairichtinginstructies van toepassing op elke printer?',
+      answer: 'Nee. De berekende millimeters en graden zijn universeel, maar de draairichting van de knop kan per machine verschillen. Als jouw bed de tegenovergestelde kant op beweegt, keer dan de richting om en behoud hetzelfde aantal millimeters.',
+    },
+    {
+      question: 'Vervangt mesh-compensatie handmatig nivelleren?',
+      answer: 'Nee. Mesh-compensatie is het beste voor kleine restfouten. Mechanisch nivelleren houdt de correctie klein en verbetert de consistentie van de eerste laag.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Plak meshuitvoer', text: 'Kopieer de numerieke bedmesh van Marlin of Klipper en plak deze in het veld voor ruwe gegevens.' },
+    { name: 'Kies mechanica', text: 'Selecteer drie of vier nivelleerpunten en de schroefspoed die de printer gebruikt.' },
+    { name: 'Lees de diagnose', text: 'Controleer of het oppervlak hellend, verdraaid, hol, bol of overmatig gekromd is.' },
+    { name: 'Pas voorzichtig aan', text: 'Draai elke schroef met de aanbevolen fractie van een omwenteling en meet opnieuw voordat je een volgende ronde doet.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: '3D-printer bed mesh analyser',
+      description: 'Analyseer Marlin- en Klipper-bedmeshgegevens en zet Z-hoekfouten om in instructies voor nivelleerschroefrotatie.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Alles',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Welke bedmesh-variatie is acceptabel?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Onder 0,10 mm is uitstekend, 0,10 tot 0,30 mm is gebruikelijk en meestal printbaar met mesh-compensatie, en boven 0,50 mm duidt op een oppervlakte- of mechanisch probleem.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Hoe analyseer je een 3D-printerbedmesh',
+      step: [
+        { '@type': 'HowToStep', text: 'Plak ruwe Marlin- of Klipper-meshgegevens.' },
+        { '@type': 'HowToStep', text: 'Selecteer het aantal nivelleerpunten en de schroefspoed.' },
+        { '@type': 'HowToStep', text: 'Lees variatie, diagnose en warmtekaart.' },
+        { '@type': 'HowToStep', text: 'Pas schroefdraaiinstructies toe en meet opnieuw.' },
+      ],
+    },
+  ],
+};

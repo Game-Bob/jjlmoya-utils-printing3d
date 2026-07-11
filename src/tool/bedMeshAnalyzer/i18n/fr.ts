@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analyseur-maillage-lit',
+  title: "Analyseur de maillage de lit d'imprimante 3D",
+  description: 'Analysez les donnees de maillage de lit Marlin ou Klipper, visualisez la surface, diagnostiquez l\'inclinaison ou la deformation, et convertissez l\'erreur Z en instructions de rotation de vis.',
+  ui: {
+    controlsAriaLabel: "Entrees de l'analyseur de maillage de lit",
+    resultsAriaLabel: "Resultats de l'analyseur de maillage de lit",
+    dataLabel: 'Donnees brutes du maillage',
+    dataPlaceholder: 'Collez le resultat de votre commande G29 ici...',
+    sampleButtonLabel: 'Utiliser un maillage exemple',
+    levelingPointsLabel: 'Points de nivellement',
+    threePointLabel: '3 points',
+    fourPointLabel: '4 points',
+    screwTypeLabel: 'Type de vis',
+    customScrewLabel: 'Autre',
+    pitchLabel: 'Pas de filetage',
+    unitSystemLabel: 'Unites',
+    metricLabel: 'Metrique',
+    imperialLabel: 'US',
+    heatmapLabel: 'Topographie interactive du lit',
+    lowScaleLabel: 'Bas',
+    flatScaleLabel: 'Plat',
+    highScaleLabel: 'Haut',
+    healthLabel: 'Etat de planiete',
+    rangeLabel: 'Variation totale',
+    meshSizeLabel: 'Taille du maillage',
+    meanLabel: 'Z moyen',
+    diagnosisLabel: 'Diagnostic',
+    instructionsLabel: 'Instructions de reglage mecanique',
+    cornerHeader: 'Coin',
+    deltaHeader: 'Correction',
+    actionHeader: 'Action',
+    frontLeft: 'Avant gauche',
+    frontRight: 'Avant droit',
+    rearLeft: 'Arriere gauche',
+    rearRight: 'Arriere droit',
+    rearCenter: 'Arriere centre',
+    clockwiseLabel: 'tourner dans le sens horaire',
+    counterClockwiseLabel: 'tourner dans le sens antihoraire',
+    noTurnLabel: 'laisser cette vis telle quelle',
+    raiseLabel: 'Monter le lit de',
+    lowerLabel: 'Baisser le lit de',
+    warningWarped: 'Deformation excessive: le probleme vient probablement de la surface, pas seulement du nivellement. Envisagez de remplacer ou d\'aplatir le plateau.',
+    parseError: "Le maillage n'a pas pu etre analyse. Collez les lignes de valeurs Z decimales provenant de G29, M420 V ou Klipper BED_MESH_OUTPUT.",
+    notEnoughNumbers: 'Pas assez de valeurs de maillage trouvees. Un maillage valide necessite au moins deux rangees et deux colonnes.',
+    raggedRows: 'Les rangees detectees n\'ont pas toutes la meme longueur. Verifiez si la sortie du maillage est tronquee ou corrompue.',
+    badPitch: 'Le pas de filetage doit etre superieur a zero.',
+    diagnosisFlat: 'Le lit est deja presque plat. Seul un reglage fin de la premiere couche devrait etre necessaire.',
+    diagnosisFrontHigh: "L'avant est plus haut que l'arriere. Corrigez les vis avant avant de chercher a ajuster des points individuels.",
+    diagnosisRearHigh: "L'arriere est plus haut que l'avant. Corrigez d'abord les vis arriere.",
+    diagnosisLeftHigh: 'Le cote gauche est plus haut que le cote droit. Il s\'agit principalement d\'une inclinaison sur l\'axe X a travers le lit.',
+    diagnosisRightHigh: 'Le cote droit est plus haut que le cote gauche. Il s\'agit principalement d\'une inclinaison sur l\'axe X a travers le lit.',
+    diagnosisTwisted: 'Les coins opposes ne concordent pas. Le lit est tordu ou le portique n\'est pas correctement dresse.',
+    diagnosisConcave: 'Le centre est plus bas que les coins. Les vis de nivellement ne peuvent pas corriger completement cette forme concave.',
+    diagnosisConvex: 'Le centre est plus haut que les coins. Verifiez les aimants, les clips, la contrainte du plateau ou le cintrage thermique.',
+    diagnosisWarped: 'La plage Z depasse 0,5 mm, ce qui indique une deformation excessive de la surface plutot qu\'une simple erreur de nivellement.',
+    mmUnit: 'mm',
+    inchUnit: 'po',
+    degreeUnit: 'deg',
+  },
+  seo: [
+    { type: 'title', text: 'Comment lire un maillage de lit d\'imprimante 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: "Un maillage de lit est une grille de decalages Z mesures par un palpeur ou un capteur de buse sur toute la surface imprimable. Les firmwares tels que Marlin et Klipper utilisent cette grille pour compenser les faibles differences de hauteur lors de l'impression des premieres couches. Les valeurs sont generalement exprimees en millimetres: une valeur positive signifie que le point palpe est haut par rapport au plan de reference choisi, et une valeur negative signifie qu'il est bas. La question pratique n'est pas seulement de savoir si le firmware peut compenser. La vraie question est de savoir si le lit physique, le portique et les vis de nivellement sont suffisamment proches pour que la compensation n'ait pas a travailler trop fort.",
+    },
+    {
+      type: 'paragraph',
+      html: "Cet analyseur transforme les donnees brutes de maillage en trois decisions: quelle est la variation Z totale, si la forme ressemble a une inclinaison ou a une deformation, et quelles vis doivent etre ajustees. Cette distinction est importante car un lit incline et un lit deforme necessitent des reparations differentes. Une inclinaison peut souvent etre corrigee en tournant les vis d'angle. Une plaque de verre concave, une feuille magnetique galbee, un chariot Y detendu ou un portique tordu peuvent produire une mauvaise premiere couche meme apres avoir parfaitement nivele chaque coin.",
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'plage ideale, rarement atteinte sur les lits reels' },
+        { value: '0,10 mm', label: 'generalement excellent pour les premieres couches FDM typiques' },
+        { value: '0,30 mm', label: 'remarquable mais souvent imprimable avec compensation de maillage' },
+        { value: '0,50 mm+', label: 'la surface ou la mecanique doit etre examinee' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Les valeurs de maillage ne sont pas des instructions de vis',
+      html: "Le firmware fournit une carte de hauteur. Une instruction de vis est derivee des moyennes d'angle, du pas de filetage et du sens de reglage mecanique. Effectuez toujours de petites modifications, refaites la mise a zero et palpez a nouveau.",
+    },
+    { type: 'title', text: 'Ce que signifient les valeurs G29 et BED_MESH_OUTPUT', level: 2 },
+    {
+      type: 'paragraph',
+      html: "Les utilisateurs de Marlin obtiennent souvent les donnees du lit via <code>G29</code>, <code>M420 V</code> ou un rapport de nivellement dans le terminal. Les utilisateurs de Klipper peuvent inspecter le maillage avec <code>BED_MESH_OUTPUT</code>, l'interface web ou les donnees de profil sauvegardees. Les formats de sortie different, mais les donnees importantes sont les memes: des rangees et colonnes de mesures Z decimales. Certains rapports incluent des etiquettes, des coordonnees, des crochets, des numeros d'index ou du texte du firmware. Un analyseur efficace doit ignorer le texte environnant et n'extraire que les valeurs numeriques qui forment le maillage.",
+    },
+    {
+      type: 'paragraph',
+      html: "Le collage de maillage le plus fiable est un bloc rectangulaire ou chaque rangee a le meme nombre de valeurs. Un maillage 3x3 a 9 valeurs, un maillage 5x5 a 25 valeurs et un maillage 7x7 a 49 valeurs. Les maillages rectangulaires peuvent aussi etre valides si la grille de palpage utilise des nombres X et Y differents. Si les rangees ont des longueurs irregulieres, les donnees sont probablement incompletes ou melangees avec des nombres sans rapport tels que des coordonnees, des vitesses d'avance ou des compteurs de commandes. Dans ce cas, reexecutez le rapport et collez uniquement la grille numerique.",
+    },
+    {
+      type: 'table',
+      headers: ['Indice de sortie', 'Ce que cela suggere', 'Que faire'],
+      rows: [
+        ['Les rangees ont la meme longueur', 'Le maillage est probablement complet.', 'Analysez directement et comparez la variation totale.'],
+        ['Une rangee est plus courte', "La copie du terminal peut etre tronquee.", 'Recopiez le rapport depuis le debut.'],
+        ['Beaucoup d\'entiers supplementaires', "Le collage inclut des index ou des coordonnees.", 'Collez uniquement la section matrice lorsque c\'est possible.'],
+        ['Une seule longue ligne', "L'outil peut tenter une reconstruction carree.", 'Utilisez 9, 25, 49 ou un autre nombre carre.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Palpez apres chauffage',
+      html: 'Pour des donnees pertinentes, chauffez le lit a la temperature d\'impression et attendez la stabilisation thermique avant de palper. Les plaques en aluminium et les feuilles magnetiques peuvent changer de forme apres plusieurs minutes a temperature.',
+    },
+    { type: 'title', text: 'Variation totale: le nombre qui predit les problemes de premiere couche', level: 2 },
+    {
+      type: 'paragraph',
+      html: "La variation totale est la difference absolue entre la valeur de maillage la plus elevee et la plus basse. Si le point maximum est de +0,180 mm et le point minimum de -0,120 mm, la variation totale est de 0,300 mm. Ce nombre unique est facile a comprendre car il decrit le travail vertical complet que le firmware doit absorber sur toute la surface du lit. Une faible variation signifie que l'ecart de la buse reste similaire de l'avant a l'arriere et de la gauche a la droite. Une variation elevee signifie qu'une zone peut etre ecrasee tandis qu'une autre a encore du mal a accrocher.",
+    },
+    {
+      type: 'paragraph',
+      html: "La plage acceptable depend de la hauteur de couche, de la taille de la buse, du filament, de la texture de la surface et de l'agressivite de l'ecrasement de la premiere couche. Avec une premiere couche de 0,20 mm, une plage de surface de 0,10 mm est generalement confortable. Une plage de 0,30 mm peut encore imprimer si la compensation de maillage est activee et que la hauteur d'estompage est reglee correctement, mais elle laisse moins de marge. Au-dessus de 0,50 mm, l'utilisateur doit suspecter des problemes mecaniques ou de surface, car le lit n'est plus simplement legerement de niveau.",
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'En dessous de 0,10 mm',
+          description: "Excellent pour la plupart des imprimantes FDM grand public. Le reglage de la premiere couche concerne surtout le decalage Z et la proprete de la surface.",
+          highlight: true,
+          points: ['Correction de vis minimale', 'Faible charge de compensation', 'Bonne repetabilite'],
+        },
+        {
+          title: '0,10 a 0,30 mm',
+          description: 'Courant sur les machines de loisir. La compensation de maillage peut aider, mais le dressage des coins peut ameliorer l\'adhesion.',
+          points: ['La repetabilite du palpage compte', 'Surveillez les bords et les coins', 'Reglez les vis par petits pas'],
+        },
+        {
+          title: 'Au dessus de 0,50 mm',
+          description: "Probablement une deformation, un jeu du chariot, une contrainte du plateau ou une erreur de portique. Le nivellement par vis seul peut ne pas suffire.",
+          points: ['Inspectez le materiel', 'Verifiez l\'etat chauffe', 'Envisagez un nouveau plateau'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Une bonne plage peut quand meme mal imprimer',
+      html: "Si la plage est faible mais que la premiere couche echoue, verifiez le decalage Z, l'extrusion, un PEI sale, la repetabilite du palpeur, les debris de buse et si le profil de maillage est effectivement charge avant l'impression.",
+    },
+    { type: 'title', text: 'Inclinaison, torsion, concavite et convexite', level: 2 },
+    {
+      type: 'paragraph',
+      html: "Un maillage de lit est plus qu'une valeur maximale et minimale. La distribution vous indique quel type de correction est realiste. Si toute la rangee avant est haute et la rangee arriere basse, le lit est globalement incline d'avant en arriere. Si le cote gauche est haut et le cote droit bas, le lit est incline sur l'axe X. Ces cas sont ideaux pour un reglage par vis car le plan physique du lit n'est tout simplement pas aligne avec le plan de deplacement de la buse.",
+    },
+    {
+      type: 'paragraph',
+      html: "Un maillage tordu est different: une paire diagonale est haute tandis que la paire diagonale opposee est basse. Cela peut provenir d'une compression inegale des vis, d'un chariot Y deforme, d'un portique X qui n'est pas d'equerre ou d'une plaque de support de lit qui flechit. Un maillage concave a un centre plus bas que les coins, tandis qu'un maillage convexe a un centre plus haut que les coins. Les vis sur les bords ne peuvent pas supprimer completement un cintrage central car elles ne controlent pas directement le milieu du plateau.",
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Inclinaison', definition: "Difference de hauteur globalement plane ou un cote du lit est plus haut que le cote oppose." },
+        { term: 'Torsion', definition: "Decalage diagonal ou les coins opposes ne concordent pas, souvent cause par un support inegal ou un defaut d'alignement du bati." },
+        { term: 'Lit concave', definition: 'Surface dont le centre est plus bas que les coins ou les bords environnants.' },
+        { term: 'Lit convexe', definition: 'Surface dont le centre est plus haut que les coins ou les bords environnants.' },
+        { term: 'Deformation', definition: "Forme non plane suffisamment importante pour que le dressage par vis ne puisse pas la supprimer." },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Pourquoi un bombement central est difficile a corriger avec les vis d\'angle',
+      html: "Les vis d'angle definissent le plan de support au bord du lit. Si le centre est bombe vers le haut a cause de la chaleur, des aimants, des clips ou de la contrainte du plateau, abaisser les coins peut aggraver les bords tandis que le milieu reste haut.",
+    },
+    { type: 'title', text: 'Convertir l\'erreur Z en rotation de vis', level: 2 },
+    {
+      type: 'paragraph',
+      html: "La conversion mecanique est basee sur le pas de filetage. Le pas de filetage est le deplacement vertical produit par un tour complet de vis. Une vis M3 coarse courante a un pas de 0,50 mm, une M4 coarse d'environ 0,70 mm et une M5 coarse d'environ 0,80 mm. Si un coin doit bouger de 0,125 mm sur une vis M3, la rotation est <code>0,125 x 360 / 0,50 = 90 degres</code>, soit un quart de tour. C'est bien plus facile a executer qu'un nombre Z abstrait.",
+    },
+    {
+      type: 'paragraph',
+      html: "Le sens depend de la mecanique de l'imprimante. De nombreuses imprimantes a lit a ressorts relevent le lit vers la buse lorsque le bouton est tourne dans le sens antihoraire depuis le dessous, mais les machines different. L'analyseur utilise un style d'instruction conventionnel et indique si le coin doit etre monte ou abaisse. Si le sens du bouton de votre imprimante est inverse, conservez la correction en millimetres et la fraction de tour, mais inversez le sens. La methode la plus sure est de deplacer une vis de la moitie de la quantite recommandee, de palper a nouveau, puis de repeter.",
+    },
+    {
+      type: 'table',
+      headers: ['Vis', 'Pas coarse typique', 'Correction de 0,10 mm', 'Correction de 0,20 mm'],
+      rows: [
+        ['M3', '0,50 mm / tour', '72 degres', '144 degres'],
+        ['M4', '0,70 mm / tour', '51 degres', '103 degres'],
+        ['M5', '0,80 mm / tour', '45 degres', '90 degres'],
+        ['Personnalisee', 'Valeur utilisateur', '360 x 0,10 / pas', '360 x 0,20 / pas'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Ne cherchez pas a corriger les 0,02 mm restants mecaniquement',
+      html: "La repetabilite du palpage, la temperature du lit et la compression des ressorts peuvent facilement varier de quelques centiemes de millimetre. Arretez lorsque le maillage est dans une plage pratique et utilisez le decalage Z pour le reglage final de la premiere couche.",
+    },
+    { type: 'title', text: 'Nivellement a trois points contre quatre points', level: 2 },
+    {
+      type: 'paragraph',
+      html: "Le nivellement a trois points est mecaniquement elegant car trois points definissent un plan sans le surcontraindre. Un lit a trois vis a normalement deux vis a l'avant et une vis au centre arriere, ou une disposition triangulaire similaire. Le nivellement a quatre points est courant sur de nombreux lits Cartesiens, mais quatre vis peuvent se contrarier mutuellement: serrer un coin peut flechir le lit ou modifier la charge sur le coin oppose. L'analyseur prend en charge les deux configurations car le jeu d'instructions correct depend de la machine.",
+    },
+    {
+      type: 'paragraph',
+      html: "Pour les lits a quatre points, l'analyseur compare les quatre coins et donne une instruction pour chacun. Pour les lits a trois points, il utilise l'avant gauche, l'avant droit et le centre arriere. Il ne peut pas connaitre la position physique exacte de chaque modele d'imprimante, traitez donc les etiquettes comme une carte: l'avant est le bord le plus proche de l'utilisateur sur la plupart des lits, et l'arriere est le bord du fond. Si votre systeme de coordonnees est inverse, adaptez mentalement l'instruction a votre machine avant de toucher aux vis.",
+    },
+    {
+      type: 'proscons',
+      title: 'Compromis des systemes de nivellement',
+      items: [
+        { pro: 'Trois vis definissent un plan stable avec moins d\'interactions.', con: "Toutes les imprimantes ne sont pas conçues pour un support triangulaire." },
+        { pro: 'Quatre vis correspondent a de nombreux lits standard et sont faciles a comprendre.', con: 'Ils peuvent surcontraindre une plaque mince et creer une torsion.' },
+        { pro: 'La compensation de maillage peut masquer de petites erreurs residuelles.', con: "Elle ne peut pas supprimer un jeu mecanique, des plaques deformees ou de mauvaises donnees de palpage." },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Sequence de reglage recommandee',
+      html: "Corrigez d'abord l'inclinaison globale, puis la torsion diagonale, puis lancez un nouveau maillage. Evitez de faire de grands changements sur toutes les vis a la fois car chaque vis modifie le plan utilise par les autres.",
+    },
+    { type: 'title', text: 'Pourquoi la compensation de maillage ne remplace pas la mecanique', level: 2 },
+    {
+      type: 'paragraph',
+      html: "La compensation de maillage deplace Z pendant l'impression pour que la buse suive la surface mesuree. C'est puissant, mais cela a des limites. Une grande plage de maillage provoque un mouvement Z visible, peut affecter la pression d'extrusion sur la premiere couche et peut laisser la base de la piece legerement deformee comme le lit. Si le maillage s'estompe sur plusieurs millimetres, les couches inferieures peuvent passer progressivement de la forme du lit a la forme nominale du modele. C'est acceptable pour de petites corrections, mais indesirable pour une deformation severe.",
+    },
+    {
+      type: 'paragraph',
+      html: "Une bonne mecanique reduit la quantite de correction necessaire. Verifiez que les roulettes ou rails du chariot n'ont pas de jeu, que le support du palpeur est rigide, que la buse est propre avant le palpage, que le plateau est positionne de maniere coherente et que le portique est d'equerre. Sur les lits a ressorts, des ressorts plus forts ou des entretoises en silicone peuvent ameliorer la repetabilite. Sur les systemes magnetiques PEI, les debris sous la feuille peuvent creer un point haut local qui apparait comme une bosse mysterieuse dans le maillage.",
+    },
+    {
+      type: 'list',
+      items: [
+        'Nettoyez la buse avant de palper si la buse touche la surface.',
+        'Chauffez le lit et attendez assez longtemps pour que le plateau cesse de bouger thermiquement.',
+        'Confirmez que le maillage sauvegarde est charge dans la sequence de debut d\'impression.',
+        'Inspectez les clips, les aimants et l\'assise de la feuille pour les points hauts locaux.',
+        'Revetifiez l\'equerre du portique lorsque le maillage montre une torsion diagonale.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Au dessus de 0,5 mm: une investigation mecanique s\'impose',
+      html: "Lorsque la variation totale depasse 0,5 mm, ne continuez pas a tourner les vis indefiniment. Recherchez une plaque deformee, un chariot detendu, des entretoises inegales, une erreur de decalage du palpeur ou une surface qui change de forme en chauffant.",
+    },
+    { type: 'title', text: 'Un flux de travail pratique pour de meilleures premieres couches', level: 2 },
+    {
+      type: 'paragraph',
+      html: "Commencez avec une imprimante mecaniquement stable. Chauffez le lit, attendez, initialisez tous les axes et lancez le maillage. Collez les donnees dans l'analyseur et lisez d'abord la variation totale. Si la plage est extreme, arretez-vous et inspectez le materiel. Si la plage est moderee et que le diagnostic indique un cote avant, arriere, gauche ou droit haut, appliquez les recommandations de vis par petits increments. Palpez a nouveau apres chaque passage. Deux passages conservateurs valent generalement mieux qu'un passage agressif car la compression des ressorts et la flexibilite du lit ne sont pas parfaitement lineaires.",
+    },
+    {
+      type: 'paragraph',
+      html: "Une fois le maillage raisonnable, arretez de regler les vis et ajustez la premiere couche avec le decalage Z, la largeur d'extrusion, la vitesse et la preparation de surface. Un lit parfaitement dresse avec un mauvais decalage Z echoue quand meme. Un lit legerement imparfait avec une feuille PEI propre, un decalage Z correct et une compensation de maillage active peut imprimer magnifiquement. L'analyseur est conçu pour repondre d'abord a la question mecanique: ou l'utilisateur doit-il tourner, de combien, et si tourner des vis est meme la bonne reparaction.",
+    },
+    {
+      type: 'summary',
+      title: 'Meilleur flux de travail pour le maillage de lit',
+      items: [
+        'Palpez a la temperature d\'impression, pas a froid.',
+        'Utilisez la variation totale pour decider si le maillage est ordinaire ou excessif.',
+        'Classifiez la forme avant d\'ajuster les vis.',
+        'Convertissez l\'erreur d\'angle en rotation en fonction du pas de filetage.',
+        'Repalpez apres de petites corrections et arretez lorsque l\'erreur restante est pratique.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Le but n\'est pas un beau graphique',
+      html: 'Le resultat utile est une meilleure premiere couche. Une image de maillage vous aide a voir la surface, mais le tableau des vis est la partie qui transforme la mesure en reparaction.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Puis-je coller des donnees de maillage Marlin et Klipper ?',
+      answer: 'Oui. L\'analyseur extrait les valeurs Z decimales d\'un texte multiligne, il fonctionne donc avec les rapports courants G29, M420 V et BED_MESH_OUTPUT lorsque la grille numerique est presente.',
+    },
+    {
+      question: 'Quelle variation de maillage de lit est acceptable ?',
+      answer: 'En dessous de 0,10 mm est excellent, de 0,10 a 0,30 mm est courant et generalement imprimable avec compensation de maillage, et au-dessus de 0,50 mm suggere un probleme de surface ou mecanique.',
+    },
+    {
+      question: 'Pourquoi l\'outil avertit-il d\'une deformation au-dessus de 0,5 mm ?',
+      answer: 'A cette plage, le nivellement par vis n\'est souvent plus le principal probleme. Le plateau, le chariot, le palpeur ou le portique peuvent etre deformes, detendus ou thermiquement distordus.',
+    },
+    {
+      question: 'Les instructions de sens de vis s\'appliquent-elles a toutes les imprimantes ?',
+      answer: 'Non. Les millimetres et degres calcules sont universels, mais le sens du bouton peut varier selon la machine. Si votre lit se deplace dans le sens oppose a l\'etiquette, inversez le sens et conservez la meme quantite.',
+    },
+    {
+      question: 'La compensation de maillage remplace-t-elle le nivellement manuel ?',
+      answer: 'Non. La compensation de maillage est destinee aux petites erreurs residuelles. Le nivellement mecanique maintient la correction faible et ameliore la coherence de la premiere couche.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Coller le maillage', text: 'Copiez le maillage numerique du lit depuis Marlin ou Klipper et collez-le dans le champ de donnees brutes.' },
+    { name: 'Choisir la mecanique', text: 'Selectionnez trois ou quatre points de nivellement et le pas de vis utilise par l\'imprimante.' },
+    { name: 'Lire le diagnostic', text: 'Verifiez si la surface est inclinee, tordue, concave, convexe ou excessivement deformee.' },
+    { name: 'Ajuster avec soin', text: 'Tournez chaque vis de la fraction recommandee, puis palpez a nouveau avant de faire un autre passage.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analyseur de maillage de lit d\'imprimante 3D',
+      description: 'Analysez les donnees de maillage de lit Marlin et Klipper et convertissez l\'erreur Z d\'angle en instructions de rotation de vis de nivellement.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Quelle variation de maillage de lit est acceptable ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'En dessous de 0,10 mm est excellent, de 0,10 a 0,30 mm est courant et generalement imprimable avec compensation de maillage, et au-dessus de 0,50 mm suggere un probleme de surface ou mecanique.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Comment analyser un maillage de lit d\'imprimante 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Collez les donnees brutes de maillage Marlin ou Klipper.' },
+        { '@type': 'HowToStep', text: 'Selectionnez le nombre de points de nivellement et le pas de vis.' },
+        { '@type': 'HowToStep', text: 'Lisez la variation, le diagnostic et la carte de chaleur.' },
+        { '@type': 'HowToStep', text: 'Appliquez les instructions de rotation de vis et palpez a nouveau.' },
+      ],
+    },
+  ],
+};

@@ -18,6 +18,9 @@ import { printTimeWorkflowOptimizer } from '../tool/printTimeWorkflowOptimizer/e
 import { printDurationEstimator } from '../tool/printDurationEstimator/entry';
 import { resinRealCostCalculator } from '../tool/resinRealCostCalculator/entry';
 import { retractionStringingCalibrator } from '../tool/retractionStringingCalibrator/entry';
+import { overhangSafeAngleSimulator } from '../tool/overhangSafeAngleSimulator/entry';
+import { bedMeshAnalyzer } from '../tool/bedMeshAnalyzer/entry';
+import { bridgingOptimizer } from '../tool/bridgingOptimizer/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -41,6 +44,9 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     printDurationEstimator,
     resinRealCostCalculator,
     retractionStringingCalibrator,
+    overhangSafeAngleSimulator,
+    bedMeshAnalyzer,
+    bridgingOptimizer,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

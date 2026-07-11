@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'guvenli-cikinti-acisi-hesaplayici',
+  title: 'Güvenli 3B Baskı Çıkıntı Açısı Hesaplayıcı',
+  description: 'Katman yüksekliği, çizgi genişliği, soğutma, malzeme ve baskı hızına göre FDM yazıcınızın desteksiz çıkıntı açısı tahminini yapın.',
+  ui: {
+    controlsAriaLabel: 'Güvenli çıkıntı açısı girişleri',
+    resultsAriaLabel: 'Güvenli çıkıntı açısı sonuçları',
+    unitSystemLabel: 'Birimler',
+    metricLabel: 'Metrik',
+    imperialLabel: 'US',
+    profileLabel: 'Yazıcı profili',
+    defaultProfileLabel: 'Kaydedilmemiş ayar',
+    saveProfileLabel: 'Profili kaydet',
+    geometryGroupLabel: 'Ekstrüzyon geometrisi',
+    coolingGroupLabel: 'Katman soğutması',
+    materialGroupLabel: 'Malzeme',
+    speedGroupLabel: 'Hareket',
+    layerHeightLabel: 'Katman yüksekliği',
+    layerHeightHelp: 'Katman yüksekliği, yeni plastiğin bir önceki çizgi tarafından ne kadar destekleneceğini belirler. Daha yüksek katmanlar genellikle çıkıntı toleransını azaltır.',
+    lineWidthLabel: 'Çizgi genişliği',
+    lineWidthHelp: 'Çizgi genişliği, yalnızca nozul çapı değil, dilimleyicideki ekstrüzyon genişliğidir. Daha geniş çizgiler bir sonraki katmana tutunacak daha fazla yüzey sağlar.',
+    coolingLabel: 'Parça soğutması',
+    coolingHelp: 'Soğutma, taze ekstrüde edilen filamentin sarkmadan önce şeklini koruyacak kadar sertleşme hızını tanımlar.',
+    lowCoolingLabel: 'Düşük',
+    mediumCoolingLabel: 'Orta',
+    highCoolingLabel: 'Yüksek',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Baskı hızı',
+    overhangHelp: 'Çıkıntı açısı dikey duvara göre gösterilir. Daha yüksek değerler, filamentin desteksiz olarak daha fazla dışarıya uzanması anlamına gelir.',
+    angleLabel: 'Tahmini güvenli açı',
+    vectorLabel: 'Dikeye göre çıkıntı vektörü',
+    riskLabel: 'Risk geri bildirimi',
+    safeRiskLabel: 'Yeşil: güvenli',
+    cautiousRiskLabel: 'Sarı: ihtiyatlı',
+    supportsRiskLabel: 'Kırmızı: destek gerekli',
+    reportButtonLabel: 'Yapılandırmayı profil olarak kaydet',
+    savedNoticeLabel: 'Profil bu tarayıcıya kaydedildi.',
+    coolingFactorLabel: 'Soğutma faktörü',
+    speedFactorLabel: 'Hız faktörü',
+    materialFactorLabel: 'Malzeme faktörü',
+    geometryFactorLabel: 'Geometri faktörü',
+    ratioLabel: 'Katman / çizgi oranı',
+    educationLabel: 'Bilgilendirme notu',
+    tipIncreaseCooling: 'Dış çevre yollarında parça soğutmasını %100\'e yaklaştırmak, güvenli çıkıntı açısını özellikle PLA ile yaklaşık 5 ila 10 derece iyileştirebilir.',
+    tipSlowDown: 'Yüksek çevre yolu hızı, filamentin donması için daha az zaman bırakır. Her yere destek eklemeden önce dış duvarları yavaşlatmayı deneyin.',
+    tipLowerLayer: 'Katman-çizgi oranı yüksek. Katman yüksekliğini düşürmek veya çizgi genişliğini artırmak her yeni filamente daha fazla destek sağlar.',
+    tipPetgCaution: 'PETG ısıyı PLA\'dan daha uzun süre tutar ve yapışkan kalır. Güçlü soğutma yardımcı olur ancak çok fazla fan, fonksiyonel parçalarda katman bağlanmasını azaltabilir.',
+    tipBaseline: 'Bu, bir CFD simülasyonu değil, buluşsal bir tahmindir. Uzun bir baskıya başlamadan önce kritik profilleri küçük bir çıkıntı test kulesi ile doğrulayın.',
+    optimizeOverhangsLabel: 'Çıkıntılar için optimize et',
+    validationRangeLabel: 'Katman / çizgi oranı',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Güvenli Bir 3B Baskı Çıkıntı Açısı Nasıl Tahmin Edilir', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Bir FDM çıkıntısı, her yeni filamentin bir önceki katmana soğurken tutunacak kadar teması olduğunda çalışır. Yaygın kural, bir yazıcının desteksiz olarak yaklaşık <strong>45 dereceyi</strong> kaldırabileceğini söyler ancak bu sayı yalnızca bir başlangıç noktasıdır. Düşük katman yüksekliği, geniş ekstrüzyon ve orta düzey hız ile iyi soğutulmuş bir PLA profili 55 derecenin ötesinde bile temiz baskı verebilir. Zayıf soğutmalı sıcak bir PETG, ABS veya TPU profili 45 derecenin altında sarkma yapabilir. Bu hesaplayıcı, çıkıntı yeteneğini sabit bir evrensel açı yerine pratik bir termal ve geometrik tahmin olarak ele alır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Sonuç kasıtlı olarak buluşsaldır. Bir hesaplamalı akışkanlar dinamiği modeli, bir sonlu eleman sarkma simülasyonu veya bir kalibrasyon kulesi dilimlemenin yerine geçmez. Bir üreticinin yazıcısında gerçekten kontrol edebileceği değişkenlerden (katman yüksekliği, çizgi genişliği, parça soğutması, malzeme ve hız) hareketle güvenilir bir ilk cevap verir. Değer, ev tipi yazıcı aralığına sınırlandırılmıştır, bu nedenle tüm girdiler olumlu olsa bile 75 derecenin üzerinde gerçekçi olmayan açılar önermez.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'geleneksel desteksiz başlangıç kuralı' },
+        { value: '55-60°', label: 'ayarlanmış PLA ve güçlü soğutma ile genellikle mümkün' },
+        { value: '75°', label: 'tüketici FDM yazıcılar için hesaplayıcı tavanı' },
+        { value: '0,08-0,32 mm', label: 'doğrulanmış katman yüksekliği giriş aralığı' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Açı yönünü doğru okuyun',
+      html: 'Bu araç, çıkıntı açısını dikey duvara göre rapor eder; bu, birçok dilimleyicide destek ayarlarının tanımlanma şekliyle uyumludur. Daha büyük bir sayı, yolun dikeyden daha fazla dışarıya doğru eğildiği ve desteksiz yazdırmanın daha zor olduğu anlamına gelir.',
+    },
+    { type: 'title', text: '45 Derece Kuralı Neden Kullanışlı ama Eksiktir', level: 2 },
+    {
+      type: 'paragraph',
+      html: '45 derece kuralı basit bir geometrik durumu tanımladığı için varlığını sürdürür: kabaca 45 derecede, yeni bir ekstrüzyon çizgisinin yaklaşık yarısı hala bir önceki katmandaki malzemenin üzerinde durur. Bu örtüşme, filamente desteklenmeyen kenar soğurken tutunacak bir çıkıntı sağlar. Bir sonraki çizgi daha fazla dışarıya doğru hareket ederse, desteklenmeyen kısım büyür ve polimer şeklini koruyacak kadar sertleşmeden önce yerçekimi daha fazla kaldıraca sahip olur.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Gerçek yazıcılar birkaç ek karmaşıklık getirir. Bir dilimleyici, nozul çapından daha geniş bir çizgi genişliği kullanabilir ve bu da ne kadar örtüşme olduğunu değiştirir. 0,45 mm çizgi ile basılan 0,20 mm katman, 0,40 mm çizgi ile basılan 0,28 mm katmandan farklı bir destek oranına sahiptir. Soğutma hava akışı, kafa hızı, nozul sıcaklığı, hazne sıcaklığı, malzeme viskozitesi ve çevre yolu sırası, filamentin yerinde donup donmayacağını veya sarkacağını etkiler.',
+    },
+    {
+      type: 'table',
+      headers: ['Değişken', 'Çıkıntıları neden etkiler', 'Tipik ayar hamlesi'],
+      rows: [
+        ['Katman yüksekliği', 'Daha yüksek katmanlar, aynı duvar açısı için filamenti daha agresif şekilde dışarıya taşır.', 'Detay önemli olduğunda dış duvar katman yüksekliğini düşürün.'],
+        ['Çizgi genişliği', 'Daha geniş çizgiler temas alanını artırır ve biraz daha büyük bir kaymayı destekleyebilir.', '0,4 mm nozulda 0,44 ila 0,48 mm gibi orta derecede daha geniş bir dış duvar çizgisi kullanın.'],
+        ['Soğutma', 'Çabuk sertleşen bir filamentin sarkmak için daha az zamanı olur.', 'PLA çıkıntı bölgelerinde fan hızını artırın.'],
+        ['Hız', 'Hızlı hareket, sıcak plastiği çabuk bırakır ve milimetre başına soğuma süresini azaltır.', 'Dış çevre yollarını ve çıkıntı duvarlarını yavaşlatın.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Hesaplayıcıyı bir dilimleyici karar aracı olarak kullanın',
+      html: 'Modelin 58 derecelik bir alt yüzü varsa ve hesaplayıcı mevcut PETG profili için 52 derece tahmin ediyorsa, desteği yalnızca bu özellik için etkinleştirin veya tüm parçayı basmadan önce soğutma ve hızı ayarlayın.',
+    },
+    { type: 'title', text: 'Katman Yüksekliği ve Çizgi Genişliği: Çıkıntı Sarkmasının Arkasındaki Geometri', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Katman yüksekliği ve çizgi genişliği, duvarın fiziksel basamaklanmasını tanımlar. Daha düşük katman yükseklikleri, her yeni katman yalnızca küçük bir mesafe dışarıya hareket ettiği için çıkıntıları kolaylaştırır. Daha geniş ekstrüzyon çizgileri de daha geniş bir temas tabanı oluşturdukları için yardımcı olur. Önemli pratik sinyal, <strong>katman yüksekliğinin çizgi genişliğine oranıdır</strong>. Düşük bir oran, bir sonraki filamenti taşımak için daha fazla yatay malzeme olduğu anlamına gelir. Yüksek bir oran, yeni filamentin daha dar bir çıkıntı üzerinde durduğu anlamına gelir.',
+    },
+    {
+      type: 'paragraph',
+      html: '0,4 mm nozul için yaygın dilimleyici çizgi genişlikleri yaklaşık 0,42 mm ila 0,48 mm arasındadır. 0,45 mm çizgi ile 0,16 mm katman, çıkıntılar için tutucudur; 0,40 mm çizgi ile 0,30 mm katman, polimer ve soğutmadan çok daha fazlasını talep eder. Hesaplayıcı, uygun geometriyi ödüllendirir çünkü her bir boncuğun desteklenmeyen kısmını azaltır ancak aynı zamanda sonucu sınırlar çünkü geometri tek başına ısı, hava akışı ve hızlanma sınırlamalarını yenemez.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Düşük oran',
+          description: 'Çizgi genişliğine kıyasla küçük bir katman yüksekliği, en temiz desteksiz çıkıntı davranışını sağlar.',
+          points: ['Eğimler altında daha iyi yüzey', 'Daha düşük sarkma riski', 'Daha fazla baskı süresi'],
+        },
+        {
+          title: 'Dengeli oran',
+          description: 'Soğutma ve malzeme de makul olduğunda tipik üretim ayarları iyi çalışır.',
+          highlight: true,
+          points: ['İyi hız-kalite dengesi', 'Birçok PLA parçası için çalışır', '60 derece civarında hala test gerektirir'],
+        },
+        {
+          title: 'Yüksek oran',
+          description: 'Büyük katmanlar ve dar çizgiler, her yeni boncuğun altındaki çıkıntıyı azaltır.',
+          points: ['Daha belirgin basamak izi', 'Daha yüksek alt yüzey kıvrılma riski', 'Destekler daha erken gerekli hale gelir'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Çizgi genişliği', definition: 'Dilimleyicide planlanan ekstrüzyon genişliği. Fiziksel nozul çapından biraz daha geniş olabilir.' },
+        { term: 'Katman yüksekliği', definition: 'Her bir basılı katmanın dikey kalınlığı.' },
+        { term: 'Desteklenmeyen oran', definition: 'Yeni bir ekstrüzyon boncuğunun bir önceki katmanın ötesine uzanan kısmı.' },
+        { term: 'Sarkma', definition: 'Sıcak bir filamentin sertleşmeden önce aşağı doğru deforme olması.' },
+      ],
+    },
+    { type: 'title', text: 'Soğutma: Fan Havası Neden Genellikle 5 ila 10 Derece Ekler', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Soğutma, PLA çıkıntıları için en hızlı koldur. Yeni ekstrüde edilmiş bir filament nozuldan yumuşak, parlak ve deforme olmaya yatkın olarak çıkar. Güçlü, iyi yönlendirilmiş hava akışı, dış cildin sertleşme hızını artırır. Filament kendi kendini destekleyebilir hale geldiğinde, yerçekimi görünür bir sarkma bırakmadan önce daha büyük bir desteklenmeyen mesafeyi köprüleyebilir. Bu nedenle fan kanal tasarımı, fan sağlığı ve baskı yönü, G-kod değerleri aynı olsa bile çıkıntı sonuçlarını değiştirebilir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Daha fazla fan her malzeme için otomatik olarak daha iyi değildir. PLA genellikle çıkıntı çevre yollarında yüksek soğutmadan faydalanır. PETG soğutma kullanabilir ancak aşırı fan katman bağlanmasını azaltabilir veya yüzeyleri bulanıklaştırabilir. ABS, çarpılmayı önlemek için genellikle sınırlı soğutma ve sıcak bir ortam gerektirir, bu nedenle çıkıntı açısı, makine kontrollü hava akışı için ayarlanmadığı sürece genellikle daha düşüktür. TPU, sert malzemelere kıyasla soğuduktan sonra bile lastiksi ve esnek kaldığı için sarkabilir.',
+    },
+    {
+      type: 'proscons',
+      title: 'Çıkıntılar için parça soğutmasını artırma',
+      items: [
+        { pro: 'PLA filamentlerini desteklenmeyen kenar sarkmadan önce dondurabilir.', con: 'Isı tutması gereken malzemelerde katman yapışmasını zayıflatabilir.' },
+        { pro: 'Keskin alt yüzey detaylarını ve küçük çıkıntı özelliklerini iyileştirir.', con: 'Kötü yönlendirilmiş kanallar bir tarafı soğutup diğer tarafı dağınık bırakabilir.' },
+        { pro: 'Küçük özellikler için destekleri yeniden tasarlamaktan genellikle daha hızlıdır.', con: 'Fan gürültüsü, elektrik yükü ve büyük düz parçalarda çarpılma yaratabilir.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Fan yüzdesine güvenmeden önce hava akışı yönünü kontrol edin',
+      html: '%100\'lük bir dilimleyici fan değeri, boncukta faydalı soğutma olduğunu garanti etmez. Tıkalı bir kanal, zayıf bir fan, silikon kap şekli veya kafa modifikasyonu, nozulun bir tarafında çok daha az hava akışı bırakabilir.',
+    },
+    { type: 'title', text: 'Malzeme Farklılıkları: PLA, PETG, ABS ve TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA, çabuk sertleştiği ve güçlü parça soğutmasını kabul ettiği için çıkıntı testlerinde en kolay referans malzemesidir. Bu nedenle ayarlanmış PLA profilleri, geleneksel 45 derece kuralından daha dik desteksiz duvarlar basabilir. PETG daha yapışkandır ve ısıyı daha uzun süre tutar. Güçlü fonksiyonel baskılar üretebilir ancak hız ve soğutma kontrol edilmezse desteklenmeyen alt yüzeyler parlak, ipliksi veya kıvrılmış görünebilir. PETG çıkıntıları, fanı maksimuma çıkarmadan önce dış duvarları yavaşlatmaktan fayda sağlar.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS farklı davranır çünkü çarpılma ve katman çatlaklarını önlemek için genellikle sıcak bir hazne ve sınırlı soğutma kullanılır. Aynı koşullar desteklenmeyen eğimleri daha zor hale getirir. TPU başka bir zorluk getirir: malzeme esnek kalır, bu nedenle bir filament nozulda olduğu kadar sıcak olmasa bile sarkabilir veya yayılabilir. Hesaplayıcı, bu pratik farklılıkları yansıtmak için her malzemeye ayrı bir temel davranış ve çarpan verir.',
+    },
+    {
+      type: 'table',
+      headers: ['Malzeme', 'Çıkıntı davranışı', 'İlk yapılacak en iyi ayar'],
+      rows: [
+        ['PLA', 'İyi sertlik ve güçlü soğutma toleransı.', 'Soğutmayı artırın ve dış çevre yollarını yavaşlatın.'],
+        ['PETG', 'Yapışkan, ısı tutan, parlak sarkmaya eğilimli.', 'Hızı düşürün ve orta düzey soğutma kullanın.'],
+        ['ABS', 'Isı tutması gerekir, bu nedenle desteklenmeyen eğimler daha az affedicidir.', 'Yönü ayarlayın veya seçici destek kullanın.'],
+        ['TPU', 'Esnek filament, biriktirme sonrası deforme olabilir.', 'Tutucu açılar ve yavaş hareket kullanın.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Islak filament neden kötü çıkıntı ayarını taklit edebilir',
+      html: 'Nem, küçük buhar kabarcıkları ve pürüzlü ekstrüzyon oluşturabilir. Alt yüzey köpüklü, tutarsız veya tüylü görünüyorsa, güvenli açı tahmininin yanlış olduğunu varsaymadan önce filamentinizi kurutun.',
+    },
+    { type: 'title', text: 'Baskı Hızı ve Termal Zaman', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Baskı hızı, termal zamanı değiştirdiği için çıkıntıları etkiler. Yüksek hızlarda, saniyede daha fazla sıcak malzeme biriktirilir ve filamentin her noktası, bir sonraki bölüm döşenmeden önce faydalı hava akışı altında daha az zamana sahip olur. Hızlı dış duvarlar dikey yüzeylerde kabul edilebilir görünebilir ancak çıkıntılar altında başarısız olur çünkü boncuk desteksizken hala yumuşaktır. Yalnızca çıkıntı çevre yolunu yavaşlatmak, tüm modeli yavaşlatmaktan genellikle daha verimlidir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Bir dilimleyicide dış duvar hızı, köprü hızı, küçük çevre yolu hızı, çıkıntı hızı ve minimum katman süresi için ayrı kontroller bulunabilir. Hesaplayıcı, ana baskı hızını pratik bir girdi olarak kullanır ve ardından yüksek hızı aşamalı olarak cezalandırır. Bir modelin kısa katmanları varsa, minimum katman süresi ve fan davranışı baskın olabilir. Çıkıntı uzun sürekli bir duvarsa, çevre yolu hızı ve soğutma kanalı yönü daha önemli hale gelir.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Önce dış duvarları yavaşlatın çünkü bunlar kullanıcının inceleyeceği yüzeylerdir.',
+        'Dilimleyici desteklediğinde çıkıntıya özel yavaşlatma kullanın.',
+        'Küçük özelliklerde ısı birikmesini önlemek için seyahat hareketlerini yeterince hızlı tutun.',
+        'Yalnızca küçük bir kuleden hızı değerlendirmekten kaçının; büyük parçalar ısıyı farklı tutar.',
+        'Nozul boyutunu değiştirdikten sonra yeniden test edin çünkü akış hızı termal yükü değiştirir.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Pratik ayar sırası',
+      html: 'Sınırda bir desteksiz eğim için, her yere yoğun destek etkinleştirmeden önce daha güçlü soğutma, daha düşük dış duvar hızı ve daha düşük katman yüksekliği deneyin.',
+    },
+    { type: 'title', text: 'Desteklerin Hala Doğru Cevap Olduğu Zamanlar', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Amaç, her ne pahasına olursa olsun destekleri ortadan kaldırmak değildir. Destekler, bir alt yüzey boyutsal olarak doğru olması gerektiğinde, malzeme ısıya duyarlı olduğunda, kozmetik bir yüzey aşağı baktığında veya çıkıntı önceki bir katman teması olmadan havada başladığında kullanışlıdır. Hesaplanan 60 derece yeteneği, her 60 derecelik özelliğin iyi görüneceği anlamına gelmez. Küçük adalar, aniden oluşan çıkıntılar, delikler, kabartmalı metin ve içbükey alt yüzeyler, düzgün bir kalibrasyon rampasından daha erken başarısız olabilir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Seçici destekler genellikle global desteklerden daha iyidir. Yalnızca bir bölge hesaplanan güvenli açıyı aşıyorsa, destek engelleyicileri ve zorunlu kılıcıları boyayın, parçayı döndürün, alt yüzeye pah kırın, modeli bölün veya küçük bir kurban kaburgası ekleyin. Ağaç destekleri, organik destekler ve ara yüzey katmanları, kritik ilk desteksiz filamentleri tutarken izleri azaltabilir. Fonksiyonel braketler için küçük bir tasarım değişikliği, agresif dilimleyici ayarından genellikle daha fazla malzeme tasarrufu sağlar.',
+    },
+    {
+      type: 'summary',
+      title: 'Şu durumlarda destek kullanın',
+      items: [
+        'Hesaplanan güvenli açı, modelin alt yüzey açısının altındaysa.',
+        'Alt yüzey pürüzsüz, düz veya boyutsal olarak doğru olmalıysa.',
+        'Özellik, tutunacak önceki katmanı olmayan bir ada olarak başlıyorsa.',
+        'Malzeme, çarpılma veya zayıf bağlanma olmadan yeterli soğutma kullanamıyorsa.',
+        'Başarısız bir çıkıntı, işin ilerleyen saatlerinde uzun bir baskıyı mahvedecekse.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Kırmızı risk imkansız anlamına gelmez',
+      html: 'Kırmızı sonuç, normal bir tüketici profili için desteklerin daha güvenli varsayılan olduğu anlamına gelir. Uzman kullanıcılar yine de özel kanallar, ayarlanmış çıkıntı hızı, özel dilimleyici yolları veya model yeniden tasarımı ile başarılı olabilir ancak marj dardır.',
+    },
+    { type: 'title', text: 'Tahmin Bir Çıkıntı Kulesi ile Nasıl Doğrulanır', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Küçük bir çıkıntı test kulesi, belirli bir yazıcı için tahmini doğrulamanın en iyi yoludur. Gerçek parçada kullanmayı planladığınız aynı filament, nozul, sıcaklık, fan ve duvar hızını kullanarak 35 dereceden 75 dereceye kademeli bir kule basın. Alt yüzeyi yandan ve alttan inceleyin. Kıvrılma, pürüzlü halkalar, ayrılmış çevre yolu kenarları ve parlak sarkma arayın. Son temiz kademe, bu profil için gerçek güvenli açınızdır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Kule koşuları arasında beş değişkeni birden değiştirmeyin. İlk kule 48 derecede başarısız olursa, soğutmayı artırın veya çıkıntı hızını yavaşlatın ve tekrarlayın. İkinci kule 55 dereceye ulaşırsa, hangi kolun yardımcı olduğunu bilirsiniz. Kule bir tarafta düzelirken diğer tarafta düzelmezse, fan kanalı simetrisini kontrol edin. Her kademe kötü görünüyorsa, desteklerin kaçınılmaz olduğunu varsaymadan önce nozul sıcaklığını, ekstrüzyon çarpanını, ıslak filament ve parça soğutma donanımını kontrol edin.',
+    },
+    {
+      type: 'table',
+      headers: ['Test gözlemi', 'Olası neden', 'Sonraki adım'],
+      rows: [
+        ['Alt kenar yukarı kıvrılıyor', 'Isı ve soğutma dengesizliği', 'Çevre yolunu yavaşlatın ve fan yönünü iyileştirin.'],
+        ['Halkalar aşağı sarkıyor', 'Desteklenmeyen oran çok yüksek', 'Katman yüksekliğini düşürün veya destek kullanın.'],
+        ['Bir taraf diğerinden daha temiz', 'Asimetrik hava akışı', 'Kanal ve fan yolunu inceleyin.'],
+        ['Pürüzlü köpüklü alt yüzey', 'Nem veya aşırı ısınmış filament', 'Makara kurutun veya nozul sıcaklığını düşürün.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Profil adını kaydedin',
+      html: 'Her nozul, malzeme ve soğutma düzeneği için ayrı bir profil kaydedin. Bir PLA 0,16 mm profili ile bir PETG 0,28 mm profili aynı güvenli çıkıntı varsayımını paylaşmamalıdır.',
+    },
+    { type: 'title', text: 'Desteklerden Kaçınmak İçin Parça Tasarımı', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'En ucuz çıkıntı çözümü genellikle CAD\'de gerçekleşir. Keskin bir 90 derecelik alt yüzeyi pah ile değiştirin, yatay deliklere gözyaşı damlası şekli ekleyin, parçayı en dik yüzey yukarı bakacak şekilde döndürün veya modeli iki yazdırılabilir yarıya bölün. 45 derecelik bir pah, bir destek gereksinimini tamamen ortadan kaldırabilir ve mukavemeti koruyabilir. Vida delikleri için gözyaşı damlası ve elmas profilleri, deliğin üst kısmı aksi halde bir köprü haline geldiğinde mükemmel dairelerden daha temiz baskı verir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Üretim bilinciyle tasarım ayrıca son işlemeyi azaltır. Destekler malzeme tüketir, baskı süresini artırır, yüzeyleri çizer ve çıkarma sırasında hassas özellikleri kırabilir. Yazıcının güvenli açısına saygı duyan bir model, daha hızlı ve daha tutarlı baskı verir. Hesaplayıcı, tasarım incelemesi sırasında yardımcı olur: modelin alt yüzey açısını tahmini güvenli açıyla karşılaştırın ve ardından yeniden tasarlamaya, profili ayarlamaya veya yalnızca riskli alanı desteklemeye karar verin.',
+    },
+    {
+      type: 'proscons',
+      title: 'Desteklemek yerine yeniden tasarlamak',
+      items: [
+        { pro: 'Malzeme ve son işleme süresini azaltır.', con: 'Parçanın görsel veya işlevsel şeklini değiştirebilir.' },
+        { pro: 'Baskı çiftliklerinde tekrarlanabilirliği artırır.', con: 'CAD kaynağına veya ağ düzenleme araçlarına erişim gerektirir.' },
+        { pro: 'Katmanları daha iyi hizalayarak parçaları güçlendirebilir.', con: 'Bazı geometriler doğruluk için hala destek gerektirir.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'En iyi desteksiz tasarım hamleleri',
+      items: [
+        'Yatay çıkıntılar altında 45 derece pah kullanın.',
+        'Mümkün olduğunda dairesel yatay delikleri gözyaşı damlasına dönüştürün.',
+        'Kozmetik yüzeyleri yukarı veya yanlara doğru yönlendirin.',
+        'Geniş bir alt yüzeyi desteklemek yerine parçaları gizli dikişler boyunca bölün.',
+        'Desteği yalnızca model açısının test edilen profili aştığı yerde kullanın.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: '45 derece 3B yazıcı çıkıntıları için her zaman güvenli midir?',
+      answer: 'Hayır. Yararlı bir varsayılan kuraldır ancak malzeme, soğutma, katman yüksekliği, çizgi genişliği, hız ve fan kanalı performansı pratik sınırı aşağı veya yukarı taşıyabilir.',
+    },
+    {
+      question: 'Hesaplayıcı sonuçları neden 75 derece ile sınırlıyor?',
+      answer: 'Tüketici FDM yazıcılar bazen çok dik çıkıntı test şekillerini basabilir ancak 75 derecenin üzerindeki değerleri önermek normal parçalar için güvenilir değildir, bu nedenle araç tahmini tutucu bir ev tipi aralığa sınırlar.',
+    },
+    {
+      question: 'Hangi malzeme en iyi desteksiz çıkıntıları basar?',
+      answer: 'PLA genellikle en kolayıdır çünkü çabuk sertleşir ve güçlü parça soğutmasını tolere eder. PETG, ABS ve TPU genellikle daha tutucu çıkıntı varsayımları gerektirir.',
+    },
+    {
+      question: 'Önce fan hızını mı artırmalıyım yoksa baskı hızını mı düşürmeliyim?',
+      answer: 'PLA için soğutmayı artırın ve dış çıkıntı duvarlarını yavaşlatın. PETG, ABS veya fonksiyonel parçalar için soğutmayı katman yapışması ve çarpılma riskine karşı dengeleyin.',
+    },
+    {
+      question: 'Bu, bir çıkıntı kalibrasyon kulesinin yerini alabilir mi?',
+      answer: 'Hayır. Buluşsal bir tahmin ve iyi bir başlangıç noktası sağlar. Belirli bir yazıcı, filament ve dilimleyici profili için küçük bir kule hala en iyi doğrulamadır.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Ekstrüzyon geometrisini girin', text: 'Profil tarafından kullanılan katman yüksekliğini ve dilimleyici çizgi genişliğini ayarlayın.' },
+    { name: 'Malzeme ve soğutmayı seçin', text: 'PLA, PETG, ABS veya TPU ve mevcut parça soğutma seviyesini seçin.' },
+    { name: 'Baskı hızını ekleyin', text: 'Çıkıntı alanı için kullanılan dış duvar veya pratik baskı hızını girin.' },
+    { name: 'Sonucu karşılaştırın', text: 'Ayarlama, yeniden tasarlama veya destek etkinleştirme kararı vermek için güvenli açı ve risk geri bildirimini kullanın.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Güvenli 3B Baskı Çıkıntı Açısı Hesaplayıcı',
+      description: 'Katman yüksekliği, çizgi genişliği, soğutma, malzeme ve hızdan desteksiz FDM çıkıntı açısını tahmin edin.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '45 derece 3B yazıcı çıkıntıları için her zaman güvenli midir?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Hayır. Yararlı bir varsayılan kuraldır ancak malzeme, soğutma, katman yüksekliği, çizgi genişliği, hız ve fan kanalı performansı pratik sınırı aşağı veya yukarı taşıyabilir.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Güvenli bir 3B yazıcı çıkıntı açısı nasıl tahmin edilir',
+      step: [
+        { '@type': 'HowToStep', text: 'Katman yüksekliğini ve çizgi genişliğini girin.' },
+        { '@type': 'HowToStep', text: 'Malzeme ve soğutma seviyesini seçin.' },
+        { '@type': 'HowToStep', text: 'Baskı hızını girin.' },
+        { '@type': 'HowToStep', text: 'Sonucu modelin alt yüzey açısıyla karşılaştırın.' },
+      ],
+    },
+  ],
+};

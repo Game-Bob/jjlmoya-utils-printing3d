@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'baddmesh-analysator',
+  title: '3D skrivare Bäddmaskanalsator',
+  description: 'Analysera Marlin- eller Klipper-data från bäddmätning, visualisera ytan, diagnosticera lutning eller skeva och omvandla Z-avvikelser till skruvjusteringsanvisningar.',
+  ui: {
+    controlsAriaLabel: 'Indata för bäddmaskanalsys',
+    resultsAriaLabel: 'Resultat från bäddmaskanalsys',
+    dataLabel: 'Rådata från bäddmätning',
+    dataPlaceholder: 'Klistra in resultatet från ditt G29-kommando här ...',
+    sampleButtonLabel: 'Använd exempeldata',
+    levelingPointsLabel: 'Utjämningspunkter',
+    threePointLabel: '3 punkter',
+    fourPointLabel: '4 punkter',
+    screwTypeLabel: 'Skruvtyp',
+    customScrewLabel: 'Annan',
+    pitchLabel: 'Gängstigning',
+    unitSystemLabel: 'Enheter',
+    metricLabel: 'Metriskt',
+    imperialLabel: 'US',
+    heatmapLabel: 'Interaktiv bäddtopografi',
+    lowScaleLabel: 'Låg',
+    flatScaleLabel: 'Plan',
+    highScaleLabel: 'Hög',
+    healthLabel: 'Planhetsstatus',
+    rangeLabel: 'Total variation',
+    meshSizeLabel: 'Maskstorlek',
+    meanLabel: 'Genomsnittligt Z',
+    diagnosisLabel: 'Diagnos',
+    instructionsLabel: 'Anvisningar för mekanisk justering',
+    cornerHeader: 'Hörn',
+    deltaHeader: 'Korrigering',
+    actionHeader: 'Åtgärd',
+    frontLeft: 'Främre vänster',
+    frontRight: 'Främre höger',
+    rearLeft: 'Bakre vänster',
+    rearRight: 'Bakre höger',
+    rearCenter: 'Bakre mitt',
+    clockwiseLabel: 'vrid medurs',
+    counterClockwiseLabel: 'vrid moturs',
+    noTurnLabel: 'lämna denna skruv orörd',
+    raiseLabel: 'Höj bädden med',
+    lowerLabel: 'Sänk bädden med',
+    warningWarped: 'Kraftig skevhet: problemet är troligen ytan, inte bara utjämningen. Överväg att byta ut eller plana byggplattan.',
+    parseError: 'Masknätet kunde inte tolkas. Klistra in rader med decimala Z-värden från G29, M420 V eller Klipper BED_MESH_OUTPUT.',
+    notEnoughNumbers: 'För få maskvärden hittades. Ett giltigt masknät behöver minst två rader och två kolumner.',
+    raggedRows: 'De identifierade raderna har inte samma längd. Kontrollera om maskutdatan är trunkerad eller skadad.',
+    badPitch: 'Gängstigningen måste vara större än noll.',
+    diagnosisFlat: 'Bädden är redan nära plan. Endast finjustering av första lagret bör behövas.',
+    diagnosisFrontHigh: 'Framsidan är högre än baksidan. Justera de främre skruvarna innan du jagar enskilda punkter.',
+    diagnosisRearHigh: 'Baksidan är högre än framsidan. Justera de bakre skruvarna först.',
+    diagnosisLeftHigh: 'Vänster sida är högre än höger sida. Det handlar främst om en X-axellutning tvärs över bädden.',
+    diagnosisRightHigh: 'Höger sida är högre än vänster sida. Det handlar främst om en X-axellutning tvärs över bädden.',
+    diagnosisTwisted: 'Motstående hörn visar olika värden. Bädden är vriden eller gantryn är inte konsekvent uppriktad.',
+    diagnosisConcave: 'Mitten är lägre än hörnen. Utjämningsskruvar kan inte helt eliminera denna konkava form.',
+    diagnosisConvex: 'Mitten är högre än hörnen. Kontrollera magneter, klämmor, plattspänning eller termisk böjning.',
+    diagnosisWarped: 'Z-intervallet överstiger 0,5 mm, vilket tyder på kraftig ytskevhet snarare än vanligt utjämningsfel.',
+    mmUnit: 'mm',
+    inchUnit: 'tum',
+    degreeUnit: 'gr',
+  },
+  seo: [
+    { type: 'title', text: 'Hur man läser av ett bäddmask från en 3D-skrivare', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ett bäddmask är ett rutnät med uppmätta Z-avvikelser som samlats in av en sond eller munstyckssensor över det utskrivbara området. Firmware som Marlin och Klipper använder rutnätet för att kompensera för små höjdskillnader vid utskrift av de första lagren. Värdena anges vanligtvis i millimeter: ett positivt värde innebär att den avkända punkten är hög i förhållande till det valda referensplanet, och ett negativt värde innebär att den är låg. Den praktiska frågan är inte bara om firmware kan kompensera. Den viktiga frågan är om den fysiska bädden, gantryn och utjämningsskruvarna är tillräckligt nära för att kompensationen inte ska behöva arbeta för hårt.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Denna analysator omvandlar rådata från bäddmätning till tre beslut: hur stor den totala Z-variationen är, om formen ser ut som lutning eller deformation, och vilka skruvar som bör justeras. Den distinktionen är viktig eftersom en lutande bädd och en skev bädd kräver olika åtgärder. En lutning kan ofta åtgärdas genom att vrida på hörnskruvar. En konkav glasplatta, en böjd magnetskiva, en lös Y-vagn eller en vriden gantry kan fortfarande ge ett dåligt första lager även efter att varje hörn är perfekt utjämnat.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'ideellt intervall, sällan uppnått på verkliga bäddar' },
+        { value: '0,10 mm', label: 'oftast utmärkt för vanliga FDM-första lager' },
+        { value: '0,30 mm', label: 'märkbart men ofta utskrivbart med maskkompensation' },
+        { value: '0,50 mm+', label: 'ytan eller mekaniken bör undersökas' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Maskvärden är inte skruvkommandon i sig själva',
+      html: 'Firmware rapporterar en höjdkarta. En skruvanvisning härleds från hörnmedelvärden, gängstigning och den mekaniska justeringsriktningen. Gör alltid små ändringar, återställ hempositionen och mät igen.',
+    },
+    { type: 'title', text: 'Vad G29- och BED_MESH_OUTPUT-värden betyder', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Marlin-användare får ofta bädddata genom <code>G29</code>, <code>M420 V</code> eller en utjämningsrapport i terminalen. Klipper-användare kan granska masken med <code>BED_MESH_OUTPUT</code>, webbgränssnittet eller sparade profildata. Utdataformaten skiljer sig åt, men den viktiga datan är densamma: rader och kolumner med decimala Z-mätningar. Vissa rapporter innehåller etiketter, koordinater, hakparenteser, indexnummer eller firmwaretext. En fungerande tolk bör ignorera den omgivande texten och extrahera endast de mätvärden som utgör masken.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Den mest tillförlitliga inklistringen är ett rektangulärt block där varje rad har samma antal värden. Ett 3×3-mask har 9 värden, ett 5×5-mask har 25 värden och ett 7×7-mask har 49 värden. Rektangulära mask kan också vara giltiga om avkänningsrutnätet använder olika X- och Y-antal. Om rader har inkonsekventa längder är datan troligen ofullständig eller blandad med orelaterade tal som koordinater, matningshastigheter eller kommandoräknare. Kör i så fall rapporten igen och klistra endast in det numeriska rutnätet.',
+    },
+    {
+      type: 'table',
+      headers: ['Ledtråd i utdata', 'Vad det tyder på', 'Vad du ska göra'],
+      rows: [
+        ['Rader har samma längd', 'Masken är troligen komplett.', 'Analysera direkt och jämför total variation.'],
+        ['En rad är kortare', 'Terminalutskriften kan vara trunkerad.', 'Kopiera rapporten igen från början.'],
+        ['Många extra heltal', 'Inklistringen innehåller index- eller koordinatetiketter.', 'Klistra endast in matrisdelen när möjligt.'],
+        ['Endast en lång rad', 'Verktyget kan försöka kvadratisk rekonstruktion.', 'Använd 9, 25, 49 eller ett annat kvadratiskt antal.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Mät efter uppvärmning',
+      html: 'För meningsfulla data, värm bädden till utskriftstemperatur och vänta på termisk stabilisering innan du mäter. Aluminiumplattor och magnetskivor kan ändra form efter flera minuter vid temperatur.',
+    },
+    { type: 'title', text: 'Total variation: siffran som förutsäger problem med första lagret', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Total variation är den absoluta skillnaden mellan det högsta och lägsta maskvärdet. Om den högsta punkten är +0,180 mm och den lägsta punkten är -0,120 mm är den totala variationen 0,300 mm. Denna enda siffra är lätt att förstå eftersom den beskriver det fulla vertikala arbete som firmware måste absorbera över bädden. En liten variation innebär att munstycksgapet förblir likartat från fram till bak och från vänster till höger. En stor variation innebär att ett område kan bli krossat medan ett annat fortfarande har svårt att fästa.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Det acceptabla intervallet beror på lagertjocklek, munstycksstorlek, filament, ytstruktur och hur aggressiv första-lager-squish är. Med ett första lager på 0,20 mm är ett ytintervall på 0,10 mm oftast bekvämt. Ett intervall på 0,30 mm kan fortfarande skrivas ut om maskkompensation är aktiverad och fade-höjden är vettigt inställd, men marginalen blir mindre. Över 0,50 mm bör användaren misstänka mekaniska eller ytrelaterade problem eftersom bädden inte längre bara är något ur nivå.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Under 0,10 mm',
+          description: 'Utmärkt för de flesta konsument-FDM-skrivare. Första-lager-inställning handlar mest om Z-offset och ytrenhet.',
+          highlight: true,
+          points: ['Minimal skruvkorrigering', 'Låg kompensationsbelastning', 'God repeterbarhet'],
+        },
+        {
+          title: '0,10 till 0,30 mm',
+          description: 'Vanligt på hobbymaskiner. Maskkompensation kan hjälpa, men hörnuppriktning kan förbättra vidhäftningen.',
+          points: ['Sondrepeterbarhet spelar roll', 'Håll koll på kanter och hörn', 'Justera skruvar i små steg'],
+        },
+        {
+          title: 'Över 0,50 mm',
+          description: 'Troligen skevhet, vagnsrörelse, plattspänning eller gantryfel. Enbart skruvutjämning kanske inte löser det.',
+          points: ['Inspektera hårdvara', 'Kontrollera uppvärmt tillstånd', 'Överväg ny platta'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Ett bra intervall kan fortfarande ge dålig utskrift',
+      html: 'Om intervallet är litet men första lagret misslyckas, kontrollera Z-offset, extrusion, smutsig PEI, sondrepeterbarhet, skräp på munstycket och om maskprofilen faktiskt är inläst före utskrift.',
+    },
+    { type: 'title', text: 'Lutning, vridning, konkavitet och konvexitet', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ett bäddmask är mer än ett maximum- och minimumvärde. Fördelningen berättar vilken typ av korrigering som är realistisk. Om hela främre raden är hög och den bakre raden är låg är bädden globalt lutad framifrån och bakåt. Om vänster sida är hög och höger sida är låg är bädden lutad längs X. Dessa fall är idealiska för skruvjustering eftersom bäddens fysiska plan helt enkelt inte är i linje med munstyckets rörelseplan.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Ett vridet mask är annorlunda: ett diagonalt par är högt medan det motsatta diagonala paret är lågt. Detta kan komma från ojämn skruvkompression, en skev Y-vagn, en X-gantry som inte är vinkelrät eller en bäddstödplatta som flexar. Ett konkavt mask har en mitt som är lägre än hörnen, medan ett konvext mask har en mitt som är högre än hörnen. Skruvar vid kanterna kan inte helt eliminera en mittbåge eftersom de inte direkt kontrollerar mitten av byggplattan.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Lutning', definition: 'En i huvudsak plan höjdskillnad där en sida av bädden är högre än den motsatta sidan.' },
+        { term: 'Vridning', definition: 'En diagonal obalans där motstående hörn visar olika värden, ofta orsakad av ojämnt stöd eller raminriktning.' },
+        { term: 'Konkav bädd', definition: 'En yta där mitten är lägre än de omgivande hörnen eller kanterna.' },
+        { term: 'Konvex bädd', definition: 'En yta där mitten är högre än de omgivande hörnen eller kanterna.' },
+        { term: 'Skevhet', definition: 'En icke-plan form som är så stor att vanlig skruvuppriktning inte kan ta bort den.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Varför en mittbula är svår att åtgärda med hörnskruvar',
+      html: 'Hörnskruvar definierar stödplanet vid bäddens kant. Om mitten är böjd uppåt på grund av värme, magneter, klämmor eller plattspänning kan sänkning av hörnen göra kanterna sämre medan mitten förblir hög.',
+    },
+    { type: 'title', text: 'Omvandla Z-avvikelse till skruvrotation', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Den mekaniska omvandlingen baseras på gängstigning. Gängstigning är den vertikala förflyttning som en hel skruvvridning ger. En vanlig M3-grovskruv har 0,50 mm stigning, M4-grov har cirka 0,70 mm och M5-grov har cirka 0,80 mm. Om ett hörn behöver flyttas 0,125 mm på en M3-skruv blir rotationen <code>0,125 × 360 / 0,50 = 90 grader</code>, vilket är ett kvarts varv. Detta är långt enklare att utföra än ett abstrakt Z-värde.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Riktningen beror på skrivarens mekanik. Många fjäderbäddsskrivare höjer bädden mot munstycket när vredet vrids moturs underifrån, men maskiner skiljer sig åt. Analysatorn använder en konventionell anvisningsstil och visar om hörnet ska höjas eller sänkas. Om din skrivares vredriktning är omvänd, behåll millimetervärdet och bråkdelen av ett varv men invertera riktningen. Det säkraste arbetssättet är att flytta en skruv med halva rekommenderade mängden, mäta igen och sedan upprepa.',
+    },
+    {
+      type: 'table',
+      headers: ['Skruv', 'Typisk grovstigning', '0,10 mm korrigering', '0,20 mm korrigering'],
+      rows: [
+        ['M3', '0,50 mm / varv', '72 grader', '144 grader'],
+        ['M4', '0,70 mm / varv', '51 grader', '103 grader'],
+        ['M5', '0,80 mm / varv', '45 grader', '90 grader'],
+        ['Anpassad', 'Användarens värde', '360 × 0,10 / stigning', '360 × 0,20 / stigning'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Jaga inte de sista 0,02 mm mekaniskt',
+      html: 'Sondrepeterbarhet, bäddtemperatur och fjäderkompression kan lätt röra sig med hundradels millimeter. Sluta när masken är inom ett praktiskt intervall och använd Z-offset för den slutliga första-lager-känslan.',
+    },
+    { type: 'title', text: 'Tre- kontra fyrpunktsutjämning av bädden', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Trepunktsutjämning är mekaniskt elegant eftersom tre punkter definierar ett plan utan att överbestämma det. En bädd med tre skruvar har normalt två främre skruvar och en bakre mittskruv, eller en liknande triangulär layout. Fyrpunktsutjämning är vanlig på många kartesiska bäddar, men fyra skruvar kan motverka varandra: att dra åt ett hörn kan flexa bädden eller ändra belastningen på det motsatta hörnet. Analysatorn stödjer båda eftersom rätt anvisningsuppsättning beror på maskinen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'För fyrpunktsbäddar jämför analysatorn de fyra hörnen och ger en anvisning för varje. För trepunktsbäddar använder den främre vänster, främre höger och bakre mitt. Detta kan inte känna till den exakta fysiska positionen för varje skrivarmodell, så behandla etiketterna som en karta: fram är kanten närmast användaren på de flesta bäddar, och bak är bakkanten. Om ditt koordinatsystem är omvänt, vänd anvisningen mentalt så att den passar din maskin innan du rör skruvarna.',
+    },
+    {
+      type: 'proscons',
+      title: 'Avvägningar vid utjämningssystem',
+      items: [
+        { pro: 'Tre skruvar definierar ett stabilt plan med färre interaktioner.', con: 'Alla skrivare är inte byggda för ett triangulärt stödmönster.' },
+        { pro: 'Fyra skruvar passar många standardbäddar och är lätta att förstå.', con: 'De kan överbestämma en tunn platta och skapa vridning.' },
+        { pro: 'Maskkompensation kan dölja små kvarvarande fel.', con: 'Den kan inte åtgärda lösa mekaniska delar, skeva plattor eller dåliga sonddata.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Rekommenderad justeringssekvens',
+      html: 'Korrigera global lutning först, sedan diagonal vridning, och kör därefter en ny mätning. Undvik att göra stora ändringar på alla skruvar samtidigt eftersom varje skruv ändrar planet som de andra använder.',
+    },
+    { type: 'title', text: 'Varför maskkompensation inte ersätter mekanik', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Bäddmaskkompensation flyttar Z under utskrift så att munstycket följer den uppmätta ytan. Detta är kraftfullt, men det har begränsningar. Ett stort maskintervall orsakar synlig Z-rörelse, kan påverka extruderingstrycket på första lagret och kan göra att delens bas något får bäddens form. Om masken tonas ut över flera millimeter kan de undre lagren gradvis övergå från bäddformen till den nominella modellformen. Det är acceptabelt för små korrigeringar men oönskat vid kraftig skevhet.',
+    },
+    {
+      type: 'paragraph',
+      html: 'God mekanik minskar den nödvändiga korrigeringen. Kontrollera att bäddvagnens hjul eller skenor inte har glapp, att sondfästet är stelt, att munstycket är rent före mätning, att byggplattan sitter konsekvent och att gantryn är vinkelrät. På bäddar med fjädrar kan starkare fjädrar eller silikonavståndshållare förbättra repeterbarheten. På magnetiska PEI-system kan skräp under plåten skapa en lokal förhöjning som visas som en mystisk bula i masken.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Rengör munstycket före mätning om munstycket vidrör ytan.',
+        'Värm bädden och vänta tillräckligt länge för att plattan ska sluta röra sig termiskt.',
+        'Bekräfta att det sparade masket är inläst i utskriftsstartsekvensen.',
+        'Inspektera bäddklämmor, magneter och plåtens läge för lokala förhöjningar.',
+        'Kontrollera gantryns vinkelräthet igen när masket visar diagonal vridning.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Över 0,5 mm innebär hårdvaruundersökning',
+      html: 'När total variation överstiger 0,5 mm, fortsätt inte att vrida på skruvar i all oändlighet. Leta efter en böjd platta, lös vagn, ojämna distanser, sondoffsetfel eller en yta som ändrar form vid uppvärmning.',
+    },
+    { type: 'title', text: 'Ett praktiskt arbetsflöde för bättre första lager', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Börja med en mekaniskt stabil skrivare. Värm bädden, vänta, hemma alla axlar och kör mätningen. Klistra in datan i analysatorn och läs först av den totala variationen. Om intervallet är extremt, stoppa och inspektera hårdvaran. Om intervallet är måttligt och diagnosen säger fram, bak, vänster eller höger hög, tillämpa skruvrekommendationerna i små steg. Mät igen efter varje omgång. Två försiktiga omgångar är oftast bättre än en aggressiv eftersom fjäderkompression och bäddflex inte är helt linjära.',
+    },
+    {
+      type: 'paragraph',
+      html: 'När masket är rimligt, sluta justera skruvar och ställ in första lagret med Z-offset, extruderingsbredd, hastighet och ytförberedelse. En perfekt uppriktad bädd med fel Z-offset misslyckas ändå. En något imperfekt bädd med ren PEI-plåt, korrekt Z-offset och aktiv maskkompensation kan skrivas ut vackert. Analysatorn är utformad för att först besvara den mekaniska frågan: var ska användaren vrida, hur mycket och om det ens är rätt åtgärd att vrida på skruvar.',
+    },
+    {
+      type: 'summary',
+      title: 'Bästa arbetsflödet för bäddmask',
+      items: [
+        'Mät vid utskriftstemperatur, inte kallt.',
+        'Använd total variation för att avgöra om masket är normalt eller överdrivet.',
+        'Klassificera formen innan du justerar skruvar.',
+        'Omvandla hörnfel till rotationsvärden baserade på gängstigning.',
+        'Mät igen efter små korrigeringar och sluta när det kvarvarande felet är praktiskt acceptabelt.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Målet är inte en vacker graf',
+      html: 'Det användbara resultatet är ett bättre första lager. En maskbild hjälper dig att se ytan, men skruvtabellen är den del som omvandlar mätning till reparation.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Kan jag klistra in både Marlin- och Klipper-data?',
+      answer: 'Ja. Tolken extraherar decimala Z-värden från flerradig text, så den fungerar med vanliga G29-, M420 V- och BED_MESH_OUTPUT-rapporter när det numeriska rutnätet finns med.',
+    },
+    {
+      question: 'Vilken variation i bäddmask är acceptabel?',
+      answer: 'Under 0,10 mm är utmärkt, 0,10 till 0,30 mm är vanligt och oftast utskrivbart med maskkompensation, och över 0,50 mm tyder på ett yt- eller mekaniskt problem.',
+    },
+    {
+      question: 'Varför varnar verktyget för skevhet över 0,5 mm?',
+      answer: 'Vid det intervallet är skruvutjämning ofta inte längre huvudproblemet. Byggplattan, vagnen, sonden eller gantryn kan vara skeva, lösa eller termiskt distorderade.',
+    },
+    {
+      question: 'Gäller anvisningarna om skruvriktning för alla skrivare?',
+      answer: 'Nej. De beräknade millimeterna och graderna är universella, men vredriktningen kan variera mellan maskiner. Om din bädd rör sig i motsatt riktning mot etiketten, invertera riktningen och behåll samma mängd.',
+    },
+    {
+      question: 'Ersätter maskkompensation manuell utjämning?',
+      answer: 'Nej. Maskkompensation är bäst för små kvarvarande fel. Mekanisk utjämning håller korrigeringen liten och förbättrar första-lager-konsistensen.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Klistra in maskutdata', text: 'Kopiera det numeriska bäddmasket från Marlin eller Klipper och klistra in det i rådatafältet.' },
+    { name: 'Välj mekanik', text: 'Välj tre eller fyra utjämningspunkter och den gängstigning som skrivaren använder.' },
+    { name: 'Läs diagnosen', text: 'Kontrollera om ytan är lutad, vriden, konkav, konvex eller kraftigt skev.' },
+    { name: 'Justera noggrant', text: 'Vrid varje skruv enligt rekommenderad bråkdel, mät sedan igen innan du gör en ny omgång.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: '3D-skrivare - Bäddmaskanalsator',
+      description: 'Analysera Marlin- och Klipper-data från bäddmätning och omvandla Z-avvikelser i hörn till anvisningar för utjämningsskruvar.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Vilken variation i bäddmask är acceptabel?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Under 0,10 mm är utmärkt, 0,10 till 0,30 mm är vanligt och oftast utskrivbart med maskkompensation, och över 0,50 mm tyder på ett yt- eller mekaniskt problem.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Hur man analyserar ett bäddmask från en 3D-skrivare',
+      step: [
+        { '@type': 'HowToStep', text: 'Klistra in rådata från Marlin eller Klipper.' },
+        { '@type': 'HowToStep', text: 'Välj antal utjämningspunkter och gängstigning.' },
+        { '@type': 'HowToStep', text: 'Läs av variation, diagnos och värmekarta.' },
+        { '@type': 'HowToStep', text: 'Tillämpa skruvvridningsanvisningarna och mät igen.' },
+      ],
+    },
+  ],
+};

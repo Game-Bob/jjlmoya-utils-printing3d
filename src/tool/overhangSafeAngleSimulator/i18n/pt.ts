@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'calculadora-angulo-salgado-seguro',
+  title: 'Calculadora de Ângulo de Saliência Segura para Impressão 3D',
+  description: 'Estima o ângulo máximo de saliência sem suporte que a sua impressora FDM consegue atingir com base na altura da camada, largura da linha, arrefecimento, material e velocidade de impressão.',
+  ui: {
+    controlsAriaLabel: 'Parâmetros do ângulo de saliência segura',
+    resultsAriaLabel: 'Resultados do ângulo de saliência segura',
+    unitSystemLabel: 'Unidades',
+    metricLabel: 'Métrico',
+    imperialLabel: 'EUA',
+    profileLabel: 'Perfil da impressora',
+    defaultProfileLabel: 'Configuração não guardada',
+    saveProfileLabel: 'Guardar perfil',
+    geometryGroupLabel: 'Geometria de extrusão',
+    coolingGroupLabel: 'Arrefecimento da camada',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Movimento',
+    layerHeightLabel: 'Altura da camada',
+    layerHeightHelp: 'A altura da camada define quanto plástico novo precisa ser suportado pela linha anterior. Camadas mais altas geralmente reduzem a tolerância a saliências.',
+    lineWidthLabel: 'Largura da linha',
+    lineWidthHelp: 'A largura da linha é a largura de extrusão definida no fatiador, não apenas o diâmetro do bocal. Linhas mais largas dão à camada seguinte uma base maior para aderir.',
+    coolingLabel: 'Arrefecimento da peça',
+    coolingHelp: 'O arrefecimento descreve a rapidez com que o filamento extrudido fica rígido o suficiente para manter a forma antes de ceder.',
+    lowCoolingLabel: 'Baixo',
+    mediumCoolingLabel: 'Médio',
+    highCoolingLabel: 'Alto',
+    materialLabel: 'Filamento',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Velocidade de impressão',
+    overhangHelp: 'O ângulo de saliência é medido em relação à parede vertical. Valores mais altos indicam que o filamento se projeta mais para fora sem suporte.',
+    angleLabel: 'Ângulo seguro estimado',
+    vectorLabel: 'Vetor de saliência em relação à vertical',
+    riskLabel: 'Avaliação de risco',
+    safeRiskLabel: 'Verde: seguro',
+    cautiousRiskLabel: 'Amarelo: prudente',
+    supportsRiskLabel: 'Vermelho: suportes necessários',
+    reportButtonLabel: 'Guardar configuração como perfil',
+    savedNoticeLabel: 'Perfil guardado neste navegador.',
+    coolingFactorLabel: 'Fator de arrefecimento',
+    speedFactorLabel: 'Fator de velocidade',
+    materialFactorLabel: 'Fator de material',
+    geometryFactorLabel: 'Fator de geometria',
+    ratioLabel: 'Relação camada / linha',
+    educationLabel: 'Nota educativa',
+    tipIncreaseCooling: 'Aumentar o arrefecimento da peça para perto de 100% nos perímetros externos melhora frequentemente o ângulo seguro de saliência em cerca de 5 a 10 graus, especialmente com PLA.',
+    tipSlowDown: 'Uma velocidade alta no perímetro dá menos tempo ao filamento para solidificar. Tente reduzir a velocidade das paredes externas antes de adicionar suportes por todo o lado.',
+    tipLowerLayer: 'A relação camada/linha está alta. Baixar a altura da camada ou aumentar a largura da linha dá a cada novo filamento mais área de apoio.',
+    tipPetgCaution: 'O PETG retém calor e permanece pegajoso por mais tempo que o PLA. Um arrefecimento forte ajuda, mas ventoinha em excesso pode reduzir a adesão entre camadas em peças funcionais.',
+    tipBaseline: 'Esta é uma estimativa heurística, não uma simulação CFD. Confirme perfis críticos com uma torre de teste de saliência antes de iniciar uma impressão longa.',
+    optimizeOverhangsLabel: 'Otimizar para saliências',
+    validationRangeLabel: 'Relação camada / linha',
+    mmUnit: 'mm',
+    inchUnit: 'pol',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'pol/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Como Estimar um Ângulo de Saliência Seguro na Impressão 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Uma saliência na impressão FDM funciona quando cada novo filamento tem contacto suficiente com a camada anterior para se manter fixo enquanto arrefece. A regra básica ensinada é que uma impressora consegue cerca de <strong>45 graus</strong> sem suportes, mas esse número é apenas um ponto de partida. Um perfil de PLA bem arrefecido, com altura de camada baixa, extrusão larga e velocidade moderada, pode imprimir limpo acima dos 55 graus. Um perfil quente de PETG, ABS ou TPU com arrefecimento fraco pode ceder abaixo dos 45 graus. Esta calculadora trata a capacidade de saliência como uma estimativa térmica e geométrica prática, em vez de um ângulo universal fixo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'O resultado é intencionalmente heurístico. Não é um modelo de dinâmica de fluidos computacional, uma simulação de deformação por elementos finitos, nem substitui o fatiamento de uma torre de calibração. Oferece uma primeira resposta fiável a partir de variáveis que um maker pode realmente controlar na impressora: altura da camada, largura da linha, arrefecimento da peça, material e velocidade. O valor está limitado a uma gama doméstica de impressoras, pelo que não recomendará ângulos irreais acima de 75 graus, mesmo quando todos os parâmetros são favoráveis.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'regra tradicional de início sem suporte' },
+        { value: '55-60°', label: 'frequentemente possível com PLA afinado e arrefecimento forte' },
+        { value: '75°', label: 'teto da calculadora para impressoras FDM domésticas' },
+        { value: '0,08-0,32 mm', label: 'gama validada de altura de camada' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Leia a direção do ângulo corretamente',
+      html: 'Esta ferramenta apresenta o ângulo de saliência em relação à parede vertical, coincidindo com a forma como muitas definições de suporte são descritas nos fatiadores. Um número maior significa que o trajeto se inclina mais para fora da vertical e é mais difícil de imprimir sem suporte.',
+    },
+    { type: 'title', text: 'Porque é que a Regra dos 45 Graus é Útil mas Incompleta', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A regra dos 45 graus sobrevive porque descreve uma condição geométrica simples: aproximadamente aos 45 graus, cerca de metade de uma nova linha de extrusão ainda assenta sobre material da camada anterior. Essa sobreposição dá ao filamento uma base de apoio enquanto a borda não suportada arrefece. Se a linha seguinte se deslocar mais para fora, a porção não suportada cresce e a gravidade exerce mais influência antes de o polímero ficar rígido o suficiente para manter a forma.',
+    },
+    {
+      type: 'paragraph',
+      html: 'As impressoras reais acrescentam várias complicações. Um fatiador pode usar uma largura de linha maior que o diâmetro do bocal, o que altera a sobreposição existente. Uma camada de 0,20 mm impressa com uma linha de 0,45 mm tem uma relação de suporte diferente de uma camada de 0,28 mm impressa com uma linha de 0,40 mm. O fluxo de ar do arrefecimento, a velocidade do cabeçote, a temperatura do bocal, a temperatura da câmara, a viscosidade do material e a ordem dos perímetros alteram se o filamento solidifica no lugar ou cede.',
+    },
+    {
+      type: 'table',
+      headers: ['Variável', 'Porque altera as saliências', 'Ajuste típico'],
+      rows: [
+        ['Altura da camada', 'Camadas mais altas deslocam o filamento para fora de forma mais agressiva para o mesmo ângulo de parede.', 'Reduza a altura da camada das paredes externas quando o detalhe for importante.'],
+        ['Largura da linha', 'Linhas mais largas aumentam a área de contacto e podem suportar um deslocamento ligeiramente maior.', 'Use uma largura de linha externa moderadamente maior, como 0,44 a 0,48 mm num bocal de 0,4 mm.'],
+        ['Arrefecimento', 'Um filamento que endurece rapidamente tem menos tempo para ceder.', 'Aumente a velocidade da ventoinha para zonas de saliência em PLA.'],
+        ['Velocidade', 'Movimento rápido deposita plástico quente rapidamente e reduz o tempo de arrefecimento por milímetro.', 'Reduza a velocidade dos perímetros externos e das paredes em saliência.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Use a calculadora como ferramenta de decisão no fatiador',
+      html: 'Se o modelo tem uma superfície inferior a 58 graus e a calculadora estima 52 graus para o perfil PETG atual, ative suportes apenas para essa zona ou afine o arrefecimento e a velocidade antes de imprimir a peça completa.',
+    },
+    { type: 'title', text: 'Altura da Camada e Largura da Linha: A Geometria por Trás da Deformação em Saliências', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A altura da camada e a largura da linha definem o escalonamento físico da parede. Alturas de camada mais baixas facilitam as saliências porque cada nova camada desloca-se apenas uma pequena distância para fora. Linhas de extrusão mais largas também ajudam porque criam uma base de contacto mais ampla. O sinal prático mais importante é a <strong>relação entre altura da camada e largura da linha</strong>. Uma relação baixa significa que há mais material horizontal disponível para suportar o próximo filamento. Uma relação alta significa que o novo filamento está apoiado numa base mais estreita.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Para um bocal de 0,4 mm, as larguras de linha comuns nos fatiadores situam-se entre 0,42 mm e 0,48 mm. Uma camada de 0,16 mm com uma linha de 0,45 mm é conservadora para saliências; uma camada de 0,30 mm com uma linha de 0,40 mm exige muito mais do polímero e do arrefecimento. A calculadora recompensa geometrias favoráveis porque reduzem a fração não suportada de cada cordão, mas também limita o resultado porque a geometria por si só não consegue superar as limitações de calor, fluxo de ar e aceleração.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Relação baixa',
+          description: 'Uma altura de camada pequena em comparação com a largura da linha proporciona o comportamento de saliência sem suporte mais limpo.',
+          points: ['Melhor superfície sob inclinações', 'Menor risco de deformação', 'Mais tempo de impressão'],
+        },
+        {
+          title: 'Relação equilibrada',
+          description: 'As definições típicas de produção funcionam bem quando o arrefecimento e o material também são razoáveis.',
+          highlight: true,
+          points: ['Boa relação velocidade-qualidade', 'Funciona para muitas peças em PLA', 'Ainda necessita de teste perto dos 60 graus'],
+        },
+        {
+          title: 'Relação alta',
+          description: 'Camadas grandes e linhas estreitas reduzem a base de apoio de cada novo cordão.',
+          points: ['Escalonamento mais visível', 'Maior risco de curvatura na face inferior', 'Suportes tornam-se úteis mais cedo'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Largura da linha', definition: 'A largura de extrusão planeada no fatiador. Pode ser ligeiramente maior que o diâmetro físico do bocal.' },
+        { term: 'Altura da camada', definition: 'A espessura vertical de cada camada impressa.' },
+        { term: 'Fração não suportada', definition: 'A parte de um novo cordão de extrusão que se estende para além da camada anterior.' },
+        { term: 'Deformação', definition: 'Distorção descendente de um filamento quente antes de se tornar rígido.' },
+      ],
+    },
+    { type: 'title', text: 'Arrefecimento: Porque é que a Ventoinha Acrescenta Frequentemente 5 a 10 Graus', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'O arrefecimento é a alavanca mais rápida para saliências em PLA. Um filamento acabado de extrudir sai do bocal macio, brilhante e fácil de deformar. Um fluxo de ar forte e bem direcionado aumenta a velocidade a que a pele externa endurece. Quando o filamento se torna autossuficiente rapidamente, consegue cobrir uma maior distância não suportada antes de a gravidade deixar uma curvatura visível. É por isso que o design do duto da ventoinha, a saúde do ventilador e a orientação da impressão podem alterar os resultados das saliências mesmo quando os valores de G-code são idênticos.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Mais ventoinha não é automaticamente melhor para todos os materiais. O PLA geralmente beneficia de arrefecimento elevado nos perímetros em saliência. O PETG pode usar arrefecimento, mas ventoinha em excesso pode reduzir a adesão entre camadas ou tornar as superfícies opacas. O ABS necessita frequentemente de arrefecimento controlado e de um ambiente quente para evitar empenos, pelo que o seu ângulo de saliência é geralmente menor, a menos que a máquina esteja afinada para um fluxo de ar controlado. O TPU pode ceder porque permanece emborrachado e flexível mesmo depois de arrefecido, em comparação com materiais rígidos.',
+    },
+    {
+      type: 'proscons',
+      title: 'Aumentar o arrefecimento da peça para saliências',
+      items: [
+        { pro: 'Pode solidificar os filamentos de PLA antes de a borda não suportada ceder.', con: 'Pode enfraquecer a adesão entre camadas em materiais que necessitam de retenção de calor.' },
+        { pro: 'Melhora os detalhes nítidos na face inferior e pequenas saliências.', con: 'Dutos mal direcionados podem arrefecer um lado e deixar o lado oposto irregular.' },
+        { pro: 'Frequentemente mais rápido que redesenhar suportes para pequenos detalhes.', con: 'Pode gerar ruído da ventoinha, carga elétrica e empeno em peças grandes e planas.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Verifique a direção do fluxo de ar antes de confiar na percentagem da ventoinha',
+      html: 'Um valor de ventoinha de 100% no fatiador não garante arrefecimento útil no cordão. Um duto obstruído, um ventilador fraco, o formato da manga de silicone ou uma modificação no cabeçote podem deixar um lado do bocal com muito menos fluxo de ar.',
+    },
+    { type: 'title', text: 'Diferenças entre Materiais: PLA, PETG, ABS e TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'O PLA é o material de referência mais fácil para testar saliências porque endurece rapidamente e aceita arrefecimento intenso da peça. É por isso que os perfis de PLA bem afinados imprimem frequentemente paredes não suportadas mais íngremes do que a regra tradicional dos 45 graus. O PETG é mais pegajoso e retém calor por mais tempo. Pode produzir peças funcionais resistentes, mas as superfícies inferiores não suportadas podem apresentar aspeto brilhante, com fios ou curvadas se a velocidade e o arrefecimento não forem controlados. As saliências em PETG beneficiam frequentemente de reduzir a velocidade das paredes externas antes de aumentar a ventoinha ao máximo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'O ABS comporta-se de forma diferente porque uma câmara quente e arrefecimento limitado são frequentemente usados para evitar empenos e fissuras entre camadas. Essas mesmas condições tornam as inclinações não suportadas mais difíceis. O TPU traz outro desafio: o material permanece flexível, pelo que um cordão pode ceder ou esborratar-se mesmo quando já não está tão quente como à saída do bocal. A calculadora atribui a cada material um comportamento base e um multiplicador separados para refletir estas diferenças práticas.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Comportamento em saliência', 'Melhor primeiro ajuste'],
+      rows: [
+        ['PLA', 'Boa rigidez e forte tolerância ao arrefecimento.', 'Aumente o arrefecimento e reduza a velocidade dos perímetros externos.'],
+        ['PETG', 'Pegajoso, retém calor, propenso a deformação brilhante.', 'Reduza a velocidade e use arrefecimento moderado.'],
+        ['ABS', 'Necessita de retenção de calor, pelo que as inclinações não suportadas são menos tolerantes.', 'Ajuste a orientação ou use suportes seletivos.'],
+        ['TPU', 'O cordão flexível pode deformar-se após a deposição.', 'Use ângulos conservadores e movimento lento.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Porque é que o filamento húmido pode imitar uma má afinação de saliências',
+      html: 'A humidade pode criar minúsculas bolhas de vapor e extrusão irregular. Se a face inferior parecer espumosa, irregular ou com asperezas, seque o filamento antes de assumir que a estimativa do ângulo seguro está errada.',
+    },
+    { type: 'title', text: 'Velocidade de Impressão e Tempo Térmico', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A velocidade de impressão afeta as saliências porque altera o tempo térmico. A velocidades mais altas, é depositado mais material quente por segundo, e cada ponto do cordão tem menos tempo sob fluxo de ar útil antes de a secção seguinte ser aplicada. Paredes externas rápidas podem parecer aceitáveis em superfícies verticais, mas falham em saliências porque o cordão ainda está mole enquanto não tem suporte. Reduzir a velocidade apenas do perímetro em saliência é frequentemente mais eficiente do que reduzir a velocidade de todo o modelo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Um fatiador pode ter controlos separados para velocidade da parede externa, velocidade de ponte, velocidade de pequenos perímetros, velocidade de saliência e tempo mínimo de camada. A calculadora usa a velocidade de impressão principal como entrada prática e depois penaliza a alta velocidade progressivamente. Se um modelo tiver camadas curtas, o tempo mínimo de camada e o comportamento da ventoinha podem dominar. Se a saliência for uma parede contínua longa, a velocidade do perímetro e a direção do duto de arrefecimento tornam-se mais importantes.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Reduza primeiro as paredes externas, porque são as superfícies que o utilizador vai inspecionar.',
+        'Use a redução de velocidade específica para saliências quando o fatiador o permitir.',
+        'Mantenha os movimentos de deslocação suficientemente rápidos para evitar sobreaquecer pequenos detalhes.',
+        'Evite avaliar a velocidade apenas com uma torre pequena; peças grandes retêm calor de forma diferente.',
+        'Re teste após mudar o diâmetro do bocal, porque o caudal altera a carga térmica.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Ordem prática de afinação',
+      html: 'Para uma inclinação não suportada no limite, tente aumentar o arrefecimento, reduzir a velocidade da parede externa e baixar a altura da camada antes de ativar suportes densos em toda a peça.',
+    },
+    { type: 'title', text: 'Quando os Suportes Ainda São a Resposta Certa', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'O objetivo não é eliminar suportes a qualquer custo. Os suportes são úteis quando uma face inferior tem de ser dimensionalmente precisa, quando o material é sensível ao calor, quando uma superfície estética fica voltada para baixo ou quando a saliência começa a meio do ar sem contacto com a camada anterior. Uma capacidade calculada de 60 graus não significa que todas as saliências de 60 graus terão bom aspeto. Ilhas pequenas, bordos abruptos, furos, texto em relevo e superfícies inferiores côncavas podem falhar mais cedo do que uma rampa de calibração suave.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Suportes seletivos são geralmente melhores que suportes globais. Se apenas uma região exceder o ângulo seguro calculado, pinte bloqueadores e aplicadores de suporte, rode a peça, chanfre a face inferior, divida o modelo ou adicione uma pequena nervura sacrificial. Suportes em árvore, suportes orgânicos e camadas de interface podem reduzir as marcas enquanto ainda seguram os primeiros cordões não suportados críticos. Para suportes funcionais, uma pequena alteração no design muitas vezes poupa mais material do que uma afinação agressiva do fatiador.',
+    },
+    {
+      type: 'summary',
+      title: 'Use suportes quando',
+      items: [
+        'O ângulo seguro calculado está abaixo do ângulo da face inferior do modelo.',
+        'A face inferior tem de ser lisa, plana ou dimensionalmente precisa.',
+        'O detalhe começa como uma ilha sem camada anterior para se fixar.',
+        'O material não pode usar arrefecimento suficiente sem empenar ou perder adesão.',
+        'Uma saliência falhada arruinaria uma impressão longa já avançada.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Risco vermelho não significa impossível',
+      html: 'Um resultado vermelho significa que os suportes são a predefinição mais segura para um perfil doméstico normal. Utilizadores experientes podem ainda conseguir com dutos personalizados, velocidade de saliência afinada, trajetos especiais no fatiador ou redesenho do modelo, mas a margem é estreita.',
+    },
+    { type: 'title', text: 'Como Validar a Estimativa com uma Torre de Saliência', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Uma pequena torre de teste de saliência é a melhor forma de validar a estimativa para uma impressora específica. Imprima uma torre que vá aumentando de 35 graus a 75 graus usando o mesmo filamento, bocal, temperatura, ventoinha e velocidade de parede que planeia usar na peça real. Inspecione a face inferior de lado e por baixo. Procure curvaturas, loops irregulares, bordos de perímetro separados e deformação brilhante. O último degrau limpo é o seu ângulo seguro real para esse perfil.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Não altere cinco variáveis entre testes de torre. Se a primeira torre falhar aos 48 graus, aumente o arrefecimento ou reduza a velocidade de saliência e repita. Se a segunda torre atingir 55 graus, já sabe qual alavanca ajudou. Se a torre melhorar de um lado mas não do outro, inspecione a simetria do duto da ventoinha. Se todos os degraus tiverem aspeto fraco, verifique a temperatura do bocal, o multiplicador de extrusão, filamento húmido e o hardware de arrefecimento da peça antes de assumir que os suportes são inevitáveis.',
+    },
+    {
+      type: 'table',
+      headers: ['Observação no teste', 'Causa provável', 'Próxima ação'],
+      rows: [
+        ['Borda inferior curva para cima', 'Desequilíbrio entre calor e arrefecimento', 'Reduza a velocidade do perímetro e melhore a direção da ventoinha.'],
+        ['Loops cedem para baixo', 'Fração não suportada demasiado alta', 'Reduza a altura da camada ou use suporte.'],
+        ['Um lado mais limpo que o outro', 'Fluxo de ar assimétrico', 'Inspecione o duto e o percurso do ventilador.'],
+        ['Face inferior espumosa e irregular', 'Humidade ou filamento sobreaquecido', 'Seque o carretel ou reduza a temperatura do bocal.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Registe o nome do perfil',
+      html: 'Guarde um perfil separado para cada bocal, material e configuração de arrefecimento. Um perfil de PLA 0,16 mm e um perfil de PETG 0,28 mm não devem partilhar o mesmo pressuposto de ângulo seguro de saliência.',
+    },
+    { type: 'title', text: 'Projetar Peças para Evitar Suportes', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A correção mais barata para saliências acontece frequentemente no CAD. Substitua uma face inferior com 90 graus por um chanfro, adicione uma forma de gota a furos horizontais, rode a peça para que a superfície mais íngreme fique para cima, ou divida o modelo em duas metades imprimíveis. Um chanfro de 45 graus pode eliminar completamente a necessidade de suporte sem comprometer a resistência. Para furos de parafuso, perfis em forma de gota e diamante imprimem de forma mais limpa do que círculos perfeitos quando o topo do furo se tornaria uma ponte.',
+    },
+    {
+      type: 'paragraph',
+      html: 'O design consciente da fabricação também reduz o pós-processamento. Os suportes consomem material, aumentam o tempo de impressão, marcam superfícies e podem partir detalhes delicados durante a remoção. Um modelo que respeite o ângulo seguro da impressora imprime mais rápido e de forma mais consistente. A calculadora ajuda durante a revisão do design: compare o ângulo da face inferior do modelo com o ângulo seguro estimado e decida se deve redesenhar, afinar o perfil ou suportar apenas a zona de risco.',
+    },
+    {
+      type: 'proscons',
+      title: 'Redesenhar em vez de suportar',
+      items: [
+        { pro: 'Reduz material e tempo de pós-processamento.', con: 'Pode alterar a forma visual ou funcional da peça.' },
+        { pro: 'Melhora a repetibilidade em várias impressoras.', con: 'Requer acesso ao ficheiro CAD original ou ferramentas de edição de malha.' },
+        { pro: 'Pode fortalecer peças alinhando melhor as camadas.', con: 'Algumas geometrias ainda precisam de suporte para precisão.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Melhores estratégias de design sem suporte',
+      items: [
+        'Use chanfros de 45 graus sob bordos horizontais.',
+        'Transforme furos horizontais circulares em gotas quando possível.',
+        'Orientar superfícies estéticas para cima ou para os lados.',
+        'Divida peças ao longo de juntas ocultas em vez de suportar uma grande face inferior.',
+        'Use suporte apenas onde o ângulo do modelo exceder o perfil testado.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: '45 graus é sempre seguro para saliências na impressão 3D?',
+      answer: 'Não. É uma regra predefinida útil, mas o material, arrefecimento, altura da camada, largura da linha, velocidade e desempenho do duto da ventoinha podem deslocar o limite prático para baixo ou para cima.',
+    },
+    {
+      question: 'Porque é que a calculadora limita os resultados a 75 graus?',
+      answer: 'As impressoras FDM domésticas conseguem por vezes imprimir formas de teste com saliências muito íngremes, mas recomendar valores acima de 75 graus não é fiável para peças normais, por isso a ferramenta limita a estimativa a uma gama doméstica conservadora.',
+    },
+    {
+      question: 'Qual é o melhor material para imprimir saliências sem suporte?',
+      answer: 'O PLA é geralmente o mais fácil porque endurece rapidamente e tolera arrefecimento intenso da peça. PETG, ABS e TPU geralmente precisam de pressupostos de saliência mais conservadores.',
+    },
+    {
+      question: 'Devo aumentar a velocidade da ventoinha ou reduzir a velocidade de impressão primeiro?',
+      answer: 'Para PLA, aumente o arrefecimento e reduza a velocidade das paredes externas em saliência. Para PETG, ABS ou peças funcionais, equilibre o arrefecimento com a adesão entre camadas e o risco de empeno.',
+    },
+    {
+      question: 'Isto pode substituir uma torre de calibração de saliência?',
+      answer: 'Não. Fornece uma estimativa heurística e um bom ponto de partida. Uma torre pequena continua a ser a melhor validação para uma impressora, filamento e perfil de fatiador específicos.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Introduza a geometria de extrusão', text: 'Defina a altura da camada e a largura da linha do fatiador usadas no perfil.' },
+    { name: 'Escolha o material e o arrefecimento', text: 'Selecione PLA, PETG, ABS ou TPU e o nível atual de arrefecimento da peça.' },
+    { name: 'Adicione a velocidade de impressão', text: 'Introduza a velocidade da parede externa ou a velocidade prática usada na zona de saliência.' },
+    { name: 'Compare o resultado', text: 'Use o ângulo seguro e a avaliação de risco para decidir se deve ajustar, redesenhar ou ativar suportes.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Calculadora de Ângulo de Saliência Segura para Impressão 3D',
+      description: 'Estima o ângulo de saliência FDM sem suporte a partir da altura da camada, largura da linha, arrefecimento, material e velocidade.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '45 graus é sempre seguro para saliências na impressão 3D?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Não. É uma regra predefinida útil, mas o material, arrefecimento, altura da camada, largura da linha, velocidade e desempenho do duto da ventoinha podem deslocar o limite prático para baixo ou para cima.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Como estimar um ângulo de saliência seguro para impressora 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Introduza a altura da camada e a largura da linha.' },
+        { '@type': 'HowToStep', text: 'Selecione o material e o nível de arrefecimento.' },
+        { '@type': 'HowToStep', text: 'Introduza a velocidade de impressão.' },
+        { '@type': 'HowToStep', text: 'Compare o resultado com o ângulo inferior do modelo.' },
+      ],
+    },
+  ],
+};

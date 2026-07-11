@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analizzatore-maglia-letto',
+  title: 'Analizzatore Maglia Letto Stampante 3D',
+  description: 'Analizza i dati della maglia del letto di Marlin o Klipper, visualizza la superficie, diagnostica inclinazione o deformazione e converte l\'errore Z in indicazioni di rotazione delle viti.',
+  ui: {
+    controlsAriaLabel: 'Input analizzatore maglia letto',
+    resultsAriaLabel: 'Risultati analizzatore maglia letto',
+    dataLabel: 'Dati maglia grezzi',
+    dataPlaceholder: 'Incolla qui il risultato del tuo comando G29...',
+    sampleButtonLabel: 'Usa maglia di esempio',
+    levelingPointsLabel: 'Punti di livellamento',
+    threePointLabel: '3 punti',
+    fourPointLabel: '4 punti',
+    screwTypeLabel: 'Tipo vite',
+    customScrewLabel: 'Altro',
+    pitchLabel: 'Passo filetto',
+    unitSystemLabel: 'Unità',
+    metricLabel: 'Metrico',
+    imperialLabel: 'US',
+    heatmapLabel: 'Topografia interattiva del letto',
+    lowScaleLabel: 'Basso',
+    flatScaleLabel: 'Piatto',
+    highScaleLabel: 'Alto',
+    healthLabel: 'Salute planarità',
+    rangeLabel: 'Variazione totale',
+    meshSizeLabel: 'Dimensioni maglia',
+    meanLabel: 'Z medio',
+    diagnosisLabel: 'Diagnosi',
+    instructionsLabel: 'Istruzioni di regolazione meccanica',
+    cornerHeader: 'Angolo',
+    deltaHeader: 'Correzione',
+    actionHeader: 'Cosa fare',
+    frontLeft: 'Anteriore sinistro',
+    frontRight: 'Anteriore destro',
+    rearLeft: 'Posteriore sinistro',
+    rearRight: 'Posteriore destro',
+    rearCenter: 'Centro posteriore',
+    clockwiseLabel: 'girare in senso orario',
+    counterClockwiseLabel: 'girare in senso antiorario',
+    noTurnLabel: 'lasciare questa vite com\'è',
+    raiseLabel: 'Alzare il letto di',
+    lowerLabel: 'Abbassare il letto di',
+    warningWarped: 'Deformazione eccessiva: il problema è probabilmente la superficie, non solo il livellamento. Considera la sostituzione o la rettifica del piano di stampa.',
+    parseError: 'Impossibile analizzare la maglia. Incolla righe di valori Z decimali da G29, M420 V o BED_MESH_OUTPUT di Klipper.',
+    notEnoughNumbers: 'Non sono stati trovati abbastanza numeri per la maglia. Una maglia valida necessita di almeno due righe e due colonne.',
+    raggedRows: 'Le righe rilevate non hanno la stessa lunghezza. Verifica la presenza di dati troncati o corrotti.',
+    badPitch: 'Il passo del filetto deve essere maggiore di zero.',
+    diagnosisFlat: 'Il letto è già quasi piatto. Dovrebbe bastare solo una regolazione fine del primo strato.',
+    diagnosisFrontHigh: 'Il lato anteriore è più alto del posteriore. Correggi le viti anteriori prima di inseguire i singoli punti.',
+    diagnosisRearHigh: 'Il lato posteriore è più alto dell\'anteriore. Correggi prima le viti posteriori.',
+    diagnosisLeftHigh: 'Il lato sinistro è più alto del destro. Si tratta principalmente di un\'inclinazione dell\'asse X attraverso il letto.',
+    diagnosisRightHigh: 'Il lato destro è più alto del sinistro. Si tratta principalmente di un\'inclinazione dell\'asse X attraverso il letto.',
+    diagnosisTwisted: 'Gli angoli opposti non concordano. Il letto è deformato in torsione o il portale non è allineato in modo consistente.',
+    diagnosisConcave: 'Il centro è più basso degli angoli. Le viti di livellamento non possono eliminare completamente questa forma concava.',
+    diagnosisConvex: 'Il centro è più alto degli angoli. Controlla magneti, clip, stress del piano o deformazione termica.',
+    diagnosisWarped: 'Il range Z è superiore a 0,5 mm, il che indica un\'eccessiva deformazione della superficie piuttosto che un normale errore di livellamento.',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    degreeUnit: 'gradi',
+  },
+  seo: [
+    { type: 'title', text: 'Come Leggere una Maglia del Letto della Stampante 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una maglia del letto è una griglia di offset Z misurati da un sensore o da un tastatore sulla superficie stampabile. Firmware come Marlin e Klipper usano questa griglia per compensare piccole differenze di altezza durante la stampa dei primi strati. I numeri sono solitamente espressi in millimetri: un valore positivo indica che il punto misurato è alto rispetto al piano di riferimento scelto, mentre un valore negativo indica che è basso. La domanda pratica non è solo se il firmware possa compensarlo. La domanda importante è se il letto fisico, il portale e le viti di livellamento siano sufficientemente vicini da non costringere la compensazione a lavorare troppo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Questo analizzatore trasforma i dati grezzi della maglia in tre decisioni: quanta variazione Z totale esiste, se la forma assomiglia a un\'inclinazione o a una deformazione, e quali viti dovrebbero essere regolate. Questa distinzione è importante perché un letto inclinato e un letto deformato richiedono riparazioni diverse. Un\'inclinazione può spesso essere corretta girando le viti agli angoli. Una lastra di vetro concava, un foglio magnetico imbarcato, un carrello Y allentato o un portale deformato possono comunque produrre un primo strato scadente anche dopo aver livellato perfettamente ogni angolo.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'intervallo ideale, raramente raggiunto su letti reali' },
+        { value: '0,10 mm', label: 'di solito eccellente per i primi strati FDM tipici' },
+        { value: '0,30 mm', label: 'notevole ma spesso stampabile con compensazione della maglia' },
+        { value: '0,50 mm+', label: 'superficie o meccanica da controllare' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'I valori della maglia non sono comandi per le viti',
+      html: 'Il firmware riporta una mappa delle altezze. Un\'istruzione per le viti deriva dalle medie degli angoli, dal passo del filetto e dalla direzione meccanica della regolazione. Fai sempre piccole modifiche, riporta a casa e sonda di nuovo.',
+    },
+    { type: 'title', text: 'Cosa Significano i Valori di G29 e BED_MESH_OUTPUT', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Gli utenti di Marlin ottengono spesso i dati del letto tramite <code>G29</code>, <code>M420 V</code> o un rapporto di livellamento nel terminale. Gli utenti di Klipper possono ispezionare la maglia con <code>BED_MESH_OUTPUT</code>, l\'interfaccia web o i dati del profilo salvato. I formati di output differiscono, ma i dati importanti sono gli stessi: righe e colonne di misure Z decimali. Alcuni rapporti includono etichette, coordinate, parentesi, numeri di indice o testo del firmware. Un parser efficace dovrebbe ignorare il testo circostante ed estrarre solo i numeri di misura che formano la maglia.',
+    },
+    {
+      type: 'paragraph',
+      html: 'L\'incollaggio più affidabile di una maglia è un blocco rettangolare in cui ogni riga ha lo stesso numero di valori. Una maglia 3x3 ha 9 valori, una 5x5 ha 25 valori e una 7x7 ha 49 valori. Anche le maglie rettangolari possono essere valide se la griglia di misurazione utilizza conteggi X e Y diversi. Se le righe hanno lunghezze diverse, i dati sono probabilmente incompleti o mescolati con numeri non correlati come coordinate, velocità di avanzamento o contatori di comandi. In tal caso, esegui di nuovo il rapporto e incolla solo la griglia numerica.',
+    },
+    {
+      type: 'table',
+      headers: ['Indizio nell\'output', 'Cosa suggerisce', 'Cosa fare'],
+      rows: [
+        ['Le righe hanno la stessa lunghezza', 'La maglia è probabilmente completa.', 'Analizza direttamente e confronta la varianza totale.'],
+        ['Una riga è più corta', 'La copia dal terminale potrebbe essere troncata.', 'Copia di nuovo il rapporto dall\'inizio.'],
+        ['Molti interi extra', 'L\'incollaggio include etichette di indice o coordinate.', 'Incolla solo la sezione della matrice quando possibile.'],
+        ['Una sola riga lunga', 'Lo strumento può provare una ricostruzione quadrata.', 'Usa 9, 25, 49 o un altro numero quadrato.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Sonda dopo il riscaldamento',
+      html: 'Per dati significativi, riscalda il letto alla temperatura di stampa e attendi la stabilizzazione termica prima di sondare. I piani in alluminio e i fogli magnetici possono cambiare forma dopo diversi minuti a temperatura.',
+    },
+    { type: 'title', text: 'Variazione Totale: Il Numero che Prevede i Problemi del Primo Strato', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La variazione totale è la differenza assoluta tra il valore più alto e quello più basso della maglia. Se il punto massimo è +0,180 mm e il punto minimo è -0,120 mm, la variazione totale è 0,300 mm. Questo singolo numero è facile da capire perché descrive l\'intero lavoro verticale che il firmware deve assorbire attraverso il letto. Una varianza piccola significa che la distanza dell\'ugello rimane simile da anteriore a posteriore e da sinistra a destra. Una varianza grande significa che un\'area potrebbe essere schiacciata mentre un\'altra fatica ancora ad aderire.',
+    },
+    {
+      type: 'paragraph',
+      html: 'L\'intervallo accettabile dipende dall\'altezza dello strato, dal diametro dell\'ugello, dal filamento, dalla texture della superficie e da quanto aggressivo è lo schiacciamento del primo strato. Con un primo strato di 0,20 mm, un intervallo di superficie di 0,10 mm è di solito confortevole. Un intervallo di 0,30 mm può ancora stampare se la compensazione della maglia è attiva e l\'altezza di dissolvenza è impostata in modo sensato, ma lascia meno margine. Oltre 0,50 mm, l\'utente dovrebbe sospettare problemi meccanici o di superficie perché il letto non è più solo leggermente fuori livello.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Sotto 0,10 mm',
+          description: 'Eccellente per la maggior parte delle stampanti FDM consumer. La regolazione del primo strato riguarda principalmente l\'offset Z e la pulizia della superficie.',
+          highlight: true,
+          points: ['Correzione minima delle viti', 'Carico di compensazione ridotto', 'Buona ripetibilità'],
+        },
+        {
+          title: 'Da 0,10 a 0,30 mm',
+          description: 'Comune su macchine hobbistiche. La compensazione della maglia può aiutare, ma il livellamento degli angoli può migliorare l\'adesione.',
+          points: ['La ripetibilità della sonda è importante', 'Controlla bordi e angoli', 'Regola le viti a piccoli passi'],
+        },
+        {
+          title: 'Oltre 0,50 mm',
+          description: 'Probabile deformazione, problema al carrello, stress del piano o errore del portale. Il solo livellamento delle viti potrebbe non risolverlo.',
+          points: ['Ispeziona l\'hardware', 'Controlla lo stato a caldo', 'Considera un nuovo piano'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Un buon intervallo può comunque stampare male',
+      html: 'Se l\'intervallo è piccolo ma il primo strato fallisce, controlla l\'offset Z, l\'estrusione, il PEI sporco, la ripetibilità della sonda, i detriti sull\'ugello e se il profilo della maglia è effettivamente caricato prima della stampa.',
+    },
+    { type: 'title', text: 'Inclinazione, Torsione, Concavità e Convessità', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una maglia del letto è più di un valore massimo e minimo. La distribuzione ti dice che tipo di correzione è realistica. Se l\'intera riga anteriore è alta e quella posteriore è bassa, il letto è globalmente inclinato da anteriore a posteriore. Se il lato sinistro è alto e quello destro è basso, il letto è inclinato lungo X. Questi casi sono ideali per la regolazione delle viti perché il piano fisico del letto è semplicemente allineato male rispetto al piano di movimento dell\'ugello.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una maglia in torsione è diversa: una coppia diagonale è alta mentre l\'altra coppia diagonale è bassa. Questo può derivare da una compressione non uniforme delle viti, da un carrello Y deformato, da un portale X non squadrato o da una piastra di supporto del letto che flette. Una maglia concava ha un centro più basso degli angoli, mentre una maglia convessa ha un centro più alto degli angoli. Le viti ai bordi non possono eliminare completamente una curvatura centrale perché non controllano direttamente il centro del piano di stampa.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Inclinazione', definition: 'Una differenza di altezza sostanzialmente planare in cui un lato del letto è più alto del lato opposto.' },
+        { term: 'Torsione', definition: 'Una discrepanza diagonale in cui angoli opposti non concordano, spesso causata da supporto irregolare o allineamento del telaio.' },
+        { term: 'Letto concavo', definition: 'Una superficie in cui il centro è più basso degli angoli o dei bordi circostanti.' },
+        { term: 'Letto convesso', definition: 'Una superficie in cui il centro è più alto degli angoli o dei bordi circostanti.' },
+        { term: 'Deformazione', definition: 'Una forma non planare abbastanza grande da non poter essere eliminata con il normale livellamento delle viti.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Perché un rigonfiamento centrale è difficile da risolvere con le viti d\'angolo',
+      html: 'Le viti d\'angolo definiscono il piano di supporto al bordo del letto. Se il centro è curvato verso l\'alto a causa di calore, magneti, clip o stress del piano, abbassare gli angoli può peggiorare i bordi mentre il centro rimane alto.',
+    },
+    { type: 'title', text: 'Convertire l\'Errore Z in Rotazione della Vite', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La conversione meccanica si basa sul passo del filetto. Il passo del filetto è la corsa verticale prodotta da un giro completo della vite. Una comune vite M3 a passo grosso ha un passo di 0,50 mm, M4 grosso circa 0,70 mm e M5 grosso circa 0,80 mm. Se un angolo deve muoversi di 0,125 mm su una vite M3, la rotazione è <code>0,125 x 360 / 0,50 = 90 gradi</code>, cioè un quarto di giro. Questo è molto più facile da applicare rispetto a un numero Z astratto.',
+    },
+    {
+      type: 'paragraph',
+      html: 'La direzione dipende dalla meccanica della stampante. Molte stampanti a molla alzano il letto verso l\'ugello quando la manopola viene girata in senso antiorario dal di sotto, ma le macchine differiscono. L\'analizzatore usa uno stile di istruzioni convenzionale e mostra se l\'angolo deve essere alzato o abbassato. Se la direzione della manopola della tua stampante è invertita, mantieni la correzione in millimetri e la frazione di giro, ma inverti la direzione. Il flusso di lavoro più sicuro è muovere una vite per metà della quantità raccomandata, sondare di nuovo, poi ripetere.',
+    },
+    {
+      type: 'table',
+      headers: ['Vite', 'Passo grosso tipico', 'Correzione 0,10 mm', 'Correzione 0,20 mm'],
+      rows: [
+        ['M3', '0,50 mm/giro', '72 gradi', '144 gradi'],
+        ['M4', '0,70 mm/giro', '51 gradi', '103 gradi'],
+        ['M5', '0,80 mm/giro', '45 gradi', '90 gradi'],
+        ['Personalizzata', 'Valore utente', '360 x 0,10 / passo', '360 x 0,20 / passo'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Non inseguire meccanicamente l\'ultimo 0,02 mm',
+      html: 'La ripetibilità della sonda, la temperatura del letto e la compressione delle molle possono facilmente variare di centesimi di millimetro. Fermati quando la maglia è entro un intervallo pratico e usa l\'offset Z per la regolazione finale del primo strato.',
+    },
+    { type: 'title', text: 'Livellamento a Tre Punti vs Quattro Punti', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Il livellamento a tre punti è meccanicamente elegante perché tre punti definiscono un piano senza sovra-vincolarlo. Un letto a tre viti ha normalmente due viti anteriori e una vite centrale posteriore, o una disposizione triangolare simile. Il livellamento a quattro punti è comune su molti letti Cartesiani, ma quattro viti possono contrastarsi a vicenda: serrare un angolo può flettere il letto o modificare il carico sull\'angolo opposto. L\'analizzatore supporta entrambi perché il set di istruzioni corretto dipende dalla macchina.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Per i letti a quattro punti, l\'analizzatore confronta i quattro angoli e fornisce un\'istruzione per ciascuno. Per i letti a tre punti, usa anteriore sinistro, anteriore destro e centro posteriore. Questo non può conoscere l\'esatta posizione fisica di ogni modello di stampante, quindi considera le etichette come una mappa: anteriore è il bordo più vicino all\'utente sulla maggior parte dei letti, e posteriore è il bordo posteriore. Se il tuo sistema di coordinate è invertito, ruota mentalmente l\'istruzione per adattarla alla tua macchina prima di toccare le viti.',
+    },
+    {
+      type: 'proscons',
+      title: 'Compromessi del sistema di livellamento',
+      items: [
+        { pro: 'Tre viti definiscono un piano stabile con meno interazioni.', con: 'Non tutte le stampanti sono progettate per uno schema di supporto triangolare.' },
+        { pro: 'Quattro viti corrispondono a molti letti di stampante standard e sono facili da capire.', con: 'Possono sovra-vincolare un piano sottile e creare torsione.' },
+        { pro: 'La compensazione della maglia può nascondere piccoli errori residui.', con: 'Non può eliminare meccaniche allentate, piani deformati o dati della sonda errati.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Sequenza di regolazione consigliata',
+      html: 'Correggi prima l\'inclinazione globale, poi la torsione diagonale, poi esegui una nuova maglia. Evita di fare grandi modifiche a tutte le viti contemporaneamente perché ogni vite cambia il piano usato dalle altre.',
+    },
+    { type: 'title', text: 'Perché la Compensazione della Maglia Non Sostituisce la Meccanica', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La compensazione della maglia del letto muove Z durante la stampa in modo che l\'ugello segua la superficie misurata. Questo è potente, ma ha dei limiti. Un grande intervallo della maglia causa un movimento Z visibile, può influenzare la pressione di estrusione sul primo strato e può lasciare la base del pezzo leggermente modellata come il letto. Se la maglia si dissolve gradualmente nell\'arco di diversi millimetri, gli strati inferiori possono passare gradualmente dalla forma del letto alla forma nominale del modello. Questo è accettabile per piccole correzioni ma indesiderabile per deformazioni gravi.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una buona meccanica riduce la quantità di correzione necessaria. Controlla che le ruote o le guide del carrello del letto non abbiano gioco, che il supporto della sonda sia rigido, che l\'ugello sia pulito prima di sondare, che il piano di stampa sia posizionato in modo consistente e che il portale sia squadrato. Sui letti con molle, molle più forti o distanziatori in silicone possono migliorare la ripetibilità. Sui sistemi magnetici PEI, i detriti sotto il foglio possono creare un punto alto locale che appare come un misterioso rigonfiamento nella maglia.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Pulisci l\'ugello prima di sondare se l\'ugello tocca la superficie.',
+        'Riscalda il letto e attendi abbastanza a lungo che il piano smetta di muoversi termicamente.',
+        'Conferma che la maglia salvata sia caricata nella sequenza di inizio stampa.',
+        'Ispeziona clip, magneti e il posizionamento del foglio per punti alti locali.',
+        'Ricontrolla la squadratura del portale quando la maglia mostra torsione diagonale.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Oltre 0,5 mm è un\'indagine hardware',
+      html: 'Quando la varianza totale supera 0,5 mm, non continuare a girare le viti all\'infinito. Cerca un piano piegato, un carrello allentato, distanziatori irregolari, un errore di offset della sonda o una superficie che cambia forma quando viene riscaldata.',
+    },
+    { type: 'title', text: 'Un Flusso di Lavoro Pratico per Primi Strati Migliori', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Inizia con una stampante meccanicamente stabile. Riscalda il letto, attendi, porta a casa tutti gli assi ed esegui la maglia. Incolla i dati nell\'analizzatore e leggi prima la varianza totale. Se l\'intervallo è estremo, fermati e ispeziona l\'hardware. Se l\'intervallo è moderato e la diagnosi indica anteriore, posteriore, sinistro o destro alto, applica le raccomandazioni per le viti con piccoli incrementi. Sonda di nuovo dopo ogni passaggio. Due passaggi conservativi di solito battono un passaggio aggressivo perché la compressione delle molle e la flessione del letto non sono perfettamente lineari.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una volta che la maglia è ragionevole, smetti di regolare le viti e regola il primo strato con offset Z, larghezza di estrusione, velocità e preparazione della superficie. Un letto perfettamente livellato con un offset Z sbagliato fallisce comunque. Un letto leggermente imperfetto con un foglio PEI pulito, offset Z corretto e compensazione della maglia attiva può stampare magnificamente. L\'analizzatore è progettato per rispondere prima alla domanda meccanica: dove deve girare l\'utente, di quanto, e se girare le viti sia addirittura la riparazione giusta.',
+    },
+    {
+      type: 'summary',
+      title: 'Miglior flusso di lavoro per la maglia del letto',
+      items: [
+        'Sonda a temperatura di stampa, non a freddo.',
+        'Usa la varianza totale per decidere se la maglia è ordinaria o eccessiva.',
+        'Classifica la forma prima di regolare le viti.',
+        'Converti l\'errore d\'angolo in rotazione basata sul passo del filetto.',
+        'Risonda dopo piccole correzioni e fermati quando l\'errore residuo è accettabile.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'L\'obiettivo non è un grafico bellissimo',
+      html: 'Il risultato utile è un primo strato migliore. Un\'immagine della maglia aiuta a vedere la superficie, ma la tabella delle viti è la parte che trasforma la misurazione in riparazione.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Posso incollare dati della maglia sia da Marlin che da Klipper?',
+      answer: 'Sì. Il parser estrae valori Z decimali da testo su più righe, quindi funziona con i rapporti comuni di G29, M420 V e BED_MESH_OUTPUT quando è presente la griglia numerica.',
+    },
+    {
+      question: 'Quale varianza della maglia del letto è accettabile?',
+      answer: 'Sotto 0,10 mm è eccellente, da 0,10 a 0,30 mm è comune e di solito stampabile con compensazione della maglia, e oltre 0,50 mm suggerisce un problema di superficie o meccanico.',
+    },
+    {
+      question: 'Perché lo strumento avverte della deformazione oltre 0,5 mm?',
+      answer: 'A quel livello, il livellamento delle viti spesso non è più il problema principale. Il piano di stampa, il carrello, la sonda o il portale potrebbero essere deformati, allentati o termicamente distorti.',
+    },
+    {
+      question: 'Le indicazioni sulla direzione delle viti valgono per ogni stampante?',
+      answer: 'No. I millimetri e i gradi calcolati sono universali, ma la direzione della manopola può variare da macchina a macchina. Se il tuo letto si muove in direzione opposta rispetto all\'etichetta, inverti la direzione e mantieni la stessa quantità.',
+    },
+    {
+      question: 'La compensazione della maglia sostituisce il livellamento manuale?',
+      answer: 'No. La compensazione della maglia è ideale per piccoli errori residui. Il livellamento meccanico mantiene piccola la correzione e migliora la consistenza del primo strato.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Incolla l\'output della maglia', text: 'Copia la maglia numerica del letto da Marlin o Klipper e incollala nel campo dei dati grezzi.' },
+    { name: 'Scegli la meccanica', text: 'Seleziona tre o quattro punti di livellamento e il passo della vite usato dalla stampante.' },
+    { name: 'Leggi la diagnosi', text: 'Controlla se la superficie è inclinata, in torsione, concava, convessa o eccessivamente deformata.' },
+    { name: 'Regola con cura', text: 'Gira ogni vite della frazione consigliata, poi sonda di nuovo prima di fare un altro passaggio.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analizzatore Maglia Letto Stampante 3D',
+      description: 'Analizza i dati della maglia del letto di Marlin e Klipper e converte l\'errore Z degli angoli in istruzioni di rotazione delle viti di livellamento.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Tutti',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Quale varianza della maglia del letto è accettabile?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sotto 0,10 mm è eccellente, da 0,10 a 0,30 mm è comune e di solito stampabile con compensazione della maglia, e oltre 0,50 mm suggerisce un problema di superficie o meccanico.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Come analizzare la maglia del letto di una stampante 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Incolla i dati grezzi della maglia di Marlin o Klipper.' },
+        { '@type': 'HowToStep', text: 'Seleziona il numero di punti di livellamento e il passo della vite.' },
+        { '@type': 'HowToStep', text: 'Leggi varianza, diagnosi e mappa di calore.' },
+        { '@type': 'HowToStep', text: 'Applica le istruzioni di rotazione delle viti e sonda di nuovo.' },
+      ],
+    },
+  ],
+};

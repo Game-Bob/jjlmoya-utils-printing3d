@@ -1,0 +1,123 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { BedMeshAnalyzerUI } from './ui';
+import './bed-mesh-analyzer.css';
+interface Props {
+  ui: BedMeshAnalyzerUI;
+}
+const { ui } = Astro.props;
+---
+<div class="bma-root" id="main-tool">
+  <section class="bma-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="bma-controls" onsubmit="return false;">
+      <label class="bma-textarea-label">
+        <span>{ui.dataLabel}</span>
+        <textarea id="bma-raw" spellcheck="false" placeholder={ui.dataPlaceholder}></textarea>
+      </label>
+      <button type="button" class="bma-sample" id="bma-sample"><Icon name="mdi:clipboard-text-outline" size={18} />{ui.sampleButtonLabel}</button>
+      <div class="bma-config">
+        <label>
+          <span>{ui.levelingPointsLabel}</span>
+          <select id="bma-points">
+            <option value="4">{ui.fourPointLabel}</option>
+            <option value="3">{ui.threePointLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.screwTypeLabel}</span>
+          <select id="bma-screw">
+            <option value="0.5">M3</option>
+            <option value="0.7">M4</option>
+            <option value="0.8">M5</option>
+            <option value="custom">{ui.customScrewLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.pitchLabel}</span>
+          <b><input id="bma-pitch" type="number" min="0.1" step="0.05" value="0.5" /><em id="bma-pitch-unit">{ui.mmUnit}</em></b>
+        </label>
+        <div class="bma-units" role="group" aria-label={ui.unitSystemLabel}>
+          <button type="button" class="active" data-bma-units="metric">{ui.metricLabel}</button>
+          <button type="button" data-bma-units="imperial">{ui.imperialLabel}</button>
+        </div>
+      </div>
+      <p class="bma-error" id="bma-error" hidden>{ui.parseError}</p>
+    </form>
+    <div class="bma-results" aria-label={ui.resultsAriaLabel}>
+      <div class="bma-map-panel">
+        <div class="bma-map-head">
+          <span>{ui.heatmapLabel}</span>
+          <b id="bma-size">0 x 0</b>
+        </div>
+        <canvas id="bma-canvas" width="760" height="460"></canvas>
+        <div class="bma-scale" aria-hidden="true"><i></i><span>{ui.lowScaleLabel}</span><span>{ui.flatScaleLabel}</span><span>{ui.highScaleLabel}</span></div>
+      </div>
+      <aside class="bma-dashboard">
+        <article class="bma-health">
+          <span>{ui.healthLabel}</span>
+          <strong><output id="bma-health">0</output>%</strong>
+        </article>
+        <article>
+          <span>{ui.rangeLabel}</span>
+          <strong><output id="bma-range">0.000</output> <small id="bma-range-unit">{ui.mmUnit}</small></strong>
+        </article>
+        <article>
+          <span>{ui.meanLabel}</span>
+          <strong><output id="bma-mean">0.000</output> <small id="bma-mean-unit">{ui.mmUnit}</small></strong>
+        </article>
+        <article>
+          <span>{ui.diagnosisLabel}</span>
+          <p id="bma-diagnosis">{ui.diagnosisFlat}</p>
+        </article>
+      </aside>
+      <div class="bma-instructions">
+        <h3>{ui.instructionsLabel}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>{ui.cornerHeader}</th>
+              <th>{ui.deltaHeader}</th>
+              <th>{ui.actionHeader}</th>
+            </tr>
+          </thead>
+          <tbody id="bma-actions"></tbody>
+        </table>
+      </div>
+    </div>
+    <span id="bma-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-degree={ui.degreeUnit}></span>
+    <span
+      id="bma-labels"
+      hidden
+      data-front-left={ui.frontLeft}
+      data-front-right={ui.frontRight}
+      data-rear-left={ui.rearLeft}
+      data-rear-right={ui.rearRight}
+      data-rear-center={ui.rearCenter}
+      data-clockwise={ui.clockwiseLabel}
+      data-counter-clockwise={ui.counterClockwiseLabel}
+      data-none={ui.noTurnLabel}
+      data-raise={ui.raiseLabel}
+      data-lower={ui.lowerLabel}
+      data-warning-warped={ui.warningWarped}
+      data-parse-error={ui.parseError}
+      data-not-enough-numbers={ui.notEnoughNumbers}
+      data-ragged-rows={ui.raggedRows}
+      data-bad-pitch={ui.badPitch}
+      data-diagnosis-flat={ui.diagnosisFlat}
+      data-diagnosis-front-high={ui.diagnosisFrontHigh}
+      data-diagnosis-rear-high={ui.diagnosisRearHigh}
+      data-diagnosis-left-high={ui.diagnosisLeftHigh}
+      data-diagnosis-right-high={ui.diagnosisRightHigh}
+      data-diagnosis-twisted={ui.diagnosisTwisted}
+      data-diagnosis-concave={ui.diagnosisConcave}
+      data-diagnosis-convex={ui.diagnosisConvex}
+      data-diagnosis-warped={ui.diagnosisWarped}
+    ></span>
+  </section>
+</div>
+<script>
+  import { initBedMeshAnalyzer } from './runtime';
+
+  document.addEventListener('astro:page-load', initBedMeshAnalyzer);
+  initBedMeshAnalyzer();
+</script>

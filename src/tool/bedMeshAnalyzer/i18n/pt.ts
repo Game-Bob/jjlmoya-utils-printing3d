@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analisador-malha-cama',
+  title: 'Analisador de Malha da Mesa de Impressão 3D',
+  description: 'Interpretar dados de malha da mesa do Marlin ou Klipper, visualizar a superfície, diagnosticar inclinação ou empeno e converter erro Z em instruções de ajuste dos parafusos.',
+  ui: {
+    controlsAriaLabel: 'Controlos do analisador de malha da mesa',
+    resultsAriaLabel: 'Resultados do analisador de malha da mesa',
+    dataLabel: 'Dados brutos da malha',
+    dataPlaceholder: 'Cole aqui o resultado do comando G29...',
+    sampleButtonLabel: 'Usar malha de exemplo',
+    levelingPointsLabel: 'Pontos de nivelamento',
+    threePointLabel: '3 pontos',
+    fourPointLabel: '4 pontos',
+    screwTypeLabel: 'Tipo de parafuso',
+    customScrewLabel: 'Outro',
+    pitchLabel: 'Passo da rosca',
+    unitSystemLabel: 'Unidades',
+    metricLabel: 'Métrico',
+    imperialLabel: 'EUA',
+    heatmapLabel: 'Topografia interativa da mesa',
+    lowScaleLabel: 'Baixo',
+    flatScaleLabel: 'Plano',
+    highScaleLabel: 'Alto',
+    healthLabel: 'Saúde da planicidade',
+    rangeLabel: 'Variação total',
+    meshSizeLabel: 'Dimensão da malha',
+    meanLabel: 'Z médio',
+    diagnosisLabel: 'Diagnóstico',
+    instructionsLabel: 'Instruções de ajuste mecânico',
+    cornerHeader: 'Canto',
+    deltaHeader: 'Correção',
+    actionHeader: 'O que fazer',
+    frontLeft: 'Frente esquerda',
+    frontRight: 'Frente direita',
+    rearLeft: 'Traseira esquerda',
+    rearRight: 'Traseira direita',
+    rearCenter: 'Centro traseiro',
+    clockwiseLabel: 'rodar no sentido horário',
+    counterClockwiseLabel: 'rodar no sentido anti-horário',
+    noTurnLabel: 'deixar este parafuso como está',
+    raiseLabel: 'Subir a mesa em',
+    lowerLabel: 'Descer a mesa em',
+    warningWarped: 'Empeno excessivo: o problema é provavelmente a superfície, não apenas o nivelamento. Considere substituir ou aplanar a placa de construção.',
+    parseError: 'Não foi possível interpretar a malha. Cole linhas com valores Z decimais do G29, M420 V ou Klipper BED_MESH_OUTPUT.',
+    notEnoughNumbers: 'Não foram encontrados números de malha suficientes. Uma malha válida precisa de pelo menos duas linhas e duas colunas.',
+    raggedRows: 'As linhas detetadas não têm o mesmo comprimento. Verifique se o resultado está truncado ou corrompido.',
+    badPitch: 'O passo da rosca deve ser maior que zero.',
+    diagnosisFlat: 'A mesa já está praticamente plana. Apenas um ajuste fino da primeira camada deve ser necessário.',
+    diagnosisFrontHigh: 'A parte frontal está mais alta que a traseira. Corrija os parafusos da frente antes de ajustar pontos individuais.',
+    diagnosisRearHigh: 'A parte traseira está mais alta que a frontal. Corrija primeiro os parafusos traseiros.',
+    diagnosisLeftHigh: 'O lado esquerdo está mais alto que o direito. Trata-se sobretudo de uma inclinação no eixo X.',
+    diagnosisRightHigh: 'O lado direito está mais alto que o esquerdo. Trata-se sobretudo de uma inclinação no eixo X.',
+    diagnosisTwisted: 'Os cantos opostos não concordam. A mesa está torcida ou o pórtico não está nivelado de forma consistente.',
+    diagnosisConcave: 'O centro está mais baixo que os cantos. Os parafusos de nivelamento não conseguem remover totalmente esta forma côncava.',
+    diagnosisConvex: 'O centro está mais alto que os cantos. Verifique ímanes, clips, tensão da placa ou curvatura térmica.',
+    diagnosisWarped: 'A variação Z está acima de 0,5 mm, o que indica empeno excessivo da superfície em vez de erro comum de nivelamento.',
+    mmUnit: 'mm',
+    inchUnit: 'pol',
+    degreeUnit: 'graus',
+  },
+  seo: [
+    { type: 'title', text: 'Como Ler uma Malha da Mesa de Impressão 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Uma malha da mesa é uma grelha de medidas Z recolhidas por uma sonda ou sensor do bico sobre a área imprimível. Firmware como Marlin e Klipper usa essa grelha para compensar pequenas diferenças de altura durante a impressão das primeiras camadas. Os números são normalmente expressos em milímetros: um valor positivo significa que o ponto medido está alto em relação ao plano de referência escolhido, e um valor negativo significa que está baixo. A questão prática não é apenas se o firmware consegue compensar. A questão importante é se a mesa física, o pórtico e os parafusos de nivelamento estão suficientemente próximos para que a compensação não tenha de trabalhar demasiado.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Este analisador transforma os dados brutos da malha em três decisões: quanta variação total de Z existe, se a forma parece inclinação ou deformação, e quais parafusos devem ser ajustados. Esta distinção é importante porque uma mesa inclinada e uma mesa empenada precisam de reparações diferentes. Uma inclinação pode muitas vezes ser corrigida ajustando os parafusos dos cantos. Um vidro côncavo, uma chapa magnética encurvada, um carro Y solto ou um pórtico torcido podem ainda produzir uma primeira camada má mesmo depois de cada canto estar perfeitamente nivelado.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'intervalo ideal, raramente alcançado em mesas reais' },
+        { value: '0,10 mm', label: 'geralmente excelente para primeiras camadas FDM típicas' },
+        { value: '0,30 mm', label: 'percetível mas muitas vezes imprimível com compensação de malha' },
+        { value: '0,50 mm+', label: 'a superfície ou a mecânica devem ser investigadas' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Os valores da malha não são por si só comandos para os parafusos',
+      html: 'O firmware reporta um mapa de alturas. Uma instrução para os parafusos é derivada das médias dos cantos, do passo da rosca e da direção mecânica do ajuste. Faça sempre pequenas alterações, reposicione o eixo e meça novamente.',
+    },
+    { type: 'title', text: 'O Que os Valores de G29 e BED_MESH_OUTPUT Significam', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Os utilizadores de Marlin obtêm frequentemente dados da mesa através de <code>G29</code>, <code>M420 V</code> ou de um relatório de nivelamento no terminal. Os utilizadores de Klipper podem inspecionar a malha com <code>BED_MESH_OUTPUT</code>, a interface web ou dados de perfil guardados. Os formatos de saída diferem, mas os dados importantes são os mesmos: linhas e colunas de medições Z decimais. Alguns relatórios incluem etiquetas, coordenadas, parênteses retos, números de índice ou texto do firmware. Um analisador útil deve ignorar o texto circundante e extrair apenas os números de medição que formam a malha.',
+    },
+    {
+      type: 'paragraph',
+      html: 'A colagem de malha mais fiável é um bloco retangular onde cada linha tem o mesmo número de valores. Uma malha 3x3 tem 9 valores, uma malha 5x5 tem 25 valores e uma malha 7x7 tem 49 valores. Malhas retangulares também podem ser válidas se a grelha de medição usar contagens X e Y diferentes. Se as linhas tiverem comprimentos inconsistentes, os dados estão provavelmente incompletos ou misturados com números não relacionados, como coordenadas, velocidades de avanço ou contadores de comandos. Nesse caso, execute novamente o relatório e cole apenas a grelha numérica.',
+    },
+    {
+      type: 'table',
+      headers: ['Indício na saída', 'O que sugere', 'O que fazer'],
+      rows: [
+        ['Linhas com igual comprimento', 'A malha está provavelmente completa.', 'Analisar diretamente e comparar a variação total.'],
+        ['Uma linha mais curta', 'A cópia do terminal pode estar truncada.', 'Copiar o relatório novamente desde o início.'],
+        ['Muitos números inteiros extra', 'A colagem inclui índices ou coordenadas.', 'Colar apenas a secção da matriz sempre que possível.'],
+        ['Apenas uma linha longa', 'A ferramenta pode tentar reconstrução quadrada.', 'Usar 9, 25, 49 ou outra contagem quadrada.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Medir após aquecer',
+      html: 'Para obter dados significativos, aqueça a mesa à temperatura de impressão e aguarde a estabilização térmica antes de medir. Placas de alumínio e chapas magnéticas podem mudar de forma após vários minutos à temperatura.',
+    },
+    { type: 'title', text: 'Variação Total: O Número que Prevê Problemas na Primeira Camada', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A variação total é a diferença absoluta entre o valor mais alto e o mais baixo da malha. Se o ponto máximo for +0,180 mm e o ponto mínimo for -0,120 mm, a variação total é 0,300 mm. Este número único é fácil de entender porque descreve todo o trabalho vertical que o firmware tem de absorver na mesa. Uma variação pequena significa que a distância do bico se mantém semelhante da frente para trás e da esquerda para a direita. Uma variação grande significa que uma área pode ficar esmagada enquanto outra ainda luta para aderir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'O intervalo aceitável depende da altura da camada, do diâmetro do bico, do filamento, da textura da superfície e da agressividade do esmagamento da primeira camada. Com uma primeira camada de 0,20 mm, um intervalo de superfície de 0,10 mm é geralmente confortável. Um intervalo de 0,30 mm ainda pode imprimir se a compensação de malha estiver ativada e a altura de dissipação estiver definida sensatamente, mas deixa menos margem. Acima de 0,50 mm, o utilizador deve suspeitar de problemas mecânicos ou de superfície, porque a mesa já não está apenas ligeiramente desnivelada.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Abaixo de 0,10 mm',
+          description: 'Excelente para a maioria das impressoras FDM de consumo. O ajuste da primeira camada resume-se sobretudo ao offset Z e à limpeza da superfície.',
+          highlight: true,
+          points: ['Correção mínima dos parafusos', 'Baixa carga de compensação', 'Boa repetibilidade'],
+        },
+        {
+          title: '0,10 a 0,30 mm',
+          description: 'Comum em máquinas amadoras. A compensação de malha pode ajudar, mas o nivelamento dos cantos pode melhorar a aderência.',
+          points: ['A repetibilidade da sonda é importante', 'Vigiar os cantos e extremidades', 'Ajustar os parafusos em pequenos passos'],
+        },
+        {
+          title: 'Acima de 0,50 mm',
+          description: 'Provável empeno, movimento do carro, tensão da placa ou erro do pórtico. Só o nivelamento dos parafusos pode não resolver.',
+          points: ['Inspecionar o hardware', 'Verificar o estado aquecido', 'Considerar uma placa nova'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Um bom intervalo ainda pode imprimir mal',
+      html: 'Se o intervalo é pequeno mas a primeira camada falha, verifique o offset Z, a extrusão, o PEI sujo, a repetibilidade da sonda, detritos no bico e se o perfil de malha está realmente carregado antes de imprimir.',
+    },
+    { type: 'title', text: 'Inclinação, Torção, Concavidade e Convexidade', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Uma malha da mesa é mais do que um valor máximo e mínimo. A distribuição diz-lhe que tipo de correção é realista. Se toda a linha da frente está alta e a linha traseira está baixa, a mesa está inclinada globalmente da frente para trás. Se o lado esquerdo está alto e o direito está baixo, a mesa está inclinada no eixo X. Estes casos são ideais para ajuste dos parafusos porque o plano físico da mesa está simplesmente desalinhado com o plano de movimento do bico.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Uma malha torcida é diferente: um par diagonal está alto enquanto o par diagonal oposto está baixo. Isto pode resultar de compressão desigual dos parafusos, um carro Y empenado, um pórtico X que não está quadrado ou uma placa de suporte da mesa que flexiona. Uma malha côncava tem o centro mais baixo que os cantos, enquanto uma malha convexa tem o centro mais alto que os cantos. Os parafusos nas extremidades não conseguem remover completamente uma curvatura central porque não controlam diretamente o meio da placa de construção.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Inclinação', definition: 'Uma diferença de altura maioritariamente planar onde um lado da mesa está mais alto que o lado oposto.' },
+        { term: 'Torção', definition: 'Um desalinhamento diagonal onde cantos opostos não concordam, frequentemente causado por suporte irregular ou alinhamento da estrutura.' },
+        { term: 'Mesa côncava', definition: 'Uma superfície onde o centro está mais baixo que os cantos ou extremidades circundantes.' },
+        { term: 'Mesa convexa', definition: 'Uma superfície onde o centro está mais alto que os cantos ou extremidades circundantes.' },
+        { term: 'Empeno', definition: 'Uma forma não planar suficientemente grande para que o nivelamento normal dos parafusos não a consiga remover.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Porque é que uma saliência central é difícil de corrigir com os parafusos dos cantos',
+      html: 'Os parafusos dos cantos definem o plano de suporte na borda da mesa. Se o centro está curvado para cima devido ao calor, ímanes, clips ou tensão da placa, baixar os cantos pode piorar as bordas enquanto o meio permanece alto.',
+    },
+    { type: 'title', text: 'Converter Erro Z em Rotação dos Parafusos', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A conversão mecânica baseia-se no passo da rosca. O passo da rosca é o deslocamento vertical produzido por uma volta completa do parafuso. Um parafuso M3 normal tem um passo de 0,50 mm, M4 normal tem cerca de 0,70 mm e M5 normal tem cerca de 0,80 mm. Se um canto precisar de mover 0,125 mm num parafuso M3, a rotação é <code>0,125 x 360 / 0,50 = 90 graus</code>, o que equivale a um quarto de volta. Isto é muito mais fácil de executar do que um número Z abstrato.',
+    },
+    {
+      type: 'paragraph',
+      html: 'A direção depende da mecânica da impressora. Muitas impressoras com molas levantam a mesa na direção do bico quando o botão é rodado no sentido anti-horário por baixo, mas as máquinas diferem. O analisador usa um estilo de instrução convencional e mostra se o canto deve ser subido ou descido. Se a direção do botão da sua impressora for inversa, mantenha a correção em milímetros e a fração de volta, mas inverta a direção. O fluxo de trabalho mais seguro é mover um parafuso metade da quantidade recomendada, medir novamente e repetir.',
+    },
+    {
+      type: 'table',
+      headers: ['Parafuso', 'Passo normal típico', 'Correção de 0,10 mm', 'Correção de 0,20 mm'],
+      rows: [
+        ['M3', '0,50 mm / volta', '72 graus', '144 graus'],
+        ['M4', '0,70 mm / volta', '51 graus', '103 graus'],
+        ['M5', '0,80 mm / volta', '45 graus', '90 graus'],
+        ['Personalizado', 'Valor do utilizador', '360 x 0,10 / passo', '360 x 0,20 / passo'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Não persiga os últimos 0,02 mm mecanicamente',
+      html: 'A repetibilidade da sonda, a temperatura da mesa e a compressão das molas podem facilmente variar centésimas de milímetro. Pare quando a malha estiver dentro de um intervalo prático e use o offset Z para o ajuste final da primeira camada.',
+    },
+    { type: 'title', text: 'Nivelamento da Mesa com Três Versus Quatro Pontos', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'O nivelamento com três pontos é mecanicamente elegante porque três pontos definem um plano sem o sobrecarregar. Uma mesa com três parafusos tem normalmente dois parafusos à frente e um parafuso central atrás, ou uma disposição triangular semelhante. O nivelamento com quatro pontos é comum em muitas mesas Cartesianas, mas quatro parafusos podem lutar entre si: apertar um canto pode fletir a mesa ou alterar a carga no canto oposto. O analisador suporta ambos porque o conjunto correto de instruções depende da máquina.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Para mesas de quatro pontos, o analisador compara os quatro cantos e dá uma instrução para cada um. Para mesas de três pontos, usa a frente esquerda, a frente direita e o centro traseiro. Isto não pode saber a posição física exata de cada modelo de impressora, por isso trate as etiquetas como um mapa: a frente é a borda mais próxima do utilizador na maioria das mesas, e a traseira é a borda de trás. Se o seu sistema de coordenadas for inverso, rode mentalmente a instrução para corresponder à sua máquina antes de tocar nos parafusos.',
+    },
+    {
+      type: 'proscons',
+      title: 'Compensações do sistema de nivelamento',
+      items: [
+        { pro: 'Três parafusos definem um plano estável com menos interações.', con: 'Nem todas as impressoras são construídas para um padrão de suporte triangular.' },
+        { pro: 'Quatro parafusos correspondem a muitas mesas de série e são fáceis de entender.', con: 'Podem sobrecarregar uma placa fina e criar torção.' },
+        { pro: 'A compensação de malha pode ocultar pequenos erros residuais.', con: 'Não consegue remover mecânica solta, placas empenadas ou maus dados da sonda.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Sequência de ajuste recomendada',
+      html: 'Corrija primeiro a inclinação global, depois a torção diagonal, e execute uma nova malha. Evite fazer grandes alterações em todos os parafusos de uma só vez porque cada parafuso altera o plano usado pelos outros.',
+    },
+    { type: 'title', text: 'Porque a Compensação de Malha Não Substitui a Mecânica', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A compensação de malha move Z durante a impressão para que o bico siga a superfície medida. Isto é poderoso, mas tem limites. Uma grande variação na malha causa movimento Z visível, pode afetar a pressão de extrusão na primeira camada e pode deixar a base da peça ligeiramente moldada pela mesa. Se a malha se dissipar ao longo de vários milímetros, as camadas inferiores podem transitar gradualmente da forma da mesa para a forma nominal do modelo. Isto é aceitável para pequenas correções, mas indesejável para empenos severos.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Uma boa mecânica reduz a quantidade de correção necessária. Verifique se as rodas ou calhas do carro da mesa não têm folga, se o suporte da sonda é rígido, se o bico está limpo antes de medir, se a placa de construção está colocada de forma consistente e se o pórtico está quadrado. Em mesas com molas, molas mais fortes ou espaçadores de silicone podem melhorar a repetibilidade. Em sistemas magnéticos PEI, detritos por baixo da chapa podem criar um ponto alto local que aparece como uma saliência misteriosa na malha.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Limpe o bico antes de medir se o bico tocar na superfície.',
+        'Aqueça a mesa e aguarde tempo suficiente para a placa parar de se mover termicamente.',
+        'Confirme que a malha guardada é carregada na sequência de início da impressão.',
+        'Inspecione clips, ímanes e a colocação da chapa para pontos altos locais.',
+        'Reveja o esquadro do pórtico quando a malha mostrar torção diagonal.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Acima de 0,5 mm é investigação de hardware',
+      html: 'Quando a variação total excede 0,5 mm, não continue a rodar parafusos indefinidamente. Procure uma placa empenada, carro solto, espaçadores desiguais, erro de offset da sonda ou uma superfície que muda de forma quando aquecida.',
+    },
+    { type: 'title', text: 'Um Fluxo de Trabalho Prático para Melhores Primeiras Camadas', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Comece com uma impressora mecanicamente estável. Aqueça a mesa, aguarde, reposicione todos os eixos e execute a malha. Cole os dados no analisador e leia primeiro a variação total. Se o intervalo for extremo, pare e inspecione o hardware. Se o intervalo for moderado e o diagnóstico disser que a frente, trás, esquerda ou direita está alta, aplique as recomendações dos parafusos em pequenos incrementos. Meça novamente após cada passagem. Duas passagens conservadoras geralmente vencem uma passagem agressiva porque a compressão das molas e a flexão da mesa não são perfeitamente lineares.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Assim que a malha estiver razoável, pare de ajustar parafusos e ajuste a primeira camada com o offset Z, largura de extrusão, velocidade e preparação da superfície. Uma mesa perfeitamente nivelada com um offset Z errado ainda falha. Uma mesa ligeiramente imperfeita com uma chapa PEI limpa, offset Z correto e compensação de malha ativa pode imprimir lindamente. O analisador foi concebido para responder primeiro à questão mecânica: onde deve o utilizador rodar, quanto, e se rodar parafusos é sequer a reparação correta.',
+    },
+    {
+      type: 'summary',
+      title: 'Melhor fluxo de trabalho para malha da mesa',
+      items: [
+        'Medir à temperatura de impressão, não em frio.',
+        'Usar a variação total para decidir se a malha é normal ou excessiva.',
+        'Classificar a forma antes de ajustar parafusos.',
+        'Converter o erro dos cantos em rotação baseada no passo da rosca.',
+        'Medir novamente após pequenas correções e parar quando o erro residual for prático.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'O objetivo não é um gráfico bonito',
+      html: 'O resultado útil é uma primeira camada melhor. Uma imagem da malha ajuda a ver a superfície, mas a tabela dos parafusos é a parte que transforma a medição em reparação.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Posso colar dados de malha do Marlin e do Klipper?',
+      answer: 'Sim. O analisador extrai valores Z decimais de texto multilinha, por isso funciona com relatórios comuns de G29, M420 V e BED_MESH_OUTPUT quando a grelha numérica está presente.',
+    },
+    {
+      question: 'Que variação de malha da mesa é aceitável?',
+      answer: 'Abaixo de 0,10 mm é excelente, 0,10 a 0,30 mm é comum e geralmente imprimível com compensação de malha, e acima de 0,50 mm sugere um problema de superfície ou mecânico.',
+    },
+    {
+      question: 'Porque é que a ferramenta avisa sobre empeno acima de 0,5 mm?',
+      answer: 'Nesse intervalo, o nivelamento dos parafusos já não é o principal problema. A placa de construção, o carro, a sonda ou o pórtico podem estar empenados, soltos ou termicamente deformados.',
+    },
+    {
+      question: 'As instruções de direção dos parafusos aplicam-se a todas as impressoras?',
+      answer: 'Não. Os milímetros e graus calculados são universais, mas a direção do botão pode variar conforme a máquina. Se a sua mesa se mover no sentido oposto ao indicado, inverta a direção e mantenha a mesma quantidade.',
+    },
+    {
+      question: 'A compensação de malha substitui o nivelamento manual?',
+      answer: 'Não. A compensação de malha é melhor para pequenos erros residuais. O nivelamento mecânico mantém a correção pequena e melhora a consistência da primeira camada.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Colar a saída da malha', text: 'Copie a malha numérica da mesa do Marlin ou Klipper e cole-a no campo de dados brutos.' },
+    { name: 'Escolher a mecânica', text: 'Selecione três ou quatro pontos de nivelamento e o passo da rosca usado pela impressora.' },
+    { name: 'Ler o diagnóstico', text: 'Verifique se a superfície está inclinada, torcida, côncava, convexa ou excessivamente empenada.' },
+    { name: 'Ajustar com cuidado', text: 'Rode cada parafuso pela fração recomendada e meça novamente antes de fazer outra passagem.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analisador de Malha da Mesa de Impressão 3D',
+      description: 'Analisar dados de malha da mesa do Marlin e Klipper e converter o erro Z dos cantos em instruções de rotação dos parafusos de nivelamento.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Que variação de malha da mesa é aceitável?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Abaixo de 0,10 mm é excelente, 0,10 a 0,30 mm é comum e geralmente imprimível com compensação de malha, e acima de 0,50 mm sugere um problema de superfície ou mecânico.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Como analisar uma malha da mesa de impressão 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Cole os dados brutos da malha do Marlin ou Klipper.' },
+        { '@type': 'HowToStep', text: 'Selecione o número de pontos de nivelamento e o passo da rosca.' },
+        { '@type': 'HowToStep', text: 'Leia a variação, o diagnóstico e o mapa de calor.' },
+        { '@type': 'HowToStep', text: 'Aplique as instruções de rotação dos parafusos e meça novamente.' },
+      ],
+    },
+  ],
+};

@@ -52,3 +52,9 @@ export { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator/ind
 export { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator/index';
 
 export { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator/index';
+
+export { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimulator/index';
+
+export { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer/index';
+
+export { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer/index';

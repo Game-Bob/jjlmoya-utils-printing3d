@@ -19,6 +19,9 @@ import { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOpti
 import { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator';
 import { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator';
 import { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator';
+import { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimulator';
+import { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer';
+import { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -40,4 +43,7 @@ export const ALL_TOOLS: ToolDefinition[] = [
   PRINT_DURATION_ESTIMATOR_TOOL,
   RESIN_REAL_COST_CALCULATOR_TOOL,
   RETRACTION_STRINGING_CALIBRATOR_TOOL,
+  OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL,
+  BED_MESH_ANALYZER_TOOL,
+  BRIDGING_OPTIMIZER_TOOL,
 ];

@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'safe-overhang-angle-calculator',
+  title: 'Safe 3D Print Overhang Angle Calculator',
+  description: 'Estimate the maximum unsupported overhang angle your FDM printer can handle from layer height, line width, cooling, material, and print speed.',
+  ui: {
+    controlsAriaLabel: 'Safe overhang angle inputs',
+    resultsAriaLabel: 'Safe overhang angle results',
+    unitSystemLabel: 'Units',
+    metricLabel: 'Metric',
+    imperialLabel: 'US',
+    profileLabel: 'Printer profile',
+    defaultProfileLabel: 'Unsaved setup',
+    saveProfileLabel: 'Save profile',
+    geometryGroupLabel: 'Extrusion geometry',
+    coolingGroupLabel: 'Layer cooling',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Motion',
+    layerHeightLabel: 'Layer height',
+    layerHeightHelp: 'Layer height controls how much new plastic must be supported by the previous line. Taller layers usually reduce overhang tolerance.',
+    lineWidthLabel: 'Line width',
+    lineWidthHelp: 'Line width is the slicer extrusion width, not only nozzle diameter. Wider lines can give the next layer more ledge to bond to.',
+    coolingLabel: 'Part cooling',
+    coolingHelp: 'Cooling describes how quickly the fresh strand becomes stiff enough to hold its shape before sagging.',
+    lowCoolingLabel: 'Low',
+    mediumCoolingLabel: 'Medium',
+    highCoolingLabel: 'High',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Print speed',
+    overhangHelp: 'Overhang angle is shown against the vertical wall. Higher values mean the strand projects farther outward without support.',
+    angleLabel: 'Estimated safe angle',
+    vectorLabel: 'Overhang vector against vertical',
+    riskLabel: 'Risk feedback',
+    safeRiskLabel: 'Green: safe',
+    cautiousRiskLabel: 'Yellow: prudent',
+    supportsRiskLabel: 'Red: supports needed',
+    reportButtonLabel: 'Save configuration as profile',
+    savedNoticeLabel: 'Profile saved in this browser.',
+    coolingFactorLabel: 'Cooling factor',
+    speedFactorLabel: 'Speed factor',
+    materialFactorLabel: 'Material factor',
+    geometryFactorLabel: 'Geometry factor',
+    ratioLabel: 'Layer / line ratio',
+    educationLabel: 'Educational note',
+    tipIncreaseCooling: 'Increasing part cooling near 100% on outside perimeters often improves the safe overhang by about 5 to 10 degrees, especially with PLA.',
+    tipSlowDown: 'Fast perimeter speed gives the strand less time to freeze. Try slowing external walls before adding supports everywhere.',
+    tipLowerLayer: 'The layer-to-line ratio is high. Lowering layer height or increasing line width gives each new strand more support.',
+    tipPetgCaution: 'PETG keeps heat and stays tacky longer than PLA. Strong cooling helps, but too much fan can reduce layer bonding on functional parts.',
+    tipBaseline: 'This is a heuristic estimate, not CFD simulation. Confirm critical profiles with a small overhang test tower before committing a long print.',
+    optimizeOverhangsLabel: 'Optimize for overhangs',
+    validationRangeLabel: 'Layer / line ratio',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'How to Estimate a Safe 3D Printing Overhang Angle', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'An FDM overhang works when each new strand has enough contact with the previous layer to stay attached while it cools. The common classroom rule says that a printer can handle about <strong>45 degrees</strong> without supports, but that number is only a starting point. A well cooled PLA profile with low layer height, wide extrusion, and moderate speed may print cleanly beyond 55 degrees. A hot PETG, ABS, or TPU profile with weak cooling may sag below 45 degrees. This calculator treats overhang ability as a practical thermal and geometric estimate instead of a fixed universal angle.',
+    },
+    {
+      type: 'paragraph',
+      html: 'The result is intentionally heuristic. It is not a computational fluid dynamics model, a finite element sag simulation, or a replacement for slicing a calibration tower. It gives a credible first answer from variables a maker can actually control at the printer: layer height, line width, part cooling, material, and speed. The value is clamped to a domestic printer range so it will not recommend unrealistic angles above 75 degrees even when every input is favorable.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'traditional support-free starting rule' },
+        { value: '55-60°', label: 'often possible with tuned PLA and strong cooling' },
+        { value: '75°', label: 'calculator ceiling for consumer FDM printers' },
+        { value: '0.08-0.32 mm', label: 'validated layer height input range' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Read the angle direction correctly',
+      html: 'This tool reports overhang angle against the vertical wall, matching the way many support settings are described in slicers. A larger number means the path leans farther outward from vertical and is harder to print without support.',
+    },
+    { type: 'title', text: 'Why the 45 Degree Rule Is Useful but Incomplete', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'The 45 degree rule survives because it describes a simple geometric condition: at roughly 45 degrees, about half of a new extrusion line still sits over material from the previous layer. That overlap gives the strand a ledge to bond to while the unsupported edge cools. If the next line moves farther outward, the unsupported portion grows, and gravity has more leverage before the polymer becomes stiff enough to hold its shape.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Real printers add several complications. A slicer may use a line width wider than the nozzle diameter, which changes how much overlap exists. A 0.20 mm layer printed with a 0.45 mm line has a different support ratio than a 0.28 mm layer printed with a 0.40 mm line. Cooling airflow, toolhead speed, nozzle temperature, chamber temperature, material viscosity, and perimeter order all change whether the strand freezes in place or droops.',
+    },
+    {
+      type: 'table',
+      headers: ['Variable', 'Why it changes overhangs', 'Typical tuning move'],
+      rows: [
+        ['Layer height', 'Taller layers shift the strand outward more aggressively for the same wall angle.', 'Lower external wall layer height when detail matters.'],
+        ['Line width', 'Wider lines increase contact area and can support a slightly larger offset.', 'Use a modestly wider external wall line, such as 0.44 to 0.48 mm on a 0.4 mm nozzle.'],
+        ['Cooling', 'A strand that stiffens quickly has less time to sag.', 'Raise fan speed for PLA overhang zones.'],
+        ['Speed', 'Fast motion lays hot plastic quickly and reduces cooling time per millimeter.', 'Slow external perimeters and overhang walls.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Use the calculator as a slicer decision tool',
+      html: 'If the model has a 58 degree underside and the calculator estimates 52 degrees for the current PETG profile, enable supports only for that feature or tune cooling and speed before printing the full part.',
+    },
+    { type: 'title', text: 'Layer Height and Line Width: The Geometry Behind Overhang Sag', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Layer height and line width define the physical stepping of the wall. Lower layer heights make overhangs easier because each new layer only moves a small distance outward. Wider extrusion lines also help because they create a broader base of contact. The important practical signal is the <strong>layer-height to line-width ratio</strong>. A low ratio means there is more horizontal material available to carry the next strand. A high ratio means the new strand is perched on a narrower ledge.',
+    },
+    {
+      type: 'paragraph',
+      html: 'For a 0.4 mm nozzle, common slicer line widths are around 0.42 mm to 0.48 mm. A 0.16 mm layer with a 0.45 mm line is conservative for overhangs; a 0.30 mm layer with a 0.40 mm line asks much more from the polymer and cooling. The calculator rewards favorable geometry because it reduces the unsupported fraction of each bead, but it also clamps the result because geometry alone cannot defeat heat, airflow, and acceleration limits.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Low ratio',
+          description: 'A small layer height compared with line width gives the cleanest support-free overhang behavior.',
+          points: ['Better surface under slopes', 'Lower sag risk', 'More print time'],
+        },
+        {
+          title: 'Balanced ratio',
+          description: 'Typical production settings work well when cooling and material are also reasonable.',
+          highlight: true,
+          points: ['Good speed-quality tradeoff', 'Works for many PLA parts', 'Still needs testing near 60 degrees'],
+        },
+        {
+          title: 'High ratio',
+          description: 'Large layers and narrow lines reduce the ledge under each new bead.',
+          points: ['More visible stair stepping', 'Higher underside curl risk', 'Supports become useful earlier'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Line width', definition: 'The planned extrusion width in the slicer. It may be slightly wider than the physical nozzle diameter.' },
+        { term: 'Layer height', definition: 'The vertical thickness of each printed layer.' },
+        { term: 'Unsupported fraction', definition: 'The part of a new extrusion bead that extends beyond the previous layer.' },
+        { term: 'Sag', definition: 'Downward deformation of a hot strand before it becomes stiff.' },
+      ],
+    },
+    { type: 'title', text: 'Cooling: Why Fan Air Often Adds 5 to 10 Degrees', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Cooling is the fastest lever for PLA overhangs. A freshly extruded strand leaves the nozzle soft, glossy, and easy to deform. Strong, well directed airflow increases the rate at which the outer skin stiffens. When the strand becomes self-supporting quickly, it can bridge a larger unsupported distance before gravity leaves a visible droop. This is why fan duct design, blower health, and print orientation can change overhang results even when the G-code values are identical.',
+    },
+    {
+      type: 'paragraph',
+      html: 'More fan is not automatically better for every material. PLA usually benefits from high cooling on overhang perimeters. PETG can use cooling, but excessive fan may reduce layer bonding or make surfaces cloudy. ABS often needs restrained cooling and a warm environment to avoid warping, so its overhang angle is usually lower unless the machine is tuned for controlled airflow. TPU can sag because it stays rubbery and flexible even after cooling compared with rigid materials.',
+    },
+    {
+      type: 'proscons',
+      title: 'Increasing part cooling for overhangs',
+      items: [
+        { pro: 'Can freeze PLA strands before the unsupported edge droops.', con: 'May weaken layer adhesion on materials that need heat retention.' },
+        { pro: 'Improves sharp underside details and small overhang features.', con: 'Poorly aimed ducts can cool one side and leave the opposite side messy.' },
+        { pro: 'Often faster than redesigning supports for small features.', con: 'Can create fan noise, electrical load, and warping on large flat parts.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Check airflow direction before trusting fan percentage',
+      html: 'A slicer fan value of 100% does not guarantee useful cooling at the bead. A blocked duct, weak blower, silicone sock shape, or toolhead mod can leave one side of the nozzle with much less airflow.',
+    },
+    { type: 'title', text: 'Material Differences: PLA, PETG, ABS, and TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA is the easiest reference material for overhang testing because it becomes stiff quickly and accepts strong part cooling. That is why tuned PLA profiles often print steeper unsupported walls than the traditional 45 degree rule. PETG is stickier and retains heat longer. It can produce strong functional prints, but unsupported undersides may look glossy, stringy, or curled if speed and cooling are not controlled. PETG overhangs often benefit from slowing external walls before pushing fan to the maximum.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS behaves differently because a warm chamber and limited cooling are often used to prevent warping and layer cracks. Those same conditions make unsupported slopes more difficult. TPU brings another challenge: the material remains flexible, so a strand can sag or smear even when it is not as hot as it was at the nozzle. The calculator gives each material a separate base behavior and multiplier to reflect these practical differences.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Overhang behavior', 'Best first adjustment'],
+      rows: [
+        ['PLA', 'Good stiffness and strong cooling tolerance.', 'Raise cooling and slow outside perimeters.'],
+        ['PETG', 'Tacky, heat-retaining, prone to glossy sag.', 'Lower speed and use moderate cooling.'],
+        ['ABS', 'Needs heat retention, so unsupported slopes are less forgiving.', 'Tune orientation or use selective supports.'],
+        ['TPU', 'Flexible strand can deform after deposition.', 'Use conservative angles and slow motion.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Why wet filament can mimic bad overhang tuning',
+      html: 'Moisture can create tiny steam bubbles and rough extrusion. If the underside looks foamy, inconsistent, or hairy, dry the filament before assuming the safe angle estimate is wrong.',
+    },
+    { type: 'title', text: 'Print Speed and Thermal Time', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Print speed affects overhangs because it changes thermal time. At higher speeds, more hot material is deposited per second, and each point of the strand has less time under useful airflow before the next section is laid down. Fast external walls can look acceptable on vertical surfaces but fail under overhangs because the bead is still soft while unsupported. Slowing only the overhang perimeter is often more efficient than slowing the entire model.',
+    },
+    {
+      type: 'paragraph',
+      html: 'A slicer may have separate controls for external wall speed, bridge speed, small perimeter speed, overhang speed, and minimum layer time. The calculator uses the main print speed as a practical input, then penalizes high speed progressively. If a model has short layers, minimum layer time and fan behavior may dominate. If the overhang is a long continuous wall, perimeter speed and cooling duct direction become more important.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Slow outside walls first because those are the surfaces the user will inspect.',
+        'Use overhang-specific slowdown when the slicer supports it.',
+        'Keep travel moves fast enough to avoid heat soaking tiny features.',
+        'Avoid judging speed from a tiny tower only; large parts retain heat differently.',
+        'Retest after changing nozzle size because flow rate changes thermal load.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Practical tuning order',
+      html: 'For a borderline unsupported slope, try stronger cooling, lower external wall speed, and lower layer height before enabling dense support everywhere.',
+    },
+    { type: 'title', text: 'When Supports Are Still the Right Answer', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'The goal is not to eliminate supports at any cost. Supports are useful when an underside must be dimensionally accurate, when the material is heat sensitive, when a cosmetic face points downward, or when the overhang starts in mid-air with no previous layer contact. A calculated 60 degree capability does not mean every 60 degree feature will look good. Small islands, abrupt ledges, holes, embossed text, and concave undersides can fail earlier than a smooth calibration ramp.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Selective supports usually beat global supports. If only one region exceeds the calculated safe angle, paint support blockers and enforcers, rotate the part, chamfer the underside, split the model, or add a small sacrificial rib. Tree supports, organic supports, and interface layers can reduce scarring while still holding the critical first unsupported strands. For functional brackets, a small design change often saves more material than aggressive slicer tuning.',
+    },
+    {
+      type: 'summary',
+      title: 'Use supports when',
+      items: [
+        'The calculated safe angle is below the model underside angle.',
+        'The underside must be smooth, flat, or dimensionally accurate.',
+        'The feature begins as an island with no previous layer to attach to.',
+        'The material cannot use enough cooling without warping or weak bonding.',
+        'A failed overhang would ruin a long print late in the job.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Red risk does not mean impossible',
+      html: 'A red result means supports are the safer default for a normal consumer profile. Expert users may still succeed with custom ducts, tuned overhang speed, special slicer paths, or model redesign, but the margin is narrow.',
+    },
+    { type: 'title', text: 'How to Validate the Estimate With an Overhang Tower', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A small overhang test tower is the best way to validate the estimate for a specific printer. Print a tower that steps from 35 degrees to 75 degrees using the same filament, nozzle, temperature, fan, and wall speed you plan to use on the real part. Inspect the underside from the side and from below. Look for curling, rough loops, separated perimeter edges, and glossy sag. The last clean step is your real safe angle for that profile.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Do not change five variables between tower runs. If the first tower fails at 48 degrees, raise cooling or slow overhang speed and repeat. If the second tower reaches 55 degrees, you know which lever helped. If the tower improves on one side but not another, inspect fan duct symmetry. If every step looks poor, check nozzle temperature, extrusion multiplier, wet filament, and part cooling hardware before assuming supports are unavoidable.',
+    },
+    {
+      type: 'table',
+      headers: ['Test observation', 'Likely cause', 'Next action'],
+      rows: [
+        ['Lower edge curls upward', 'Heat and cooling imbalance', 'Slow perimeter and improve fan direction.'],
+        ['Loops sag downward', 'Unsupported fraction too high', 'Lower layer height or use support.'],
+        ['One side cleaner than the other', 'Asymmetric airflow', 'Inspect duct and blower path.'],
+        ['Rough foamy underside', 'Moisture or overheated filament', 'Dry spool or reduce nozzle temperature.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Record the profile name',
+      html: 'Save a separate profile for each nozzle, material, and cooling setup. A PLA 0.16 mm profile and a PETG 0.28 mm profile should not share the same safe overhang assumption.',
+    },
+    { type: 'title', text: 'Designing Parts to Avoid Supports', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'The cheapest overhang fix often happens in CAD. Replace a sharp 90 degree underside with a chamfer, add a teardrop shape to horizontal holes, rotate the part so the steepest surface points upward, or split the model into two printable halves. A 45 degree chamfer can remove a support requirement entirely while preserving strength. For screw holes, teardrop and diamond profiles print cleaner than perfect circles when the top of the hole would otherwise become a bridge.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Manufacturing-aware design also reduces post-processing. Supports consume material, increase print time, scar surfaces, and can break delicate features during removal. A model that respects the printer safe angle prints faster and more consistently. The calculator helps during design review: compare the model underside angle against the estimated safe angle, then decide whether to redesign, tune the profile, or support only the risky area.',
+    },
+    {
+      type: 'proscons',
+      title: 'Redesigning instead of supporting',
+      items: [
+        { pro: 'Reduces material and post-processing time.', con: 'May change the visual or functional shape of the part.' },
+        { pro: 'Improves repeatability across print farms.', con: 'Requires access to the CAD source or mesh editing tools.' },
+        { pro: 'Can strengthen parts by aligning layers better.', con: 'Some geometries still need support for accuracy.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Best support free design moves',
+      items: [
+        'Use 45 degree chamfers under horizontal ledges.',
+        'Turn circular horizontal holes into teardrops when possible.',
+        'Orient cosmetic faces upward or sideways.',
+        'Split parts along hidden seams instead of supporting a large underside.',
+        'Use support only where the model angle exceeds the tested profile.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Is 45 degrees always safe for 3D printer overhangs?',
+      answer: 'No. It is a useful default rule, but material, cooling, layer height, line width, speed, and fan duct performance can move the practical limit lower or higher.',
+    },
+    {
+      question: 'Why does the calculator limit results to 75 degrees?',
+      answer: 'Consumer FDM printers can sometimes print very steep overhang test shapes, but recommending values above 75 degrees is unreliable for normal parts, so the tool clamps the estimate to a conservative domestic range.',
+    },
+    {
+      question: 'Which material prints the best support-free overhangs?',
+      answer: 'PLA is usually easiest because it stiffens quickly and tolerates strong part cooling. PETG, ABS, and TPU generally need more conservative overhang assumptions.',
+    },
+    {
+      question: 'Should I increase fan speed or lower print speed first?',
+      answer: 'For PLA, increase cooling and slow external overhang walls. For PETG, ABS, or functional parts, balance cooling against layer adhesion and warping risk.',
+    },
+    {
+      question: 'Can this replace an overhang calibration tower?',
+      answer: 'No. It provides a heuristic estimate and a good starting point. A small tower is still the best validation for a specific printer, filament, and slicer profile.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Enter extrusion geometry', text: 'Set the layer height and slicer line width used by the profile.' },
+    { name: 'Choose material and cooling', text: 'Select PLA, PETG, ABS, or TPU and the current part cooling level.' },
+    { name: 'Add print speed', text: 'Enter the external wall or practical print speed used for the overhang area.' },
+    { name: 'Compare the result', text: 'Use the safe angle and risk feedback to decide whether to tune, redesign, or enable supports.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Safe 3D Print Overhang Angle Calculator',
+      description: 'Estimate support-free FDM overhang angle from layer height, line width, cooling, material, and speed.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is 45 degrees always safe for 3D printer overhangs?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. It is a useful default rule, but material, cooling, layer height, line width, speed, and fan duct performance can move the practical limit lower or higher.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to estimate a safe 3D printer overhang angle',
+      step: [
+        { '@type': 'HowToStep', text: 'Enter layer height and line width.' },
+        { '@type': 'HowToStep', text: 'Select material and cooling level.' },
+        { '@type': 'HowToStep', text: 'Enter print speed.' },
+        { '@type': 'HowToStep', text: 'Compare the result with the model underside angle.' },
+      ],
+    },
+  ],
+};

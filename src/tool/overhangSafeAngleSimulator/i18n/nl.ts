@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'veilige-overhanghoek-calculator',
+  title: 'Veilige 3D print overhanghoek calculator',
+  description: 'Schat de maximale ongesteunde overhanghoek van je FDM-printer op basis van laaghoogte, lijnbreedte, koeling, materiaal en printsnelheid.',
+  ui: {
+    controlsAriaLabel: 'Invoerwaarden veilige overhanghoek',
+    resultsAriaLabel: 'Resultaten veilige overhanghoek',
+    unitSystemLabel: 'Eenheden',
+    metricLabel: 'Metrisch',
+    imperialLabel: 'US',
+    profileLabel: 'Printerprofiel',
+    defaultProfileLabel: 'Onopgeslagen setup',
+    saveProfileLabel: 'Profiel opslaan',
+    geometryGroupLabel: 'Extrusiegeometrie',
+    coolingGroupLabel: 'Laagkoeling',
+    materialGroupLabel: 'Materiaal',
+    speedGroupLabel: 'Beweging',
+    layerHeightLabel: 'Laaghoogte',
+    layerHeightHelp: 'Laaghoogte bepaalt hoeveel nieuw plastic door de vorige lijn ondersteund moet worden. Hogere lagen verminderen meestal de overhangtolerantie.',
+    lineWidthLabel: 'Lijnbreedte',
+    lineWidthHelp: 'Lijnbreedte is de extrusiebreedte van de slicer, niet alleen de nozzlediameter. bredere lijnen geven de volgende laag meer steunvlak om aan te hechten.',
+    coolingLabel: 'Onderdeelkoeling',
+    coolingHelp: 'Koeling beschrijft hoe snel de verse streng stijf genoeg wordt om zijn vorm te behouden voordat hij doorzakt.',
+    lowCoolingLabel: 'Laag',
+    mediumCoolingLabel: 'Gemiddeld',
+    highCoolingLabel: 'Hoog',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Printsnelheid',
+    overhangHelp: 'Overhanghoek wordt weergegeven ten opzichte van de verticale wand. Hogere waarden betekenen dat de streng verder naar buiten steekt zonder ondersteuning.',
+    angleLabel: 'Geschatte veilige hoek',
+    vectorLabel: 'Overhangvector ten opzichte van verticaal',
+    riskLabel: 'Risicofeedback',
+    safeRiskLabel: 'Groen: veilig',
+    cautiousRiskLabel: 'Geel: voorzichtig',
+    supportsRiskLabel: 'Rood: ondersteuning nodig',
+    reportButtonLabel: 'Configuratie opslaan als profiel',
+    savedNoticeLabel: 'Profiel opgeslagen in deze browser.',
+    coolingFactorLabel: 'Koelfactor',
+    speedFactorLabel: 'Snelheidsfactor',
+    materialFactorLabel: 'Materiaalfactor',
+    geometryFactorLabel: 'Geometriefactor',
+    ratioLabel: 'Laag / lijnverhouding',
+    educationLabel: 'Educatieve notitie',
+    tipIncreaseCooling: 'Het verhogen van de onderdeelkoeling tot bijna 100% op buitencontouren verbetert de veilige overhang vaak met ongeveer 5 tot 10 graden, vooral met PLA.',
+    tipSlowDown: 'Hoge contoursnelheid geeft de streng minder tijd om te stollen. Probeer buitenwanden te vertragen voordat je overal ondersteuning toevoegt.',
+    tipLowerLayer: 'De laag-tot-lijnverhouding is hoog. Een lagere laaghoogte of grotere lijnbreedte geeft elke nieuwe streng meer steun.',
+    tipPetgCaution: 'PETG houdt warmte vast en blijft langer plakkerig dan PLA. Sterke koeling helpt, maar te veel ventilator kan de laaghechting op functionele onderdelen verminderen.',
+    tipBaseline: 'Dit is een heuristische schatting, geen CFD-simulatie. Bevestig kritische profielen met een kleine overhang-testtoren voordat je een lange print start.',
+    optimizeOverhangsLabel: 'Optimaliseren voor overhangen',
+    validationRangeLabel: 'Laag / lijnverhouding',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '\u00b0',
+  },
+  seo: [
+    { type: 'title', text: 'Hoe schat je een veilige 3D-print overhanghoek', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Een FDM-overhang werkt wanneer elke nieuwe streng voldoende contact heeft met de vorige laag om vast te blijven zitten tijdens het afkoelen. De gangbare vuistregel zegt dat een printer ongeveer <strong>45 graden</strong> aankan zonder ondersteuning, maar dat getal is slechts een startpunt. Een goed gekoeld PLA-profiel met lage laaghoogte, brede extrusie en gematigde snelheid kan probleemloos voorbij 55 graden printen. Een heet PETG-, ABS- of TPU-profiel met zwakke koeling kan onder 45 graden doorzakken. Deze calculator behandelt overhangvermogen als een praktische thermische en geometrische schatting in plaats van een vaste universele hoek.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Het resultaat is bewust heuristisch. Het is geen computational fluid dynamics-model, geen eindige-elementen-doorhangsimulatie of vervanging voor het slicen van een kalibratietoren. Het geeft een geloofwaardig eerste antwoord op basis van variabelen die een maker daadwerkelijk aan de printer kan instellen: laaghoogte, lijnbreedte, onderdeelkoeling, materiaal en snelheid. De waarde wordt begrensd tot een gangbaar printerbereik, zodat hij geen onrealistische hoeken boven 75 graden aanbeveelt, zelfs niet bij gunstige invoerwaarden.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45\u00b0', label: 'traditionele ondersteuningsvrije startregel' },
+        { value: '55-60\u00b0', label: 'vaak mogelijk met afgestemd PLA en sterke koeling' },
+        { value: '75\u00b0', label: 'plafond van de calculator voor consumenten-FDM-printers' },
+        { value: '0,08-0,32 mm', label: 'gevalideerd laaghoogte-invoerbereik' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Lees de hoekrichting correct',
+      html: 'Dit gereedschap rapporteert de overhanghoek ten opzichte van de verticale wand, zoals veel ondersteuningsinstellingen in slicers worden beschreven. Een groter getal betekent dat het pad verder naar buiten helt vanuit verticaal en moeilijker te printen is zonder ondersteuning.',
+    },
+    { type: 'title', text: 'Waarom de 45-gradenregel nuttig maar onvolledig is', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'De 45-gradenregel blijft bestaan omdat hij een eenvoudige geometrische toestand beschrijft: bij ongeveer 45 graden ligt ongeveer de helft van een nieuwe extrusielijn nog over materiaal van de vorige laag. Die overlap geeft de streng een steunvlak om aan te hechten terwijl de ongesteunde rand afkoelt. Als de volgende lijn verder naar buiten beweegt, groeit het ongesteunde deel en heeft de zwaartekracht meer hefboomwerking voordat het polymeer stijf genoeg wordt om zijn vorm te behouden.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Echte printers voegen verschillende complicaties toe. Een slicer kan een lijnbreedte gebruiken die groter is dan de nozzlediameter, wat de overlap verandert. Een 0,20 mm-laag geprint met een 0,45 mm-lijn heeft een andere ondersteuningsverhouding dan een 0,28 mm-laag met een 0,40 mm-lijn. Koelluchtstroom, snelheid van de toolhead, nozzletemperatuur, kamertemperatuur, materiaalviscositeit en contourvolgorde veranderen allemaal of de streng op zijn plaats bevriest of doorzakt.',
+    },
+    {
+      type: 'table',
+      headers: ['Variabele', 'Waarom het overhangen be\u00efnvloedt', 'Typische afstelactie'],
+      rows: [
+        ['Laaghoogte', 'Hogere lagen verschuiven de streng agressiever naar buiten bij dezelfde wandhoek.', 'Verlaag de buitenwandlaaghoogte wanneer detail belangrijk is.'],
+        ['Lijnbreedte', 'Bredere lijnen vergroten het contactoppervlak en kunnen een iets grotere offset ondersteunen.', 'Gebruik een bescheiden bredere buitenwandlijn, zoals 0,44 tot 0,48 mm op een 0,4 mm-nozzle.'],
+        ['Koeling', 'Een streng die snel stolt heeft minder tijd om door te zakken.', 'Verhoog de ventilatorsnelheid voor PLA-overhangzones.'],
+        ['Snelheid', 'Snelle beweging legt heet plastic snel neer en verkort de koeltijd per millimeter.', 'Vertraag buitencontouren en overhangwanden.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Gebruik de calculator als slicer beslissingstool',
+      html: 'Als het model een 58-graden-onderkant heeft en de calculator schat 52 graden voor het huidige PETG-profiel, schakel dan alleen voor dat kenmerk ondersteuning in of stem koeling en snelheid af voordat je het volledige onderdeel print.',
+    },
+    { type: 'title', text: 'Laaghoogte en lijnbreedte: de geometrie achter overhangdoorhang', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Laaghoogte en lijnbreedte bepalen de fysieke traploop van de wand. Lagere laaghoogten maken overhangen gemakkelijker omdat elke nieuwe laag slechts een kleine afstand naar buiten beweegt. Bredere extrusielijnen helpen ook omdat ze een breder contactbasis cre\u00ebren. Het belangrijkste praktische signaal is de <strong>verhouding laaghoogte tot lijnbreedte</strong>. Een lage verhouding betekent dat er meer horizontaal materiaal beschikbaar is om de volgende streng te dragen. Een hoge verhouding betekent dat de nieuwe streng op een smallere richel balanceert.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Voor een 0,4 mm-nozzle liggen gangbare slicer-lijnbreedtes rond 0,42 mm tot 0,48 mm. Een 0,16 mm-laag met een 0,45 mm-lijn is conservatief voor overhangen; een 0,30 mm-laag met een 0,40 mm-lijn vraagt veel meer van het polymeer en de koeling. De calculator beloont gunstige geometrie omdat het de ongesteunde fractie van elke rups verkleint, maar begrenst het resultaat ook omdat geometrie alleen hitte, luchtstroom en acceleratielimieten niet kan overwinnen.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Lage verhouding',
+          description: 'Een kleine laaghoogte in vergelijking met lijnbreedte geeft het schoonste ondersteuningsvrije overhanggedrag.',
+          points: ['Beter oppervlak onder hellingen', 'Lager doorhangrisico', 'Meer printtijd'],
+        },
+        {
+          title: 'Evenwichtige verhouding',
+          description: 'Typische productie-instellingen werken goed wanneer koeling en materiaal ook redelijk zijn.',
+          highlight: true,
+          points: ['Goede snelheid-kwaliteit-afweging', 'Werkt voor veel PLA-onderdelen', 'Vereist nog steeds testen nabij 60 graden'],
+        },
+        {
+          title: 'Hoge verhouding',
+          description: 'Grote lagen en smalle lijnen verminderen de richel onder elke nieuwe rups.',
+          points: ['Meer zichtbare traploop', 'Hoger risico op omkrullen van de onderkant', 'Ondersteuning wordt eerder nuttig'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Lijnbreedte', definition: 'De geplande extrusiebreedte in de slicer. Deze kan iets breder zijn dan de fysieke nozzlediameter.' },
+        { term: 'Laaghoogte', definition: 'De verticale dikte van elke geprinte laag.' },
+        { term: 'Ongesteunde fractie', definition: 'Het deel van een nieuwe extrusierups dat voorbij de vorige laag uitsteekt.' },
+        { term: 'Doorhang', definition: 'Neerwaartse vervorming van een hete streng voordat deze stijf wordt.' },
+      ],
+    },
+    { type: 'title', text: 'Koeling: waarom ventilatorlucht vaak 5 tot 10 graden toevoegt', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Koeling is de snelste hefboom voor PLA-overhangen. Een vers ge\u00ebxtrudeerde streng verlaat de nozzle zacht, glanzend en gemakkelijk te vervormen. Sterke, goed gerichte luchtstroom verhoogt de snelheid waarmee de buitenhuid stolt. Wanneer de streng snel zelfdragend wordt, kan hij een grotere ongesteunde afstand overbruggen voordat de zwaartekracht een zichtbare doorhang achterlaat. Daarom kunnen ventilatorontwerp, blowergezondheid en printori\u00ebntatie de overhangresultaten veranderen, zelfs als de G-code-waarden identiek zijn.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Meer ventilator is niet automatisch beter voor elk materiaal. PLA heeft meestal baat bij hoge koeling op overhangcontouren. PETG kan koeling gebruiken, maar overmatige ventilator kan de laaghechting verminderen of oppervlakken troebel maken. ABS heeft vaak terughoudende koeling en een warme omgeving nodig om kromtrekken te voorkomen, dus de overhanghoek is meestal lager, tenzij de machine is afgesteld voor gecontroleerde luchtstroom. TPU kan doorhangen omdat het rubberachtig en flexibel blijft, zelfs na afkoeling in vergelijking met stijve materialen.',
+    },
+    {
+      type: 'proscons',
+      title: 'Onderdeelkoeling verhogen voor overhangen',
+      items: [
+        { pro: 'Kan PLA-strengen bevriezen voordat de ongesteunde rand doorhangt.', con: 'Kan laaghechting verzwakken op materialen die warmte moeten vasthouden.' },
+        { pro: 'Verbetert scherpe onderkantdetails en kleine overhangkenmerken.', con: 'Slecht gerichte kanalen kunnen \u00e9\u00e9n kant koelen en de tegenoverliggende kant rommelig achterlaten.' },
+        { pro: 'Vaak sneller dan het opnieuw ontwerpen van ondersteuning voor kleine kenmerken.', con: 'Kan ventilatorgeluid, elektrische belasting en kromtrekken op grote platte onderdelen veroorzaken.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Controleer luchtstroomrichting voordat je het ventilatorpercentage vertrouwt',
+      html: 'Een slicer-ventilatorwaarde van 100% garandeert geen effectieve koeling bij de rups. Een geblokkeerd kanaal, zwakke blower, silicone sock-vorm of toolhead-mod kunnen \u00e9\u00e9n kant van de nozzle met veel minder luchtstroom achterlaten.',
+    },
+    { type: 'title', text: 'Materiaalverschillen: PLA, PETG, ABS en TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA is het eenvoudigste referentiemateriaal voor overhangtesten omdat het snel stijf wordt en sterke onderdeelkoeling accepteert. Daarom printen afgestemde PLA-profielen vaak steilere ongesteunde wanden dan de traditionele 45-gradenregel. PETG is plakkeriger en houdt warmte langer vast. Het kan sterke functionele prints produceren, maar ongesteunde onderkanten kunnen glanzend, draderig of gekruld lijken als snelheid en koeling niet worden gecontroleerd. PETG-overhangen hebben vaak baat bij het vertragen van buitenwanden voordat de ventilator op maximaal wordt gezet.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS gedraagt zich anders omdat een warme kamer en beperkte koeling vaak worden gebruikt om kromtrekken en laagscheuren te voorkomen. Diezelfde omstandigheden maken ongesteunde hellingen moeilijker. TPU brengt een andere uitdaging: het materiaal blijft flexibel, dus een streng kan doorhangen of uitsmeren, zelfs als hij niet meer zo heet is als bij de nozzle. De calculator geeft elk materiaal een apart basisgedrag en vermenigvuldigingsfactor om deze praktische verschillen weer te geven.',
+    },
+    {
+      type: 'table',
+      headers: ['Materiaal', 'Overhanggedrag', 'Beste eerste aanpassing'],
+      rows: [
+        ['PLA', 'Goede stijfheid en hoge koeltolerantie.', 'Verhoog koeling en vertraag buitencontouren.'],
+        ['PETG', 'Plakkerig, warmtevasthoudend, geneigd tot glanzende doorhang.', 'Verlaag snelheid en gebruik gematigde koeling.'],
+        ['ABS', 'Heef warmtebehoud nodig, dus ongesteunde hellingen zijn minder vergevingsgezind.', 'Stem ori\u00ebntatie af of gebruik selectieve ondersteuning.'],
+        ['TPU', 'Flexibele streng kan vervormen na depositie.', 'Gebruik conservatieve hoeken en langzame beweging.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Waarom nat filament een slechte overhangafstelling kan nabootsen',
+      html: 'Vocht kan kleine stoombellen en ongelijkmatige extrusie veroorzaken. Als de onderkant schuimig, onregelmatig of harig lijkt, droog dan het filament voordat je aanneemt dat de hoekschatting verkeerd is.',
+    },
+    { type: 'title', text: 'Printsnelheid en thermische tijd', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Printsnelheid be\u00efnvloedt overhangen omdat het de thermische tijd verandert. Bij hogere snelheden wordt per seconde meer heet materiaal gedeponeerd en heeft elk punt van de streng minder tijd onder nuttige luchtstroom voordat de volgende sectie wordt neergelegd. Snelle buitenwanden kunnen er acceptabel uitzien op verticale oppervlakken maar falen onder overhangen omdat de rups nog zacht is terwijl hij ongesteund blijft. Alleen de overhangcontour vertragen is vaak effici\u00ebnter dan het hele model vertragen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Een slicer kan aparte regelaars hebben voor buitenwandsnelheid, bruggen, kleine contouren, overhangsnelheid en minimale laagtijd. De calculator gebruikt de hoofprintsnelheid als praktische invoer en bestraft hoge snelheden progressief. Als een model korte lagen heeft, kunnen minimale laagtijd en ventilatordraging domineren. Als de overhang een lange doorlopende wand is, worden contouren en koelluchtrichting belangrijker.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Vertraag eerst de buitenwanden, want dat zijn de oppervlakken die de gebruiker zal inspecteren.',
+        'Gebruik overhangspecifieke vertraging wanneer de slicer dit ondersteunt.',
+        'Houd reisbewegingen snel genoeg om verhitting van kleine kenmerken te voorkomen.',
+        'Beoordeel snelheid niet alleen op een kleine toren; grote onderdelen houden warmte anders vast.',
+        'Test opnieuw na het wisselen van nozzle omdat de stroomsnelheid de thermische belasting verandert.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Praktische afstelvolgorde',
+      html: 'Probeer bij een grensgeval ongesteunde helling eerst sterkere koeling, lagere buitenwandsnelheid en lagere laaghoogte voordat je overal dichte ondersteuning inschakelt.',
+    },
+    { type: 'title', text: 'Wanneer ondersteuning nog steeds het juiste antwoord is', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Het doel is niet om ondersteuning koste wat kost te vermijden. Ondersteuning is nuttig wanneer een onderkant maatvast moet zijn, wanneer het materiaal hittegevoelig is, wanneer een cosmetisch oppervlak naar beneden wijst, of wanneer de overhang in de lucht begint zonder contact met de vorige laag. Een berekende 60-gradencapaciteit betekent niet dat elk kenmerk van 60 graden er goed uitziet. Kleine eilandjes, abrupte richels, gaten, reliëftekst en holle onderkanten kunnen eerder falen dan een gladde kalibratiehelling.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Selectieve ondersteuning is meestal beter dan globale ondersteuning. Als slechts één regio de berekende veilige hoek overschrijdt, schilder dan ondersteuningsblokkers en -dwingers, draai het onderdeel, faseer de onderkant, splits het model of voeg een kleine offerrib toe. Boomondersteuning, organische ondersteuning en grenslagen kunnen littekens verminderen terwijl ze de kritieke eerste ongesteunde strengen vasthouden. Voor functionele beugels bespaart een kleine ontwerpwijziging vaak meer materiaal dan agressieve slicer-optimalisatie.',
+    },
+    {
+      type: 'summary',
+      title: 'Gebruik ondersteuning wanneer',
+      items: [
+        'De berekende veilige hoek onder de modelonderkanthoek ligt.',
+        'De onderkant glad, vlak of maatvast moet zijn.',
+        'Het kenmerk begint als een eiland zonder vorige laag om aan te hechten.',
+        'Het materiaal niet genoeg koeling kan gebruiken zonder kromtrekken of zwakke hechting.',
+        'Een mislukte overhang een lange print laat in de klus zou verpesten.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Rood risico betekent niet onmogelijk',
+      html: 'Een rood resultaat betekent dat ondersteuning de veiligere standaard is voor een normaal consumentenprofiel. Ervaren gebruikers kunnen nog steeds slagen met aangepaste kanalen, afgestemde overhangsnelheid, speciale slicer-paden of modelherontwerp, maar de marge is smal.',
+    },
+    { type: 'title', text: 'Hoe valideer je de schatting met een overhangtoren', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Een kleine overhang-testtoren is de beste manier om de schatting voor een specifieke printer te valideren. Print een toren die stapsgewijs van 35 tot 75 graden loopt met hetzelfde filament, nozzle, temperatuur, ventilator en wandsnelheid die je op het echte onderdeel wilt gebruiken. Inspecteer de onderkant van de zijkant en van onderen. Let op omkrullen, ruwe lussen, gescheiden contourranden en glanzende doorhang. De laatste schone trede is je werkelijke veilige hoek voor dat profiel.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Verander niet vijf variabelen tussen torenruns. Als de eerste toren faalt bij 48 graden, verhoog dan de koeling of vertraag de overhangsnelheid en herhaal. Als de tweede toren 55 graden bereikt, weet je welke hefboom hielp. Als de toren aan de ene kant verbetert maar aan de andere niet, inspecteer dan de symmetrie van het ventilatiekanaal. Als elke trede er slecht uitziet, controleer dan nozzletemperatuur, extrusiemultiplicator, nat filament en koelhardware voordat je aanneemt dat ondersteuning onvermijdelijk is.',
+    },
+    {
+      type: 'table',
+      headers: ['Testobservatie', 'Waarschijnlijke oorzaak', 'Volgende actie'],
+      rows: [
+        ['Onderrand krult omhoog', 'Warmte-koeling-onevenwicht', 'Contour vertragen en ventilatorrichting verbeteren.'],
+        ['Lussen hangen naar beneden', 'Ongesteunde fractie te hoog', 'Laaghoogte verlagen of ondersteuning gebruiken.'],
+        ['Eén kant schoner dan de andere', 'Asymmetrische luchtstroom', 'Kanaal en blowerpad inspecteren.'],
+        ['Ruwe, schuimige onderkant', 'Vocht of oververhit filament', 'Spoel drogen of nozzletemperatuur verlagen.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Noteer de profielnaam',
+      html: 'Bewaar een apart profiel voor elke nozzle, materiaal en koelconfiguratie. Een PLA 0,16 mm-profiel en een PETG 0,28 mm-profiel mogen niet dezelfde veilige overhangaanname delen.',
+    },
+    { type: 'title', text: 'Onderdelen ontwerpen om ondersteuning te voorkomen', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'De goedkoopste overhangoplossing ontstaat vaak in CAD. Vervang een scherpe 90-gradenonderkant door een afschuining, voeg een traanvorm toe aan horizontale gaten, draai het onderdeel zodat het steilste oppervlak naar boven wijst, of splits het model in twee printbare helften. Een 45-graden afschuining kan een ondersteuningsvereiste volledig overbodig maken terwijl de sterkte behouden blijft. Voor schroefgaten printen traan- en diamantprofielen schoner dan perfecte cirkels wanneer de bovenkant van het gat anders een brug zou worden.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Productiebewust ontwerpen vermindert ook nabewerking. Ondersteuning verbruikt materiaal, verhoogt printtijd, laat littekens achter op oppervlakken en kan delicate kenmerken beschadigen tijdens het verwijderen. Een model dat de veilige hoek van de printer respecteert, print sneller en consistenter. De calculator helpt tijdens ontwerpbeoordeling: vergelijk de onderkant van het model met de geschatte veilige hoek en beslis dan of je opnieuw wilt ontwerpen, het profiel wilt aanpassen of alleen het risicogebied wilt ondersteunen.',
+    },
+    {
+      type: 'proscons',
+      title: 'Herontwerpen in plaats van ondersteunen',
+      items: [
+        { pro: 'Vermindert materiaal en nabewerkingstijd.', con: 'Kan de visuele of functionele vorm van het onderdeel veranderen.' },
+        { pro: 'Verbetert herhaalbaarheid in printfarms.', con: 'Vereist toegang tot de CAD-bron of mesh-bewerkingsgereedschappen.' },
+        { pro: 'Kan onderdelen versterken door betere laagori\u00ebntatie.', con: 'Sommige geometrie\u00ebn hebben nog steeds ondersteuning nodig voor nauwkeurigheid.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Beste ondersteuningsvrije ontwerpmaatregelen',
+      items: [
+        'Gebruik 45-graden afschuiningen onder horizontale richels.',
+        'Verander ronde horizontale gaten waar mogelijk in traanvormen.',
+        'Richt cosmetische oppervlakken naar boven of opzij.',
+        'Splits onderdelen langs verborgen naden in plaats van een grote onderkant te ondersteunen.',
+        'Gebruik alleen ondersteuning waar de modelhoek het geteste profiel overschrijdt.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Zijn 45 graden altijd veilig voor 3D-printeroverhangen?',
+      answer: 'Nee. Het is een nuttige standaardregel, maar materiaal, koeling, laaghoogte, lijnbreedte, snelheid en ventilatorprestaties kunnen de praktische grens naar beneden of boven verplaatsen.',
+    },
+    {
+      question: 'Waarom begrenst de calculator de resultaten tot 75 graden?',
+      answer: 'Consumenten-FDM-printers kunnen soms zeer steile overhangtestvormen printen, maar het aanbevelen van waarden boven 75 graden is onbetrouwbaar voor normale onderdelen, dus begrenst het gereedschap de schatting tot een conservatief gangbaar bereik.',
+    },
+    {
+      question: 'Welk materiaal print de beste ondersteuningsvrije overhangen?',
+      answer: 'PLA is meestal het gemakkelijkst omdat het snel stolt en sterke onderdeelkoeling verdraagt. PETG, ABS en TPU hebben over het algemeen conservatievere overhangaannames nodig.',
+    },
+    {
+      question: 'Moet ik eerst de ventilatorsnelheid verhogen of de printsnelheid verlagen?',
+      answer: 'Verhoog voor PLA de koeling en vertraag de buitenste overhangwanden. Voor PETG, ABS of functionele onderdelen, balanceer koeling tegen laaghechting en kromtrekkingsrisico.',
+    },
+    {
+      question: 'Kan dit een overhangkalibratietoren vervangen?',
+      answer: 'Nee. Het geeft een heuristische schatting en een goed startpunt. Een kleine toren is nog steeds de beste validatie voor een specifieke printer, filament en slicer-profiel.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Extrusiegeometrie invoeren', text: 'Stel de laaghoogte en de slicer-lijnbreedte in die het profiel gebruikt.' },
+    { name: 'Materiaal en koeling kiezen', text: 'Selecteer PLA, PETG, ABS of TPU en het huidige onderdeelkoelingsniveau.' },
+    { name: 'Printsnelheid toevoegen', text: 'Voer de buitenwand- of praktische printsnelheid in voor het overhanggebied.' },
+    { name: 'Vergelijk het resultaat', text: 'Gebruik de veilige hoek en risicofeedback om te beslissen of je wilt afstellen, herontwerpen of ondersteuning wilt inschakelen.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Veilige 3D-print overhanghoek calculator',
+      description: 'Schat de ondersteuningsvrije FDM-overhanghoek op basis van laaghoogte, lijnbreedte, koeling, materiaal en snelheid.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Zijn 45 graden altijd veilig voor 3D-printeroverhangen?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Nee. Het is een nuttige standaardregel, maar materiaal, koeling, laaghoogte, lijnbreedte, snelheid en ventilatorprestaties kunnen de praktische grens naar beneden of boven verplaatsen.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Hoe schat je een veilige 3D-printeroverhanghoek',
+      step: [
+        { '@type': 'HowToStep', text: 'Voer laaghoogte en lijnbreedte in.' },
+        { '@type': 'HowToStep', text: 'Selecteer materiaal en koelingsniveau.' },
+        { '@type': 'HowToStep', text: 'Voer de printsnelheid in.' },
+        { '@type': 'HowToStep', text: 'Vergelijk het resultaat met de modelonderkanthoek.' },
+      ],
+    },
+  ],
+};

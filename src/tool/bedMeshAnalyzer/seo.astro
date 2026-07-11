@@ -1,0 +1,18 @@
+---
+import { SEORenderer } from '@jjlmoya/utils-shared';
+import type { UtilitySEOContent } from '@jjlmoya/utils-shared';
+import { bedMeshAnalyzer } from './index';
+import type { KnownLocale } from '../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await bedMeshAnalyzer.i18n.en?.();
+const seoContent: UtilitySEOContent | null = content
+  ? { locale, sections: content.seo as UtilitySEOContent['sections'] }
+  : null;
+---
+
+{seoContent && seoContent.sections.length > 0 && <SEORenderer content={seoContent} />}

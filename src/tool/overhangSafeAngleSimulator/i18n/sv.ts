@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'kalkylator-saker-overhangsvinkel',
+  title: 'Kalkylator för säker överhängsvinkel vid 3D utskrift',
+  description: 'Uppskatta den maximala ounderstödda överhängsvinkeln som din FDM-skrivare klarar utifrån lagerhöjd, linjebredd, kylning, material och utskriftshastighet.',
+  ui: {
+    controlsAriaLabel: 'Indata för säker överhängsvinkel',
+    resultsAriaLabel: 'Resultat för säker överhängsvinkel',
+    unitSystemLabel: 'Enheter',
+    metricLabel: 'Metriskt',
+    imperialLabel: 'US',
+    profileLabel: 'Skrivarprofil',
+    defaultProfileLabel: 'Osparad konfiguration',
+    saveProfileLabel: 'Spara profil',
+    geometryGroupLabel: 'Extrusionsgeometri',
+    coolingGroupLabel: 'Lagerkylning',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Rörelse',
+    layerHeightLabel: 'Lagerhöjd',
+    layerHeightHelp: 'Lagerhöjden styr hur mycket ny plast måste stödjas av föregående linje. Högre lager minskar vanligtvis överhängstoleransen.',
+    lineWidthLabel: 'Linjebredd',
+    lineWidthHelp: 'Linjebredd är slicerns extrusionsbredd, inte bara munstyckets diameter. Bredare linjer ger nästa lager mer kant att fästa vid.',
+    coolingLabel: 'Delkylning',
+    coolingHelp: 'Kylning beskriver hur snabbt den färska strängen blir tillräckligt styv för att hålla formen innan den sjunker ihop.',
+    lowCoolingLabel: 'Låg',
+    mediumCoolingLabel: 'Medel',
+    highCoolingLabel: 'Hög',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Utskriftshastighet',
+    overhangHelp: 'Överhängsvinkeln visas mot den vertikala väggen. Högre värden innebär att strängen sticker ut längre utåt utan stöd.',
+    angleLabel: 'Uppskattad säker vinkel',
+    vectorLabel: 'Överhängsvektor mot vertikalen',
+    riskLabel: 'Riskåterkoppling',
+    safeRiskLabel: 'Grön: säker',
+    cautiousRiskLabel: 'Gul: försiktig',
+    supportsRiskLabel: 'Röd: stöd behövs',
+    reportButtonLabel: 'Spara konfiguration som profil',
+    savedNoticeLabel: 'Profil sparad i denna webbläsare.',
+    coolingFactorLabel: 'Kylningsfaktor',
+    speedFactorLabel: 'Hastighetsfaktor',
+    materialFactorLabel: 'Materialfaktor',
+    geometryFactorLabel: 'Geometrifaktor',
+    ratioLabel: 'Lager-/linjekvot',
+    educationLabel: 'Pedagogisk notering',
+    tipIncreaseCooling: 'Att öka delkylningen till nära 100 % på yttre omkretsar förbättrar ofta det säkra överhänget med cirka 5 till 10 grader, särskilt med PLA.',
+    tipSlowDown: 'Hög perimetershastighet ger strängen mindre tid att stelna. Prova att sakta ner ytterväggar innan du lägger till stöd överallt.',
+    tipLowerLayer: 'Lager-till-linje-kvoten är hög. Sänkning av lagerhöjden eller ökning av linjebredden ger varje ny sträng mer stöd.',
+    tipPetgCaution: 'PETG behåller värme och förblir kladdig längre än PLA. Kraftig kylning hjälper, men för mycket fläkt kan minska lagerbindningen på funktionella delar.',
+    tipBaseline: 'Detta är en heuristisk uppskattning, inte CFD-simulering. Bekräfta kritiska profiler med ett litet överhängstesttorn innan du påbörjar en lång utskrift.',
+    optimizeOverhangsLabel: 'Optimera för överhäng',
+    validationRangeLabel: 'Lager-/linjekvot',
+    mmUnit: 'mm',
+    inchUnit: 'tum',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'tum/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Hur man uppskattar en säker 3D-utskriftsöverhängsvinkel', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ett FDM-överhäng fungerar när varje ny sträng har tillräcklig kontakt med föregående lager för att sitta kvar medan den svalnar. Tumregeln i skolböckerna säger att en skrivare klarar cirka <strong>45 grader</strong> utan stöd, men den siffran är bara en utgångspunkt. En välkyld PLA-profil med låg lagerhöjd, bred extrusionsbredd och måttlig hastighet kan skriva rent bortom 55 grader. En varm PETG-, ABS- eller TPU-profil med svag kylning kan sjunka ihop under 45 grader. Denna kalkylator behandlar överhängsförmåga som en praktisk termisk och geometrisk uppskattning istället för en fast universell vinkel.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Resultatet är avsiktligt heuristiskt. Det är inte en numerisk strömningsmodell, en finit element-simulering av nedhängning eller en ersättning för att skriva ut ett kalibreringstorn. Det ger ett trovärdigt första svar utifrån variabler en verkstadsägare faktiskt kan styra vid skrivaren: lagerhöjd, linjebredd, delkylning, material och hastighet. Värdet är begränsat till en vanlig skrivares räckvidd så att det inte rekommenderar orealistiska vinklar över 75 grader, även när alla parametrar är gynnsamma.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'traditionell tumregel för stödfri utskrift' },
+        { value: '55-60°', label: 'ofta möjligt med injusterad PLA och kraftig kylning' },
+        { value: '75°', label: 'kalkylatorns tak för konsument-FDM-skrivare' },
+        { value: '0,08-0,32 mm', label: 'validerat inmatningsområde för lagerhöjd' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Läs vinkelriktningen rätt',
+      html: 'Detta verktyg rapporterar överhängsvinkeln mot den vertikala väggen, i linje med hur många stödinställningar beskrivs i slicers. Ett större tal innebär att banan lutar längre ut från vertikalen och är svårare att skriva utan stöd.',
+    },
+    { type: 'title', text: 'Varför 45-gradersregeln är användbar men ofullständig', level: 2 },
+    {
+      type: 'paragraph',
+      html: '45-gradersregeln lever kvar eftersom den beskriver ett enkelt geometriskt villkor: vid ungefär 45 grader ligger ungefär hälften av en ny extrusionslinje fortfarande över material från föregående lager. Den överlappningen ger strängen en kant att binda till medan den ounderstödda kanten svalnar. Om nästa linje rör sig längre utåt växer den ounderstödda delen, och gravitationen får mer hävstång innan polymeren blir tillräckligt styv för att hålla formen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Riktiga skrivare tillför flera komplikationer. En slicer kan använda en linjebredd som är bredare än munstyckets diameter, vilket förändrar hur mycket överlapp som finns. Ett 0,20 mm lager utskrivet med en 0,45 mm linje har en annan stödkvot än ett 0,28 mm lager utskrivet med en 0,40 mm linje. Kylningsluftflöde, verktygshastighet, munstyckstemperatur, kammartemperatur, materialviskositet och perimeterordning påverkar alla om strängen stelnar på plats eller hänger ner.',
+    },
+    {
+      type: 'table',
+      headers: ['Variabel', 'Varför den påverkar överhäng', 'Typisk justeringsåtgärd'],
+      rows: [
+        ['Lagerhöjd', 'Högre lager flyttar strängen utåt mer aggressivt för samma väggvinkel.', 'Sänk lagerhöjden på ytterväggar när detaljerna spelar roll.'],
+        ['Linjebredd', 'Bredare linjer ökar kontaktytan och kan stödja en något större förskjutning.', 'Använd en måttligt bredare ytterväggslinje, t.ex. 0,44 till 0,48 mm på ett 0,4 mm munstycke.'],
+        ['Kylning', 'En sträng som stelnar snabbt har mindre tid att sjunka.', 'Höj fläkthastigheten för PLA i överhängszoner.'],
+        ['Hastighet', 'Snabb rörelse lägger het plast snabbt och minskar kylningstiden per millimeter.', 'Sänk hastigheten på yttre omkretsar och överhängsväggar.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Använd kalkylatorn som ett slicer beslutsverktyg',
+      html: 'Om modellen har en 58-graders undersida och kalkylatorn uppskattar 52 grader för den aktuella PETG-profilen, aktivera stöd endast för den detaljen eller justera kylning och hastighet innan du skriver ut hela delen.',
+    },
+    { type: 'title', text: 'Lagerhöjd och linjebredd: geometrin bakom överhängsnedhängning', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Lagerhöjd och linjebredd definierar väggens fysiska stegning. Lägre lagerhöjder gör överhäng enklare eftersom varje nytt lager bara flyttar sig en liten sträcka utåt. Bredare extrusionslinjer hjälper också eftersom de skapar en bredare kontaktyta. Den viktiga praktiska signalen är <strong>kvoten mellan lagerhöjd och linjebredd</strong>. En låg kvot innebär att det finns mer horisontellt material tillgängligt för att bära nästa sträng. En hög kvot innebär att den nya strängen sitter på en smalare kant.',
+    },
+    {
+      type: 'paragraph',
+      html: 'För ett 0,4 mm munstycke är vanliga slicer-linjebredder runt 0,42 mm till 0,48 mm. Ett 0,16 mm lager med en 0,45 mm linje är konservativt för överhäng; ett 0,30 mm lager med en 0,40 mm linje begär mycket mer av polymeren och kylningen. Kalkylatorn belönar gynnsam geometri eftersom den minskar den ounderstödda fraktionen av varje sträng, men den begränsar också resultatet eftersom geometri ensam inte kan övervinna värme, luftflöde och accelerationsbegränsningar.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Låg kvot',
+          description: 'En liten lagerhöjd jämfört med linjebredd ger det renaste stödfria överhängsbeteendet.',
+          points: ['Bättre yta under sluttningar', 'Lägre risk för nedhängning', 'Mer utskriftstid'],
+        },
+        {
+          title: 'Balanserad kvot',
+          description: 'Typiska produktionsinställningar fungerar bra när kylning och material också är rimliga.',
+          highlight: true,
+          points: ['Bra avvägning mellan hastighet och kvalitet', 'Fungerar för många PLA-delar', 'Kräver fortfarande testning nära 60 grader'],
+        },
+        {
+          title: 'Hög kvot',
+          description: 'Stora lager och smala linjer minskar kanten under varje ny sträng.',
+          points: ['Mer synlig trappstegseffekt', 'Högre risk för upprullning på undersidan', 'Stöd blir användbara tidigare'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Linjebredd', definition: 'Den planerade extrusionsbredden i slicern. Den kan vara något bredare än munstyckets fysiska diameter.' },
+        { term: 'Lagerhöjd', definition: 'Den vertikala tjockleken för varje utskrivet lager.' },
+        { term: 'Ounderstödd fraktion', definition: 'Den del av en ny extrusionssträng som sträcker sig bortom föregående lager.' },
+        { term: 'Nedhängning', definition: 'Nedåtriktad deformation av en het sträng innan den blir styv.' },
+      ],
+    },
+    { type: 'title', text: 'Kylning: varför fläktluft ofta tillför 5 till 10 grader', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Kylning är den snabbaste reglaget för PLA-överhäng. En nyss extruderad sträng lämnar munstycket mjuk, glansig och lätt att deformera. Starkt, väldirigerat luftflöde ökar hastigheten med vilken den yttre huden stelnar. När strängen snabbt blir självbärande kan den överbrygga ett större ounderstött avstånd innan gravitationen lämnar en synlig hängning. Det är därför fläktkanaldesign, fläktens skick och utskriftsorientering kan förändra överhängsresultat även när G-kodvärdena är identiska.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Mer fläkt är inte automatiskt bättre för alla material. PLA gynnas vanligtvis av hög kylning på överhängsomkretsar. PETG kan använda kylning, men överdriven fläkt kan minska lagerbindningen eller göra ytor matta. ABS behöver ofta begränsad kylning och en varm miljö för att undvika skevhet, så dess överhängsvinkel är vanligtvis lägre om inte maskinen är injusterad för kontrollerat luftflöde. TPU kan sjunka eftersom det förblir gummiliknande och flexibelt även efter kylning jämfört med styva material.',
+    },
+    {
+      type: 'proscons',
+      title: 'Ökad delkylning för överhäng',
+      items: [
+        { pro: 'Kan stelna PLA-strängar innan den ounderstödda kanten hänger ner.', con: 'Kan försvaga lagerbindningen på material som behöver värmebevarande.' },
+        { pro: 'Förbättrar skarpa undersidedetaljer och små överhängsdetaljer.', con: 'Dåligt riktade kanaler kan kyla ena sidan och lämna den motsatta sidan stökig.' },
+        { pro: 'Ofta snabbare än att designa om stöd för små detaljer.', con: 'Kan skapa fläktljud, elektrisk belastning och skevhet på stora platta delar.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Kontrollera luftflödets riktning innan du litar på fläktprocenten',
+      html: 'Ett fläktvärde på 100 % i slicern garanterar inte effektiv kylning vid strängen. En blockerad kanal, svag fläkt, silikonsockas form eller verktygsmodd kan lämna ena sidan av munstycket med mycket mindre luftflöde.',
+    },
+    { type: 'title', text: 'Materialskillnader: PLA, PETG, ABS och TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA är det lättaste referensmaterialet för överhängstestning eftersom det blir styvt snabbt och accepterar kraftig delkylning. Det är därför injusterade PLA-profiler ofta skriver brantare ounderstödda väggar än den traditionella 45-gradersregeln. PETG är kladdigare och behåller värme längre. Det kan producera starka funktionella utskrifter, men ounderstödda undersidor kan se glansiga, trådiga eller upprullade ut om hastighet och kylning inte kontrolleras. PETG-överhäng gynnas ofta av att sakta ner ytterväggar innan fläkten dras till max.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS beter sig annorlunda eftersom en varm kammare och begränsad kylning ofta används för att förhindra skevhet och lagersprickor. Samma förhållanden gör ounderstödda sluttningar svårare. TPU innebär en annan utmaning: materialet förblir flexibelt, så en sträng kan sjunka eller kladdas även när den inte är lika varm som vid munstycket. Kalkylatorn ger varje material ett separat basbeteende och en multiplikator för att återspegla dessa praktiska skillnader.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Överhängsbeteende', 'Bästa första justering'],
+      rows: [
+        ['PLA', 'Bra styvhet och stark kylningstolerans.', 'Öka kylning och sänk hastigheten på yttre omkretsar.'],
+        ['PETG', 'Kladdig, värmebevarande, benägen för glansig nedhängning.', 'Sänk hastigheten och använd måttlig kylning.'],
+        ['ABS', 'Behöver värmebevarande, så ounderstödda sluttningar är mindre förlåtande.', 'Justera orientering eller använd selektiva stöd.'],
+        ['TPU', 'Flexibel sträng kan deformeras efter deponering.', 'Använd konservativa vinklar och långsam rörelse.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Varför fuktigt filament kan efterlikna dålig överhängsjustering',
+      html: 'Fukt kan skapa små ångbubblor och ojämn extrusionsbredd. Om undersidan ser skummig, ojämn eller hårig ut, torka filamentet innan du antar att den säkra vinkeluppskattningen är fel.',
+    },
+    { type: 'title', text: 'Utskriftshastighet och termisk tid', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Utskriftshastighet påverkar överhäng eftersom det förändrar den termiska tiden. Vid högre hastigheter deponeras mer hett material per sekund, och varje punkt på strängen har mindre tid under användbart luftflöde innan nästa sektion läggs. Snabba ytterväggar kan se acceptabla ut på vertikala ytor men misslyckas under överhäng eftersom strängen fortfarande är mjuk medan den är ounderstödd. Att endast sakta ner överhängsomkretsen är ofta effektivare än att sakta ner hela modellen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'En slicer kan ha separata kontroller för ytterväggshastighet, brygghastighet, små perimetershastighet, överhängshastighet och minsta lagertid. Kalkylatorn använder huvudutskriftshastigheten som en praktisk parameter och straffar sedan hög hastighet progressivt. Om en modell har korta lager kan minsta lagertid och fläktbeteende dominera. Om överhänget är en lång sammanhängande vägg blir perimeterhastighet och kylningskanalriktning viktigare.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Sänk först ytterväggarna eftersom det är de ytor användaren kommer att inspektera.',
+        'Använd överhängsspecifik hastighetssänkning när slicern stöder det.',
+        'Håll förflyttningsrörelser tillräckligt snabba för att undvika värmeansamling i små detaljer.',
+        'Undvik att bedöma hastighet från endast ett litet torn; stora delar behåller värme annorlunda.',
+        'Testa om efter byte av munstycksstorlek eftersom flödeshastigheten ändrar värmebelastningen.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Praktisk justeringsordning',
+      html: 'För en tveksam ounderstödd sluttning, prova starkare kylning, lägre ytterväggshastighet och lägre lagerhöjd innan du aktiverar tätt stöd överallt.',
+    },
+    { type: 'title', text: 'När stöd fortfarande är rätt svar', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Målet är inte att eliminera stöd till varje pris. Stöd är användbara när en undersida måste vara dimensionsmässigt noggrann, när materialet är värmekänsligt, när en kosmetisk yta pekar nedåt, eller när överhänget börjar i luften utan kontakt med föregående lager. En beräknad kapacitet på 60 grader betyder inte att varje 60-gradersdetalj kommer att se bra ut. Små öar, abrupta kanter, hål, präglad text och konkava undersidor kan misslyckas tidigare än en jämn kalibreringsramp.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Selektiva stöd är oftast bättre än globala stöd. Om endast en region överstiger den beräknade säkra vinkeln, måla stödblockerare och förstärkare, rotera delen, fasa undersidan, dela modellen eller lägg till en liten offerribba. Trädstöd, organiska stöd och gränssnittslager kan minska ärrbildning medan de fortfarande håller de kritiska första ounderstödda strängarna. För funktionella fästen sparar en liten designändring ofta mer material än aggressiv slicer-justering.',
+    },
+    {
+      type: 'summary',
+      title: 'Använd stöd när',
+      items: [
+        'Den beräknade säkra vinkeln är lägre än modellens undersidesvinkel.',
+        'Undersidan måste vara slät, plan eller dimensionsmässigt noggrann.',
+        'Detaljen börjar som en ö utan föregående lager att fästa vid.',
+        'Materialet inte kan använda tillräcklig kylning utan skevhet eller svag bindning.',
+        'Ett misslyckat överhäng skulle förstöra en lång utskrift sent i jobbet.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Röd risk betyder inte omöjligt',
+      html: 'Ett rött resultat innebär att stöd är det säkraste standardvalet för en normal konsumentprofil. Erfarna användare kan fortfarande lyckas med specialkanaler, injusterad överhängshastighet, speciella slicer-banor eller modellomdesign, men marginalen är liten.',
+    },
+    { type: 'title', text: 'Hur man validerar uppskattningen med ett överhängstorn', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ett litet överhängstesttorn är det bästa sättet att validera uppskattningen för en specifik skrivare. Skriv ut ett torn som trappar från 35 grader till 75 grader med samma filament, munstycke, temperatur, fläkt och vägghastighet som du planerar att använda på den riktiga delen. Inspektera undersidan från sidan och underifrån. Leta efter upprullning, grova öglor, separerade perimeterkanter och glansig nedhängning. Det sista rena steget är din verkliga säkra vinkel för den profilen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Ändra inte fem variabler mellan tornkörningar. Om det första tornet misslyckas vid 48 grader, höj kylningen eller sänk överhängshastigheten och upprepa. Om det andra tornet når 55 grader vet du vilket reglage som hjälpte. Om tornet förbättras på ena sidan men inte den andra, inspektera fläktkanalens symmetri. Om varje steg ser dåligt ut, kontrollera munstyckstemperatur, extrusionsmultiplikator, fuktigt filament och delkylningshårdvara innan du antar att stöd är oundvikliga.',
+    },
+    {
+      type: 'table',
+      headers: ['Testobservation', 'Trolig orsak', 'Nästa åtgärd'],
+      rows: [
+        ['Nedre kanten rullar uppåt', 'Värme- och kylningsobalans', 'Sänk perimeterhastigheten och förbättra fläktriktningen.'],
+        ['Öglor hänger nedåt', 'Ounderstödd fraktion för hög', 'Sänk lagerhöjden eller använd stöd.'],
+        ['Ena sidan renare än den andra', 'Asymmetriskt luftflöde', 'Inspektera kanal och fläktbana.'],
+        ['Grov skummig undersida', 'Fukt eller överhettat filament', 'Torka spolen eller sänk munstyckstemperaturen.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Anteckna profilnamnet',
+      html: 'Spara en separat profil för varje munstycke, material och kylningskonfiguration. En PLA 0,16 mm-profil och en PETG 0,28 mm-profil bör inte dela samma antagande om säkert överhäng.',
+    },
+    { type: 'title', text: 'Designa delar för att undvika stöd', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Den billigaste överhängsfixen sker ofta i CAD. Ersätt en skarp 90-graders undersida med en fas, lägg till en tårformsform på horisontella hål, rotera delen så att den brantaste ytan pekar uppåt, eller dela modellen i två utskrivbara halvor. En 45-graders fas kan helt eliminera ett stödbehov samtidigt som styrkan bevaras. För skruvhål skriver tårforms- och diamantprofiler renare än perfekta cirklar när toppen av hålet annars skulle bli en brygga.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Tillverkningsmedveten design minskar också efterbearbetning. Stöd förbrukar material, ökar utskriftstiden, ärrar ytor och kan bryta ömtåliga detaljer vid borttagning. En modell som respekterar skrivarens säkra vinkel skriver snabbare och mer konsekvent. Kalkylatorn hjälper under designgranskningen: jämför modellens undersidesvinkel mot den uppskattade säkra vinkeln och bestäm sedan om du ska designa om, justera profilen eller endast stödja det riskfyllda området.',
+    },
+    {
+      type: 'proscons',
+      title: 'Omdesign istället för stöd',
+      items: [
+        { pro: 'Minskar material och efterbearbetningstid.', con: 'Kan ändra delens visuella eller funktionella form.' },
+        { pro: 'Förbättrar repeterbarhet över utskriftsgårdar.', con: 'Kräver tillgång till CAD-källan eller mesh-redigeringsverktyg.' },
+        { pro: 'Kan förstärka delar genom att bättre rikta in lager.', con: 'Vissa geometrier behöver fortfarande stöd för noggrannhet.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Bästa stödfria designåtgärder',
+      items: [
+        'Använd 45-graders fasar under horisontella kanter.',
+        'Gör cirkulära horisontella hål till tårformar när möjligt.',
+        'Orientera kosmetiska ytor uppåt eller åt sidan.',
+        'Dela delar längs dolda skarvar istället för att stödja en stor undersida.',
+        'Använd stöd endast där modellvinkeln överstiger den testade profilen.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Är 45 grader alltid säkert för 3D-skrivaröverhäng?',
+      answer: 'Nej. Det är en användbar standardregel, men material, kylning, lagerhöjd, linjebredd, hastighet och fläktkanalens prestanda kan flytta den praktiska gränsen lägre eller högre.',
+    },
+    {
+      question: 'Varför begränsar kalkylatorn resultaten till 75 grader?',
+      answer: 'Konsument-FDM-skrivare kan ibland skriva mycket branta överhängstestformer, men att rekommendera värden över 75 grader är opålitligt för normala delar, så verktyget begränsar uppskattningen till ett konservativt hushållsspann.',
+    },
+    {
+      question: 'Vilket material skriver bäst stödfria överhäng?',
+      answer: 'PLA är oftast enklast eftersom det stelnar snabbt och tål kraftig delkylning. PETG, ABS och TPU behöver generellt mer konservativa överhängsantaganden.',
+    },
+    {
+      question: 'Ska jag öka fläkthastigheten eller sänka utskriftshastigheten först?',
+      answer: 'För PLA, öka kylning och sänk hastigheten på yttre överhängsväggar. För PETG, ABS eller funktionella delar, balansera kylning mot lagerbindning och skevhetsrisk.',
+    },
+    {
+      question: 'Kan detta ersätta ett överhängskalibreringstorn?',
+      answer: 'Nej. Det ger en heuristisk uppskattning och en bra utgångspunkt. Ett litet torn är fortfarande den bästa valideringen för en specifik skrivare, filament och slicerprofil.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Ange extrusionsgeometri', text: 'Ställ in lagerhöjden och slicerns linjebredd som används av profilen.' },
+    { name: 'Välj material och kylning', text: 'Välj PLA, PETG, ABS eller TPU samt aktuell delkylningsnivå.' },
+    { name: 'Lägg till utskriftshastighet', text: 'Ange ytterväggshastigheten eller den praktiska utskriftshastigheten som används för överhängsområdet.' },
+    { name: 'Jämför resultatet', text: 'Använd den säkra vinkeln och riskåterkopplingen för att avgöra om du ska justera, designa om eller aktivera stöd.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Kalkylator för säker 3D-utskriftsöverhängsvinkel',
+      description: 'Uppskatta stödfri FDM-överhängsvinkel utifrån lagerhöjd, linjebredd, kylning, material och hastighet.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Är 45 grader alltid säkert för 3D-skrivaröverhäng?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Nej. Det är en användbar standardregel, men material, kylning, lagerhöjd, linjebredd, hastighet och fläktkanalens prestanda kan flytta den praktiska gränsen lägre eller högre.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Hur man uppskattar en säker 3D-skrivaröverhängsvinkel',
+      step: [
+        { '@type': 'HowToStep', text: 'Ange lagerhöjd och linjebredd.' },
+        { '@type': 'HowToStep', text: 'Välj material och kylningsnivå.' },
+        { '@type': 'HowToStep', text: 'Ange utskriftshastighet.' },
+        { '@type': 'HowToStep', text: 'Jämför resultatet med modellens undersidesvinkel.' },
+      ],
+    },
+  ],
+};

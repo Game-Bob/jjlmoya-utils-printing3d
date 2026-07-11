@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'calcolatore-angolo-sbalzo-sicuro',
+  title: 'Calcolatore Angolo di Sbalzo Sicuro per Stampante 3D',
+  description: 'Stima l\'angolo di sbalzo massimo senza supporti che la tua stampante FDM può gestire in base ad altezza strato, larghezza linea, raffreddamento, materiale e velocità di stampa.',
+  ui: {
+    controlsAriaLabel: 'Input angolo di sbalzo sicuro',
+    resultsAriaLabel: 'Risultati angolo di sbalzo sicuro',
+    unitSystemLabel: 'Unità',
+    metricLabel: 'Metrico',
+    imperialLabel: 'US',
+    profileLabel: 'Profilo stampante',
+    defaultProfileLabel: 'Configurazione non salvata',
+    saveProfileLabel: 'Salva profilo',
+    geometryGroupLabel: 'Geometria estrusione',
+    coolingGroupLabel: 'Raffreddamento strato',
+    materialGroupLabel: 'Materiale',
+    speedGroupLabel: 'Movimento',
+    layerHeightLabel: 'Altezza strato',
+    layerHeightHelp: 'L\'altezza strato controlla quanto nuovo plastico deve essere supportato dalla linea precedente. Strati più alti di solito riducono la tolleranza allo sbalzo.',
+    lineWidthLabel: 'Larghezza linea',
+    lineWidthHelp: 'La larghezza linea è la larghezza di estrusione del slicer, non solo il diametro dell\'ugello. Linee più larghe danno allo strato successivo più superficie d\'appoggio.',
+    coolingLabel: 'Raffreddamento pezzo',
+    coolingHelp: 'Il raffreddamento descrive quanto velocemente il nuovo filamento diventa abbastanza rigido da mantenere la sua forma prima di cedere.',
+    lowCoolingLabel: 'Basso',
+    mediumCoolingLabel: 'Medio',
+    highCoolingLabel: 'Alto',
+    materialLabel: 'Filamento',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Velocità di stampa',
+    overhangHelp: 'L\'angolo di sbalzo è mostrato rispetto alla parete verticale. Valori più alti significano che il filamento si proietta più verso l\'esterno senza supporto.',
+    angleLabel: 'Angolo sicuro stimato',
+    vectorLabel: 'Vettore sbalzo rispetto alla verticale',
+    riskLabel: 'Valutazione rischio',
+    safeRiskLabel: 'Verde: sicuro',
+    cautiousRiskLabel: 'Giallo: prudente',
+    supportsRiskLabel: 'Rosso: supporti necessari',
+    reportButtonLabel: 'Salva configurazione come profilo',
+    savedNoticeLabel: 'Profilo salvato in questo browser.',
+    coolingFactorLabel: 'Fattore di raffreddamento',
+    speedFactorLabel: 'Fattore di velocità',
+    materialFactorLabel: 'Fattore materiale',
+    geometryFactorLabel: 'Fattore geometrico',
+    ratioLabel: 'Rapporto strato / linea',
+    educationLabel: 'Nota educativa',
+    tipIncreaseCooling: 'Aumentare il raffreddamento del pezzo vicino al 100% sui perimetri esterni spesso migliora lo sbalzo sicuro di circa 5-10 gradi, specialmente con PLA.',
+    tipSlowDown: 'La velocità elevata del perimetro dà al filamento meno tempo per solidificarsi. Prova a rallentare le pareti esterne prima di aggiungere supporti dappertutto.',
+    tipLowerLayer: 'Il rapporto strato/linea è alto. Ridurre l\'altezza strato o aumentare la larghezza linea dà a ogni nuovo filamento più supporto.',
+    tipPetgCaution: 'Il PETG trattiene il calore e rimane appiccicoso più a lungo del PLA. Un buon raffreddamento aiuta, ma troppa ventola può ridurre l\'adesione degli strati su parti funzionali.',
+    tipBaseline: 'Questa è una stima euristica, non una simulazione CFD. Conferma i profili critici con una piccola torre di prova dello sbalzo prima di avviare una stampa lunga.',
+    optimizeOverhangsLabel: 'Ottimizza per sbalzi',
+    validationRangeLabel: 'Rapporto strato / linea',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Come stimare un angolo di sbalzo sicuro per la stampa 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Uno sbalzo FDM funziona quando ogni nuovo filamento ha abbastanza contatto con lo strato precedente per rimanere attaccato mentre si raffredda. La regola comune dice che una stampante può gestire circa <strong>45 gradi</strong> senza supporti, ma quel numero è solo un punto di partenza. Un profilo PLA ben raffreddato con altezza strato bassa, estrusione larga e velocità moderata può stampare pulitamente oltre i 55 gradi. Un profilo PETG, ABS o TPU caldo con raffreddamento debole può cedere sotto i 45 gradi. Questo calcolatore tratta la capacità di sbalzo come una stima termica e geometrica pratica invece di un angolo universale fisso.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Il risultato è intenzionalmente euristico. Non è un modello di fluidodinamica computazionale, una simulazione di cedimento agli elementi finiti o un sostituto dell\'affettatura di una torre di calibrazione. Fornisce una prima risposta credibile da variabili che un maker può effettivamente controllare sulla stampante: altezza strato, larghezza linea, raffreddamento pezzo, materiale e velocità. Il valore è limitato a un intervallo di stampante domestica in modo da non raccomandare angoli irrealistici sopra i 75 gradi anche quando tutti gli input sono favorevoli.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'regola iniziale tradizionale senza supporti' },
+        { value: '55-60°', label: 'spesso possibile con PLA ottimizzato e buon raffreddamento' },
+        { value: '75°', label: 'tetto del calcolatore per stampanti FDM consumer' },
+        { value: '0,08-0,32 mm', label: 'intervallo altezza strato validato' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Leggi correttamente la direzione dell\'angolo',
+      html: 'Questo strumento riporta l\'angolo di sbalzo rispetto alla parete verticale, come molti parametri di supporto sono descritti nei slicer. Un numero maggiore significa che il percorso si inclina più verso l\'esterno dalla verticale ed è più difficile da stampare senza supporto.',
+    },
+    { type: 'title', text: 'Perché la regola dei 45 gradi è utile ma incompleta', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La regola dei 45 gradi sopravvive perché descrive una condizione geometrica semplice: a circa 45 gradi, circa metà di una nuova linea di estrusione poggia ancora sul materiale dello strato precedente. Questa sovrapposizione dà al filamento una base su cui aderire mentre il bordo non supportato si raffredda. Se la linea successiva si sposta più verso l\'esterno, la porzione non supportata cresce e la gravità ha più leva prima che il polimero diventi abbastanza rigido da mantenere la sua forma.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Le stampanti reali aggiungono diverse complicazioni. Un slicer può usare una larghezza linea maggiore del diametro dell\'ugello, il che cambia la quantità di sovrapposizione esistente. Uno strato di 0,20 mm stampato con una linea di 0,45 mm ha un rapporto di supporto diverso da uno strato di 0,28 mm stampato con una linea di 0,40 mm. Il flusso d\'aria di raffreddamento, la velocità della testina, la temperatura dell\'ugello, la temperatura della camera, la viscosità del materiale e l\'ordine dei perimetri cambiano tutti se il filamento si solidifica sul posto o cede.',
+    },
+    {
+      type: 'table',
+      headers: ['Variabile', 'Perché modifica gli sbalzi', 'Regolazione tipica'],
+      rows: [
+        ['Altezza strato', 'Strati più alti spostano il filamento più aggressivamente verso l\'esterno per lo stesso angolo di parete.', 'Riduci l\'altezza strato della parete esterna quando i dettagli contano.'],
+        ['Larghezza linea', 'Linee più larghe aumentano l\'area di contatto e possono sostenere un offset leggermente maggiore.', 'Usa una larghezza linea esterna moderatamente più larga, ad esempio 0,44-0,48 mm su un ugello da 0,4 mm.'],
+        ['Raffreddamento', 'Un filamento che si indurisce rapidamente ha meno tempo per cedere.', 'Aumenta la velocità della ventola per le zone di sbalzo in PLA.'],
+        ['Velocità', 'Il movimento veloce deposita plastica calda rapidamente e riduce il tempo di raffreddamento per millimetro.', 'Rallenta i perimetri esterni e le pareti in sbalzo.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Usa il calcolatore come strumento decisionale per il slicer',
+      html: 'Se il modello ha un lato inferiore di 58 gradi e il calcolatore stima 52 gradi per l\'attuale profilo PETG, attiva i supporti solo per quella caratteristica o regola raffreddamento e velocità prima di stampare l\'intera parte.',
+    },
+    { type: 'title', text: 'Altezza strato e larghezza linea: la geometria dietro il cedimento degli sbalzi', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'L\'altezza strato e la larghezza linea definiscono la gradinatura fisica della parete. Altezze strato più basse facilitano gli sbalzi perché ogni nuovo strato si sposta solo di una piccola distanza verso l\'esterno. Linee di estrusione più larghe aiutano anche perché creano una base di contatto più ampia. Il segnale pratico importante è il <strong>rapporto altezza strato / larghezza linea</strong>. Un rapporto basso significa che c\'è più materiale orizzontale disponibile per sostenere il filamento successivo. Un rapporto alto significa che il nuovo filamento è appollaiato su un bordo più stretto.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Per un ugello da 0,4 mm, le larghezze linea comuni del slicer sono circa 0,42-0,48 mm. Uno strato di 0,16 mm con una linea di 0,45 mm è conservativo per gli sbalzi; uno strato di 0,30 mm con una linea di 0,40 mm richiede molto di più dal polimero e dal raffreddamento. Il calcolatore premia una geometria favorevole perché riduce la frazione non supportata di ogni cordone, ma limita anche il risultato perché la geometria da sola non può superare calore, flusso d\'aria e limiti di accelerazione.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Rapporto basso',
+          description: 'Una piccola altezza strato rispetto alla larghezza linea dà il comportamento di sbalzo senza supporti più pulito.',
+          points: ['Migliore superficie sotto le pendenze', 'Minore rischio di cedimento', 'Più tempo di stampa'],
+        },
+        {
+          title: 'Rapporto bilanciato',
+          description: 'Le impostazioni di produzione tipiche funzionano bene quando anche raffreddamento e materiale sono ragionevoli.',
+          highlight: true,
+          points: ['Buon compromesso velocità-qualità', 'Funziona per molte parti in PLA', 'Richiede ancora test vicino a 60 gradi'],
+        },
+        {
+          title: 'Rapporto alto',
+          description: 'Strati grandi e linee strette riducono la base sotto ogni nuovo cordone.',
+          points: ['Gradinatura più visibile', 'Maggiore rischio di arricciatura inferiore', 'I supporti diventano utili prima'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Larghezza linea', definition: 'La larghezza di estrusione pianificata nel slicer. Può essere leggermente più larga del diametro fisico dell\'ugello.' },
+        { term: 'Altezza strato', definition: 'Lo spessore verticale di ogni strato stampato.' },
+        { term: 'Frazione non supportata', definition: 'La parte di un nuovo cordone di estrusione che si estende oltre lo strato precedente.' },
+        { term: 'Cedimento', definition: 'Deformazione verso il basso di un filamento caldo prima che diventi rigido.' },
+      ],
+    },
+    { type: 'title', text: 'Raffreddamento: perché l\'aria della ventola spesso aggiunge 5-10 gradi', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Il raffreddamento è la leva più veloce per gli sbalzi in PLA. Un filamento appena estruso esce dall\'ugello morbido, lucido e facile da deformare. Un flusso d\'aria forte e ben diretto aumenta la velocità con cui la pelle esterna si indurisce. Quando il filamento diventa autoportante rapidamente, può superare una distanza non supportata maggiore prima che la gravità lasci un cedimento visibile. Ecco perché il design del condotto della ventola, la salute del ventilatore e l\'orientamento di stampa possono cambiare i risultati dello sbalzo anche quando i valori G-code sono identici.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Più ventola non è automaticamente meglio per tutti i materiali. Il PLA di solito beneficia di un raffreddamento elevato sui perimetri in sbalzo. Il PETG può usare il raffreddamento, ma la ventola eccessiva può ridurre l\'adesione degli strati o rendere le superfici opache. L\'ABS spesso necessita di raffreddamento limitato e un ambiente caldo per evitare deformazioni, quindi il suo angolo di sbalzo è solitamente inferiore a meno che la macchina non sia regolata per un flusso d\'aria controllato. Il TPU può cedere perché rimane gommoso e flessibile anche dopo il raffreddamento rispetto ai materiali rigidi.',
+    },
+    {
+      type: 'proscons',
+      title: 'Aumentare il raffreddamento del pezzo per gli sbalzi',
+      items: [
+        { pro: 'Può congelare i filamenti PLA prima che il bordo non supportato ceda.', con: 'Può indebolire l\'adesione degli strati su materiali che necessitano di ritenzione termica.' },
+        { pro: 'Migliora i dettagli nitidi inferiori e le piccole caratteristiche in sbalzo.', con: 'Condotti mal direzionati possono raffreddare un lato e lasciare l\'opposto disordinato.' },
+        { pro: 'Spesso più veloce che riprogettare i supporti per piccole caratteristiche.', con: 'Può creare rumore della ventola, carico elettrico e deformazione su parti grandi e piatte.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Controlla la direzione del flusso d\'aria prima di fidarti della percentuale ventola',
+      html: 'Un valore ventola del 100% nel slicer non garantisce un raffreddamento utile al cordone. Un condotto ostruito, un ventilatore debole, la forma del rivestimento in silicone o una modifica della testina possono lasciare un lato dell\'ugello con molto meno flusso d\'aria.',
+    },
+    { type: 'title', text: 'Differenze tra materiali: PLA, PETG, ABS e TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Il PLA è il materiale di riferimento più facile per i test di sbalzo perché si indurisce rapidamente e accetta un forte raffreddamento del pezzo. Ecco perché i profili PLA ottimizzati spesso stampano pareti non supportate più ripide della regola tradizionale dei 45 gradi. Il PETG è più appiccicoso e trattiene il calore più a lungo. Può produrre parti funzionali resistenti, ma i lati inferiori non supportati possono apparire lucidi, filamentosi o arricciati se velocità e raffreddamento non sono controllati. Gli sbalzi in PETG spesso beneficiano del rallentamento delle pareti esterne prima di portare la ventola al massimo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'L\'ABS si comporta diversamente perché una camera calda e un raffreddamento limitato sono spesso usati per prevenire deformazioni e crepe degli strati. Queste stesse condizioni rendono le pendenze non supportate più difficili. Il TPU porta un\'altra sfida: il materiale rimane flessibile, quindi un filamento può cedere o sbavare anche quando non è più caldo come all\'ugello. Il calcolatore dà a ogni materiale un comportamento base e un moltiplicatore separati per riflettere queste differenze pratiche.',
+    },
+    {
+      type: 'table',
+      headers: ['Materiale', 'Comportamento in sbalzo', 'Prima regolazione consigliata'],
+      rows: [
+        ['PLA', 'Buona rigidità e forte tolleranza al raffreddamento.', 'Aumenta il raffreddamento e rallenta i perimetri esterni.'],
+        ['PETG', 'Appiccicoso, trattiene calore, incline a cedimento lucido.', 'Riduci la velocità e usa raffreddamento moderato.'],
+        ['ABS', 'Necessita ritenzione termica, quindi le pendenze non supportate sono meno tolleranti.', 'Regola l\'orientamento o usa supporti selettivi.'],
+        ['TPU', 'Il filamento flessibile può deformarsi dopo la deposizione.', 'Usa angoli conservativi e movimento lento.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Perché il filamento umido può imitare una cattiva regolazione dello sbalzo',
+      html: 'L\'umidità può creare piccole bolle di vapore e un\'estrusione irregolare. Se il lato inferiore appare spumoso, irregolare o peloso, asciuga il filamento prima di presumere che la stima dell\'angolo sicuro sia sbagliata.',
+    },
+    { type: 'title', text: 'Velocità di stampa e tempo termico', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La velocità di stampa influisce sugli sbalzi perché modifica il tempo termico. A velocità più elevate, più materiale caldo viene depositato al secondo e ogni punto del filamento ha meno tempo sotto flusso d\'aria utile prima che la sezione successiva venga depositata. Le pareti esterne veloci possono sembrare accettabili sulle superfici verticali ma fallire sotto gli sbalzi perché il cordone è ancora morbido mentre non è supportato. Rallentare solo il perimetro in sbalzo è spesso più efficiente che rallentare l\'intero modello.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Un slicer può avere controlli separati per velocità parete esterna, velocità ponte, velocità piccoli perimetri, velocità sbalzo e tempo minimo strato. Il calcolatore usa la velocità di stampa principale come input pratico, poi penalizza progressivamente le velocità elevate. Se un modello ha strati corti, il tempo minimo strato e il comportamento della ventola possono dominare. Se lo sbalzo è una lunga parete continua, la velocità del perimetro e la direzione del condotto di raffreddamento diventano più importanti.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Rallenta prima le pareti esterne perché sono le superfici che l\'utente ispezionerà.',
+        'Usa un rallentamento specifico per sbalzi quando il slicer lo supporta.',
+        'Mantieni i movimenti di viaggio abbastanza veloci da evitare il surriscaldamento di piccole caratteristiche.',
+        'Non giudicare la velocità solo da una piccola torre; le parti grandi trattengono il calore diversamente.',
+        'Ritesta dopo aver cambiato la dimensione dell\'ugello perché la portata modifica il carico termico.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Ordine pratico di regolazione',
+      html: 'Per una pendenza non supportata al limite, prova prima un raffreddamento più forte, velocità parete esterna più bassa e altezza strato inferiore prima di attivare supporti densi dappertutto.',
+    },
+    { type: 'title', text: 'Quando i supporti sono ancora la risposta giusta', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'L\'obiettivo non è eliminare i supporti a tutti i costi. I supporti sono utili quando un lato inferiore deve essere dimensionalmente accurato, quando il materiale è sensibile al calore, quando una faccia estetica punta verso il basso, o quando lo sbalzo inizia in aria senza contatto con lo strato precedente. Una capacità calcolata di 60 gradi non significa che ogni caratteristica a 60 gradi sarà bella. Piccole isole, bordi bruschi, fori, testo in rilievo e lati inferiori concavi possono fallire prima di una rampa di calibrazione liscia.',
+    },
+    {
+      type: 'paragraph',
+      html: 'I supporti selettivi sono di solito migliori dei supporti globali. Se solo una regione supera l\'angolo sicuro calcolato, dipingi bloccanti e forzatori di supporto, ruota la parte, smussa il lato inferiore, dividi il modello o aggiungi una piccola nervatura sacrificale. I supporti ad albero, i supporti organici e gli strati di interfaccia possono ridurre le cicatrici mentre sostengono i primi filamenti critici non supportati. Per staffe funzionali, un piccolo cambiamento di design spesso risparmia più materiale di una regolazione aggressiva del slicer.',
+    },
+    {
+      type: 'summary',
+      title: 'Usa i supporti quando',
+      items: [
+        'L\'angolo sicuro calcolato è inferiore all\'angolo inferiore del modello.',
+        'Il lato inferiore deve essere liscio, piatto o dimensionalmente accurato.',
+        'La caratteristica inizia come un\'isola senza strato precedente a cui attaccarsi.',
+        'Il materiale non può usare abbastanza raffreddamento senza deformarsi o indebolire l\'adesione.',
+        'Uno sbalzo fallito rovinerebbe una stampa lunga a lavoro avanzato.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Rischio rosso non significa impossibile',
+      html: 'Un risultato rosso significa che i supporti sono l\'opzione più sicura per un profilo consumer normale. Gli utenti esperti possono ancora avere successo con condotti personalizzati, velocità sbalzo regolata, percorsi slicer speciali o riprogettazione del modello, ma il margine è stretto.',
+    },
+    { type: 'title', text: 'Come validare la stima con una torre di sbalzo', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una piccola torre di prova dello sbalzo è il modo migliore per validare la stima per una stampante specifica. Stampa una torre che gradini da 35 a 75 gradi usando lo stesso filamento, ugello, temperatura, ventola e velocità parete che intendi usare sulla parte reale. Ispeziona il lato inferiore dal lato e dal basso. Cerca arricciatura, anelli rugosi, bordi del perimetro separati e cedimento lucido. L\'ultimo gradino pulito è il tuo angolo sicuro reale per quel profilo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Non cambiare cinque variabili tra le prove della torre. Se la prima torre fallisce a 48 gradi, aumenta il raffreddamento o rallenta la velocità dello sbalzo e ripeti. Se la seconda torre raggiunge 55 gradi, sai quale leva ha aiutato. Se la torre migliora su un lato ma non sull\'altro, ispeziona la simmetria del condotto della ventola. Se ogni gradino sembra brutto, controlla la temperatura dell\'ugello, il moltiplicatore di estrusione, il filamento umido e l\'hardware di raffreddamento prima di presumere che i supporti siano inevitabili.',
+    },
+    {
+      type: 'table',
+      headers: ['Osservazione', 'Causa probabile', 'Azione successiva'],
+      rows: [
+        ['Il bordo inferiore si arriccia verso l\'alto', 'Squilibrio calore/raffreddamento', 'Rallenta il perimetro e migliora la direzione della ventola.'],
+        ['Gli anelli cedono verso il basso', 'Frazione non supportata troppo alta', 'Riduci l\'altezza strato o usa supporto.'],
+        ['Un lato più pulito dell\'altro', 'Flusso d\'aria asimmetrico', 'Ispeziona condotto e percorso ventilatore.'],
+        ['Lato inferiore ruvido e spumoso', 'Umidità o filamento surriscaldato', 'Asciuga la bobina o riduci la temperatura dell\'ugello.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Registra il nome del profilo',
+      html: 'Salva un profilo separato per ogni ugello, materiale e configurazione di raffreddamento. Un profilo PLA da 0,16 mm e un profilo PETG da 0,28 mm non dovrebbero condividere la stessa ipotesi di sbalzo sicuro.',
+    },
+    { type: 'title', text: 'Progettare parti per evitare i supporti', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La soluzione più economica per gli sbalzi si trova spesso in CAD. Sostituisci un angolo inferiore retto di 90 gradi con uno smusso, aggiungi una forma a goccia ai fori orizzontali, ruota la parte in modo che la superficie più ripida punti verso l\'alto, o dividi il modello in due metà stampabili. Uno smusso di 45 gradi può eliminare completamente la necessità di supporto preservando la resistenza. Per i fori delle viti, i profili a goccia e a diamante stampano più puliti dei cerchi perfetti quando la parte superiore del foro diventerebbe altrimenti un ponte.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Il design attento alla produzione riduce anche la post-elaborazione. I supporti consumano materiale, aumentano il tempo di stampa, segnano le superfici e possono rompere caratteristiche delicate durante la rimozione. Un modello che rispetta l\'angolo sicuro della stampante stampa più velocemente e in modo più consistente. Il calcolatore aiuta durante la revisione del progetto: confronta l\'angolo inferiore del modello con l\'angolo sicuro stimato, poi decidi se riprogettare, regolare il profilo o supportare solo l\'area rischiosa.',
+    },
+    {
+      type: 'proscons',
+      title: 'Riprogettare invece di supportare',
+      items: [
+        { pro: 'Riduce materiale e tempo di post-elaborazione.', con: 'Può cambiare la forma visiva o funzionale della parte.' },
+        { pro: 'Migliora la ripetibilità nelle farm di stampa.', con: 'Richiede accesso alla fonte CAD o a strumenti di modifica mesh.' },
+        { pro: 'Può rafforzare le parti allineando meglio gli strati.', con: 'Alcune geometrie necessitano ancora di supporti per la precisione.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Migliori mosse di design senza supporti',
+      items: [
+        'Usa smussi di 45 gradi sotto i bordi orizzontali.',
+        'Trasforma i fori orizzontali circolari in gocce quando possibile.',
+        'Orienta le facce estetiche verso l\'alto o lateralmente.',
+        'Dividi le parti lungo giunzioni nascoste invece di supportare un grande lato inferiore.',
+        'Usa supporti solo dove l\'angolo del modello supera il profilo testato.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: '45 gradi sono sempre sicuri per gli sbalzi delle stampanti 3D?',
+      answer: 'No. È una regola predefinita utile, ma materiale, raffreddamento, altezza strato, larghezza linea, velocità e prestazioni del condotto della ventola possono spostare il limite pratico più in basso o più in alto.',
+    },
+    {
+      question: 'Perché il calcolatore limita i risultati a 75 gradi?',
+      answer: 'Le stampanti FDM consumer a volte possono stampare forme di prova di sbalzo molto ripide, ma raccomandare valori sopra i 75 gradi non è affidabile per parti normali, quindi lo strumento limita la stima a un intervallo domestico conservativo.',
+    },
+    {
+      question: 'Quale materiale stampa i migliori sbalzi senza supporti?',
+      answer: 'Il PLA è di solito il più facile perché si indurisce rapidamente e tollera un forte raffreddamento del pezzo. PETG, ABS e TPU generalmente necessitano di ipotesi di sbalzo più conservative.',
+    },
+    {
+      question: 'Devo prima aumentare la velocità della ventola o ridurre la velocità di stampa?',
+      answer: 'Per il PLA, aumenta il raffreddamento e rallenta le pareti esterne in sbalzo. Per PETG, ABS o parti funzionali, bilancia il raffreddamento con l\'adesione degli strati e il rischio di deformazione.',
+    },
+    {
+      question: 'Questo può sostituire una torre di calibrazione dello sbalzo?',
+      answer: 'No. Fornisce una stima euristica e un buon punto di partenza. Una piccola torre rimane la migliore validazione per una stampante, un filamento e un profilo slicer specifici.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Inserisci la geometria di estrusione', text: 'Imposta l\'altezza strato e la larghezza linea del slicer usate dal profilo.' },
+    { name: 'Scegli materiale e raffreddamento', text: 'Seleziona PLA, PETG, ABS o TPU e il livello di raffreddamento attuale del pezzo.' },
+    { name: 'Aggiungi la velocità di stampa', text: 'Inserisci la velocità parete esterna o la velocità di stampa pratica per l\'area di sbalzo.' },
+    { name: 'Confronta il risultato', text: 'Usa l\'angolo sicuro e la valutazione del rischio per decidere se regolare, riprogettare o attivare i supporti.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Calcolatore Angolo di Sbalzo Sicuro per Stampante 3D',
+      description: 'Stima l\'angolo di sbalzo FDM senza supporti da altezza strato, larghezza linea, raffreddamento, materiale e velocità.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '45 gradi sono sempre sicuri per gli sbalzi delle stampanti 3D?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. È una regola predefinita utile, ma materiale, raffreddamento, altezza strato, larghezza linea, velocità e prestazioni del condotto della ventola possono spostare il limite pratico più in basso o più in alto.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Come stimare un angolo di sbalzo sicuro per stampante 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Inserisci altezza strato e larghezza linea.' },
+        { '@type': 'HowToStep', text: 'Seleziona materiale e livello di raffreddamento.' },
+        { '@type': 'HowToStep', text: 'Inserisci la velocità di stampa.' },
+        { '@type': 'HowToStep', text: 'Confronta il risultato con l\'angolo inferiore del modello.' },
+      ],
+    },
+  ],
+};

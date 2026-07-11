@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'sicherer-ueberhangwinkel-rechner',
+  title: 'Sicherer 3D Druck Überhangwinkel Rechner',
+  description: 'Schätze den maximalen ungestützten Überhangwinkel deines FDM-Druckers anhand von Schichthöhe, Linienbreite, Kühlung, Material und Druckgeschwindigkeit.',
+  ui: {
+    controlsAriaLabel: 'Einstellungen für den sicheren Überhangwinkel',
+    resultsAriaLabel: 'Ergebnisse zum sicheren Überhangwinkel',
+    unitSystemLabel: 'Einheiten',
+    metricLabel: 'Metrisch',
+    imperialLabel: 'US',
+    profileLabel: 'Druckerprofil',
+    defaultProfileLabel: 'Unbenanntes Setup',
+    saveProfileLabel: 'Profil speichern',
+    geometryGroupLabel: 'Extrusionsgeometrie',
+    coolingGroupLabel: 'Schichtkühlung',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Bewegung',
+    layerHeightLabel: 'Schichthöhe',
+    layerHeightHelp: 'Die Schichthöhe bestimmt, wie viel neues Plastik von der vorherigen Linie gestützt werden muss. Höhere Schichten reduzieren meist die Überhangtoleranz.',
+    lineWidthLabel: 'Linienbreite',
+    lineWidthHelp: 'Die Linienbreite ist die Extrusionsbreite des Slicers, nicht nur der Düsendurchmesser. Breitere Linien geben der nächsten Schicht mehr Auflagefläche.',
+    coolingLabel: 'Bauteilkühlung',
+    coolingHelp: 'Die Kühlung beschreibt, wie schnell die frische Strangmasse steif genug wird, um ihre Form zu halten, bevor sie absackt.',
+    lowCoolingLabel: 'Niedrig',
+    mediumCoolingLabel: 'Mittel',
+    highCoolingLabel: 'Hoch',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Druckgeschwindigkeit',
+    overhangHelp: 'Der Überhangwinkel wird zur senkrechten Wand angegeben. Höhere Werte bedeuten, dass der Strang weiter nach außen ragt, ohne gestützt zu werden.',
+    angleLabel: 'Geschätzter sicherer Winkel',
+    vectorLabel: 'Überhangvektor zur Senkrechten',
+    riskLabel: 'Risikobewertung',
+    safeRiskLabel: 'Grün: sicher',
+    cautiousRiskLabel: 'Gelb: Vorsicht geboten',
+    supportsRiskLabel: 'Rot: Stützen erforderlich',
+    reportButtonLabel: 'Konfiguration als Profil speichern',
+    savedNoticeLabel: 'Profil in diesem Browser gespeichert.',
+    coolingFactorLabel: 'Kühlungsfaktor',
+    speedFactorLabel: 'Geschwindigkeitsfaktor',
+    materialFactorLabel: 'Materialfaktor',
+    geometryFactorLabel: 'Geometriefaktor',
+    ratioLabel: 'Schicht- / Linienverhältnis',
+    educationLabel: 'Hinweis zur Orientierung',
+    tipIncreaseCooling: 'Eine Erhöhung der Bauteilkühlung auf nahezu 100 % an den Außenkonturen verbessert den sicheren Überhang oft um etwa 5 bis 10 Grad, besonders bei PLA.',
+    tipSlowDown: 'Hohe Außengeschwindigkeit gibt dem Strang weniger Zeit zum Erstarren. Versuche, die Außenwände zu verlangsamen, bevor du überall Stützen hinzufügst.',
+    tipLowerLayer: 'Das Schicht-zu-Linien-Verhältnis ist hoch. Eine geringere Schichthöhe oder eine größere Linienbreite gibt jedem neuen Strang mehr Halt.',
+    tipPetgCaution: 'PETG speichert Wärme und bleibt länger klebrig als PLA. Starke Kühlung hilft, aber zu viel Gebläse kann die Schichthaftung bei funktionalen Teilen beeinträchtigen.',
+    tipBaseline: 'Dies ist eine heuristische Schätzung, keine CFD-Simulation. Bestätige kritische Profile mit einem kleinen Überhang-Testturm, bevor du einen langen Druck startest.',
+    optimizeOverhangsLabel: 'Für Überhänge optimieren',
+    validationRangeLabel: 'Schicht- / Linienverhältnis',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'So schätzt du einen sicheren 3D-Druck-Überhangwinkel', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ein FDM-Überhang funktioniert, wenn jeder neue Strang genügend Kontakt zur vorherigen Schicht hat, um während des Abkühlens haften zu bleiben. Die gängige Faustregel besagt, dass ein Drucker etwa <strong>45 Grad</strong> ohne Stützen schafft, aber das ist nur ein Ausgangswert. Ein gut gekühltes PLA-Profil mit niedriger Schichthöhe, breiter Extrusion und moderater Geschwindigkeit kann sauber über 55 Grad drucken. Ein heißes PETG-, ABS- oder TPU-Profil mit schwacher Kühlung kann unter 45 Grad absacken. Dieser Rechner behandelt die Überhangfähigkeit als praktische thermische und geometrische Schätzung statt als festen universellen Winkel.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Das Ergebnis ist bewusst heuristisch. Es ist kein Modell der numerischen Strömungsmechanik, keine Finite-Elemente-Durchhangsimulation und kein Ersatz für das Slicen eines Kalibrierungsturms. Es gibt eine glaubwürdige erste Antwort aus Variablen, die ein Maker tatsächlich am Drucker steuern kann: Schichthöhe, Linienbreite, Bauteilkühlung, Material und Geschwindigkeit. Der Wert wird auf einen haushaltsüblichen Druckerbereich begrenzt, sodass er selbst bei günstigsten Eingaben keine unrealistischen Winkel über 75 Grad empfiehlt.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'traditionelle stützenfreie Startregel' },
+        { value: '55-60°', label: 'oft möglich mit optimiertem PLA und starker Kühlung' },
+        { value: '75°', label: 'Obergrenze des Rechners für FDM-Drucker' },
+        { value: '0,08-0,32 mm', label: 'gültiger Schichthöhenbereich' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Die Winkelrichtung richtig verstehen',
+      html: 'Dieses Tool gibt den Überhangwinkel zur senkrechten Wand an, entsprechend der Beschreibung vieler Stützeneinstellungen in Slicern. Ein größerer Wert bedeutet, dass der Pfad weiter von der Senkrechten abweicht und schwieriger ohne Stütze zu drucken ist.',
+    },
+    { type: 'title', text: 'Warum die 45-Grad-Regel nützlich, aber unvollständig ist', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Die 45-Grad-Regel bleibt bestehen, weil sie einen einfachen geometrischen Zustand beschreibt: Bei etwa 45 Grad liegt etwa die Hälfte einer neuen Extrusionslinie noch über Material der vorherigen Schicht. Diese Überlappung gibt dem Strang eine Auflagefläche zum Anhaften, während die ungestützte Kante abkühlt. Wenn die nächste Linie weiter nach außen wandert, wächst der ungestützte Anteil, und die Schwerkraft hat mehr Hebelwirkung, bevor das Polymer steif genug wird, um seine Form zu halten.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Echte Drucker bringen mehrere Komplikationen mit sich. Ein Slicer verwendet möglicherweise eine Linienbreite, die größer als der Düsendurchmesser ist, was das Überlappungsverhältnis verändert. Eine 0,20-mm-Schicht mit einer 0,45-mm-Linie hat ein anderes Stützverhältnis als eine 0,28-mm-Schicht mit einer 0,40-mm-Linie. Kühlluftstrom, Geschwindigkeit des Druckkopfes, Düsentemperatur, Kammertemperatur, Materialviskosität und die Reihenfolge der Konturen verändern alle, ob der Strang an Ort und Stelle erstarrt oder durchhängt.',
+    },
+    {
+      type: 'table',
+      headers: ['Variable', 'Warum sie Überhänge beeinflusst', 'Typischer Optimierungsschritt'],
+      rows: [
+        ['Schichthöhe', 'Höhere Schichten verschieben den Strang beim gleichen Wandwinkel aggressiver nach außen.', 'Reduziere die Schichthöhe der Außenwände, wenn Details wichtig sind.'],
+        ['Linienbreite', 'Breitere Linien vergrößern die Kontaktfläche und können einen etwas größeren Versatz tragen.', 'Verwende eine moderat breitere Außenwandlinie, z. B. 0,44 bis 0,48 mm bei einer 0,4-mm-Düse.'],
+        ['Kühlung', 'Ein Strang, der schnell erstarrt, hat weniger Zeit zum Durchhängen.', 'Erhöhe die Lüftergeschwindigkeit für PLA-Überhangzonen.'],
+        ['Geschwindigkeit', 'Schnelle Bewegungen legen heißes Plastik rasch ab und verkürzen die Kühlzeit pro Millimeter.', 'Verlangsame die äußeren Konturen und Überhangwände.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Nutze den Rechner als Slicer Entscheidungshilfe',
+      html: 'Wenn das Modell eine 58-Grad-Unterseite hat und der Rechner für das aktuelle PETG-Profil 52 Grad schätzt, aktiviere Stützen nur für diese Stelle oder optimiere Kühlung und Geschwindigkeit vor dem Druck des gesamten Teils.',
+    },
+    { type: 'title', text: 'Schichthöhe und Linienbreite: Die Geometrie hinter dem Überhangdurchhang', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Schichthöhe und Linienbreite bestimmen die physische Abstufung der Wand. Niedrigere Schichthöhen erleichtern Überhänge, weil jede neue Schicht nur einen kleinen Abstand nach außen zurücklegt. Breitere Extrusionslinien helfen ebenfalls, da sie eine breitere Kontaktbasis schaffen. Das wichtigste praktische Signal ist das <strong>Verhältnis von Schichthöhe zu Linienbreite</strong>. Ein niedriges Verhältnis bedeutet, dass mehr horizontales Material zur Verfügung steht, um den nächsten Strang zu tragen. Ein hohes Verhältnis bedeutet, dass der neue Strang auf einer schmaleren Kante balanciert.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Bei einer 0,4-mm-Düse liegen die üblichen Slicer-Linienbreiten zwischen etwa 0,42 mm und 0,48 mm. Eine 0,16-mm-Schicht mit einer 0,45-mm-Linie ist konservativ für Überhänge; eine 0,30-mm-Schicht mit einer 0,40-mm-Linie verlangt dem Polymer und der Kühlung deutlich mehr ab. Der Rechner belohnt eine günstige Geometrie, weil sie den ungestützten Anteil jeder Raupe verringert, begrenzt das Ergebnis aber, weil Geometrie allein Hitze, Luftstrom und Beschleunigungsgrenzen nicht überwinden kann.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Niedriges Verhältnis',
+          description: 'Eine geringe Schichthöhe im Vergleich zur Linienbreite ergibt das sauberste stützenfreie Überhangverhalten.',
+          points: ['Bessere Oberfläche unter Schrägen', 'Geringeres Durchhangrisiko', 'Mehr Druckzeit'],
+        },
+        {
+          title: 'Ausgewogenes Verhältnis',
+          description: 'Typische Produktionseinstellungen funktionieren gut, wenn Kühlung und Material ebenfalls angemessen sind.',
+          highlight: true,
+          points: ['Guter Kompromiss zwischen Geschwindigkeit und Qualität', 'Funktioniert für viele PLA-Teile', 'Erfordert dennoch Tests nahe 60 Grad'],
+        },
+        {
+          title: 'Hohes Verhältnis',
+          description: 'Große Schichten und schmale Linien verringern die Auflagefläche unter jeder neuen Raupe.',
+          points: ['Stärkere Treppenstufenbildung', 'Höheres Risiko von Einrollen an der Unterseite', 'Stützen werden früher sinnvoll'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Linienbreite', definition: 'Die geplante Extrusionsbreite im Slicer. Sie kann etwas größer sein als der physische Düsendurchmesser.' },
+        { term: 'Schichthöhe', definition: 'Die vertikale Dicke jeder gedruckten Schicht.' },
+        { term: 'Ungestützter Anteil', definition: 'Der Teil einer neuen Extrusionsraupe, der über die vorherige Schicht hinausragt.' },
+        { term: 'Durchhang', definition: 'Abwärtsverformung eines heißen Strangs, bevor er erstarrt.' },
+      ],
+    },
+    { type: 'title', text: 'Kühlung: Warum Lüfterluft oft 5 bis 10 Grad bringt', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Kühlung ist der schnellste Hebel für PLA-Überhänge. Ein frisch extrudierter Strang verlässt die Düse weich, glänzend und leicht verformbar. Ein starker, gut ausgerichteter Luftstrom erhöht die Geschwindigkeit, mit der die äußere Haut erstarrt. Wenn der Strang schnell selbsttragend wird, kann er eine größere ungestützte Strecke überbrücken, bevor die Schwerkraft einen sichtbaren Durchhang hinterlässt. Deshalb können Lüfterdüsendesign, Gebläsezustand und Druckausrichtung die Überhangergebnisse verändern, selbst wenn die G-Code-Werte identisch sind.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Mehr Gebläse ist nicht automatisch für jedes Material besser. PLA profitiert in der Regel von starker Kühlung an Überhangkonturen. PETG verträgt Kühlung, aber zu viel Gebläse kann die Schichthaftung verringern oder die Oberflächen trüben. ABS benötigt oft zurückhaltende Kühlung und eine warme Umgebung, um Verzug zu vermeiden, daher ist sein Überhangwinkel meist geringer, es sei denn, die Maschine ist für kontrollierte Luftströmung optimiert. TPU kann durchhängen, da es auch nach dem Abkühlen gummiartig und flexibel bleibt.',
+    },
+    {
+      type: 'proscons',
+      title: 'Erhöhung der Bauteilkühlung für Überhänge',
+      items: [
+        { pro: 'Kann PLA-Stränge einfrieren, bevor die ungestützte Kante durchhängt.', con: 'Kann die Schichthaftung bei Materialien schwächen, die Wärmerückhalt benötigen.' },
+        { pro: 'Verbessert scharfe Unterseitendetails und kleine Überhangmerkmale.', con: 'Schlecht ausgerichtete Düsen können eine Seite kühlen und die gegenüberliegende Seite unsauber lassen.' },
+        { pro: 'Oft schneller, als Stützen für kleine Merkmale neu zu konstruieren.', con: 'Kann Lüftergeräusche, elektrische Last und Verzug bei großen flachen Teilen verursachen.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Prüfe die Luftstromrichtung, bevor du dem Lüfterprozentsatz vertraust',
+      html: 'Ein Slicer-Lüfterwert von 100 % bedeutet nicht automatisch eine effektive Kühlung an der Raupe. Ein blockierter Kanal, ein schwaches Gebläse, die Form des Silikonsockels oder eine Modifikation am Druckkopf können eine Seite der Düse mit deutlich weniger Luftstrom versorgen.',
+    },
+    { type: 'title', text: 'Materialunterschiede: PLA, PETG, ABS und TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA ist das einfachste Referenzmaterial für Überhangtests, da es schnell erstarrt und starke Bauteilkühlung verträgt. Deshalb drucken optimierte PLA-Profile oft steilere ungestützte Wände als die traditionelle 45-Grad-Regel. PETG ist klebriger und speichert Wärme länger. Es kann robuste funktionale Teile hervorbringen, aber ungestützte Unterseiten können glänzend, fädig oder eingerollt wirken, wenn Geschwindigkeit und Kühlung nicht kontrolliert werden. PETG-Überhänge profitieren oft von langsamen Außenwänden, bevor der Lüfter auf Maximum gestellt wird.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS verhält sich anders, weil oft eine warme Kammer und begrenzte Kühlung verwendet werden, um Verzug und Schichtrisse zu vermeiden. Dieselben Bedingungen erschweren ungestützte Schrägen. TPU bringt eine weitere Herausforderung mit sich: Das Material bleibt flexibel, sodass ein Strang durchhängen oder verschmieren kann, selbst wenn er nicht mehr so heiß ist wie an der Düse. Der Rechner gibt jedem Material ein separates Basisverhalten und einen Multiplikator, um diese praktischen Unterschiede abzubilden.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Überhangverhalten', 'Beste erste Anpassung'],
+      rows: [
+        ['PLA', 'Gute Steifigkeit und hohe Kühltoleranz.', 'Erhöhe Kühlung und reduziere Außengeschwindigkeit.'],
+        ['PETG', 'Klebrig, wärmespeichernd, zu glänzendem Durchhang neigend.', 'Reduziere Geschwindigkeit und verwende moderate Kühlung.'],
+        ['ABS', 'Benötigt Wärmerückhalt, daher sind ungestützte Schrägen weniger verzeihend.', 'Optimiere die Ausrichtung oder verwende selektive Stützen.'],
+        ['TPU', 'Flexibler Strang kann sich nach dem Auftragen verformen.', 'Verwende konservative Winkel und langsame Bewegung.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Warum nasses Filament eine schlechte Überhangeinstellung vortäuschen kann',
+      html: 'Feuchtigkeit kann winzige Dampfblasen und eine ungleichmäßige Extrusion erzeugen. Wenn die Unterseite schaumig, ungleichmäßig oder haarig aussieht, trockne das Filament, bevor du annimmst, dass die Winkelschätzung falsch ist.',
+    },
+    { type: 'title', text: 'Druckgeschwindigkeit und thermische Zeit', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Die Druckgeschwindigkeit beeinflusst Überhänge, weil sie die thermische Zeit verändert. Bei höheren Geschwindigkeiten wird pro Sekunde mehr heißes Material aufgetragen, und jeder Punkt des Strangs hat weniger Zeit unter nutzbarer Luftströmung, bevor der nächste Abschnitt gelegt wird. Schnelle Außenwände können auf senkrechten Flächen akzeptabel aussehen, aber bei Überhängen versagen, weil die Raupe noch weich ist, während sie ungestützt bleibt. Nur die Überhangkontur zu verlangsamen ist oft effizienter, als das gesamte Modell zu verlangsamen.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Ein Slicer kann separate Steuerungen für Außenwandgeschwindigkeit, Brückengeschwindigkeit, Kleinkonturgeschwindigkeit, Überhanggeschwindigkeit und minimale Schichtzeit haben. Der Rechner verwendet die Hauptdruckgeschwindigkeit als praktischen Eingabewert und bewertet hohe Geschwindigkeiten zunehmend negativ. Wenn ein Modell kurze Schichten hat, können die minimale Schichtzeit und das Lüfterverhalten dominieren. Wenn der Überhang eine lange durchgehende Wand ist, werden Konturgengeschwindigkeit und Kühlluftrichtung wichtiger.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Verlangsame zuerst die Außenwände, denn diese Flächen wird der Benutzer begutachten.',
+        'Verwende überhangspezifische Verlangsamung, wenn der Slicer sie unterstützt.',
+        'Halte Reisebewegungen schnell genug, um ein Aufheizen kleiner Details zu vermeiden.',
+        'Beurteile die Geschwindigkeit nicht nur anhand eines kleinen Turms; große Teile speichern Wärme anders.',
+        'Teste nach einem Düsenwechsel erneut, da die Flussrate die thermische Last verändert.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Praktische Optimierungsreihenfolge',
+      html: 'Versuche bei einer grenzwertigen ungestützten Schräge zuerst stärkere Kühlung, niedrigere Außenwandgeschwindigkeit und geringere Schichthöhe, bevor du überall dichte Stützen aktivierst.',
+    },
+    { type: 'title', text: 'Wann Stützen immer noch die richtige Lösung sind', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Das Ziel ist nicht, Stützen um jeden Preis zu vermeiden. Stützen sind sinnvoll, wenn eine Unterseite maßhaltig sein muss, wenn das Material hitzeempfindlich ist, wenn eine sichtbare Fläche nach unten zeigt oder wenn der Überhang in der Luft beginnt, ohne Kontakt zur vorherigen Schicht. Eine berechnete 60-Grad-Fähigkeit bedeutet nicht, dass jedes 60-Grad-Merkmal gut aussieht. Kleine Inseln, abrupte Kanten, Löcher, geprägte Texte und konkave Unterseiten können früher versagen als eine glatte Kalibrierungsschräge.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Selektive Stützen sind normalerweise besser als globale Stützen. Wenn nur eine Region den berechneten sicheren Winkel überschreitet, male Stützenblöcke und -erzwingungen, drehe das Teil, fase die Unterseite an, teile das Modell oder füge eine kleine opfernde Rippe hinzu. Baumstützen, organische Stützen und Grenzschichten können die Narbenbildung reduzieren, während sie die kritischen ersten ungestützten Stränge halten. Bei funktionalen Halterungen spart eine kleine Designänderung oft mehr Material als aggressive Slicer-Optimierung.',
+    },
+    {
+      type: 'summary',
+      title: 'Verwende Stützen, wenn',
+      items: [
+        'Der berechnete sichere Winkel unter dem Unterseitenwinkel des Modells liegt.',
+        'Die Unterseite glatt, flach oder maßhaltig sein muss.',
+        'Das Merkmal als Insel beginnt, ohne vorherige Schicht zum Anhaften.',
+        'Das Material nicht genug Kühlung verträgt, ohne sich zu verziehen oder die Haftung zu schwächen.',
+        'Ein fehlgeschlagener Überhang einen langen Druck spät im Job ruinieren würde.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Rotes Risiko bedeutet nicht unmöglich',
+      html: 'Ein rotes Ergebnis bedeutet, dass Stützen der sicherere Standard für ein normales Verbraucherprofil sind. Erfahrene Benutzer können mit benutzerdefinierten Kanälen, optimierter Überhanggeschwindigkeit, speziellen Slicer-Pfaden oder einer Modellneukonstruktion trotzdem erfolgreich sein, aber die Toleranz ist gering.',
+    },
+    { type: 'title', text: 'Wie du die Schätzung mit einem Überhangturm validierst', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Ein kleiner Überhang-Testturm ist der beste Weg, die Schätzung für einen bestimmten Drucker zu validieren. Drucke einen Turm, der von 35 bis 75 Grad ansteigt, mit demselben Filament, derselben Düse, Temperatur, Lüfter und derselben Wandgeschwindigkeit, die du für das eigentliche Teil verwenden willst. Prüfe die Unterseite von der Seite und von unten. Achte auf Einrollen, raue Schlaufen, getrennte Konturränder und glänzenden Durchhang. Die letzte saubere Stufe ist dein tatsächlicher sicherer Winkel für dieses Profil.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Ändere nicht fünf Variablen zwischen den Turmdurchläufen. Wenn der erste Turm bei 48 Grad versagt, erhöhe die Kühlung oder reduziere die Überhanggeschwindigkeit und wiederhole den Vorgang. Wenn der zweite Turm 55 Grad erreicht, weißt du, welcher Hebel geholfen hat. Wenn der Turm auf einer Seite besser wird, aber auf der anderen nicht, überprüfe die Symmetrie des Lüfterkanals. Wenn jede Stufe schlecht aussieht, überprüfe Düsentemperatur, Extrusionsmultiplikator, nasses Filament und die Kühlungshardware, bevor du annimmst, dass Stützen unvermeidbar sind.',
+    },
+    {
+      type: 'table',
+      headers: ['Beobachtung', 'Wahrscheinliche Ursache', 'Nächster Schritt'],
+      rows: [
+        ['Unterkante rollt sich auf', 'Wärme-Kühlung-Ungleichgewicht', 'Kontur verlangsamen und Lüfterausrichtung verbessern.'],
+        ['Schlaufen hängen durch', 'Ungestützter Anteil zu hoch', 'Schichthöhe reduzieren oder Stütze verwenden.'],
+        ['Eine Seite sauberer als die andere', 'Asymmetrischer Luftstrom', 'Kanal und Gebläseweg prüfen.'],
+        ['Raue, schaumige Unterseite', 'Feuchtigkeit oder überhitztes Filament', 'Spule trocknen oder Düsentemperatur reduzieren.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Profilname notieren',
+      html: 'Speichere ein separates Profil für jede Düse, jedes Material und jede Kühlungskonfiguration. Ein PLA-0,16-mm-Profil und ein PETG-0,28-mm-Profil sollten nicht dieselbe Überhanganahme teilen.',
+    },
+    { type: 'title', text: 'Teile so konstruieren, dass Stützen vermieden werden', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Die günstigste Überhanglösung entsteht oft im CAD. Ersetze eine scharfe 90-Grad-Unterseite durch eine Fase, füge horizontale Löcher in Tränenform hinzu, drehe das Teil so, dass die steilste Fläche nach oben zeigt, oder teile das Modell in zwei druckbare Hälften. Eine 45-Grad-Fase kann eine Stütze vollständig überflüssig machen, während die Festigkeit erhalten bleibt. Bei Schraubenlöchern drucken Tropfen- und Diamantprofile sauberer als perfekte Kreise, wenn die Oberseite des Lochs sonst zu einer Brücke würde.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Eine fertigungsgerechte Konstruktion reduziert auch die Nachbearbeitung. Stützen verbrauchen Material, erhöhen die Druckzeit, hinterlassen Narben auf Oberflächen und können empfindliche Merkmale beim Entfernen beschädigen. Ein Modell, das den sicheren Winkel des Druckers respektiert, druckt schneller und gleichmäßiger. Der Rechner hilft bei der Designprüfung: Vergleiche den Unterseitenwinkel des Modells mit dem geschätzten sicheren Winkel und entscheide dann, ob du umkonstruieren, das Profil anpassen oder nur den riskanten Bereich stützen willst.',
+    },
+    {
+      type: 'proscons',
+      title: 'Umkonstruieren statt stützen',
+      items: [
+        { pro: 'Reduziert Material und Nachbearbeitungszeit.', con: 'Kann die visuelle oder funktionale Form des Teils verändern.' },
+        { pro: 'Verbessert die Wiederholbarkeit in Druckfarmen.', con: 'Erfordert Zugriff auf die CAD-Quelle oder Mesh-Bearbeitungswerkzeuge.' },
+        { pro: 'Kann Teile durch bessere Schichtausrichtung verstärken.', con: 'Einige Geometrien benötigen dennoch Stützen für die Genauigkeit.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Beste stützenfreie Designmaßnahmen',
+      items: [
+        'Verwende 45-Grad-Fasen unter horizontalen Kanten.',
+        'Wandle kreisförmige horizontale Löcher wenn möglich in Tränenform um.',
+        'Richte sichtbare Flächen nach oben oder zur Seite aus.',
+        'Teile Teile entlang versteckter Nähte, anstatt eine große Unterseite zu stützen.',
+        'Verwende Stützen nur dort, wo der Modellwinkel das getestete Profil überschreitet.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Sind 45 Grad bei 3D-Drucker-Überhängen immer sicher?',
+      answer: 'Nein. Es ist eine nützliche Standardregel, aber Material, Kühlung, Schichthöhe, Linienbreite, Geschwindigkeit und Lüfterkanalleistung können die praktische Grenze nach unten oder oben verschieben.',
+    },
+    {
+      question: 'Warum begrenzt der Rechner die Ergebnisse auf 75 Grad?',
+      answer: 'FDM-Drucker für den Hausgebrauch können manchmal sehr steile Überhang-Testformen drucken, aber Werte über 75 Grad sind für normale Teile unzuverlässig, daher begrenzt das Tool die Schätzung auf einen konservativen haushaltsüblichen Bereich.',
+    },
+    {
+      question: 'Welches Material druckt die besten stützenfreien Überhänge?',
+      answer: 'PLA ist in der Regel am einfachsten, weil es schnell erstarrt und starke Bauteilkühlung verträgt. PETG, ABS und TPU benötigen meist konservativere Überhangannahmen.',
+    },
+    {
+      question: 'Sollte ich zuerst die Lüftergeschwindigkeit erhöhen oder die Druckgeschwindigkeit senken?',
+      answer: 'Erhöhe bei PLA die Kühlung und verlangsame die äußeren Überhangwände. Bei PETG, ABS oder funktionalen Teilen balanciere die Kühlung gegen Schichthaftung und Verzugsrisiko aus.',
+    },
+    {
+      question: 'Kann dies einen Überhang-Kalibrierungsturm ersetzen?',
+      answer: 'Nein. Es liefert eine heuristische Schätzung und einen guten Ausgangspunkt. Ein kleiner Turm ist immer noch die beste Validierung für einen bestimmten Drucker, ein bestimmtes Filament und ein bestimmtes Slicer-Profil.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Extrusionsgeometrie eingeben', text: 'Stelle die Schichthöhe und die Slicer-Linienbreite des Profils ein.' },
+    { name: 'Material und Kühlung wählen', text: 'Wähle PLA, PETG, ABS oder TPU und die aktuelle Bauteilkühlungsstufe.' },
+    { name: 'Druckgeschwindigkeit angeben', text: 'Gib die Außenwand- oder praktische Druckgeschwindigkeit für den Überhangbereich ein.' },
+    { name: 'Ergebnis vergleichen', text: 'Nutze den sicheren Winkel und die Risikobewertung, um zu entscheiden, ob du optimieren, umkonstruieren oder Stützen aktivieren solltest.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Sicherer 3D-Druck Überhangwinkel Rechner',
+      description: 'Schätze den stützenfreien FDM-Überhangwinkel anhand von Schichthöhe, Linienbreite, Kühlung, Material und Geschwindigkeit.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Sind 45 Grad bei 3D-Drucker-Überhängen immer sicher?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Nein. Es ist eine nützliche Standardregel, aber Material, Kühlung, Schichthöhe, Linienbreite, Geschwindigkeit und Lüfterkanalleistung können die praktische Grenze nach unten oder oben verschieben.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'So schätzt du einen sicheren 3D-Drucker-Überhangwinkel',
+      step: [
+        { '@type': 'HowToStep', text: 'Gib Schichthöhe und Linienbreite ein.' },
+        { '@type': 'HowToStep', text: 'Wähle Material und Kühlungsstufe.' },
+        { '@type': 'HowToStep', text: 'Gib die Druckgeschwindigkeit ein.' },
+        { '@type': 'HowToStep', text: 'Vergleiche das Ergebnis mit dem Unterseitenwinkel des Modells.' },
+      ],
+    },
+  ],
+};

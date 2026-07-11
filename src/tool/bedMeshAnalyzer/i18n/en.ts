@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'bed-mesh-analyzer',
+  title: '3D Printer Bed Mesh Analyzer',
+  description: 'Parse Marlin or Klipper bed mesh data, visualize the surface, diagnose tilt or warp, and convert Z error into screw turn instructions.',
+  ui: {
+    controlsAriaLabel: 'Bed mesh analyzer inputs',
+    resultsAriaLabel: 'Bed mesh analyzer results',
+    dataLabel: 'Raw mesh data',
+    dataPlaceholder: 'Paste your G29 command result here...',
+    sampleButtonLabel: 'Use sample mesh',
+    levelingPointsLabel: 'Leveling points',
+    threePointLabel: '3 points',
+    fourPointLabel: '4 points',
+    screwTypeLabel: 'Screw type',
+    customScrewLabel: 'Other',
+    pitchLabel: 'Thread pitch',
+    unitSystemLabel: 'Units',
+    metricLabel: 'Metric',
+    imperialLabel: 'US',
+    heatmapLabel: 'Interactive bed topography',
+    lowScaleLabel: 'Low',
+    flatScaleLabel: 'Flat',
+    highScaleLabel: 'High',
+    healthLabel: 'Flatness health',
+    rangeLabel: 'Total variance',
+    meshSizeLabel: 'Mesh size',
+    meanLabel: 'Average Z',
+    diagnosisLabel: 'Diagnosis',
+    instructionsLabel: 'Mechanical adjustment instructions',
+    cornerHeader: 'Corner',
+    deltaHeader: 'Correction',
+    actionHeader: 'What to do',
+    frontLeft: 'Front left',
+    frontRight: 'Front right',
+    rearLeft: 'Rear left',
+    rearRight: 'Rear right',
+    rearCenter: 'Rear center',
+    clockwiseLabel: 'turn clockwise',
+    counterClockwiseLabel: 'turn counter-clockwise',
+    noTurnLabel: 'leave this screw as it is',
+    raiseLabel: 'Raise bed by',
+    lowerLabel: 'Lower bed by',
+    warningWarped: 'Excessive warp: the problem is probably the surface, not only the level. Consider replacing or flattening the build plate.',
+    parseError: 'The mesh could not be parsed. Paste rows of decimal Z values from G29, M420 V, or Klipper BED_MESH_OUTPUT.',
+    notEnoughNumbers: 'Not enough mesh numbers were found. A valid mesh needs at least two rows and two columns.',
+    raggedRows: 'The detected rows do not have the same length. Check for truncated or corrupt mesh output.',
+    badPitch: 'Thread pitch must be greater than zero.',
+    diagnosisFlat: 'The bed is already close to flat. Only fine first-layer tuning should be needed.',
+    diagnosisFrontHigh: 'The front side is higher than the rear side. Correct the front screws before chasing individual points.',
+    diagnosisRearHigh: 'The rear side is higher than the front side. Correct the rear screws first.',
+    diagnosisLeftHigh: 'The left side is higher than the right side. This is mostly an X-axis tilt across the bed.',
+    diagnosisRightHigh: 'The right side is higher than the left side. This is mostly an X-axis tilt across the bed.',
+    diagnosisTwisted: 'The opposite corners disagree. The bed is twisted or the gantry is not trammed consistently.',
+    diagnosisConcave: 'The center is lower than the corners. Leveling screws cannot fully remove this concave shape.',
+    diagnosisConvex: 'The center is higher than the corners. Check magnets, clips, plate stress, or thermal bowing.',
+    diagnosisWarped: 'The Z range is above 0.5 mm, which points to excessive surface warp rather than ordinary leveling error.',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    degreeUnit: 'deg',
+  },
+  seo: [
+    { type: 'title', text: 'How to Read a 3D Printer Bed Mesh', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A bed mesh is a grid of measured Z offsets collected by a probe or nozzle sensor across the printable area. Firmware such as Marlin and Klipper uses that grid to compensate for small height differences while printing the first layers. The numbers are usually expressed in millimeters: a positive value means the probed point is high relative to the chosen reference plane, and a negative value means it is low. The practical question is not only whether the firmware can compensate it. The important question is whether the physical bed, gantry, and leveling screws are close enough that compensation does not have to work too hard.',
+    },
+    {
+      type: 'paragraph',
+      html: 'This analyzer turns raw mesh output into three decisions: how much total Z variation exists, whether the shape looks like tilt or deformation, and which screws should be adjusted. That distinction matters because a tilted bed and a warped bed need different repairs. A tilt can often be fixed by turning corner screws. A concave glass plate, bowed magnetic sheet, loose Y carriage, or twisted gantry may still produce a bad first layer even after every corner is leveled perfectly.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0.00 mm', label: 'ideal range, rarely achieved on real beds' },
+        { value: '0.10 mm', label: 'usually excellent for typical FDM first layers' },
+        { value: '0.30 mm', label: 'noticeable but often printable with mesh compensation' },
+        { value: '0.50 mm+', label: 'surface or mechanics should be investigated' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Mesh values are not screw commands by themselves',
+      html: 'The firmware reports a height map. A screw instruction is derived from corner averages, thread pitch, and the mechanical direction of adjustment. Always make small changes, re-home, and probe again.',
+    },
+    { type: 'title', text: 'What G29 and BED_MESH_OUTPUT Values Mean', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Marlin users often obtain bed data through <code>G29</code>, <code>M420 V</code>, or a leveling report in the terminal. Klipper users may inspect the mesh with <code>BED_MESH_OUTPUT</code>, the web interface, or saved profile data. The output formats differ, but the important data is the same: rows and columns of decimal Z measurements. Some reports include labels, coordinates, bracket characters, index numbers, or firmware text. A useful parser should ignore the surrounding text and extract only the measurement numbers that form the mesh.',
+    },
+    {
+      type: 'paragraph',
+      html: 'The most reliable mesh paste is a rectangular block where every row has the same number of values. A 3x3 mesh has 9 values, a 5x5 mesh has 25 values, and a 7x7 mesh has 49 values. Rectangular meshes can also be valid if the probing grid uses different X and Y counts. If rows have inconsistent lengths, the data is probably incomplete or mixed with unrelated numbers such as coordinates, feed rates, or command counters. In that case, re-run the report and paste only the numeric grid.',
+    },
+    {
+      type: 'table',
+      headers: ['Output clue', 'What it suggests', 'What to do'],
+      rows: [
+        ['Rows have equal length', 'The mesh is probably complete.', 'Analyze directly and compare total variance.'],
+        ['One row is shorter', 'Terminal copy may be truncated.', 'Copy the report again from the beginning.'],
+        ['Many extra integers', 'The paste includes index or coordinate labels.', 'Paste only the matrix section when possible.'],
+        ['Only one long line', 'The tool can try square reconstruction.', 'Use 9, 25, 49, or another square count.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Probe after heating',
+      html: 'For meaningful data, heat the bed to printing temperature and wait for thermal stabilization before probing. Aluminum plates and magnetic sheets can change shape after several minutes at temperature.',
+    },
+    { type: 'title', text: 'Total Variance: The Number That Predicts First Layer Trouble', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Total variance is the absolute difference between the highest and lowest mesh value. If the maximum point is +0.180 mm and the minimum point is -0.120 mm, the total variance is 0.300 mm. This single number is easy to understand because it describes the full vertical work the firmware must absorb across the bed. A small variance means the nozzle gap stays similar from front to rear and left to right. A large variance means one area may be crushed while another still struggles to stick.',
+    },
+    {
+      type: 'paragraph',
+      html: 'The acceptable range depends on layer height, nozzle size, filament, surface texture, and how aggressive the first-layer squish is. With a 0.20 mm first layer, a 0.10 mm surface range is usually comfortable. A 0.30 mm range can still print if mesh compensation is enabled and the fade height is set sensibly, but it leaves less margin. Above 0.50 mm, the user should suspect mechanical or surface problems because the bed is no longer just slightly out of level.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Below 0.10 mm',
+          description: 'Excellent for most consumer FDM printers. First-layer tuning is mostly about Z offset and surface cleanliness.',
+          highlight: true,
+          points: ['Minimal screw correction', 'Low compensation load', 'Good repeatability'],
+        },
+        {
+          title: '0.10 to 0.30 mm',
+          description: 'Common on hobby machines. Mesh compensation can help, but corner tramming may improve adhesion.',
+          points: ['Probe repeatability matters', 'Watch edges and corners', 'Tune screws in small steps'],
+        },
+        {
+          title: 'Above 0.50 mm',
+          description: 'Likely warp, carriage movement, plate stress, or gantry error. Screw leveling alone may not solve it.',
+          points: ['Inspect hardware', 'Check heated state', 'Consider new plate'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'A good range can still print badly',
+      html: 'If the range is small but the first layer fails, check Z offset, extrusion, dirty PEI, probe repeatability, nozzle debris, and whether the mesh profile is actually loaded before printing.',
+    },
+    { type: 'title', text: 'Tilt, Twist, Concavity, and Convexity', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'A bed mesh is more than a maximum and minimum value. The distribution tells you what kind of correction is realistic. If the entire front row is high and the rear row is low, the bed is globally tilted front to back. If the left side is high and the right side is low, the bed is tilted across X. Those cases are ideal for screw adjustment because the physical bed plane is simply not aligned with the nozzle motion plane.',
+    },
+    {
+      type: 'paragraph',
+      html: 'A twisted mesh is different: one diagonal pair is high while the opposite diagonal pair is low. This can come from uneven screw compression, a warped Y carriage, an X gantry that is not square, or a bed support plate that flexes. A concave mesh has a center lower than the corners, while a convex mesh has a center higher than the corners. Screws at the edges cannot completely remove a center bow because they do not directly control the middle of the build plate.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Tilt', definition: 'A mostly planar height difference where one side of the bed is higher than the opposite side.' },
+        { term: 'Twist', definition: 'A diagonal mismatch where opposite corners disagree, often caused by uneven support or frame alignment.' },
+        { term: 'Concave bed', definition: 'A surface where the center is lower than the surrounding corners or edges.' },
+        { term: 'Convex bed', definition: 'A surface where the center is higher than the surrounding corners or edges.' },
+        { term: 'Warp', definition: 'A non-planar shape large enough that normal screw tramming cannot remove it.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Why a center bump is hard to fix with corner screws',
+      html: 'Corner screws define the support plane at the edge of the bed. If the center is bowed upward because of heat, magnets, clips, or plate stress, lowering corners can make the edges worse while the middle remains high.',
+    },
+    { type: 'title', text: 'Converting Z Error Into Screw Rotation', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'The mechanical conversion is based on thread pitch. Thread pitch is the vertical travel produced by one full screw turn. A common M3 coarse screw has a 0.50 mm pitch, M4 coarse has about 0.70 mm, and M5 coarse has about 0.80 mm. If a corner needs to move by 0.125 mm on an M3 screw, the rotation is <code>0.125 x 360 / 0.50 = 90 degrees</code>, which is a quarter turn. This is far easier to act on than an abstract Z number.',
+    },
+    {
+      type: 'paragraph',
+      html: 'The direction depends on printer mechanics. Many spring-bed printers raise the bed toward the nozzle when the knob is turned counter-clockwise from below, but machines differ. The analyzer uses a conventional instruction style and shows whether the corner should be raised or lowered. If your printer knob direction is reversed, keep the millimeter correction and fraction of a turn, but invert the direction. The safest workflow is to move one screw by half the recommended amount, probe again, then repeat.',
+    },
+    {
+      type: 'table',
+      headers: ['Screw', 'Typical coarse pitch', '0.10 mm correction', '0.20 mm correction'],
+      rows: [
+        ['M3', '0.50 mm / turn', '72 degrees', '144 degrees'],
+        ['M4', '0.70 mm / turn', '51 degrees', '103 degrees'],
+        ['M5', '0.80 mm / turn', '45 degrees', '90 degrees'],
+        ['Custom', 'User value', '360 x 0.10 / pitch', '360 x 0.20 / pitch'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Do not chase the last 0.02 mm mechanically',
+      html: 'Probe repeatability, bed temperature, and spring compression can easily move by hundredths of a millimeter. Stop when the mesh is inside a practical range and use Z offset for final first-layer feel.',
+    },
+    { type: 'title', text: 'Three-Point Versus Four-Point Bed Leveling', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Three-point leveling is mechanically elegant because three points define a plane without over-constraining it. A three-screw bed normally has two front screws and one rear center screw, or a similar triangular layout. Four-point leveling is common on many Cartesian beds, but four screws can fight each other: tightening one corner can flex the bed or change the load on the opposite corner. The analyzer supports both because the correct instruction set depends on the machine.',
+    },
+    {
+      type: 'paragraph',
+      html: 'For four-point beds, the analyzer compares the four corners and gives an instruction for each. For three-point beds, it uses front left, front right, and rear center. This cannot know the exact physical position of every printer model, so treat labels as a map: front is the edge closest to the user on most beds, and rear is the back edge. If your coordinate system is reversed, rotate the instruction mentally to match your machine before touching the screws.',
+    },
+    {
+      type: 'proscons',
+      title: 'Leveling system tradeoffs',
+      items: [
+        { pro: 'Three screws define a stable plane with fewer interactions.', con: 'Not every printer is built for a triangular support pattern.' },
+        { pro: 'Four screws match many stock printer beds and are easy to understand.', con: 'They can over-constrain a thin plate and create twist.' },
+        { pro: 'Mesh compensation can hide small remaining errors.', con: 'It cannot remove loose mechanics, warped plates, or bad probe data.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Recommended adjustment sequence',
+      html: 'Correct global tilt first, then diagonal twist, then run a fresh mesh. Avoid making large changes to all screws at once because each screw changes the plane used by the others.',
+    },
+    { type: 'title', text: 'Why Mesh Compensation Is Not a Replacement for Mechanics', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Bed mesh compensation moves Z while printing so the nozzle follows the measured surface. This is powerful, but it has limits. A large mesh range causes visible Z motion, can affect extrusion pressure on the first layer, and may leave the part base slightly shaped like the bed. If the mesh fades out over several millimeters, the lower layers may gradually transition from the bed shape to the nominal model shape. That is acceptable for small corrections but undesirable for severe warp.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Good mechanics reduce the amount of correction needed. Check that the bed carriage wheels or rails have no play, the probe mount is rigid, the nozzle is clean before probing, the build plate is seated consistently, and the gantry is square. On beds with springs, stronger springs or silicone spacers can improve repeatability. On magnetic PEI systems, debris under the sheet can create a local high spot that appears as a mysterious bump in the mesh.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Clean the nozzle before probing if the nozzle contacts the surface.',
+        'Heat the bed and wait long enough for the plate to stop moving thermally.',
+        'Confirm that the saved mesh is loaded in the print start sequence.',
+        'Inspect bed clips, magnets, and sheet seating for local high spots.',
+        'Recheck gantry squareness when the mesh shows diagonal twist.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Above 0.5 mm is a hardware investigation',
+      html: 'When total variance exceeds 0.5 mm, do not keep turning screws indefinitely. Look for a bent plate, loose carriage, uneven spacers, probe offset error, or a surface that changes shape when heated.',
+    },
+    { type: 'title', text: 'A Practical Workflow for Better First Layers', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Start with a mechanically stable printer. Heat the bed, wait, home all axes, and run the mesh. Paste the data into the analyzer and read the total variance first. If the range is extreme, stop and inspect hardware. If the range is moderate and the diagnosis says front, rear, left, or right high, apply the screw recommendations in small increments. Probe again after each pass. Two conservative passes usually beat one aggressive pass because spring compression and bed flex are not perfectly linear.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Once the mesh is reasonable, stop adjusting screws and tune the first layer with Z offset, extrusion width, speed, and surface preparation. A perfectly trammed bed with a wrong Z offset still fails. A slightly imperfect bed with a clean PEI sheet, correct Z offset, and active mesh compensation can print beautifully. The analyzer is designed to answer the mechanical question first: where should the user turn, how far, and whether turning screws is even the right repair.',
+    },
+    {
+      type: 'summary',
+      title: 'Best bed mesh workflow',
+      items: [
+        'Probe at printing temperature, not cold.',
+        'Use total variance to decide whether the mesh is ordinary or excessive.',
+        'Classify the shape before adjusting screws.',
+        'Convert corner error into thread-pitch rotation.',
+        'Re-probe after small corrections and stop when the remaining error is practical.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'The goal is not a beautiful graph',
+      html: 'The useful outcome is a better first layer. A mesh image helps you see the surface, but the screw table is the part that turns measurement into repair.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Can I paste both Marlin and Klipper mesh data?',
+      answer: 'Yes. The parser extracts decimal Z values from multiline text, so it works with common G29, M420 V, and BED_MESH_OUTPUT style reports when the numeric grid is present.',
+    },
+    {
+      question: 'What bed mesh variance is acceptable?',
+      answer: 'Below 0.10 mm is excellent, 0.10 to 0.30 mm is common and usually printable with mesh compensation, and above 0.50 mm suggests a surface or mechanical issue.',
+    },
+    {
+      question: 'Why does the tool warn about warp above 0.5 mm?',
+      answer: 'At that range, screw leveling is often no longer the main problem. The build plate, carriage, probe, or gantry may be warped, loose, or thermally distorted.',
+    },
+    {
+      question: 'Do screw direction instructions apply to every printer?',
+      answer: 'No. The calculated millimeters and degrees are universal, but knob direction can vary by machine. If your bed moves opposite to the label, invert the direction and keep the same amount.',
+    },
+    {
+      question: 'Does mesh compensation replace manual leveling?',
+      answer: 'No. Mesh compensation is best for small residual errors. Mechanical leveling keeps the correction small and improves first-layer consistency.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Paste mesh output', text: 'Copy the numeric bed mesh from Marlin or Klipper and paste it into the raw data field.' },
+    { name: 'Choose mechanics', text: 'Select three or four leveling points and the screw pitch used by the printer.' },
+    { name: 'Read the diagnosis', text: 'Check whether the surface is tilted, twisted, concave, convex, or excessively warped.' },
+    { name: 'Adjust carefully', text: 'Turn each screw by the recommended fraction, then probe again before making another pass.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: '3D Printer Bed Mesh Analyzer',
+      description: 'Analyze Marlin and Klipper bed mesh data and convert Z corner error into leveling screw rotation instructions.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What bed mesh variance is acceptable?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Below 0.10 mm is excellent, 0.10 to 0.30 mm is common and usually printable with mesh compensation, and above 0.50 mm suggests a surface or mechanical issue.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to analyze a 3D printer bed mesh',
+      step: [
+        { '@type': 'HowToStep', text: 'Paste raw Marlin or Klipper mesh data.' },
+        { '@type': 'HowToStep', text: 'Select leveling point count and screw pitch.' },
+        { '@type': 'HowToStep', text: 'Read variance, diagnosis, and heatmap.' },
+        { '@type': 'HowToStep', text: 'Apply screw turn instructions and probe again.' },
+      ],
+    },
+  ],
+};

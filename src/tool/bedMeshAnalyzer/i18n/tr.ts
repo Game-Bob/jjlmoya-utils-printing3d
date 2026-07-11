@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'yatak-mesh-analizor',
+  title: '3D Yazıcı Yatak Mesh Analizörü',
+  description: 'Marlin veya Klipper yatak mesh verilerini ayrıştırın, yüzeyi görselleştirin, eğim veya çarpılmayı teşhis edin ve Z hatasını vida dönüş talimatlarına dönüştürün.',
+  ui: {
+    controlsAriaLabel: 'Yatak mesh analizör girdileri',
+    resultsAriaLabel: 'Yatak mesh analizör sonuçları',
+    dataLabel: 'Ham mesh verisi',
+    dataPlaceholder: 'G29 komut sonucunuzu buraya yapıştırın...',
+    sampleButtonLabel: 'Örnek meshi kullan',
+    levelingPointsLabel: 'Seviyeleme noktaları',
+    threePointLabel: '3 nokta',
+    fourPointLabel: '4 nokta',
+    screwTypeLabel: 'Vida türü',
+    customScrewLabel: 'Diğer',
+    pitchLabel: 'Diş adımı',
+    unitSystemLabel: 'Birimler',
+    metricLabel: 'Metrik',
+    imperialLabel: 'US',
+    heatmapLabel: 'Etkileşimli yatak topografyası',
+    lowScaleLabel: 'Düşük',
+    flatScaleLabel: 'Düz',
+    highScaleLabel: 'Yüksek',
+    healthLabel: 'Düzlük sağlığı',
+    rangeLabel: 'Toplam varyans',
+    meshSizeLabel: 'Mesh boyutu',
+    meanLabel: 'Ortalama Z',
+    diagnosisLabel: 'Teşhis',
+    instructionsLabel: 'Mekanik ayar talimatları',
+    cornerHeader: 'Köşe',
+    deltaHeader: 'Düzeltme',
+    actionHeader: 'Ne yapılmalı',
+    frontLeft: 'Sol ön',
+    frontRight: 'Sağ ön',
+    rearLeft: 'Sol arka',
+    rearRight: 'Sağ arka',
+    rearCenter: 'Arka orta',
+    clockwiseLabel: 'saat yönünde çevir',
+    counterClockwiseLabel: 'saat yönünün tersine çevir',
+    noTurnLabel: 'bu vidayı olduğu gibi bırak',
+    raiseLabel: 'Yatağı yükselt',
+    lowerLabel: 'Yatağı alçalt',
+    warningWarped: 'Aşırı çarpılma: sorun muhtemelen yalnızca seviyeleme değil, yüzeyin kendisidir. Baskı plakasını değiştirmeyi veya düzleştirmeyi düşünün.',
+    parseError: 'Mesh ayrıştırılamadı. G29, M420 V veya Klipper BED_MESH_OUTPUT çıktısındaki ondalık Z değerlerini satır satır yapıştırın.',
+    notEnoughNumbers: 'Yeterli mesh sayısı bulunamadı. Geçerli bir mesh en az iki satır ve iki sütun gerektirir.',
+    raggedRows: 'Tespit edilen satırlar aynı uzunlukta değil. Kesilmiş veya bozuk mesh çıktısını kontrol edin.',
+    badPitch: 'Diş adımı sıfırdan büyük olmalıdır.',
+    diagnosisFlat: 'Yatak zaten yeterince düz. Yalnızca ince birinci katman ayarı yapılması gerekebilir.',
+    diagnosisFrontHigh: 'Ön taraf arka taraftan daha yüksek. Tek tek noktalara geçmeden önce ön vidaları düzeltin.',
+    diagnosisRearHigh: 'Arka taraf ön taraftan daha yüksek. Önce arka vidaları düzeltin.',
+    diagnosisLeftHigh: 'Sol taraf sağ taraftan daha yüksek. Bu çoğunlukla yatak boyunca X ekseni eğimidir.',
+    diagnosisRightHigh: 'Sağ taraf sol taraftan daha yüksek. Bu çoğunlukla yatak boyunca X ekseni eğimidir.',
+    diagnosisTwisted: 'Karşılıklı köşeler uyuşmuyor. Yatak çarpık veya gantry tutarlı şekilde tramlanmamış.',
+    diagnosisConcave: 'Merkez köşelerden daha alçak. Seviyeleme vidaları bu içbükey şekli tamamen gideremez.',
+    diagnosisConvex: 'Merkez köşelerden daha yüksek. Mıknatısları, klipsleri, plaka gerilimini veya termal eğilmeyi kontrol edin.',
+    diagnosisWarped: 'Z aralığı 0,5 mm üzerinde, bu da sıradan bir seviyeleme hatasından çok aşırı yüzey çarpılmasına işaret eder.',
+    mmUnit: 'mm',
+    inchUnit: 'inç',
+    degreeUnit: 'derece',
+  },
+  seo: [
+    { type: 'title', text: '3D Yazıcı Yatak Meshi Nasıl Okunur', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Yatak meshi, yazdırılabilir alan boyunca bir prob veya nozül sensörü tarafından toplanan ölçülmüş Z ofsetlerinden oluşan bir ızgaradır. Marlin ve Klipper gibi donanım yazılımları bu ızgarayı ilk katmanları basarken küçük yükseklik farklılıklarını telafi etmek için kullanır. Sayılar genellikle milimetre cinsinden ifade edilir: pozitif bir değer, problanan noktanın seçilen referans düzlemine göre yüksek olduğu, negatif bir değer ise alçak olduğu anlamına gelir. Pratik soru yalnızca donanım yazılımının bunu telafi edip edemeyeceği değildir. Önemli olan soru, fiziksel yatağın, gantry\'nin ve seviyeleme vidalarının, telafinin çok zorlanmasına gerek kalmayacak kadar yakın olup olmadığıdır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Bu analizör, ham mesh çıktısını üç karara dönüştürür: ne kadar toplam Z varyasyonu var, şekil eğim mi yoksa deformasyon mu gibi görünüyor ve hangi vidalar ayarlanmalı. Bu ayrım önemlidir çünkü eğimli bir yatak ile çarpık bir yatak farklı onarımlar gerektirir. Bir eğim genellikle köşe vidaları çevrilerek düzeltilebilir. İçbükey bir cam plaka, bükülmüş manyetik tabaka, gevşek Y taşıyıcı veya çarpık bir gantry, her köşe mükemmel şekilde seviyelense bile yine de kötü bir ilk katman üretebilir.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'ideal aralık, gerçek yataklarda nadiren elde edilir' },
+        { value: '0,10 mm', label: 'tipik FDM ilk katmanları için genellikle mükemmel' },
+        { value: '0,30 mm', label: 'fark edilir ancak mesh telafisi ile genellikle yazdırılabilir' },
+        { value: '0,50 mm+', label: 'yüzey veya mekanikler incelenmeli' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Mesh değerleri tek başına vida komutları değildir',
+      html: 'Donanım yazılımı bir yükseklik haritası raporlar. Vida talimatı, köşe ortalamalarından, diş adımından ve ayarın mekanik yönünden türetilir. Her zaman küçük değişiklikler yapın, yeniden home yapın ve tekrar probing yapın.',
+    },
+    { type: 'title', text: 'G29 ve BED_MESH_OUTPUT Değerlerinin Anlamı', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Marlin kullanıcıları genellikle yatak verilerini <code>G29</code>, <code>M420 V</code> veya terminaldeki bir seviyeleme raporu aracılığıyla elde eder. Klipper kullanıcıları mesh\'i <code>BED_MESH_OUTPUT</code>, web arayüzü veya kayıtlı profil verileriyle inceleyebilir. Çıktı biçimleri farklılık gösterse de önemli veriler aynıdır: satırlar ve sütunlar halinde ondalık Z ölçümleri. Bazı raporlar etiketler, koordinatlar, parantez karakterleri, indeks numaraları veya donanım yazılımı metni içerir. İyi bir ayrıştırıcı, çevreleyen metni yok saymalı ve yalnızca mesh\'i oluşturan ölçüm sayılarını çıkarmalıdır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'En güvenilir mesh yapıştırması, her satırın aynı sayıda değere sahip olduğu dikdörtgen bir bloktur. 3x3 mesh\'in 9 değeri, 5x5 mesh\'in 25 değeri ve 7x7 mesh\'in 49 değeri vardır. Dikdörtgen meshler, prob ızgarası farklı X ve Y sayıları kullanıyorsa da geçerli olabilir. Satırlar tutarsız uzunluklara sahipse, veriler muhtemelen eksiktir veya koordinatlar, ilerleme hızları veya komut sayaçları gibi ilgisiz sayılarla karışmıştır. Bu durumda, raporu yeniden çalıştırın ve yalnızca sayısal ızgarayı yapıştırın.',
+    },
+    {
+      type: 'table',
+      headers: ['Çıktı ipucu', 'Ne anlama gelir', 'Ne yapılmalı'],
+      rows: [
+        ['Satırlar eşit uzunlukta', 'Mesh muhtemelen tamam.', 'Doğrudan analiz edin ve toplam varyansı karşılaştırın.'],
+        ['Bir satır daha kısa', 'Terminal kopyası kesilmiş olabilir.', 'Raporu baştan tekrar kopyalayın.'],
+        ['Çok fazla ekstra tam sayı', 'Yapıştırma indeks veya koordinat etiketleri içeriyor.', 'Mümkünse yalnızca matris bölümünü yapıştırın.'],
+        ['Yalnızca tek bir uzun satır', 'Araç kare yeniden yapılandırmayı deneyebilir.', '9, 25, 49 veya başka bir kare sayı kullanın.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Isıttıktan sonra problayın',
+      html: 'Anlamlı veriler için, problamadan önce yatağı baskı sıcaklığına ısıtın ve termal stabilizasyon için bekleyin. Alüminyum plakalar ve manyetik tabakalar, sıcaklıkta birkaç dakika sonra şekil değiştirebilir.',
+    },
+    { type: 'title', text: 'Toplam Varyans: İlk Katman Sorunlarını Öngören Sayı', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Toplam varyans, en yüksek ve en düşük mesh değeri arasındaki mutlak farktır. Maksimum nokta +0,180 mm ve minimum nokta -0,120 mm ise toplam varyans 0,300 mm\'dir. Bu tek sayı, donanım yazılımının yatak boyunca absorbe etmesi gereken toplam dikey işi tanımladığı için anlaşılması kolaydır. Küçük bir varyans, nozül boşluğunun önden arkaya ve soldan sağa benzer kaldığı anlamına gelir. Büyük bir varyans, bir alanın ezilirken diğerinin hala yapışmakta zorlanabileceği anlamına gelir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Kabul edilebilir aralık, katman yüksekliğine, nozül boyutuna, filamente, yüzey dokusuna ve ilk katman sıkıştırma oranına bağlıdır. 0,20 mm ilk katman ile 0,10 mm yüzey aralığı genellikle rahattır. 0,30 mm aralık, mesh telafisi etkinleştirilmiş ve fade yüksekliği mantıklı ayarlanmışsa yine de baskı alabilir, ancak daha az marj bırakır. 0,50 mm üzerinde, kullanıcı mekanik veya yüzey sorunlarından şüphelenmelidir çünkü yatak artık sadece hafifçe seviye dışı değildir.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: '0,10 mm Altı',
+          description: 'Çoğu tüketici FDM yazıcısı için mükemmel. İlk katman ayarı çoğunlukla Z ofseti ve yüzey temizliği ile ilgilidir.',
+          highlight: true,
+          points: ['Minimum vida düzeltmesi', 'Düşük telafi yükü', 'İyi tekrarlanabilirlik'],
+        },
+        {
+          title: '0,10 0,30 mm',
+          description: 'Hobi makinelerinde yaygın. Mesh telafisi yardımcı olabilir ancak köşe tramlaması yapışmayı iyileştirebilir.',
+          points: ['Prob tekrarlanabilirliği önemlidir', 'Kenarlara ve köşelere dikkat edin', 'Vidaları küçük adımlarla ayarlayın'],
+        },
+        {
+          title: '0,50 mm Üzeri',
+          description: 'Muhtemelen çarpılma, taşıyıcı hareketi, plaka gerilimi veya gantry hatası. Yalnızca vida seviyelesi çözmeyebilir.',
+          points: ['Donanımı inceleyin', 'Isıtılmış durumu kontrol edin', 'Yeni plaka düşünün'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'İyi bir aralık yine de kötü baskı verebilir',
+      html: 'Aralık küçük ama ilk katman başarısız oluyorsa, Z ofsetini, ekstrüzyonu, kirli PEI\'yi, prob tekrarlanabilirliğini, nozül kalıntılarını ve mesh profilinin baskıdan önce gerçekten yüklenip yüklenmediğini kontrol edin.',
+    },
+    { type: 'title', text: 'Eğim, Çarpılma, İçbükeylik ve Dışbükeylik', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Bir yatak meshi yalnızca maksimum ve minimum değerden ibaret değildir. Dağılım size ne tür bir düzeltmenin gerçekçi olduğunu söyler. Tüm ön sıra yüksek ve arka sıra alçaksa, yatak küresel olarak önden arkaya eğimlidir. Sol taraf yüksek ve sağ taraf alçaksa, yatak X ekseni boyunca eğimlidir. Bu durumlar vida ayarı için idealdir çünkü fiziksel yatak düzlemi basitçe nozül hareket düzlemiyle hizalanmamıştır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Çarpık bir mesh farklıdır: bir çapraz çift yüksekken karşı çapraz çift alçaktır. Bu, eşit olmayan vida sıkıştırması, çarpık bir Y taşıyıcı, kare olmayan bir X gantry veya esneyen bir yatak destek plakasından kaynaklanabilir. İçbükey bir meshin merkezi köşelerden daha alçaktır, dışbükey bir meshin merkezi ise köşelerden daha yüksektir. Kenarlardaki vidalar merkezdeki bir eğriliği tamamen gidcremez çünkü baskı plakasının ortasını doğrudan kontrol etmezler.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Eğim', definition: 'Yatağın bir tarafının karşı taraftan daha yüksek olduğu, çoğunlukla düzlemsel bir yükseklik farkı.' },
+        { term: 'Çarpılma', definition: 'Karşılıklı köşelerin uyuşmadığı, genellikle eşit olmayan destek veya çerçeve hizalamasından kaynaklanan çapraz bir uyumsuzluk.' },
+        { term: 'İçbükey yatak', definition: 'Merkezin çevresindeki köşelerden veya kenarlardan daha alçak olduğu bir yüzey.' },
+        { term: 'Dışbükey yatak', definition: 'Merkezin çevresindeki köşelerden veya kenarlardan daha yüksek olduğu bir yüzey.' },
+        { term: 'Çarpılma (Warp)', definition: 'Normal vida tramlamasının gideremeyeceği kadar büyük, düzlemsel olmayan bir şekil.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Merkez tümseğinin köşe vidalarıyla düzeltilmesi neden zordur',
+      html: 'Köşe vidaları, yatağın kenarındaki destek düzlemini tanımlar. Isı, mıknatıslar, klipsler veya plaka gerilimi nedeniyle merkez yukarı doğru bombeli ise, köşeleri alçaltmak kenarları daha da kötüleştirirken orta kısım yüksek kalır.',
+    },
+    { type: 'title', text: 'Z Hatasını Vida Dönüşüne Dönüştürme', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Mekanik dönüşüm, diş adımına dayanır. Diş adımı, bir tam vida dönüşünün ürettiği dikey harekettir. Yaygın bir M3 kaba vida 0,50 mm adıma, M4 kaba yaklaşık 0,70 mm adıma ve M5 kaba yaklaşık 0,80 mm adıma sahiptir. Bir köşenin M3 vidada 0,125 mm hareket etmesi gerekiyorsa, dönüş <code>0,125 x 360 / 0,50 = 90 derece</code>, yani çeyrek turdur. Bu, soyut bir Z sayısından çok daha uygulanabilirdir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Yön, yazıcı mekaniğine bağlıdır. Birçok yaylı yatak yazıcısı, düğme alttan saat yönünün tersine çevrildiğinde yatağı nozüle doğru yükseltir, ancak makineler farklılık gösterir. Analizör geleneksel bir talimat stili kullanır ve köşenin yükseltilip alçaltılması gerektiğini gösterir. Yazıcı düğme yönünüz ters ise, milimetre düzeltmesini ve tur kesrini koruyun ancak yönü tersine çevirin. En güvenli iş akışı, bir vidayı önerilen miktarın yarısı kadar hareket ettirmek, tekrar problamak ve ardından tekrarlamaktır.',
+    },
+    {
+      type: 'table',
+      headers: ['Vida', 'Tipik kaba adım', '0,10 mm düzeltme', '0,20 mm düzeltme'],
+      rows: [
+        ['M3', '0,50 mm / tur', '72 derece', '144 derece'],
+        ['M4', '0,70 mm / tur', '51 derece', '103 derece'],
+        ['M5', '0,80 mm / tur', '45 derece', '90 derece'],
+        ['Özel', 'Kullanıcı değeri', '360 x 0,10 / adım', '360 x 0,20 / adım'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Son 0,02 mm\'nin peşinden mekanik olarak gitmeyin',
+      html: 'Prob tekrarlanabilirliği, yatak sıcaklığı ve yay sıkıştırması kolayca milimetrenin yüzde biri kadar hareket edebilir. Mesh pratik bir aralığa girdiğinde durun ve son ilk katman hissi için Z ofsetini kullanın.',
+    },
+    { type: 'title', text: 'Üç Noktaya Karşı Dört Nokta Yatak Seviyelesi', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Üç nokta seviyelesi mekanik olarak zariftir çünkü üç nokta bir düzlemi aşırı kısıtlamadan tanımlar. Üç vidalı bir yatak normalde iki ön vida ve bir arka orta vida veya benzer bir üçgen düzene sahiptir. Dört nokta seviyelesi birçok Kartezyen yatakta yaygındır, ancak dört vida birbiriyle çelişebilir: bir köşeyi sıkmak yatağı esnetebilir veya karşı köşedeki yükü değiştirebilir. Analizör her ikisini de destekler çünkü doğru talimat seti makineye bağlıdır.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Dört nokta yataklar için analizör dört köşeyi karşılaştırır ve her biri için bir talimat verir. Üç nokta yataklar için sol ön, sağ ön ve arka ortayı kullanır. Bu, her yazıcı modelinin tam fiziksel konumunu bilemez, bu nedenle etiketleri bir harita olarak ele alın: ön, çoğu yatakta kullanıcıya en yakın kenardır ve arka, arka kenardır. Koordinat sisteminiz ters ise, vidalara dokunmadan önce talimatı zihinsel olarak makinenize uyacak şekilde döndürün.',
+    },
+    {
+      type: 'proscons',
+      title: 'Seviyeleme sistemi avantaj ve dezavantajları',
+      items: [
+        { pro: 'Üç vida, daha az etkileşimle kararlı bir düzlem tanımlar.', con: 'Her yazıcı üçgen destek deseni için üretilmemiştir.' },
+        { pro: 'Dört vida, birçok stok yazıcı yatağıyla uyumludur ve anlaşılması kolaydır.', con: 'İnce bir plakayı aşırı kısıtlayabilir ve çarpılmaya neden olabilir.' },
+        { pro: 'Mesh telafisi küçük kalan hataları gizleyebilir.', con: 'Gevşek mekanikleri, çarpık plakaları veya kötü prob verilerini gideremez.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Önerilen ayar sırası',
+      html: 'Önce küresel eğimi, ardından çapraz çarpılmayı düzeltin, sonra yeni bir mesh çalıştırın. Tüm vidalarda aynı anda büyük değişiklikler yapmaktan kaçının çünkü her vida diğerlerinin kullandığı düzlemi değiştirir.',
+    },
+    { type: 'title', text: 'Mesh Telafisi Neden Mekaniğin Yerini Tutmaz', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Yatak mesh telafisi, nozülün ölçülen yüzeyi takip etmesi için baskı sırasında Z\'yi hareket ettirir. Bu güçlüdür ancak sınırları vardır. Geniş bir mesh aralığı, görünür Z hareketine neden olur, ilk katmandaki ekstrüzyon basıncını etkileyebilir ve parça tabanının yatak şeklini almasına neden olabilir. Mesh birkaç milimetre boyunca kademeli olarak kaybolursa, alt katmanlar yavaşça yatak şeklinden nominal model şekline geçiş yapabilir. Bu, küçük düzeltmeler için kabul edilebilir ancak şiddetli çarpılma için istenmez.',
+    },
+    {
+      type: 'paragraph',
+      html: 'İyi mekanikler, gereken düzeltme miktarını azaltır. Yatak taşıyıcı tekerleklerinde veya raylarında boşluk olmadığını, prob montajının sağlam olduğunu, problamadan önce nozülün temiz olduğunu, baskı plakasının tutarlı bir şekilde yerleştiğini ve gantry\'nin kare olduğunu kontrol edin. Yaylı yataklarda, daha güçlü yaylar veya silikon ara parçalar tekrarlanabilirliği artırabilir. Manyetik PEI sistemlerinde, tabakanın altındaki kalıntılar, mesh\'te gizemli bir tümsek olarak görünen yerel bir yüksek nokta oluşturabilir.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Nozül yüzeye temas ediyorsa, problamadan önce nozülü temizleyin.',
+        'Yatağı ısıtın ve plakanın termal olarak hareket etmeyi durdurması için yeterince bekleyin.',
+        'Kaydedilen mesh\'in baskı başlatma dizisinde yüklendiğini doğrulayın.',
+        'Yerel yüksek noktalar için yatak klipslerini, mıknatısları ve tabaka oturmasını inceleyin.',
+        'Mesh çapraz çarpılma gösterdiğinde gantry kareliğini yeniden kontrol edin.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: '0,5 mm üzeri donanım incelemesi gerektirir',
+      html: 'Toplam varyans 0,5 mm\'yi aştığında, vidaları sonsuza kadar çevirmeye devam etmeyin. Bükülmüş bir plaka, gevşek taşıyıcı, eşit olmayan ara parçalar, prob ofset hatası veya ısıtıldığında şekil değiştiren bir yüzey arayın.',
+    },
+    { type: 'title', text: 'Daha İyi İlk Katmanlar İçin Pratik Bir İş Akışı', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Mekanik olarak kararlı bir yazıcıyla başlayın. Yatağı ısıtın, bekleyin, tüm eksenleri home yapın ve mesh\'i çalıştırın. Verileri analizöre yapıştırın ve önce toplam varyansı okuyun. Aralık aşırıysa, durun ve donanımı inceleyin. Aralık orta düzeydeyse ve teşhis ön, arka, sol veya sağ yüksek diyorsa, vida önerilerini küçük artışlarla uygulayın. Her geçişten sonra tekrar problayın. İki muhafazakar geçiş, genellikle bir agresif geçişten daha iyidir çünkü yay sıkıştırması ve yatak esnemesi tam olarak doğrusal değildir.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Mesh makul bir seviyeye geldiğinde, vidaları ayarlamayı bırakın ve ilk katmanı Z ofseti, ekstrüzyon genişliği, hız ve yüzey hazırlığı ile ayarlayın. Yanlış Z ofseti ile mükemmel tramlanmış bir yatak yine de başarısız olur. Temiz bir PEI tabakası, doğru Z ofseti ve aktif mesh telafisi ile hafif kusurlu bir yatak güzel baskılar verebilir. Analizör, önce mekanik soruyu yanıtlamak için tasarlanmıştır: kullanıcı nereyi, ne kadar çevirmeli ve vida çevirmek doğru onarım mı?',
+    },
+    {
+      type: 'summary',
+      title: 'En iyi yatak mesh iş akışı',
+      items: [
+        'Soğuk değil, baskı sıcaklığında problayın.',
+        'Mesh\'in sıradan mı yoksa aşırı mı olduğuna karar vermek için toplam varyansı kullanın.',
+        'Vidaları ayarlamadan önce şekli sınıflandırın.',
+        'Köşe hatasını diş adımı dönüşüne dönüştürün.',
+        'Küçük düzeltmelerden sonra tekrar problayın ve kalan hata pratik olduğunda durun.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Amaç güzel bir grafik değil',
+      html: 'Yararlı sonuç daha iyi bir ilk katmandır. Bir mesh görüntüsü yüzeyi görmenize yardımcı olur, ancak vida tablosu ölçümü onarıma dönüştüren kısımdır.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Hem Marlin hem de Klipper mesh verilerini yapıştırabilir miyim?',
+      answer: 'Evet. Ayrıştırıcı, çok satırlı metinden ondalık Z değerlerini çıkarır, bu nedenle sayısal ızgara mevcut olduğunda yaygın G29, M420 V ve BED_MESH_OUTPUT tarzı raporlarla çalışır.',
+    },
+    {
+      question: 'Hangi yatak mesh varyansı kabul edilebilir?',
+      answer: '0,10 mm altı mükemmeldir, 0,10 ila 0,30 mm yaygındır ve genellikle mesh telafisi ile yazdırılabilir, 0,50 mm üzeri ise bir yüzey veya mekanik sorununa işaret eder.',
+    },
+    {
+      question: 'Araç neden 0,5 mm üzeri çarpılma konusunda uyarıyor?',
+      answer: 'Bu aralıkta, vida seviyelesi genellikle ana sorun olmaktan çıkar. Baskı plakası, taşıyıcı, prob veya gantry çarpılmış, gevşek veya termal olarak bozulmuş olabilir.',
+    },
+    {
+      question: 'Vida yönü talimatları her yazıcı için geçerli midir?',
+      answer: 'Hayır. Hesaplanan milimetre ve dereceler evrenseldir, ancak düğme yönü makineye göre değişebilir. Yatağınız etiketin tersi yönde hareket ediyorsa, aynı miktarı koruyarak yönü tersine çevirin.',
+    },
+    {
+      question: 'Mesh telafisi manuel seviyelenin yerini alır mı?',
+      answer: 'Hayır. Mesh telafisi en iyi küçük kalan hatalar için kullanılır. Mekanik seviyeleme, düzeltmeyi küçük tutar ve ilk katman tutarlılığını iyileştirir.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Mesh çıktısını yapıştırın', text: 'Marlin veya Klipper\'dan sayısal yatak mesh\'ini kopyalayın ve ham veri alanına yapıştırın.' },
+    { name: 'Mekanikleri seçin', text: 'Üç veya dört seviyeleme noktası ve yazıcının kullandığı vida adımını seçin.' },
+    { name: 'Teşhisi okuyun', text: 'Yüzeyin eğimli, çarpık, içbükey, dışbükey veya aşırı çarpık olup olmadığını kontrol edin.' },
+    { name: 'Dikkatlice ayarlayın', text: 'Her vidayı önerilen miktarda çevirin, ardından bir sonraki geçişten önce tekrar problayın.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: '3D Yazıcı Yatak Mesh Analizörü',
+      description: 'Marlin ve Klipper yatak mesh verilerini analiz edin ve Z köşe hatasını seviyeleme vidası dönüş talimatlarına dönüştürün.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Hangi yatak mesh varyansı kabul edilebilir?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: '0,10 mm altı mükemmeldir, 0,10 ila 0,30 mm yaygındır ve genellikle mesh telafisi ile yazdırılabilir, 0,50 mm üzeri ise bir yüzey veya mekanik sorununa işaret eder.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: '3D yazıcı yatak meshi nasıl analiz edilir',
+      step: [
+        { '@type': 'HowToStep', text: 'Ham Marlin veya Klipper mesh verilerini yapıştırın.' },
+        { '@type': 'HowToStep', text: 'Seviyeleme noktası sayısını ve vida adımını seçin.' },
+        { '@type': 'HowToStep', text: 'Varyans, teşhis ve ısı haritasını okuyun.' },
+        { '@type': 'HowToStep', text: 'Vida dönüş talimatlarını uygulayın ve tekrar problayın.' },
+      ],
+    },
+  ],
+};

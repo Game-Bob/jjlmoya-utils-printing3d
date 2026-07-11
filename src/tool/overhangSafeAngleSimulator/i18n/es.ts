@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'calculadora-angulo-voladizo-seguro',
+  title: 'Calculadora de Ángulo de Voladizo Seguro para Impresión 3D',
+  description: 'Estima el ángulo máximo de voladizo sin soporte que puede lograr tu impresora FDM según la altura de capa, el ancho de línea, el enfriamiento, el material y la velocidad.',
+  ui: {
+    controlsAriaLabel: 'Controles del ángulo de voladizo seguro',
+    resultsAriaLabel: 'Resultados del ángulo de voladizo seguro',
+    unitSystemLabel: 'Unidades',
+    metricLabel: 'Métrico',
+    imperialLabel: 'EE. UU.',
+    profileLabel: 'Perfil de impresora',
+    defaultProfileLabel: 'Configuración sin guardar',
+    saveProfileLabel: 'Guardar perfil',
+    geometryGroupLabel: 'Geometría de extrusión',
+    coolingGroupLabel: 'Enfriamiento de capa',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Movimiento',
+    layerHeightLabel: 'Altura de capa',
+    layerHeightHelp: 'La altura de capa controla cuánto plástico nuevo debe ser soportado por la línea anterior. Capas más altas suelen reducir la tolerancia al voladizo.',
+    lineWidthLabel: 'Ancho de línea',
+    lineWidthHelp: 'El ancho de línea es el ancho de extrusión del slicer, no solo el diámetro de la boquilla. Líneas más anchas dan a la siguiente capa más superficie de apoyo.',
+    coolingLabel: 'Enfriamiento de pieza',
+    coolingHelp: 'El enfriamiento describe la rapidez con que el filamento recién extrudido se vuelve lo suficientemente rígido para mantener su forma antes de hundirse.',
+    lowCoolingLabel: 'Bajo',
+    mediumCoolingLabel: 'Medio',
+    highCoolingLabel: 'Alto',
+    materialLabel: 'Filamento',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Velocidad de impresión',
+    overhangHelp: 'El ángulo de voladizo se muestra contra la pared vertical. Valores más altos significan que el filamento se proyecta más hacia afuera sin soporte.',
+    angleLabel: 'Ángulo seguro estimado',
+    vectorLabel: 'Vector de voladizo contra la vertical',
+    riskLabel: 'Evaluación de riesgo',
+    safeRiskLabel: 'Verde: seguro',
+    cautiousRiskLabel: 'Amarillo: prudente',
+    supportsRiskLabel: 'Rojo: se necesitan soportes',
+    reportButtonLabel: 'Guardar configuración como perfil',
+    savedNoticeLabel: 'Perfil guardado en este navegador.',
+    coolingFactorLabel: 'Factor de enfriamiento',
+    speedFactorLabel: 'Factor de velocidad',
+    materialFactorLabel: 'Factor de material',
+    geometryFactorLabel: 'Factor de geometría',
+    ratioLabel: 'Relación capa / línea',
+    educationLabel: 'Nota educativa',
+    tipIncreaseCooling: 'Aumentar el enfriamiento de la pieza cerca del 100 % en los perímetros exteriores a menudo mejora el voladizo seguro entre 5 y 10 grados, especialmente con PLA.',
+    tipSlowDown: 'La velocidad rápida del perímetro da al filamento menos tiempo para solidificarse. Intenta reducir la velocidad de las paredes exteriores antes de añadir soportes en todas partes.',
+    tipLowerLayer: 'La relación capa-línea es alta. Reducir la altura de capa o aumentar el ancho de línea da a cada nuevo filamento más soporte.',
+    tipPetgCaution: 'El PETG retiene el calor y permanece pegajoso más tiempo que el PLA. Una buena refrigeración ayuda, pero demasiado ventilador puede reducir la adhesión entre capas en piezas funcionales.',
+    tipBaseline: 'Esta es una estimación heurística, no una simulación CFD. Confirma los perfiles críticos con una pequeña torre de prueba de voladizo antes de comprometerte con una impresión larga.',
+    optimizeOverhangsLabel: 'Optimizar para voladizos',
+    validationRangeLabel: 'Relación capa / línea',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Cómo estimar un ángulo de voladizo seguro en impresión 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Un voladizo FDM funciona cuando cada nuevo filamento tiene suficiente contacto con la capa anterior para mantenerse unido mientras se enfría. La regla común dice que una impresora puede manejar unos <strong>45 grados</strong> sin soportes, pero ese número es solo un punto de partida. Un perfil de PLA bien refrigerado con altura de capa baja, extrusión ancha y velocidad moderada puede imprimir limpiamente más allá de los 55 grados. Un perfil de PETG, ABS o TPU con refrigeración débil puede hundirse por debajo de los 45 grados. Esta calculadora trata la capacidad de voladizo como una estimación térmica y geométrica práctica en lugar de un ángulo universal fijo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'El resultado es intencionadamente heurístico. No es un modelo de dinámica de fluidos computacional, una simulación de hundimiento por elementos finitos ni un sustituto del corte de una torre de calibración. Proporciona una primera respuesta creíble a partir de variables que un maker puede controlar realmente en la impresora: altura de capa, ancho de línea, enfriamiento de pieza, material y velocidad. El valor está limitado a un rango de impresora doméstica, por lo que no recomendará ángulos irreales por encima de 75 grados incluso cuando todas las entradas sean favorables.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'regla inicial tradicional sin soportes' },
+        { value: '55-60°', label: 'a menudo posible con PLA optimizado y buena refrigeración' },
+        { value: '75°', label: 'techo de la calculadora para impresoras FDM domésticas' },
+        { value: '0,08-0,32 mm', label: 'rango de altura de capa validado' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Interpreta correctamente la dirección del ángulo',
+      html: 'Esta herramienta informa el ángulo de voladizo contra la pared vertical, coincidiendo con la forma en que se describen muchos ajustes de soporte en los slicers. Un número mayor significa que el trazo se inclina más hacia afuera de la vertical y es más difícil de imprimir sin soporte.',
+    },
+    { type: 'title', text: 'Por qué la regla de los 45 grados es útil pero incompleta', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La regla de los 45 grados perdura porque describe una condición geométrica simple: aproximadamente a 45 grados, alrededor de la mitad de una nueva línea de extrusión sigue apoyada sobre material de la capa anterior. Esa superposición da al filamento una base sobre la que adherirse mientras el borde sin soporte se enfría. Si la siguiente línea se desplaza más hacia afuera, la porción sin soporte crece y la gravedad tiene más influencia antes de que el polímero se vuelva lo suficientemente rígido para mantener su forma.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Las impresoras reales añaden varias complicaciones. Un slicer puede usar un ancho de línea mayor que el diámetro de la boquilla, lo que cambia la cantidad de superposición existente. Una capa de 0,20 mm impresa con una línea de 0,45 mm tiene una relación de soporte diferente a una capa de 0,28 mm impresa con una línea de 0,40 mm. El flujo de aire de refrigeración, la velocidad del cabezal, la temperatura de la boquilla, la temperatura de la cámara, la viscosidad del material y el orden de los perímetros afectan si el filamento se solidifica en su sitio o se hunde.',
+    },
+    {
+      type: 'table',
+      headers: ['Variable', 'Por qué afecta a los voladizos', 'Ajuste típico'],
+      rows: [
+        ['Altura de capa', 'Capas más altas desplazan el filamento más agresivamente hacia afuera para el mismo ángulo de pared.', 'Reduce la altura de capa de la pared exterior cuando los detalles importan.'],
+        ['Ancho de línea', 'Líneas más anchas aumentan el área de contacto y pueden soportar un desplazamiento ligeramente mayor.', 'Usa un ancho de línea exterior moderadamente mayor, como 0,44 a 0,48 mm en una boquilla de 0,4 mm.'],
+        ['Enfriamiento', 'Un filamento que se endurece rápidamente tiene menos tiempo para hundirse.', 'Aumenta la velocidad del ventilador para zonas de voladizo en PLA.'],
+        ['Velocidad', 'El movimiento rápido deposita plástico caliente rápidamente y reduce el tiempo de enfriamiento por milímetro.', 'Reduce la velocidad de los perímetros exteriores y las paredes en voladizo.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Usa la calculadora como herramienta de decisión del slicer',
+      html: 'Si el modelo tiene un ángulo inferior de 58 grados y la calculadora estima 52 grados para el perfil PETG actual, activa soportes solo para esa característica o ajusta la refrigeración y la velocidad antes de imprimir toda la pieza.',
+    },
+    { type: 'title', text: 'Altura de capa y ancho de línea: la geometría detrás del hundimiento en voladizos', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La altura de capa y el ancho de línea definen la escalera física de la pared. Las alturas de capa más bajas facilitan los voladizos porque cada nueva capa solo se desplaza una pequeña distancia hacia afuera. Las líneas de extrusión más anchas también ayudan porque crean una base de contacto más amplia. La señal práctica importante es la <strong>relación entre la altura de capa y el ancho de línea</strong>. Una relación baja significa que hay más material horizontal disponible para soportar el siguiente filamento. Una relación alta significa que el nuevo filamento se asienta sobre un borde más estrecho.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Para una boquilla de 0,4 mm, los anchos de línea comunes del slicer oscilan entre 0,42 mm y 0,48 mm. Una capa de 0,16 mm con una línea de 0,45 mm es conservadora para voladizos; una capa de 0,30 mm con una línea de 0,40 mm exige mucho más del polímero y la refrigeración. La calculadora recompensa una geometría favorable porque reduce la fracción no soportada de cada cordón, pero también limita el resultado porque la geometría por sí sola no puede vencer el calor, el flujo de aire y los límites de aceleración.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Relación baja',
+          description: 'Una altura de capa pequeña en comparación con el ancho de línea proporciona el comportamiento de voladizo sin soporte más limpio.',
+          points: ['Mejor superficie bajo pendientes', 'Menor riesgo de hundimiento', 'Más tiempo de impresión'],
+        },
+        {
+          title: 'Relación equilibrada',
+          description: 'Los ajustes de producción típicos funcionan bien cuando la refrigeración y el material también son razonables.',
+          highlight: true,
+          points: ['Buen equilibrio velocidad-calidad', 'Funciona para muchas piezas de PLA', 'Aún necesita pruebas cerca de 60 grados'],
+        },
+        {
+          title: 'Relación alta',
+          description: 'Capas grandes y líneas estrechas reducen la base de apoyo bajo cada nuevo cordón.',
+          points: ['Más escalonamiento visible', 'Mayor riesgo de curvatura en la parte inferior', 'Los soportes se vuelven útiles antes'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Ancho de línea', definition: 'El ancho de extrusión planificado en el slicer. Puede ser ligeramente mayor que el diámetro físico de la boquilla.' },
+        { term: 'Altura de capa', definition: 'El grosor vertical de cada capa impresa.' },
+        { term: 'Fracción no soportada', definition: 'La parte de un nuevo cordón de extrusión que se extiende más allá de la capa anterior.' },
+        { term: 'Hundimiento', definition: 'Deformación hacia abajo de un filamento caliente antes de que se vuelva rígido.' },
+      ],
+    },
+    { type: 'title', text: 'Enfriamiento: por qué el aire del ventilador a menudo añade de 5 a 10 grados', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'El enfriamiento es la palanca más rápida para los voladizos en PLA. Un filamento recién extrudido sale de la boquilla blando, brillante y fácil de deformar. Un flujo de aire fuerte y bien dirigido aumenta la velocidad con la que la piel exterior se endurece. Cuando el filamento se vuelve autosuficiente rápidamente, puede salvar una mayor distancia sin soporte antes de que la gravedad deje una hundimiento visible. Por eso el diseño del ducto del ventilador, el estado del soplador y la orientación de la impresión pueden cambiar los resultados del voladizo incluso cuando los valores del G-code son idénticos.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Más ventilador no es automáticamente mejor para todos los materiales. El PLA generalmente se beneficia de una alta refrigeración en los perímetros en voladizo. El PETG puede usar refrigeración, pero el exceso de ventilador puede reducir la adhesión entre capas o dejar las superficies turbias. El ABS a menudo necesita refrigeración controlada y un entorno cálido para evitar deformaciones, por lo que su ángulo de voladizo suele ser menor a menos que la máquina esté ajustada para un flujo de aire controlado. El TPU puede hundirse porque permanece gomoso y flexible incluso después del enfriamiento en comparación con los materiales rígidos.',
+    },
+    {
+      type: 'proscons',
+      title: 'Aumentar el enfriamiento de la pieza para voladizos',
+      items: [
+        { pro: 'Puede solidificar los filamentos de PLA antes de que el borde sin soporte se hunda.', con: 'Puede debilitar la adhesión entre capas en materiales que necesitan retención de calor.' },
+        { pro: 'Mejora los detalles nítidos en la parte inferior y las características de voladizo pequeño.', con: 'Los ductos mal orientados pueden enfriar un lado y dejar el opuesto desordenado.' },
+        { pro: 'A menudo más rápido que rediseñar soportes para características pequeñas.', con: 'Puede generar ruido del ventilador, carga eléctrica y deformación en piezas grandes y planas.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Verifica la dirección del flujo de aire antes de confiar en el porcentaje del ventilador',
+      html: 'Un valor del ventilador del 100 % en el slicer no garantiza una refrigeración útil en el cordón. Un ducto obstruido, un soplador débil, la forma del protector de silicona o una modificación del cabezal pueden dejar un lado de la boquilla con mucho menos flujo de aire.',
+    },
+    { type: 'title', text: 'Diferencias entre materiales: PLA, PETG, ABS y TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'El PLA es el material de referencia más fácil para pruebas de voladizo porque se endurece rápidamente y acepta una fuerte refrigeración de la pieza. Por eso los perfiles de PLA optimizados a menudo imprimen paredes sin soporte más inclinadas que la regla tradicional de 45 grados. El PETG es más pegajoso y retiene el calor durante más tiempo. Puede producir piezas funcionales resistentes, pero las superficies inferiores sin soporte pueden verse brillantes, con hilos o curvadas si no se controlan la velocidad y la refrigeración. Los voladizos de PETG a menudo se benefician de reducir la velocidad de las paredes exteriores antes de llevar el ventilador al máximo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'El ABS se comporta de manera diferente porque a menudo se usan una cámara cálida y refrigeración limitada para evitar deformaciones y grietas entre capas. Esas mismas condiciones dificultan las pendientes sin soporte. El TPU presenta otro desafío: el material permanece flexible, por lo que un filamento puede hundirse o mancharse incluso cuando no está tan caliente como en la boquilla. La calculadora asigna a cada material un comportamiento base y un multiplicador separados para reflejar estas diferencias prácticas.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Comportamiento en voladizo', 'Primer ajuste recomendado'],
+      rows: [
+        ['PLA', 'Buena rigidez y alta tolerancia a la refrigeración.', 'Aumenta la refrigeración y reduce la velocidad de los perímetros exteriores.'],
+        ['PETG', 'Pegajoso, retiene calor, propenso a hundimiento brillante.', 'Reduce la velocidad y usa refrigeración moderada.'],
+        ['ABS', 'Necesita retención de calor, por lo que las pendientes sin soporte son menos tolerantes.', 'Ajusta la orientación o usa soportes selectivos.'],
+        ['TPU', 'El filamento flexible puede deformarse después de la deposición.', 'Usa ángulos conservadores y movimiento lento.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Por qué el filamento húmedo puede imitar una mala configuración de voladizo',
+      html: 'La humedad puede crear pequeñas burbujas de vapor y una extrusión irregular. Si la parte inferior se ve espumosa, irregular o vellosa, seca el filamento antes de asumir que la estimación del ángulo seguro es incorrecta.',
+    },
+    { type: 'title', text: 'Velocidad de impresión y tiempo térmico', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La velocidad de impresión afecta a los voladizos porque cambia el tiempo térmico. A velocidades más altas, se deposita más material caliente por segundo, y cada punto del filamento tiene menos tiempo bajo flujo de aire útil antes de que se deposite la siguiente sección. Las paredes exteriores rápidas pueden verse aceptables en superficies verticales pero fallar en voladizos porque el cordón aún está blando mientras no tiene soporte. Reducir la velocidad solo del perímetro en voladizo suele ser más eficiente que reducir la velocidad de todo el modelo.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Un slicer puede tener controles separados para la velocidad de la pared exterior, la velocidad de puente, la velocidad de perímetros pequeños, la velocidad de voladizo y el tiempo mínimo de capa. La calculadora usa la velocidad de impresión principal como entrada práctica y penaliza progresivamente las velocidades altas. Si un modelo tiene capas cortas, el tiempo mínimo de capa y el comportamiento del ventilador pueden dominar. Si el voladizo es una pared continua larga, la velocidad del perímetro y la dirección del ducto de refrigeración se vuelven más importantes.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Reduce primero la velocidad de las paredes exteriores porque son las superficies que el usuario inspeccionará.',
+        'Usa una desaceleración específica para voladizos cuando el slicer lo soporte.',
+        'Mantén los movimientos de viaje lo suficientemente rápidos para evitar el sobrecalentamiento de características pequeñas.',
+        'No juzgues la velocidad solo por una torre pequeña; las piezas grandes retienen el calor de manera diferente.',
+        'Vuelve a probar después de cambiar el tamaño de la boquilla porque el caudal cambia la carga térmica.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Orden práctico de ajuste',
+      html: 'Para una pendiente sin soporte en el límite, prueba primero con una refrigeración más fuerte, menor velocidad de la pared exterior y menor altura de capa antes de activar soportes densos en todas partes.',
+    },
+    { type: 'title', text: 'Cuándo los soportes siguen siendo la respuesta correcta', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'El objetivo no es eliminar los soportes a cualquier precio. Los soportes son útiles cuando una superficie inferior debe ser dimensionalmente precisa, cuando el material es sensible al calor, cuando una cara estética apunta hacia abajo, o cuando el voladizo comienza en el aire sin contacto con la capa anterior. Una capacidad calculada de 60 grados no significa que cada característica de 60 grados se vea bien. Las islas pequeñas, los bordes abruptos, los agujeros, el texto en relieve y las superficies inferiores cóncavas pueden fallar antes que una rampa de calibración suave.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Los soportes selectivos suelen ser mejores que los soportes globales. Si solo una región supera el ángulo seguro calculado, pinta bloqueadores y forzadores de soporte, rota la pieza, chaflana la superficie inferior, divide el modelo o añade una pequeña costilla de sacrificio. Los soportes de árbol, los soportes orgánicos y las capas de interfaz pueden reducir las marcas mientras sujetan los primeros filamentos críticos sin soporte. Para soportes funcionales, un pequeño cambio de diseño a menudo ahorra más material que un ajuste agresivo del slicer.',
+    },
+    {
+      type: 'summary',
+      title: 'Usa soportes cuando',
+      items: [
+        'El ángulo seguro calculado está por debajo del ángulo inferior del modelo.',
+        'La superficie inferior debe ser lisa, plana o dimensionalmente precisa.',
+        'La característica comienza como una isla sin capa anterior a la que adherirse.',
+        'El material no puede usar suficiente refrigeración sin deformarse o debilitar la adhesión.',
+        'Un voladizo fallido arruinaría una impresión larga al final del trabajo.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Riesgo rojo no significa imposible',
+      html: 'Un resultado rojo significa que los soportes son la opción más segura para un perfil de consumo normal. Los usuarios expertos aún pueden tener éxito con ductos personalizados, velocidad de voladizo ajustada, trayectorias especiales del slicer o rediseño del modelo, pero el margen es estrecho.',
+    },
+    { type: 'title', text: 'Cómo validar la estimación con una torre de voladizo', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una pequeña torre de prueba de voladizo es la mejor manera de validar la estimación para una impresora específica. Imprime una torre que suba escalonadamente de 35 a 75 grados usando el mismo filamento, boquilla, temperatura, ventilador y velocidad de pared que planeas usar en la pieza real. Inspecciona la superficie inferior desde el lateral y desde abajo. Busca curvaturas, bucles rugosos, bordes de perímetro separados y hundimiento brillante. El último escalón limpio es tu ángulo seguro real para ese perfil.',
+    },
+    {
+      type: 'paragraph',
+      html: 'No cambies cinco variables entre las pruebas de la torre. Si la primera torre falla a 48 grados, aumenta la refrigeración o reduce la velocidad del voladizo y repite. Si la segunda torre alcanza los 55 grados, sabes qué palanca ayudó. Si la torre mejora en un lado pero no en el otro, inspecciona la simetría del ducto del ventilador. Si cada escalón se ve mal, verifica la temperatura de la boquilla, el multiplicador de extrusión, el filamento húmedo y el hardware de refrigeración antes de asumir que los soportes son inevitables.',
+    },
+    {
+      type: 'table',
+      headers: ['Observación', 'Causa probable', 'Próxima acción'],
+      rows: [
+        ['El borde inferior se curva hacia arriba', 'Desequilibrio de calor y refrigeración', 'Reduce la velocidad del perímetro y mejora la dirección del ventilador.'],
+        ['Los bucles se hunden hacia abajo', 'Fracción no soportada demasiado alta', 'Reduce la altura de capa o usa soporte.'],
+        ['Un lado más limpio que el otro', 'Flujo de aire asimétrico', 'Inspecciona el ducto y la ruta del soplador.'],
+        ['Superficie inferior rugosa y espumosa', 'Humedad o filamento sobrecalentado', 'Seca el carrete o reduce la temperatura de la boquilla.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Registra el nombre del perfil',
+      html: 'Guarda un perfil separado para cada boquilla, material y configuración de refrigeración. Un perfil de PLA de 0,16 mm y un perfil de PETG de 0,28 mm no deberían compartir la misma suposición de voladizo seguro.',
+    },
+    { type: 'title', text: 'Diseñar piezas para evitar soportes', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La solución más económica para voladizos suele estar en el CAD. Reemplaza un ángulo inferior recto de 90 grados con un chaflán, añade forma de lágrima a los agujeros horizontales, rota la pieza para que la superficie más inclinada apunte hacia arriba, o divide el modelo en dos mitades imprimibles. Un chaflán de 45 grados puede eliminar por completo la necesidad de soporte mientras mantiene la resistencia. Para agujeros de tornillo, los perfiles de lágrima y diamante se imprimen más limpios que los círculos perfectos cuando la parte superior del agujero se convertiría en un puente.',
+    },
+    {
+      type: 'paragraph',
+      html: 'El diseño consciente de la fabricación también reduce el postprocesado. Los soportes consumen material, aumentan el tiempo de impresión, marcan las superficies y pueden romper características delicadas durante la eliminación. Un modelo que respeta el ángulo seguro de la impresora imprime más rápido y de manera más consistente. La calculadora ayuda durante la revisión del diseño: compara el ángulo inferior del modelo con el ángulo seguro estimado y decide si rediseñar, ajustar el perfil o soportar solo el área de riesgo.',
+    },
+    {
+      type: 'proscons',
+      title: 'Rediseñar en lugar de soportar',
+      items: [
+        { pro: 'Reduce el material y el tiempo de postprocesado.', con: 'Puede cambiar la forma visual o funcional de la pieza.' },
+        { pro: 'Mejora la repetibilidad en granjas de impresión.', con: 'Requiere acceso a la fuente CAD o herramientas de edición de malla.' },
+        { pro: 'Puede fortalecer las piezas al alinear mejor las capas.', con: 'Algunas geometrías aún necesitan soportes para la precisión.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Mejores movimientos de diseño sin soportes',
+      items: [
+        'Usa chaflanes de 45 grados bajo bordes horizontales.',
+        'Convierte los agujeros horizontales circulares en forma de lágrima cuando sea posible.',
+        'Orienta las caras estéticas hacia arriba o hacia los lados.',
+        'Divide las piezas por uniones ocultas en lugar de soportar una gran superficie inferior.',
+        'Usa soportes solo donde el ángulo del modelo supere el perfil probado.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: '¿Son siempre seguros los 45 grados para voladizos en impresión 3D?',
+      answer: 'No. Es una regla predeterminada útil, pero el material, la refrigeración, la altura de capa, el ancho de línea, la velocidad y el rendimiento del ducto del ventilador pueden mover el límite práctico hacia abajo o hacia arriba.',
+    },
+    {
+      question: '¿Por qué la calculadora limita los resultados a 75 grados?',
+      answer: 'Las impresoras FDM domésticas a veces pueden imprimir formas de prueba de voladizo muy inclinadas, pero recomendar valores por encima de 75 grados no es fiable para piezas normales, por lo que la herramienta limita la estimación a un rango doméstico conservador.',
+    },
+    {
+      question: '¿Qué material imprime los mejores voladizos sin soporte?',
+      answer: 'El PLA suele ser el más fácil porque se endurece rápidamente y tolera una fuerte refrigeración de la pieza. El PETG, el ABS y el TPU generalmente necesitan suposiciones de voladizo más conservadoras.',
+    },
+    {
+      question: '¿Debo aumentar primero la velocidad del ventilador o reducir la velocidad de impresión?',
+      answer: 'Para PLA, aumenta la refrigeración y reduce la velocidad de las paredes exteriores en voladizo. Para PETG, ABS o piezas funcionales, equilibra la refrigeración con la adhesión entre capas y el riesgo de deformación.',
+    },
+    {
+      question: '¿Puede esto reemplazar una torre de calibración de voladizo?',
+      answer: 'No. Proporciona una estimación heurística y un buen punto de partida. Una torre pequeña sigue siendo la mejor validación para una impresora, filamento y perfil de slicer específicos.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Introduce la geometría de extrusión', text: 'Establece la altura de capa y el ancho de línea del slicer usados por el perfil.' },
+    { name: 'Elige el material y la refrigeración', text: 'Selecciona PLA, PETG, ABS o TPU y el nivel de enfriamiento de la pieza actual.' },
+    { name: 'Añade la velocidad de impresión', text: 'Introduce la velocidad de la pared exterior o la velocidad práctica de impresión para el área de voladizo.' },
+    { name: 'Compara el resultado', text: 'Usa el ángulo seguro y la evaluación de riesgo para decidir si ajustar, rediseñar o activar soportes.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Calculadora de Ángulo de Voladizo Seguro para Impresión 3D',
+      description: 'Estima el ángulo de voladizo FDM sin soporte a partir de la altura de capa, el ancho de línea, la refrigeración, el material y la velocidad.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '¿Son siempre seguros los 45 grados para voladizos en impresión 3D?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. Es una regla predeterminada útil, pero el material, la refrigeración, la altura de capa, el ancho de línea, la velocidad y el rendimiento del ducto del ventilador pueden mover el límite práctico hacia abajo o hacia arriba.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Cómo estimar un ángulo de voladizo seguro para impresora 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Introduce la altura de capa y el ancho de línea.' },
+        { '@type': 'HowToStep', text: 'Selecciona el material y el nivel de refrigeración.' },
+        { '@type': 'HowToStep', text: 'Introduce la velocidad de impresión.' },
+        { '@type': 'HowToStep', text: 'Compara el resultado con el ángulo inferior del modelo.' },
+      ],
+    },
+  ],
+};

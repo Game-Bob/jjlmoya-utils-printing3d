@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analizator-siatki-lozka',
+  title: 'Analizator siatki stołu drukarki 3D',
+  description: 'Analizuj dane siatki stołu z firmwaru Marlin lub Klipper, wizualizuj powierzchnię, diagnozuj przechylenie lub wypaczenie i konwertuj błąd Z na instrukcje obrotu śrub.',
+  ui: {
+    controlsAriaLabel: 'Parametry analizatora siatki stołu',
+    resultsAriaLabel: 'Wyniki analizatora siatki stołu',
+    dataLabel: 'Surowe dane siatki',
+    dataPlaceholder: 'Wklej tutaj wynik komendy G29...',
+    sampleButtonLabel: 'Użyj przykładowej siatki',
+    levelingPointsLabel: 'Punkty poziomowania',
+    threePointLabel: '3 punkty',
+    fourPointLabel: '4 punkty',
+    screwTypeLabel: 'Typ śruby',
+    customScrewLabel: 'Inny',
+    pitchLabel: 'Skok gwintu',
+    unitSystemLabel: 'Jednostki',
+    metricLabel: 'Metryczne',
+    imperialLabel: 'US',
+    heatmapLabel: 'Interaktywna topografia stołu',
+    lowScaleLabel: 'Niski',
+    flatScaleLabel: 'Równy',
+    highScaleLabel: 'Wysoki',
+    healthLabel: 'Stan równości',
+    rangeLabel: 'Całkowita różnica',
+    meshSizeLabel: 'Rozmiar siatki',
+    meanLabel: 'Średnia Z',
+    diagnosisLabel: 'Diagnoza',
+    instructionsLabel: 'Instrukcje regulacji mechanicznej',
+    cornerHeader: 'Narożnik',
+    deltaHeader: 'Korekta',
+    actionHeader: 'Co zrobić',
+    frontLeft: 'Lewy przód',
+    frontRight: 'Prawy przód',
+    rearLeft: 'Lewy tył',
+    rearRight: 'Prawy tył',
+    rearCenter: 'Środek tyłu',
+    clockwiseLabel: 'obróć zgodnie z ruchem wskazówek zegara',
+    counterClockwiseLabel: 'obróć przeciwnie do ruchu wskazówek zegara',
+    noTurnLabel: 'zostaw tę śrubę bez zmian',
+    raiseLabel: 'Podnieś stół o',
+    lowerLabel: 'Opuść stół o',
+    warningWarped: 'Nadmierne wypaczenie: problem leży prawdopodobnie w powierzchni, nie tylko w poziomowaniu. Rozważ wymianę lub wypłaszczenie stołu.',
+    parseError: 'Nie udało się sparsować siatki. Wklej wiersze dziesiętnych wartości Z z komend G29, M420 V lub BED_MESH_OUTPUT z Klippera.',
+    notEnoughNumbers: 'Znaleziono zbyt mało wartości siatki. Prawidłowa siatka wymaga co najmniej dwóch wierszy i dwóch kolumn.',
+    raggedRows: 'Wykryte wiersze nie mają tej samej długości. Sprawdź, czy dane siatki nie są obcięte lub uszkodzone.',
+    badPitch: 'Skok gwintu musi być większy od zera.',
+    diagnosisFlat: 'Stół jest już prawie równy. Wystarczy delikatne strojenie pierwszej warstwy.',
+    diagnosisFrontHigh: 'Przód stołu jest wyższy niż tył. Najpierw wyreguluj przednie śruby, zanim zaczniesz korygować poszczególne punkty.',
+    diagnosisRearHigh: 'Tył stołu jest wyższy niż przód. Najpierw wyreguluj tylne śruby.',
+    diagnosisLeftHigh: 'Lewa strona jest wyższa niż prawa. To głównie nachylenie osi X w poprzek stołu.',
+    diagnosisRightHigh: 'Prawa strona jest wyższa niż lewa. To głównie nachylenie osi X w poprzek stołu.',
+    diagnosisTwisted: 'Przeciwległe narożniki są niezgodne. Stół jest skrzywiony lub gantry nie jest równomiernie wyjustowane.',
+    diagnosisConcave: 'Środek jest niższy niż narożniki. Śruby poziomujące nie usuną w pełni tej wklęsłości.',
+    diagnosisConvex: 'Środek jest wyższy niż narożniki. Sprawdź magnesy, klipsy, naprężenia płyty lub wygięcie termiczne.',
+    diagnosisWarped: 'Zakres Z przekracza 0,5 mm, co wskazuje na nadmierne wypaczenie powierzchni, a nie zwykły błąd poziomowania.',
+    mmUnit: 'mm',
+    inchUnit: 'cal',
+    degreeUnit: 'stop',
+  },
+  seo: [
+    { type: 'title', text: 'Jak czytać siatkę stołu drukarki 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Siatka stołu to prostokątna tablica zmierzonych offsetów Z, zebranych przez czujnik lub dyszę na całej powierzchni roboczej. Firmware taki jak Marlin i Klipper wykorzystuje tę siatkę do kompensacji niewielkich różnic wysokości podczas drukowania pierwszych warstw. Wartości podawane są zazwyczaj w milimetrach: wartość dodatnia oznacza, że mierzony punkt jest wysoki względem przyjętej płaszczyzny odniesienia, a ujemna - że jest niski. Praktyczne pytanie nie brzmi tylko, czy firmware jest w stanie to skompensować. Ważniejsze jest, czy fizyczny stół, gantry i śruby poziomujące są na tyle zbliżone do ideału, że kompensacja nie musi pracować zbyt ciężko.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Niniejszy analizator zamienia surowe dane siatki na trzy decyzje: jaka jest całkowita różnica Z, czy kształt powierzchni przypomina przechylenie czy odkształcenie oraz które śruby należy wyregulować. To rozróżnienie ma znaczenie, ponieważ przechylony stół i wypaczony stół wymagają różnych napraw. Przechylenie często można skorygować, obracając śruby narożne. Natomiast wklęsła płyta szklana, wygięty arkusz magnetyczny, luźny wózek osi Y czy skrzywione gantry mogą dawać złą pierwszą warstwę nawet po idealnym wypoziomowaniu każdego narożnika.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'idealny zakres, rzadko osiągalny na prawdziwych stołach' },
+        { value: '0,10 mm', label: 'zazwyczaj doskonały dla typowych pierwszych warstw FDM' },
+        { value: '0,30 mm', label: 'zauważalny, ale często do wydrukowania z kompensacją siatki' },
+        { value: '0,50 mm+', label: 'należy zbadać powierzchnię lub mechanikę' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Wartości siatki to nie komendy obrotu śrub',
+      html: 'Firmware raportuje mapę wysokości. Instrukcja obrotu śruby powstaje ze średnich narożnych, skoku gwintu i mechanicznego kierunku regulacji. Zawsze wykonuj małe zmiany, wykonaj ponownie home i sonduj ponownie.',
+    },
+    { type: 'title', text: 'Co oznaczają wartości G29 i BED_MESH_OUTPUT', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Użytkownicy Marlina często pozyskują dane stołu przez <code>G29</code>, <code>M420 V</code> lub raport poziomowania w terminalu. Użytkownicy Klippera mogą sprawdzić siatkę przez <code>BED_MESH_OUTPUT</code>, interfejs webowy lub zapisany profil. Formaty wyjściowe różnią się, ale istotne dane są te same: wiersze i kolumny dziesiętnych pomiarów Z. Niektóre raporty zawierają etykiety, współrzędne, nawiasy, numery indeksów lub komunikaty firmware. Dobry parser powinien ignorować otaczający tekst i wyodrębniać tylko wartości pomiarowe tworzące siatkę.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Najbardziej niezawodnym wklejonym tekstem jest prostokątny blok, w którym każdy wiersz ma tę samą liczbę wartości. Siatka 3x3 ma 9 wartości, 5x5 - 25 wartości, a 7x7 - 49 wartości. Siatki prostokątne również są prawidłowe, jeśli siatka pomiarowa używa różnych liczb punktów w osiach X i Y. Jeśli wiersze mają różną długość, dane są prawdopodobnie niekompletne lub wymieszane z niepowiązanymi liczbami, takimi jak współrzędne, prędkości posuwu czy liczniki komend. W takim przypadku wykonaj ponownie raport i wklej tylko liczbową siatkę.',
+    },
+    {
+      type: 'table',
+      headers: ['Wskazówka', 'Co sugeruje', 'Co zrobić'],
+      rows: [
+        ['Wiersze mają równą długość', 'Siatka jest prawdopodobnie kompletna.', 'Przeprowadź analizę i porównaj całkowitą różnicę.'],
+        ['Jeden wiersz jest krótszy', 'Kopia terminala mogła zostać obcięta.', 'Skopiuj raport ponownie od początku.'],
+        ['Wiele dodatkowych liczb całkowitych', 'Wklejony tekst zawiera indeksy lub współrzędne.', 'Jeśli to możliwe, wklej tylko sekcję macierzy.'],
+        ['Tylko jedna długa linia', 'Narzędzie może spróbować rekonstrukcji kwadratowej.', 'Użyj 9, 25, 49 lub innej kwadratowej liczby.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Sonduj po nagrzaniu',
+      html: 'Aby uzyskać miarodajne dane, nagrzej stół do temperatury drukowania i odczekaj na stabilizację termiczną przed sondowaniem. Płyty aluminiowe i arkusze magnetyczne mogą zmieniać kształt po kilku minutach w temperaturze.',
+    },
+    { type: 'title', text: 'Całkowita różnica - liczba, która przewiduje problemy z pierwszą warstwą', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Całkowita różnica to bezwzględna różnica między najwyższą a najniższą wartością siatki. Jeśli maksymalny punkt wynosi +0,180 mm, a minimalny -0,120 mm, całkowita różnica wynosi 0,300 mm. Ta pojedyncza liczba jest łatwa do zrozumienia, ponieważ opisuje pełny pionowy zakres, jaki firmware musi skompensować na całej powierzchni stołu. Mała różnica oznacza, że szczelina dyszy pozostaje podobna od przodu do tyłu i od lewej do prawej. Duża różnica oznacza, że jeden obszar może być zgniatany, podczas gdy inny wciąż ma problem z przyczepnością.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Dopuszczalny zakres zależy od wysokości warstwy, rozmiaru dyszy, filamentu, faktury powierzchni i tego, jak agresywne jest spłaszczenie pierwszej warstwy. Przy pierwszej warstwie 0,20 mm zakres powierzchni 0,10 mm jest zwykle komfortowy. Zakres 0,30 mm może być nadal drukowalny, jeśli kompensacja siatki jest włączona, a wysokość wygaszania ustawiona rozsądnie, ale pozostawia mniejszy margines. Powyżej 0,50 mm użytkownik powinien podejrzewać problemy mechaniczne lub powierzchniowe, ponieważ stół nie jest już tylko lekko niepoziomowany.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Poniżej 0,10 mm',
+          description: 'Doskonałe dla większości konsumenckich drukarek FDM. Strojenie pierwszej warstwy sprowadza się głównie do offsetu Z i czystości powierzchni.',
+          highlight: true,
+          points: ['Minimalna korekcja śrub', 'Niskie obciążenie kompensacji', 'Dobra powtarzalność'],
+        },
+        {
+          title: '0,10 do 0,30 mm',
+          description: 'Typowe dla maszyn hobbystycznych. Kompensacja siatki może pomóc, ale poziomowanie narożników może poprawić przyczepność.',
+          points: ['Powtarzalność sondy ma znaczenie', 'Obserwuj krawędzie i narożniki', 'Reguluj śruby małymi krokami'],
+        },
+        {
+          title: 'Powyżej 0,50 mm',
+          description: 'Prawdopodobnie wypaczenie, luz wózka, naprężenie płyty lub błąd gantry. Samo poziomowanie śrub może nie rozwiązać problemu.',
+          points: ['Sprawdź mechanikę', 'Zbadaj stan po nagrzaniu', 'Rozważ nową płytę'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Dobry zakres wciąż może dawać złe wydruki',
+      html: 'Jeśli zakres jest mały, ale pierwsza warstwa nie wychodzi, sprawdź offset Z, ekstruzję, zabrudzony PEI, powtarzalność sondy, resztki na dyszy i czy profil siatki jest faktycznie załadowany przed drukowaniem.',
+    },
+    { type: 'title', text: 'Przechylenie, skręcenie, wklęsłość i wypukłość', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Siatka stołu to coś więcej niż tylko wartość maksymalna i minimalna. Rozkład wartości mówi, jaki rodzaj korekcji jest realny. Jeśli cały przedni wiersz jest wysoki, a tylny niski, stół jest globalnie przechylony z przodu do tyłu. Jeśli lewa strona jest wysoka, a prawa niska, stół jest przechylony w osi X. Te przypadki są idealne do regulacji śrubami, ponieważ fizyczna płaszczyzna stołu jest po prostu niewspółosiowa z płaszczyzną ruchu dyszy.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Skręcona siatka wygląda inaczej: jedna para przekątna jest wysoka, podczas gdy przeciwna jest niska. Może to wynikać z nierównomiernego docisku śrub, wygiętego wózka osi Y, gantry, które nie jest kwadratowe, lub elastycznej płyty wsporczej stołu. Wklęsła siatka ma środek niższy niż narożniki, podczas gdy wypukła siatka ma środek wyższy niż narożniki. Śruby na krawędziach nie są w stanie całkowicie usunąć wybrzuszenia środka, ponieważ nie kontrolują bezpośrednio środkowej części stołu.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Przechylenie', definition: 'Różnica wysokości o charakterze płaszczyznowym, gdzie jedna strona stołu jest wyższa od przeciwległej.' },
+        { term: 'Skręcenie', definition: 'Niezgodność przekątnych, gdzie przeciwległe narożniki różnią się, często spowodowana nierównym podparciem lub niewspółosiowością ramy.' },
+        { term: 'Wklęsły stół', definition: 'Powierzchnia, w której środek jest niższy niż otaczające go narożniki lub krawędzie.' },
+        { term: 'Wypukły stół', definition: 'Powierzchnia, w której środek jest wyższy niż otaczające go narożniki lub krawędzie.' },
+        { term: 'Wypaczenie', definition: 'Kształt niepłaszczyznowy na tyle duży, że zwykłe poziomowanie śrubami nie jest w stanie go usunąć.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Dlaczego wybrzuszenie środka trudno skorygować śrubami narożnymi',
+      html: 'Śruby narożne definiują płaszczyznę podparcia na krawędzi stołu. Jeśli środek jest wybrzuszony do góry z powodu ciepła, magnesów, klipsów lub naprężeń płyty, opuszczanie narożników może pogorszyć sytuację na krawędziach, podczas gdy środek pozostanie wysoki.',
+    },
+    { type: 'title', text: 'Konwersja błędu Z na obrót śruby', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Przeliczenie mechaniczne opiera się na skoku gwintu. Skok gwintu to pionowy przesuw przy jednym pełnym obrocie śruby. Typowa śruba M3 gruboziarnista ma skok 0,50 mm, M4 około 0,70 mm, a M5 około 0,80 mm. Jeśli narożnik wymaga przesunięcia o 0,125 mm na śrubie M3, obrót wynosi <code>0,125 x 360 / 0,50 = 90 stopni</code>, czyli ćwierć obrotu. To znacznie łatwiejsze do wykonania niż abstrakcyjna liczba Z.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Kierunek zależy od mechaniki drukarki. W wielu drukarkach ze sprężynowym stołem obrót pokrętła w lewo (od dołu) podnosi stół w kierunku dyszy, ale maszyny bywają różne. Analizator stosuje konwencjonalny styl instrukcji i pokazuje, czy narożnik należy podnieść, czy opuścić. Jeśli kierunek pokrętła w twojej drukarce jest odwrotny, zachowaj korekcję w milimetrach i ułamek obrotu, ale odwróć kierunek. Najbezpieczniejszy sposób to przesunąć jedną śrubę o połowę zalecanej wartości, wysondować ponownie i powtórzyć.',
+    },
+    {
+      type: 'table',
+      headers: ['Śruba', 'Typowy skok gruby', 'Korekcja 0,10 mm', 'Korekcja 0,20 mm'],
+      rows: [
+        ['M3', '0,50 mm / obrót', '72 stopnie', '144 stopnie'],
+        ['M4', '0,70 mm / obrót', '51 stopni', '103 stopnie'],
+        ['M5', '0,80 mm / obrót', '45 stopni', '90 stopni'],
+        ['Własna', 'Wartość użytkownika', '360 x 0,10 / pitch', '360 x 0,20 / pitch'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Nie goń mechanicznie ostatnich 0,02 mm',
+      html: 'Powtarzalność sondy, temperatura stołu i kompresja sprężyn mogą łatwo zmieniać się o setne części milimetra. Przestań regulować, gdy siatka mieści się w praktycznym zakresie, i użyj offsetu Z do ostatecznego strojenia pierwszej warstwy.',
+    },
+    { type: 'title', text: 'Poziomowanie trójpunktowe a czteropunktowe', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Poziomowanie trójpunktowe jest mechanicznie eleganckie, ponieważ trzy punkty definiują płaszczyznę bez jej nadmiernego wiązania. Stół z trzema śrubami ma zwykle dwie śruby z przodu i jedną z tyłu pośrodku lub podobny trójkątny układ. Poziomowanie czteropunktowe jest powszechne w wielu drukarkach kartezjańskich, ale cztery śruby mogą ze sobą walczyć: dokręcenie jednego narożnika może wygiąć stół lub zmienić obciążenie przeciwległego narożnika. Analizator obsługuje oba warianty, ponieważ poprawny zestaw instrukcji zależy od maszyny.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Dla stołów czteropunktowych analizator porównuje cztery narożniki i podaje instrukcję dla każdego. Dla stołów trójpunktowych używa lewego przodu, prawego przodu i środka tyłu. Narzędzie nie zna dokładnej fizycznej pozycji każdego modelu drukarki, więc traktuj etykiety jak mapę: przód to krawędź najbliższa użytkownikowi na większości stołów, a tył to krawędź tylna. Jeśli twój układ współrzędnych jest odwrócony, przetłumacz instrukcję mentalnie na swoją maszynę przed dotknięciem śrub.',
+    },
+    {
+      type: 'proscons',
+      title: 'Kompromisy systemów poziomowania',
+      items: [
+        { pro: 'Trzy śruby definiują stabilną płaszczyznę z mniejszą liczbą interakcji.', con: 'Nie każda drukarka jest zaprojektowana do trójkątnego układu podparcia.' },
+        { pro: 'Cztery śruby pasują do wielu fabrycznych stołów i są łatwe do zrozumienia.', con: 'Mogą nadmiernie wiązać cienką płytę i powodować skręcenie.' },
+        { pro: 'Kompensacja siatki może ukryć małe pozostałe błędy.', con: 'Nie usunie luźnej mechaniki, wypaczonych płyt ani złych danych z sondy.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Zalecana kolejność regulacji',
+      html: 'Najpierw skoryguj globalne przechylenie, potem skręcenie przekątne, a następnie wykonaj nową siatkę. Unikaj dużych zmian wszystkich śrub naraz, ponieważ każda śruba zmienia płaszczyznę, na której opierają się pozostałe.',
+    },
+    { type: 'title', text: 'Dlaczego kompensacja siatki nie zastępuje mechaniki', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Kompensacja siatki stołu zmienia pozycję Z podczas drukowania, aby dysza podążała za zmierzoną powierzchnią. To potężne narzędzie, ale ma swoje ograniczenia. Duży zakres siatki powoduje widoczne ruchy w osi Z, może wpływać na ciśnienie ekstruzji na pierwszej warstwie i sprawiać, że podstawa wydruku będzie lekko odwzorowywać kształt stołu. Jeśli siatka wygasa na kilku milimetrach, niższe warstwy mogą stopniowo przechodzić z kształtu stołu do nominalnego kształtu modelu. Jest to do przyjęcia dla małych korekt, ale niepożądane w przypadku silnego wypaczenia.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Dobra mechanika zmniejsza zakres potrzebnej korekcji. Sprawdź, czy koła lub prowadnice wózka stołu nie mają luzu, czy mocowanie sondy jest sztywne, czy dysza jest czysta przed sondowaniem, czy płyta robocza jest równomiernie osadzona i czy gantry jest kwadratowe. W stołach ze sprężynami mocniejsze sprężyny lub silikonowe dystanse mogą poprawić powtarzalność. W systemach magnetycznych PEI zanieczyszczenia pod arkuszem mogą tworzyć lokalne wypukłości, które w siatce wyglądają jak tajemnicze wybrzuszenie.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Wyczyść dyszę przed sondowaniem, jeśli dysza dotyka powierzchni.',
+        'Nagrzej stół i odczekaj wystarczająco długo, aby płyta przestała się przemieszczać termicznie.',
+        'Potwierdź, że zapisana siatka jest ładowana w sekwencji startowej wydruku.',
+        'Sprawdź klipsy stołu, magnesy i osadzenie arkusza pod kątem lokalnych wypukłości.',
+        'Sprawdź ponownie kwadratowość gantry, gdy siatka wykazuje skręcenie przekątne.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Powyżej 0,5 mm to już inspekcja mechaniczna',
+      html: 'Gdy całkowita różnica przekracza 0,5 mm, nie kręć śrubami w nieskończoność. Szukaj wygiętej płyty, luźnego wózka, nierównych dystansów, błędu offsetu sondy lub powierzchni, która zmienia kształt po nagrzaniu.',
+    },
+    { type: 'title', text: 'Praktyczny przepis na lepsze pierwsze warstwy', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Zacznij od stabilnej mechanicznie drukarki. Nagrzej stół, odczekaj, zjedź do home na wszystkich osiach i uruchom pomiar siatki. Wklej dane do analizatora i najpierw sprawdź całkowitą różnicę. Jeśli zakres jest ekstremalny, zatrzymaj się i sprawdź mechanikę. Jeśli zakres jest umiarkowany, a diagnoza wskazuje na wysoki przód, tył, lewą lub prawą stronę, zastosuj zalecenia dotyczące śrub w małych przyrostach. Sondowanie po każdej korekcie. Dwa konserwatywne przejścia są zwykle lepsze niż jedno agresywne, ponieważ kompresja sprężyn i ugięcie stołu nie są idealnie liniowe.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Gdy siatka jest już rozsądna, przestań regulować śruby i dostrój pierwszą warstwę za pomocą offsetu Z, szerokości ekstruzji, prędkości i przygotowania powierzchni. Idealnie wypoziomowany stół ze złym offsetem Z wciąż zawodzi. Lekko niedoskonały stół z czystym arkuszem PEI, prawidłowym offsetem Z i aktywną kompensacją siatki może drukować pięknie. Analizator został zaprojektowany, aby najpierw odpowiedzieć na pytanie mechaniczne: gdzie użytkownik powinien obrócić, jak daleko i czy w ogóle obracanie śrub jest właściwą naprawą.',
+    },
+    {
+      type: 'summary',
+      title: 'Najlepszy przepis na siatkę stołu',
+      items: [
+        'Sonduj w temperaturze drukowania, nie na zimno.',
+        'Użyj całkowitej różnicy, aby zdecydować, czy siatka jest zwykła czy nadmierna.',
+        'Sklasyfikuj kształt przed regulacją śrub.',
+        'Przelicz błąd narożnika na obrót wynikający ze skoku gwintu.',
+        'Sondowanie po małych korektach i zakończ, gdy pozostały błąd jest praktycznie akceptowalny.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Nie chodzi o piękny wykres',
+      html: 'Liczy się lepsza pierwsza warstwa. Obraz siatki pomaga zobaczyć powierzchnię, ale tabela śrub to część, która zamienia pomiar w naprawę.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Czy mogę wkleić dane siatki zarówno z Marlina, jak i Klippera?',
+      answer: 'Tak. Parser wyodrębnia dziesiętne wartości Z z tekstu wielowierszowego, więc działa z typowymi raportami G29, M420 V i BED_MESH_OUTPUT, o ile siatka liczbowa jest obecna.',
+    },
+    {
+      question: 'Jaka różnica siatki stołu jest akceptowalna?',
+      answer: 'Poniżej 0,10 mm to wynik doskonały, 0,10-0,30 mm jest typowy i zwykle drukowalny z kompensacją siatki, a powyżej 0,50 mm sugeruje problem z powierzchnią lub mechaniką.',
+    },
+    {
+      question: 'Dlaczego narzędzie ostrzega o wypaczeniu powyżej 0,5 mm?',
+      answer: 'W tym zakresie poziomowanie śrubami często przestaje być głównym problemem. Płyta robocza, wózek, sonda lub gantry mogą być wypaczone, luźne lub odkształcone termicznie.',
+    },
+    {
+      question: 'Czy instrukcje kierunku obrotu śrub pasują do każdej drukarki?',
+      answer: 'Nie. Obliczone milimetry i stopnie są uniwersalne, ale kierunek pokrętła może się różnić w zależności od maszyny. Jeśli stół porusza się przeciwnie do opisu, odwróć kierunek, zachowując tę samą wartość.',
+    },
+    {
+      question: 'Czy kompensacja siatki zastępuje ręczne poziomowanie?',
+      answer: 'Nie. Kompensacja siatki jest najlepsza do małych resztkowych błędów. Poziomowanie mechaniczne utrzymuje korekcję na niskim poziomie i poprawia powtarzalność pierwszej warstwy.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Wklej dane siatki', text: 'Skopiuj liczbową siatkę stołu z Marlina lub Klippera i wklej ją w pole surowych danych.' },
+    { name: 'Wybierz mechanikę', text: 'Wybierz trzy lub cztery punkty poziomowania oraz skok gwintu używany w drukarce.' },
+    { name: 'Przeczytaj diagnozę', text: 'Sprawdź, czy powierzchnia jest przechylona, skręcona, wklęsła, wypukła czy nadmiernie wypaczona.' },
+    { name: 'Reguluj ostrożnie', text: 'Obróć każdą śrubę o zalecany ułamek obrotu, a następnie wysonduj ponownie przed kolejną korektą.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analizator siatki stołu drukarki 3D',
+      description: 'Analizuj dane siatki stołu z Marlina i Klippera oraz konwertuj błąd narożnika Z na instrukcje obrotu śrub poziomujących.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Jaka różnica siatki stołu jest akceptowalna?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Poniżej 0,10 mm to wynik doskonały, 0,10-0,30 mm jest typowy i zwykle drukowalny z kompensacją siatki, a powyżej 0,50 mm sugeruje problem z powierzchnią lub mechaniką.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Jak analizować siatkę stołu drukarki 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Wklej surowe dane siatki z Marlina lub Klippera.' },
+        { '@type': 'HowToStep', text: 'Wybierz liczbę punktów poziomowania i skok gwintu.' },
+        { '@type': 'HowToStep', text: 'Sprawdź różnicę, diagnozę i mapę cieplną.' },
+        { '@type': 'HowToStep', text: 'Zastosuj instrukcje obrotu śrub i wysonduj ponownie.' },
+      ],
+    },
+  ],
+};

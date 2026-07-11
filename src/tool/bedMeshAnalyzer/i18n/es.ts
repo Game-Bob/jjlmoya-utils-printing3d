@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analizador-malla-cama',
+  title: 'Analizador de Malla de Cama para Impresora 3D',
+  description: 'Analiza datos de malla de cama de Marlin o Klipper, visualiza la superficie, diagnostica inclinación o deformación y convierte el error Z en instrucciones de giro de tornillos.',
+  ui: {
+    controlsAriaLabel: 'Entradas del analizador de malla de cama',
+    resultsAriaLabel: 'Resultados del analizador de malla de cama',
+    dataLabel: 'Datos brutos de malla',
+    dataPlaceholder: 'Pega aquí el resultado de tu comando G29...',
+    sampleButtonLabel: 'Usar malla de ejemplo',
+    levelingPointsLabel: 'Puntos de nivelación',
+    threePointLabel: '3 puntos',
+    fourPointLabel: '4 puntos',
+    screwTypeLabel: 'Tipo de tornillo',
+    customScrewLabel: 'Otro',
+    pitchLabel: 'Paso de rosca',
+    unitSystemLabel: 'Unidades',
+    metricLabel: 'Métrico',
+    imperialLabel: 'Imperial',
+    heatmapLabel: 'Topografía interactiva de la cama',
+    lowScaleLabel: 'Bajo',
+    flatScaleLabel: 'Plano',
+    highScaleLabel: 'Alto',
+    healthLabel: 'Estado de planitud',
+    rangeLabel: 'Variación total',
+    meshSizeLabel: 'Tamaño de malla',
+    meanLabel: 'Z media',
+    diagnosisLabel: 'Diagnóstico',
+    instructionsLabel: 'Instrucciones de ajuste mecánico',
+    cornerHeader: 'Esquina',
+    deltaHeader: 'Corrección',
+    actionHeader: 'Acción',
+    frontLeft: 'Frontal izquierda',
+    frontRight: 'Frontal derecha',
+    rearLeft: 'Trasera izquierda',
+    rearRight: 'Trasera derecha',
+    rearCenter: 'Trasera centro',
+    clockwiseLabel: 'girar en sentido horario',
+    counterClockwiseLabel: 'girar en sentido antihorario',
+    noTurnLabel: 'dejar este tornillo como está',
+    raiseLabel: 'Subir cama',
+    lowerLabel: 'Bajar cama',
+    warningWarped: 'Deformación excesiva: el problema es probablemente la superficie, no solo el nivelado. Considera reemplazar o aplanar la placa de construcción.',
+    parseError: 'No se pudo analizar la malla. Pega filas de valores Z decimales de G29, M420 V o BED_MESH_OUTPUT de Klipper.',
+    notEnoughNumbers: 'No se encontraron suficientes números de malla. Una malla válida necesita al menos dos filas y dos columnas.',
+    raggedRows: 'Las filas detectadas no tienen la misma longitud. Verifica si la salida de malla está truncada o corrupta.',
+    badPitch: 'El paso de rosca debe ser mayor que cero.',
+    diagnosisFlat: 'La cama ya está casi plana. Solo debería ser necesario un ajuste fino de la primera capa.',
+    diagnosisFrontHigh: 'La parte frontal está más alta que la trasera. Corrige los tornillos delanteros antes de ajustar puntos individuales.',
+    diagnosisRearHigh: 'La parte trasera está más alta que la frontal. Corrige primero los tornillos traseros.',
+    diagnosisLeftHigh: 'El lado izquierdo está más alto que el derecho. Es principalmente una inclinación del eje X a lo ancho de la cama.',
+    diagnosisRightHigh: 'El lado derecho está más alto que el izquierdo. Es principalmente una inclinación del eje X a lo ancho de la cama.',
+    diagnosisTwisted: 'Las esquinas opuestas no coinciden. La cama está torcida o el pórtico no está alineado de forma consistente.',
+    diagnosisConcave: 'El centro está más bajo que las esquinas. Los tornillos de nivelación no pueden eliminar por completo esta forma cóncava.',
+    diagnosisConvex: 'El centro está más alto que las esquinas. Revisa imanes, clips, tensión de la placa o curvatura térmica.',
+    diagnosisWarped: 'El rango Z supera los 0.5 mm, lo que indica una deformación excesiva de la superficie más que un error de nivelación ordinario.',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Cómo Leer una Malla de Cama de Impresora 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una malla de cama es una cuadrícula de desviaciones Z medidas por un sensor o palpador en el área imprimible. Firmwares como Marlin y Klipper usan esa cuadrícula para compensar pequeñas diferencias de altura al imprimir las primeras capas. Los números suelen expresarse en milímetros: un valor positivo significa que el punto medido está alto respecto al plano de referencia elegido, y un valor negativo significa que está bajo. La pregunta práctica no es solo si el firmware puede compensarlo. La cuestión importante es si la cama física, el pórtico y los tornillos de nivelación están lo suficientemente cerca como para que la compensación no tenga que trabajar demasiado.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Este analizador convierte los datos brutos de malla en tres decisiones: cuánta variación Z total existe, si la forma parece inclinación o deformación, y qué tornillos deben ajustarse. Esta distinción importa porque una cama inclinada y una cama deformada necesitan reparaciones diferentes. Una inclinación a menudo puede solucionarse girando los tornillos de las esquinas. Un cristal cóncavo, una lámina magnética combada, un carro Y suelto o un pórtico torcido pueden seguir produciendo una mala primera capa incluso después de nivelar perfectamente cada esquina.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0.00 mm', label: 'rango ideal, rara vez alcanzado en camas reales' },
+        { value: '0.10 mm', label: 'generalmente excelente para primeras capas FDM típicas' },
+        { value: '0.30 mm', label: 'perceptible pero a menudo imprimible con compensación de malla' },
+        { value: '0.50 mm+', label: 'se debe investigar la superficie o la mecánica' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Los valores de malla no son instrucciones de tornillo por sí mismos',
+      html: 'El firmware informa de un mapa de alturas. Una instrucción de tornillo se deriva de los promedios de las esquinas, el paso de rosca y la dirección mecánica del ajuste. Haz siempre cambios pequeños, vuelve a hacer referencia y prueba de nuevo.',
+    },
+    { type: 'title', text: 'Qué Significan los Valores de G29 y BED_MESH_OUTPUT', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Los usuarios de Marlin suelen obtener datos de cama mediante <code>G29</code>, <code>M420 V</code> o un informe de nivelación en la terminal. Los usuarios de Klipper pueden inspeccionar la malla con <code>BED_MESH_OUTPUT</code>, la interfaz web o los datos de perfil guardados. Los formatos de salida difieren, pero los datos importantes son los mismos: filas y columnas de mediciones Z decimales. Algunos informes incluyen etiquetas, coordenadas, corchetes, números de índice o texto del firmware. Un analizador útil debe ignorar el texto circundante y extraer solo los números de medición que forman la malla.',
+    },
+    {
+      type: 'paragraph',
+      html: 'El pegado de malla más fiable es un bloque rectangular donde cada fila tiene el mismo número de valores. Una malla 3×3 tiene 9 valores, una 5×5 tiene 25 valores y una 7×7 tiene 49 valores. Las mallas rectangulares también pueden ser válidas si la cuadrícula de sondeo utiliza diferentes conteos de X e Y. Si las filas tienen longitudes inconsistentes, los datos probablemente estén incompletos o mezclados con números no relacionados, como coordenadas, velocidades de avance o contadores de comandos. En ese caso, vuelve a ejecutar el informe y pega solo la cuadrícula numérica.',
+    },
+    {
+      type: 'table',
+      headers: ['Pista en la salida', 'Lo que sugiere', 'Qué hacer'],
+      rows: [
+        ['Filas de igual longitud', 'La malla probablemente está completa.', 'Analiza directamente y compara la variación total.'],
+        ['Una fila es más corta', 'La copia de terminal puede estar truncada.', 'Copia el informe de nuevo desde el principio.'],
+        ['Muchos enteros adicionales', 'El pegado incluye índices o coordenadas.', 'Pega solo la sección de la matriz cuando sea posible.'],
+        ['Solo una línea larga', 'La herramienta puede intentar una reconstrucción cuadrada.', 'Usa 9, 25, 49 u otro número cuadrado.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Sondear después de calentar',
+      html: 'Para obtener datos significativos, calienta la cama a la temperatura de impresión y espera la estabilización térmica antes de sondear. Las placas de aluminio y las láminas magnéticas pueden cambiar de forma después de varios minutos a temperatura.',
+    },
+    { type: 'title', text: 'Variación Total: El Número que Predice Problemas en la Primera Capa', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La variación total es la diferencia absoluta entre el valor de malla más alto y el más bajo. Si el punto máximo es +0.180 mm y el punto mínimo es -0.120 mm, la variación total es 0.300 mm. Este único número es fácil de entender porque describe todo el trabajo vertical que el firmware debe absorber en toda la cama. Una variación pequeña significa que la separación de la boquilla se mantiene similar de adelante a atrás y de izquierda a derecha. Una variación grande significa que un área puede estar aplastada mientras otra aún lucha por adherirse.',
+    },
+    {
+      type: 'paragraph',
+      html: 'El rango aceptable depende de la altura de capa, el tamaño de boquilla, el filamento, la textura de la superficie y lo agresiva que sea la presión de la primera capa. Con una primera capa de 0.20 mm, un rango de superficie de 0.10 mm suele ser cómodo. Un rango de 0.30 mm aún puede imprimirse si la compensación de malla está activada y la altura de desvanecimiento está configurada de forma sensata, pero deja menos margen. Por encima de 0.50 mm, el usuario debe sospechar problemas mecánicos o de superficie porque la cama ya no está simplemente ligeramente desnivelada.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Por debajo de 0.10 mm',
+          description: 'Excelente para la mayoría de impresoras FDM de consumo. El ajuste de la primera capa se centra principalmente en el offset Z y la limpieza de la superficie.',
+          highlight: true,
+          points: ['Corrección mínima de tornillos', 'Baja carga de compensación', 'Buena repetibilidad'],
+        },
+        {
+          title: '0.10 a 0.30 mm',
+          description: 'Común en máquinas de aficionado. La compensación de malla puede ayudar, pero el nivelado de esquinas puede mejorar la adherencia.',
+          points: ['La repetibilidad del sensor importa', 'Vigila bordes y esquinas', 'Ajusta tornillos en pasos pequeños'],
+        },
+        {
+          title: 'Por encima de 0.50 mm',
+          description: 'Probablemente deformación, problema de carro, tensión de placa o error de pórtico. Solo nivelar tornillos puede no resolverlo.',
+          points: ['Inspecciona el hardware', 'Comprueba el estado en caliente', 'Considera una placa nueva'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Un buen rango aún puede imprimir mal',
+      html: 'Si el rango es pequeño pero la primera capa falla, revisa el offset Z, la extrusión, el PEI sucio, la repetibilidad del sensor, los residuos en la boquilla y si el perfil de malla está realmente cargado antes de imprimir.',
+    },
+    { type: 'title', text: 'Inclinación, Torsión, Concavidad y Convexidad', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Una malla de cama es más que un valor máximo y mínimo. La distribución te dice qué tipo de corrección es realista. Si toda la fila frontal está alta y la fila trasera está baja, la cama está globalmente inclinada de adelante a atrás. Si el lado izquierdo está alto y el derecho está bajo, la cama está inclinada a lo largo del eje X. Estos casos son ideales para el ajuste de tornillos porque el plano físico de la cama simplemente no está alineado con el plano de movimiento de la boquilla.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una malla torcida es diferente: un par diagonal está alto mientras que el par opuesto está bajo. Esto puede deberse a una compresión desigual de los tornillos, un carro Y deformado, un pórtico X que no está cuadrado o una placa de soporte de la cama que se flexiona. Una malla cóncava tiene el centro más bajo que las esquinas, mientras que una malla convexa tiene el centro más alto que las esquinas. Los tornillos en los bordes no pueden eliminar por completo una curvatura central porque no controlan directamente la parte media de la placa de construcción.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Inclinación', definition: 'Una diferencia de altura mayoritariamente plana donde un lado de la cama está más alto que el lado opuesto.' },
+        { term: 'Torsión', definition: 'Un desajuste diagonal donde las esquinas opuestas no coinciden, a menudo causado por un soporte desigual o una desalineación del bastidor.' },
+        { term: 'Cama cóncava', definition: 'Una superficie donde el centro está más bajo que las esquinas o bordes circundantes.' },
+        { term: 'Cama convexa', definition: 'Una superficie donde el centro está más alto que las esquinas o bordes circundantes.' },
+        { term: 'Deformación', definition: 'Una forma no plana lo suficientemente grande como para que el nivelado normal con tornillos no pueda eliminarla.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Por qué es difícil arreglar un abultamiento central con tornillos de esquina',
+      html: 'Los tornillos de esquina definen el plano de soporte en el borde de la cama. Si el centro está curvado hacia arriba por calor, imanes, clips o tensión de la placa, bajar las esquinas puede empeorar los bordes mientras el centro sigue alto.',
+    },
+    { type: 'title', text: 'Convertir el Error Z en Giro de Tornillos', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La conversión mecánica se basa en el paso de rosca. El paso de rosca es el recorrido vertical que produce una vuelta completa del tornillo. Un tornillo M3 grueso común tiene un paso de 0.50 mm, M4 grueso tiene aproximadamente 0.70 mm y M5 grueso tiene aproximadamente 0.80 mm. Si una esquina necesita moverse 0.125 mm en un tornillo M3, la rotación es <code>0.125 x 360 / 0.50 = 90 grados</code>, que es un cuarto de vuelta. Esto es mucho más fácil de ejecutar que un número Z abstracto.',
+    },
+    {
+      type: 'paragraph',
+      html: 'La dirección depende de la mecánica de la impresora. Muchas impresoras con cama de muelles suben la cama hacia la boquilla cuando la perilla se gira en sentido antihorario desde abajo, pero las máquinas difieren. El analizador utiliza un estilo de instrucción convencional y muestra si la esquina debe subirse o bajarse. Si la dirección de la perilla de tu impresora está invertida, mantén la corrección en milímetros y la fracción de vuelta, pero invierte la dirección. El flujo de trabajo más seguro es mover un tornillo la mitad de la cantidad recomendada, sondear de nuevo y luego repetir.',
+    },
+    {
+      type: 'table',
+      headers: ['Tornillo', 'Paso grueso típico', 'Corrección 0.10 mm', 'Corrección 0.20 mm'],
+      rows: [
+        ['M3', '0.50 mm / vuelta', '72 grados', '144 grados'],
+        ['M4', '0.70 mm / vuelta', '51 grados', '103 grados'],
+        ['M5', '0.80 mm / vuelta', '45 grados', '90 grados'],
+        ['Personalizado', 'Valor del usuario', '360 x 0.10 / paso', '360 x 0.20 / paso'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'No persigas los últimos 0.02 mm mecánicamente',
+      html: 'La repetibilidad del sensor, la temperatura de la cama y la compresión de los muelles pueden moverse fácilmente en centésimas de milímetro. Detente cuando la malla esté dentro de un rango práctico y usa el offset Z para el ajuste final de la primera capa.',
+    },
+    { type: 'title', text: 'Nivelación de Cama de Tres Puntos Versus Cuatro Puntos', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La nivelación de tres puntos es mecánicamente elegante porque tres puntos definen un plano sin sobreconstreñirlo. Una cama de tres tornillos normalmente tiene dos tornillos delanteros y un tornillo trasero central, o una disposición triangular similar. La nivelación de cuatro puntos es común en muchas camas Cartesianas, pero cuatro tornillos pueden interferir entre sí: apretar una esquina puede flexionar la cama o cambiar la carga en la esquina opuesta. El analizador admite ambas porque el conjunto de instrucciones correcto depende de la máquina.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Para camas de cuatro puntos, el analizador compara las cuatro esquinas y da una instrucción para cada una. Para camas de tres puntos, usa frontal izquierda, frontal derecha y trasera centro. Esto no puede conocer la posición física exacta de cada modelo de impresora, así que trata las etiquetas como un mapa: frontal es el borde más cercano al usuario en la mayoría de las camas, y trasero es el borde posterior. Si tu sistema de coordenadas está invertido, rota mentalmente la instrucción para que coincida con tu máquina antes de tocar los tornillos.',
+    },
+    {
+      type: 'proscons',
+      title: 'Ventajas y desventajas de los sistemas de nivelación',
+      items: [
+        { pro: 'Tres tornillos definen un plano estable con menos interacciones.', con: 'No todas las impresoras están diseñadas para un patrón de soporte triangular.' },
+        { pro: 'Cuatro tornillos se adaptan a muchas camas de impresora estándar y son fáciles de entender.', con: 'Pueden sobreconstreñir una placa fina y crear torsión.' },
+        { pro: 'La compensación de malla puede ocultar pequeños errores restantes.', con: 'No puede eliminar mecánica suelta, placas deformadas o datos de sensor incorrectos.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Secuencia de ajuste recomendada',
+      html: 'Corrige primero la inclinación global, luego la torsión diagonal, y después ejecuta una malla nueva. Evita hacer cambios grandes en todos los tornillos a la vez porque cada tornillo cambia el plano que usan los demás.',
+    },
+    { type: 'title', text: 'Por Qué la Compensación de Malla No Reemplaza la Mecánica', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'La compensación de malla mueve Z durante la impresión para que la boquilla siga la superficie medida. Esto es potente, pero tiene límites. Un rango de malla grande provoca un movimiento Z visible, puede afectar la presión de extrusión en la primera capa y puede dejar la base de la pieza ligeramente con la forma de la cama. Si la malla se desvanece a lo largo de varios milímetros, las capas inferiores pueden pasar gradualmente de la forma de la cama a la forma nominal del modelo. Esto es aceptable para correcciones pequeñas pero indeseable para deformaciones severas.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una buena mecánica reduce la cantidad de corrección necesaria. Verifica que las ruedas o rieles del carro de la cama no tengan juego, que el soporte del sensor sea rígido, que la boquilla esté limpia antes de sondear, que la placa de construcción esté asentada de forma consistente y que el pórtico esté cuadrado. En camas con muelles, unos muelles más fuertes o espaciadores de silicona pueden mejorar la repetibilidad. En sistemas PEI magnéticos, los residuos debajo de la lámina pueden crear un punto alto local que aparece como un bulto misterioso en la malla.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Limpia la boquilla antes de sondear si la boquilla entra en contacto con la superficie.',
+        'Calienta la cama y espera el tiempo suficiente para que la placa deje de moverse térmicamente.',
+        'Confirma que la malla guardada está cargada en la secuencia de inicio de impresión.',
+        'Inspecciona clips de cama, imanes y el asiento de la lámina en busca de puntos altos locales.',
+        'Vuelve a verificar la escuadra del pórtico cuando la malla muestre torsión diagonal.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Por encima de 0.5 mm es una investigación de hardware',
+      html: 'Cuando la variación total supera los 0.5 mm, no sigas girando tornillos indefinidamente. Busca una placa doblada, un carro suelto, espaciadores desiguales, error de offset del sensor o una superficie que cambie de forma al calentarse.',
+    },
+    { type: 'title', text: 'Un Flujo de Trabajo Práctico para Mejores Primeras Capas', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Comienza con una impresora mecánicamente estable. Calienta la cama, espera, haz referencia a todos los ejes y ejecuta la malla. Pega los datos en el analizador y lee primero la variación total. Si el rango es extremo, detente e inspecciona el hardware. Si el rango es moderado y el diagnóstico dice frontal, trasero, izquierdo o derecho alto, aplica las recomendaciones de tornillos en pequeños incrementos. Vuelve a sondear después de cada pasada. Dos pasadas conservadoras suelen ser mejores que una pasada agresiva porque la compresión del muelle y la flexión de la cama no son perfectamente lineales.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Una vez que la malla sea razonable, deja de ajustar tornillos y ajusta la primera capa con el offset Z, el ancho de extrusión, la velocidad y la preparación de la superficie. Una cama perfectamente nivelada con un offset Z incorrecto sigue fallando. Una cama ligeramente imperfecta con una lámina PEI limpia, un offset Z correcto y compensación de malla activa puede imprimir de maravilla. El analizador está diseñado para responder primero a la pregunta mecánica: dónde debe girar el usuario, cuánto y si girar tornillos es siquiera la reparación adecuada.',
+    },
+    {
+      type: 'summary',
+      title: 'Mejor flujo de trabajo para malla de cama',
+      items: [
+        'Sondea a temperatura de impresión, no en frío.',
+        'Usa la variación total para decidir si la malla es normal o excesiva.',
+        'Clasifica la forma antes de ajustar tornillos.',
+        'Convierte el error de esquina en rotación según el paso de rosca.',
+        'Vuelve a sondear después de correcciones pequeñas y detente cuando el error restante sea práctico.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'El objetivo no es un gráfico bonito',
+      html: 'El resultado útil es una mejor primera capa. Una imagen de malla te ayuda a ver la superficie, pero la tabla de tornillos es la parte que convierte la medición en reparación.',
+    },
+  ],
+  faq: [
+    {
+      question: '¿Puedo pegar datos de malla tanto de Marlin como de Klipper?',
+      answer: 'Sí. El analizador extrae valores Z decimales de texto multilínea, por lo que funciona con informes comunes de G29, M420 V y BED_MESH_OUTPUT cuando la cuadrícula numérica está presente.',
+    },
+    {
+      question: '¿Qué variación de malla de cama es aceptable?',
+      answer: 'Por debajo de 0.10 mm es excelente, de 0.10 a 0.30 mm es común y generalmente imprimible con compensación de malla, y por encima de 0.50 mm sugiere un problema de superficie o mecánico.',
+    },
+    {
+      question: '¿Por qué la herramienta advierte sobre deformación por encima de 0.¿5 mm?',
+      answer: 'En ese rango, el nivelado con tornillos a menudo ya no es el problema principal. La placa de construcción, el carro, el sensor o el pórtico pueden estar deformados, sueltos o distorsionados térmicamente.',
+    },
+    {
+      question: '¿Las instrucciones de dirección de tornillo se aplican a todas las impresoras?',
+      answer: 'No. Los milímetros y grados calculados son universales, pero la dirección de la perilla puede variar según la máquina. Si tu cama se mueve en dirección opuesta a la indicada, invierte la dirección y mantén la misma cantidad.',
+    },
+    {
+      question: '¿La compensación de malla reemplaza el nivelado manual?',
+      answer: 'No. La compensación de malla es mejor para pequeños errores residuales. El nivelado mecánico mantiene la corrección pequeña y mejora la consistencia de la primera capa.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Pegar salida de malla', text: 'Copia la malla numérica de cama de Marlin o Klipper y pégala en el campo de datos brutos.' },
+    { name: 'Elegir mecánica', text: 'Selecciona tres o cuatro puntos de nivelación y el paso de rosca que usa la impresora.' },
+    { name: 'Leer el diagnóstico', text: 'Comprueba si la superficie está inclinada, torcida, cóncava, convexa o excesivamente deformada.' },
+    { name: 'Ajustar con cuidado', text: 'Gira cada tornillo la fracción recomendada y vuelve a sondear antes de hacer otra pasada.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analizador de Malla de Cama para Impresora 3D',
+      description: 'Analiza datos de malla de cama de Marlin y Klipper y convierte el error Z de esquina en instrucciones de giro de tornillos de nivelación.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '¿Qué variación de malla de cama es aceptable?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Por debajo de 0.10 mm es excelente, de 0.10 a 0.30 mm es común y generalmente imprimible con compensación de malla, y por encima de 0.50 mm sugiere un problema de superficie o mecánico.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Cómo analizar una malla de cama de impresora 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Pega los datos brutos de malla de Marlin o Klipper.' },
+        { '@type': 'HowToStep', text: 'Selecciona el número de puntos de nivelación y el paso de rosca.' },
+        { '@type': 'HowToStep', text: 'Lee la variación, el diagnóstico y el mapa de calor.' },
+        { '@type': 'HowToStep', text: 'Aplica las instrucciones de giro de tornillos y vuelve a sondear.' },
+      ],
+    },
+  ],
+};

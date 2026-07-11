@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'bed-mesh-analyzer',
+  title: '3D打印机热床网格分析器',
+  description: '解析Marlin或Klipper热床网格数据，可视化曲面，诊断倾斜或翘曲，并将Z轴误差转换为螺丝旋转指令。',
+  ui: {
+    controlsAriaLabel: '热床网格分析器输入',
+    resultsAriaLabel: '热床网格分析器结果',
+    dataLabel: '原始网格数据',
+    dataPlaceholder: '在此粘贴您的G29命令结果......',
+    sampleButtonLabel: '使用示例网格',
+    levelingPointsLabel: '调平点数',
+    threePointLabel: '3点',
+    fourPointLabel: '4点',
+    screwTypeLabel: '螺丝类型',
+    customScrewLabel: '其他',
+    pitchLabel: '螺纹螺距',
+    unitSystemLabel: '单位',
+    metricLabel: '公制',
+    imperialLabel: '英制',
+    heatmapLabel: '交互式热床地形图',
+    lowScaleLabel: '低',
+    flatScaleLabel: '平',
+    highScaleLabel: '高',
+    healthLabel: '平整度健康',
+    rangeLabel: '总偏差',
+    meshSizeLabel: '网格尺寸',
+    meanLabel: '平均Z值',
+    diagnosisLabel: '诊断',
+    instructionsLabel: '机械调整说明',
+    cornerHeader: '角落',
+    deltaHeader: '修正量',
+    actionHeader: '操作',
+    frontLeft: '左前',
+    frontRight: '右前',
+    rearLeft: '左后',
+    rearRight: '右后',
+    rearCenter: '后中',
+    clockwiseLabel: '顺时针旋转',
+    counterClockwiseLabel: '逆时针旋转',
+    noTurnLabel: '此螺丝保持不动',
+    raiseLabel: '升高热床',
+    lowerLabel: '降低热床',
+    warningWarped: '过度翘曲：问题很可能出在表面本身，而不仅仅是调平。考虑更换或整平打印平台。',
+    parseError: '无法解析网格数据。请粘贴来自G29、M420 V或Klipper BED_MESH_OUTPUT的十进制Z值行。',
+    notEnoughNumbers: '找到的网格数量不足。有效网格至少需要两行和两列。',
+    raggedRows: '检测到的各行长度不一致。请检查网格输出是否被截断或损坏。',
+    badPitch: '螺纹螺距必须大于零。',
+    diagnosisFlat: '热床已接近平整。只需微调第一层即可。',
+    diagnosisFrontHigh: '前侧高于后侧。在逐个修正各点之前，请先调整前部螺丝。',
+    diagnosisRearHigh: '后侧高于前侧。请先调整后部螺丝。',
+    diagnosisLeftHigh: '左侧高于右侧。这主要是热床在X轴方向上的倾斜。',
+    diagnosisRightHigh: '右侧高于左侧。这主要是热床在X轴方向上的倾斜。',
+    diagnosisTwisted: '对角方向的数据不一致。热床存在扭曲，或龙门架未一致调平。',
+    diagnosisConcave: '中心低于四角。调平螺丝无法完全消除这种凹陷形状。',
+    diagnosisConvex: '中心高于四角。请检查磁铁、夹子、平台应力或热变形。',
+    diagnosisWarped: 'Z轴范围超过0.5毫米，表明表面存在过度翘曲，而非普通调平误差。',
+    mmUnit: '毫米',
+    inchUnit: '英寸',
+    degreeUnit: '度',
+  },
+  seo: [
+    { type: 'title', text: '如何读取3D打印机热床网格', level: 2 },
+    {
+      type: 'paragraph',
+      html: '热床网格是由探针或喷嘴传感器在打印区域采集的一组Z轴偏移量网格。Marlin和Klipper等固件利用这个网格在第一层打印时补偿微小的高度差异。数值通常以毫米表示：正值表示探测点相对于参考平面偏高，负值表示偏低。实际问题不仅在于固件能否补偿这些差异，更在于物理热床、龙门架和调平螺丝是否足够接近理想状态，使补偿不必过于吃力。',
+    },
+    {
+      type: 'paragraph',
+      html: '本分析器将原始网格输出转化为三个决策：总的Z轴变化量有多大、形貌属于倾斜还是变形、以及应该调整哪些螺丝。这种区分至关重要，因为倾斜的热床和翘曲的热床需要不同的修复方式。倾斜通常可以通过旋转角落螺丝来修正。而即使是每个角落都完美调平，一块凹陷的玻璃平台、弯曲的磁性板、松动的Y轴滑架或扭曲的龙门架仍可能导致第一层出现问题。',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0.00 mm', label: '理想范围，在实际热床上几乎无法达到' },
+        { value: '0.10 mm', label: '对于普通FDM第一层来说通常非常优秀' },
+        { value: '0.30 mm', label: '值得注意，但多数情况下可借助网格补偿打印' },
+        { value: '0.50 mm+', label: '应检查表面或机械结构' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: '网格数值本身并非螺丝调整指令',
+      html: '固件报告的是高度图。螺丝指令是根据角落平均值、螺纹螺距和机械调节方向推导得出的。请始终进行小幅调整，重新回零，再次探测。',
+    },
+    { type: 'title', text: 'G29和BED_MESH_OUTPUT数值的含义', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Marlin用户通常通过<code>G29</code>、<code>M420 V</code>或终端中的调平报告获取热床数据。Klipper用户可以使用<code>BED_MESH_OUTPUT</code>、Web界面或保存的配置文件查看网格。输出格式各不相同，但关键数据是一样的：行和列组成的十进制Z值测量值。某些报告包含标签、坐标、括号字符、索引编号或固件文本。一个实用的解析器应当忽略周围文本，仅提取构成网格的测量数值。',
+    },
+    {
+      type: 'paragraph',
+      html: '最可靠的网格粘贴数据是一个矩形数据块，其中每行有相同数量的数值。3x3网格有9个数值，5x5网格有25个数值，7x7网格有49个数值。如果探测网格使用了不同的X和Y计数，矩形网格也是有效的。如果各行长度不一致，则数据很可能不完整，或者混入了坐标、进给速率、命令计数器等无关数字。在这种情况下，请重新运行报告，仅粘贴数字网格部分。',
+    },
+    {
+      type: 'table',
+      headers: ['输出特征', '暗示的问题', '处理方法'],
+      rows: [
+        ['各行长度相等', '网格可能完整', '直接分析并比较总偏差'],
+        ['某一行较短', '终端复制可能被截断', '从头重新复制报告'],
+        ['包含大量多余整数', '粘贴内容包含索引或坐标标签', '尽可能仅粘贴矩阵部分'],
+        ['只有一行长数据', '工具可尝试方形重构', '使用9、25、49或其他平方数'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: '加热后进行探测',
+      html: '为获取有意义的数据，请将热床加热至打印温度，并等待热稳定后再进行探测。铝板和磁性板在升温几分钟后可能会发生形变。',
+    },
+    { type: 'title', text: '总偏差：预测第一层问题的关键数字', level: 2 },
+    {
+      type: 'paragraph',
+      html: '总偏差是网格中最高值与最低值之间的绝对差值。如果最高点为+0.180 mm，最低点为-0.120 mm，则总偏差为0.300 mm。这个单一数字很容易理解，因为它描述了固件在整个热床上需要吸收的垂直变化量。偏差小意味着喷嘴间隙从前到后、从左到右保持了较好的一致性。偏差大则意味着某个区域可能被压得过扁，而另一区域仍然难以附着。',
+    },
+    {
+      type: 'paragraph',
+      html: '可接受的范围取决于层高、喷嘴直径、耗材类型、表面纹理以及第一层挤压的力度。使用0.20 mm的第一层时，0.10 mm的表面偏差通常是可以接受的。0.30 mm的偏差在启用网格补偿并合理设置褪化高度的情况下仍可打印，但余量较小。超过0.50 mm时，用户应考虑机械或表面问题，因为热床已经不仅仅是稍微不平了。',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: '低于0.10 mm',
+          description: '对于大多数消费级FDM打印机来说非常优秀。第一层调整主要关注Z轴偏移和表面清洁。',
+          highlight: true,
+          points: ['螺丝修正量最小', '补偿负担低', '重复性好'],
+        },
+        {
+          title: '0.10至0.30 mm',
+          description: '在业余机器上很常见。网格补偿可以有所帮助，但调整角部螺丝可以改善附着力。',
+          points: ['探针重复性很重要', '注意边缘和角落', '以小步幅调整螺丝'],
+        },
+        {
+          title: '超过0.50 mm',
+          description: '可能存在翘曲、滑架问题、平台应力或龙门架误差。仅靠螺丝调平可能无法解决。',
+          points: ['检查硬件', '检查加热状态', '考虑更换平台'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: '偏差小不一定打印好',
+      html: '如果偏差很小但第一层仍然失败，请检查Z轴偏移量、挤出量、PEI表面清洁度、探针重复性、喷嘴是否有碎屑，以及网格配置是否在打印前已正确加载。',
+    },
+    { type: 'title', text: '倾斜、扭曲、凹陷与凸起', level: 2 },
+    {
+      type: 'paragraph',
+      html: '热床网格不仅仅是最大值和最小值。数值的分布告诉你哪种修正是可行的。如果整行前侧偏高而后侧偏低，则热床存在前后方向上的整体倾斜。如果左侧偏高而右侧偏低，则热床在X轴方向上倾斜。这些情况非常适合螺丝调整，因为物理热床平面与喷嘴运动平面只是没有对齐而已。',
+    },
+    {
+      type: 'paragraph',
+      html: '扭曲的网格则不同：一对对角偏高，而另一对对角偏低。这可能是由不均匀的螺丝压力、弯曲的Y轴滑架、不平整的X轴龙门架或可弯曲的热床支撑板引起的。凹陷网格的中心低于四角，凸起网格的中心高于四角。边缘的螺丝无法完全消除中心弯曲，因为它们不直接控制打印平台的中间部分。',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: '倾斜', definition: '热床一侧高于对侧的近似平面高度差异。' },
+        { term: '扭曲', definition: '对角方向的不一致，通常由不均匀的支撑或框架对位不良引起。' },
+        { term: '凹陷热床', definition: '中心低于周边角落或边缘的表面。' },
+        { term: '凸起热床', definition: '中心高于周边角落或边缘的表面。' },
+        { term: '翘曲', definition: '非平面形状，变形程度大到普通螺丝调平无法消除。' },
+      ],
+    },
+    {
+      type: 'card',
+      title: '为什么角落螺丝难以解决中心鼓起',
+      html: '角落螺丝定义了热床边缘的支撑平面。如果中心因热量、磁铁、夹子或平台应力而向上鼓起，降低角落会使边缘变得更糟，而中间仍然偏高。',
+    },
+    { type: 'title', text: '将Z轴误差转换为螺丝旋转量', level: 2 },
+    {
+      type: 'paragraph',
+      html: '机械转换基于螺纹螺距。螺距是螺丝旋转一整圈产生的垂直位移。常见的M3粗牙螺丝螺距为0.50 mm，M4粗牙约为0.70 mm，M5粗牙约为0.80 mm。如果某个角落需要在M3螺丝上移动0.125 mm，则旋转量为<code>0.125 × 360 ÷ 0.50 = 90度</code>，即四分之一圈。这比抽象的Z值数字容易操作得多。',
+    },
+    {
+      type: 'paragraph',
+      html: '旋转方向取决于打印机的机械结构。在许多弹簧热床打印机上，从下方逆时针旋转旋钮会使热床向喷嘴方向升高，但不同机型有所差异。本分析器使用常规指令风格，显示角落应升高还是降低。如果您的打印机旋钮方向相反，请保留毫米修正量和小数圈数，但反转方向。最安全的做法是先按建议值的一半调整一颗螺丝，再次探测，然后重复。',
+    },
+    {
+      type: 'table',
+      headers: ['螺丝规格', '典型粗牙螺距', '0.10 mm修正', '0.20 mm修正'],
+      rows: [
+        ['M3', '0.50 mm/圈', '72度', '144度'],
+        ['M4', '0.70 mm/圈', '51度', '103度'],
+        ['M5', '0.80 mm/圈', '45度', '90度'],
+        ['自定义', '用户设定值', '360 × 0.10 ÷ 螺距', '360 × 0.20 ÷ 螺距'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: '不要机械地追求最后0.02 mm',
+      html: '探针重复性、热床温度和弹簧压缩很容易产生百分之几毫米的波动。当网格落入实际可用范围后，使用Z轴偏移量来微调第一层的实际手感。',
+    },
+    { type: 'title', text: '三点调平与四点调平', level: 2 },
+    {
+      type: 'paragraph',
+      html: '三点调平在机械上非常巧妙，因为三个点即可确定一个平面而不会过度约束。三螺丝热床通常有两个前部螺丝和一个后部中心螺丝，或类似的三角形布局。四点调平在许多笛卡尔热床上很常见，但四个螺丝可能相互制衡：拧紧一个角落可能使热床弯曲或改变对角方向的负载。本分析器同时支持两种模式，因为正确的指令集取决于具体的机器。',
+    },
+    {
+      type: 'paragraph',
+      html: '对于四角热床，分析器比较四个角落并为每个角落给出指令。对于三角热床，分析器使用左前、右前和后中三个位置。由于无法得知每款打印机型号的确切物理位置，请将标签视为示意图：在大多数热床上，前部是靠近用户的一侧，后部是远离用户的一侧。如果您的坐标系相反，请在动手调整螺丝之前，在心中将指令方向反转以适配您的机器。',
+    },
+    {
+      type: 'proscons',
+      title: '调平系统权衡',
+      items: [
+        { pro: '三个螺丝定义一个稳定的平面，相互干扰较少。', con: '并非每台打印机都适合三角形支撑布局。' },
+        { pro: '四个螺丝与许多原厂热床匹配，易于理解。', con: '可能过度约束薄板，导致扭曲。' },
+        { pro: '网格补偿可以掩盖微小的剩余误差。', con: '无法消除松动的机械结构、弯曲的平台或错误的探针数据。' },
+      ],
+    },
+    {
+      type: 'message',
+      title: '建议的调整顺序',
+      html: '先修正整体倾斜，再修正对角扭曲，然后重新探测网格。避免一次性大幅调整所有螺丝，因为每个螺丝的调整都会改变其他螺丝所在的参考平面。',
+    },
+    { type: 'title', text: '为什么网格补偿不能替代机械调平', level: 2 },
+    {
+      type: 'paragraph',
+      html: '热床网格补偿在打印时动态调整Z轴，使喷嘴跟随测量到的表面。这很强大，但也有局限。大范围的网格会导致明显的Z轴运动，可能影响第一层的挤出压力，并使零件底部略微呈现热床的形状。如果网格在数毫米内逐渐褪出，较低的层将从热床形状逐渐过渡到模型的理论形状。这对于小幅修正可以接受，但严重翘曲时则不可取。',
+    },
+    {
+      type: 'paragraph',
+      html: '良好的机械结构可以减少所需的修正量。请检查热床滑架轮或导轨没有松动，探针安装座刚性良好，喷嘴在探测前已清理干净，打印平台放置一致，龙门架保持方正。使用弹簧的热床上，更强的弹簧或硅胶垫圈可以提高重复性。在磁性PEI系统中，板材下方的碎屑会造成局部高点，在网格中表现为一个神秘的凸起。',
+    },
+    {
+      type: 'list',
+      items: [
+        '喷嘴接触表面前请先清理喷嘴',
+        '加热热床并等待足够长时间，使平台热变形稳定',
+        '确认保存的网格已在打印开始序列中加载',
+        '检查热床夹子、磁铁和板材就位情况，避免局部高点',
+        '当网格显示对角扭曲时，重新检查龙门架方正度',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: '超过0.5 mm需要检查硬件',
+      html: '当总偏差超过0.5 mm时，不要继续无休止地旋转螺丝。检查是否存在弯曲的平台、松动的滑架、不均匀的垫片、探针偏移误差或加热后变形的表面。',
+    },
+    { type: 'title', text: '获得更好第一层的实用工作流程', level: 2 },
+    {
+      type: 'paragraph',
+      html: '从一台机械稳定的打印机开始。加热热床，等待，回零所有轴，运行网格探测。将数据粘贴到分析器中，首先查看总偏差。如果范围过大，停止并检查硬件。如果范围适中且诊断显示前、后、左或右侧偏高，按螺丝建议以小增量进行调整。每次调整后重新探测。两次保守的调整通常优于一次激进的调整，因为弹簧压缩和热床弯曲并非完全线性。',
+    },
+    {
+      type: 'paragraph',
+      html: '当网格达到合理水平后，停止调整螺丝，转而通过Z轴偏移量、挤出宽度、速度和表面处理来优化第一层。一个完美调平但Z轴偏移错误的热床仍然会失败。而一个略有瑕疵的热床，配合干净的PEI板、正确的Z轴偏移量和激活的网格补偿，却能打印出漂亮的作品。本分析器的设计目的是先回答机械层面的问题：用户应该朝哪个方向旋转、旋转多少，以及调整螺丝本身是否是正确的修复方式。',
+    },
+    {
+      type: 'summary',
+      title: '热床网格最佳工作流程',
+      items: [
+        '在打印温度下探测，不要冷态探测',
+        '使用总偏差判断网格是否在正常范围内',
+        '在调整螺丝之前先归类形貌特征',
+        '将角落误差转换为基于螺距的旋转量',
+        '小幅修正后重新探测，剩余误差达到实用水平时停止',
+      ],
+    },
+    {
+      type: 'card',
+      title: '目标不是一张漂亮的数据图',
+      html: '有用的输出是更好的第一层。网格图像帮助你看清表面，但螺丝调整表才是将测量转化为修复的关键。',
+    },
+  ],
+  faq: [
+    {
+      question: '可以粘贴Marlin和Klipper两种网格数据吗？',
+      answer: '可以。解析器从多行文本中提取十进制Z值，因此只要包含数字网格，来自G29、M420 V和BED_MESH_OUTPUT的报告都能正常工作。',
+    },
+    {
+      question: '热床网格偏差多少可以接受？',
+      answer: '低于0.10 mm为优秀，0.10至0.30 mm很常见且通常可借助网格补偿打印，超过0.50 mm则提示表面或机械存在问题。',
+    },
+    {
+      question: '为什么工具在超过0.5 mm时会发出翘曲警告？',
+      answer: '在这个范围内，螺丝调平往往不再是主要问题。打印平台、滑架、探针或龙门架可能存在翘曲、松动或热变形。',
+    },
+    {
+      question: '螺丝方向说明适用于所有打印机吗？',
+      answer: '不适用。计算的毫米值和角度值是通用的，但旋钮方向因机型而异。如果您的热床运动方向与标识相反，请反转方向，保持调整量不变。',
+    },
+    {
+      question: '网格补偿能取代手动调平吗？',
+      answer: '不能。网格补偿最适合处理微小的残余误差。机械调平能使修正量保持较小，提高第一层的一致性。',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: '粘贴网格输出', text: '从Marlin或Klipper复制数字网格，粘贴到原始数据字段中。' },
+    { name: '选择机械参数', text: '选择三点或四点调平模式，以及打印机使用的螺丝螺距。' },
+    { name: '阅读诊断结果', text: '检查表面是倾斜、扭曲、凹陷、凸起还是过度翘曲。' },
+    { name: '小心调整', text: '按建议的分数值旋转每个螺丝，然后重新探测，再进行下一轮调整。' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: '3D Printer Bed Mesh Analyzer',
+      description: 'Analyze Marlin and Klipper bed mesh data and convert Z corner error into leveling screw rotation instructions.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What bed mesh variance is acceptable?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Below 0.10 mm is excellent, 0.10 to 0.30 mm is common and usually printable with mesh compensation, and above 0.50 mm suggests a surface or mechanical issue.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to analyze a 3D printer bed mesh',
+      step: [
+        { '@type': 'HowToStep', text: 'Paste raw Marlin or Klipper mesh data.' },
+        { '@type': 'HowToStep', text: 'Select leveling point count and screw pitch.' },
+        { '@type': 'HowToStep', text: 'Read variance, diagnosis, and heatmap.' },
+        { '@type': 'HowToStep', text: 'Apply screw turn instructions and probe again.' },
+      ],
+    },
+  ],
+};

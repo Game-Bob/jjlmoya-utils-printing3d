@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'kalkulator-bezpiecznego-kata-nawisu',
+  title: 'Kalkulator bezpiecznego kąta nawisu w druku 3D',
+  description: 'Oszacuj maksymalny kąt nawisu bez podpór dla swojej drukarki FDM na podstawie wysokości warstwy, szerokości linii, chłodzenia, materiału i prędkości druku.',
+  ui: {
+    controlsAriaLabel: 'Parametry bezpiecznego kąta nawisu',
+    resultsAriaLabel: 'Wyniki bezpiecznego kąta nawisu',
+    unitSystemLabel: 'Jednostki',
+    metricLabel: 'Metryczne',
+    imperialLabel: 'US',
+    profileLabel: 'Profil drukarki',
+    defaultProfileLabel: 'Niezapisana konfiguracja',
+    saveProfileLabel: 'Zapisz profil',
+    geometryGroupLabel: 'Geometria ekstruzji',
+    coolingGroupLabel: 'Chłodzenie warstw',
+    materialGroupLabel: 'Materiał',
+    speedGroupLabel: 'Ruch',
+    layerHeightLabel: 'Wysokość warstwy',
+    layerHeightHelp: 'Wysokość warstwy określa, ile nowego plastiku musi być podparte przez poprzednią linię. Wyższe warstwy zwykle zmniejszają tolerancję nawisu.',
+    lineWidthLabel: 'Szerokość linii',
+    lineWidthHelp: 'Szerokość linii to szerokość ekstruzji w slicerze, nie tylko średnica dyszy. Szersze linie dają następnej warstwie większą powierzchnię przylegania.',
+    coolingLabel: 'Chłodzenie wydruku',
+    coolingHelp: 'Chłodzenie określa, jak szybko świeżo wytłoczona warstwa staje się wystarczająco sztywna, by utrzymać kształt zanim zacznie opadać.',
+    lowCoolingLabel: 'Niskie',
+    mediumCoolingLabel: 'Średnie',
+    highCoolingLabel: 'Wysokie',
+    materialLabel: 'Filament',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Prędkość druku',
+    overhangHelp: 'Kąt nawisu podawany jest względem ściany pionowej. Wyższe wartości oznaczają, że filament wystaje dalej na zewnątrz bez podparcia.',
+    angleLabel: 'Szacowany bezpieczny kąt',
+    vectorLabel: 'Wektor nawisu względem pionu',
+    riskLabel: 'Ocena ryzyka',
+    safeRiskLabel: 'Zielony: bezpiecznie',
+    cautiousRiskLabel: 'Żółty: zachowaj ostrożność',
+    supportsRiskLabel: 'Czerwony: wymagane podpory',
+    reportButtonLabel: 'Zapisz konfigurację jako profil',
+    savedNoticeLabel: 'Profil zapisany w tej przeglądarce.',
+    coolingFactorLabel: 'Współczynnik chłodzenia',
+    speedFactorLabel: 'Współczynnik prędkości',
+    materialFactorLabel: 'Współczynnik materiału',
+    geometryFactorLabel: 'Współczynnik geometrii',
+    ratioLabel: 'Stosunek warstwy do linii',
+    educationLabel: 'Uwaga edukacyjna',
+    tipIncreaseCooling: 'Zwiększenie chłodzenia do blisko 100% na zewnętrznych obwodach często poprawia bezpieczny nawis o około 5 do 10 stopni, szczególnie w przypadku PLA.',
+    tipSlowDown: 'Duża prędkość obwodów daje mniej czasu na zestalenie filamentu. Zanim dodasz podpory wszędzie, spróbuj zwolnić zewnętrzne ściany.',
+    tipLowerLayer: 'Stosunek wysokości warstwy do szerokości linii jest wysoki. Zmniejszenie wysokości warstwy lub zwiększenie szerokości linii daje każdej nowej warstwie więcej podparcia.',
+    tipPetgCaution: 'PETG dłużej utrzymuje ciepło i pozostaje lepki. Silne chłodzenie pomaga, ale zbyt duży nawiew może osłabić wiązanie warstw w funkcjonalnych elementach.',
+    tipBaseline: 'To oszacowanie heurystyczne, a nie symulacja CFD. Potwierdź krytyczne profile małą wieżą testową nawisów przed rozpoczęciem długiego wydruku.',
+    optimizeOverhangsLabel: 'Optymalizuj pod kątem nawisów',
+    validationRangeLabel: 'Stosunek warstwy do linii',
+    mmUnit: 'mm',
+    inchUnit: 'cal',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'cal/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Jak oszacować bezpieczny kąt nawisu w druku 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Nawis w druku FDM działa poprawnie, gdy każda nowa warstwa ma wystarczający kontakt z poprzednią, aby utrzymać się podczas stygnięcia. Powszechna reguła mówi, że drukarka poradzi sobie z kątem około <strong>45 stopni</strong> bez podpór, ale ta wartość to tylko punkt wyjścia. Dobrze schłodzony profil PLA z niską warstwą, szeroką ekstruzją i umiarkowaną prędkością może drukować czysto powyżej 55 stopni. Gorący profil PETG, ABS lub TPU ze słabym chłodzeniem może opadać już poniżej 45 stopni. Ten kalkulator traktuje zdolność nawisu jako praktyczne oszacowanie termiczne i geometryczne, a nie stały uniwersalny kąt.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Wynik jest celowo heurystyczny. Nie jest to model dynamiki płynów, symulacja ugięcia metodą elementów skończonych ani zamiennik kalibracyjnej wieży testowej. Daje wiarygodną pierwszą odpowiedź na podstawie zmiennych, które użytkownik faktycznie kontroluje przy drukarce: wysokości warstwy, szerokości linii, chłodzenia, materiału i prędkości. Wartość jest ograniczona do zakresu typowych drukarek domowych, więc nie zaleci nierealistycznych kątów powyżej 75 stopni, nawet gdy wszystkie parametry są korzystne.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'tradycyjna reguła dla nawisów bez podpór' },
+        { value: '55-60°', label: 'często osiągalne przy odpowiednim PLA i silnym chłodzeniu' },
+        { value: '75°', label: 'górna granica kalkulatora dla domowych drukarek FDM' },
+        { value: '0,08-0,32 mm', label: 'zakres wysokości warstwy objęty walidacją' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Zwróć uwagę na kierunek kąta',
+      html: 'To narzędzie podaje kąt nawisu względem ściany pionowej, zgodnie ze sposobem opisywania ustawień podpór w slicerach. Wyższa liczba oznacza, że ściana odchyla się bardziej od pionu i trudniej ją wydrukować bez podpór.',
+    },
+    { type: 'title', text: 'Dlaczego reguła 45 stopni jest przydatna, ale niepełna', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Reguła 45 stopni utrzymuje się, ponieważ opisuje prosty warunek geometryczny: przy około 45 stopniach mniej więcej połowa nowej linii ekstruzji wciąż spoczywa na materiale poprzedniej warstwy. To zachodzenie daje warstwie powierzchnię przylegania, podczas gdy niepodparta krawędź stygnie. Jeśli kolejna linia wysuwa się dalej na zewnątrz, niepodparta część rośnie, a grawitacja ma większą przewagę zanim polimer stanie się wystarczająco sztywny, by utrzymać kształt.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Prawdziwe drukarki dodają kilka komplikacji. Slicer może używać szerokości linii większej niż średnica dyszy, co zmienia stopień zachodzenia. Warstwa 0,20 mm drukowana linią 0,45 mm ma inny współczynnik podparcia niż warstwa 0,28 mm z linią 0,40 mm. Przepływ powietrza chłodzącego, prędkość głowicy, temperatura dyszy, temperatura komory, lepkość materiału i kolejność obwodów - wszystko to wpływa na to, czy filament zastyga w miejscu, czy opada.',
+    },
+    {
+      type: 'table',
+      headers: ['Zmienna', 'Dlaczego wpływa na nawisy', 'Typowe działanie'],
+      rows: [
+        ['Wysokość warstwy', 'Wyższe warstwy przesuwają filament bardziej na zewnątrz przy tym samym kącie ściany.', 'Zmniejsz wysokość zewnętrznych warstw, gdy szczegóły mają znaczenie.'],
+        ['Szerokość linii', 'Szersze linie zwiększają powierzchnię kontaktu i mogą utrzymać nieco większe odchylenie.', 'Użyj nieco szerszej linii zewnętrznej ściany, np. 0,44-0,48 mm przy dyszy 0,4 mm.'],
+        ['Chłodzenie', 'Filament, który szybko sztywnieje, ma mniej czasu na opadanie.', 'Zwiększ prędkość wentylatora dla stref nawisów PLA.'],
+        ['Prędkość', 'Szybki ruch nakłada gorący plastik szybciej i skraca czas chłodzenia na milimetr.', 'Zwolnij zewnętrzne obwody i ściany nawisów.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Używaj kalkulatora jako narzędzia decyzyjnego w slicerze',
+      html: 'Jeśli model ma spód pod kątem 58 stopni, a kalkulator szacuje 52 stopnie dla bieżącego profilu PETG, włącz podpory tylko dla tej cechy lub dostrój chłodzenie i prędkość przed drukowaniem całej części.',
+    },
+    { type: 'title', text: 'Wysokość warstwy i szerokość linii: geometria stojąca za opadaniem nawisów', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Wysokość warstwy i szerokość linii określają fizyczne stopniowanie ściany. Niższe warstwy ułatwiają nawisy, ponieważ każda nowa warstwa przesuwa się tylko o niewielką odległość na zewnątrz. Szersze linie ekstruzji również pomagają, tworząc szerszą podstawę kontaktu. Istotnym praktycznym sygnałem jest <strong>stosunek wysokości warstwy do szerokości linii</strong>. Niski stosunek oznacza, że dostępnych jest więcej materiału poziomego do przeniesienia kolejnej warstwy. Wysoki stosunek oznacza, że nowa warstwa spoczywa na węższym występie.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Dla dyszy 0,4 mm typowe szerokości linii w slicerze wynoszą około 0,42-0,48 mm. Warstwa 0,16 mm z linią 0,45 mm jest zachowawcza dla nawisów; warstwa 0,30 mm z linią 0,40 mm wymaga znacznie więcej od polimeru i chłodzenia. Kalkulator nagradza korzystną geometrię, ponieważ zmniejsza niepodpartą część każdego pasma, ale jednocześnie ogranicza wynik, ponieważ sama geometria nie pokona ograniczeń cieplnych, przepływu powietrza i przyspieszenia.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Niski stosunek',
+          description: 'Mała wysokość warstwy w porównaniu z szerokością linii daje najczystsze nawisy bez podpór.',
+          points: ['Lepsza powierzchnia pod skosami', 'Mniejsze ryzyko opadania', 'Więcej czasu druku'],
+        },
+        {
+          title: 'Zrównoważony stosunek',
+          description: 'Typowe ustawienia produkcyjne działają dobrze, gdy chłodzenie i materiał są rozsądne.',
+          highlight: true,
+          points: ['Dobry kompromis prędkość-jakość', 'Działa w przypadku wielu elementów PLA', 'Wymaga testowania w okolicach 60 stopni'],
+        },
+        {
+          title: 'Wysoki stosunek',
+          description: 'Duże warstwy i wąskie linie zmniejszają występ pod każdym nowym pasmem.',
+          points: ['Bardziej widoczne stopniowanie', 'Wyższe ryzyko podwijania spodu', 'Podpory stają się potrzebne wcześniej'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Szerokość linii', definition: 'Planowana szerokość ekstruzji w slicerze. Może być nieco szersza niż fizyczna średnica dyszy.' },
+        { term: 'Wysokość warstwy', definition: 'Grubość pionowa każdej drukowanej warstwy.' },
+        { term: 'Udział niepodparty', definition: 'Część nowego pasma ekstruzji wystająca poza poprzednią warstwę.' },
+        { term: 'Opadanie', definition: 'Odkształcenie grawitacyjne gorącego pasma zanim stanie się sztywne.' },
+      ],
+    },
+    { type: 'title', text: 'Chłodzenie: dlaczego nawiew często dodaje 5-10 stopni', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Chłodzenie to najszybsza dźwignia dla nawisów PLA. Świeżo wytłoczone pasmo opuszcza dyszę miękkie, błyszczące i łatwe do odkształcenia. Silny, dobrze ukierunkowany przepływ powietrza zwiększa szybkość, z jaką zewnętrzna warstwa sztywnieje. Gdy pasmo szybko staje się samonośne, może pokonać większą niepodpartą odległość, zanim grawitacja pozostawi widoczne opadanie. Dlatego konstrukcja kanału wentylatora, wydajność dmuchawy i orientacja wydruku mogą zmieniać wyniki nawisów, nawet gdy wartości G-code są identyczne.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Więcej nawiewu nie zawsze oznacza lepiej dla każdego materiału. PLA zwykle korzysta z silnego chłodzenia na obwodach nawisów. PETG można chłodzić, ale nadmiar nawiewu może osłabić wiązanie warstw lub spowodować matowienie powierzchni. ABS często wymaga ograniczonego chłodzenia i ciepłego otoczenia, aby uniknąć wypaczania, więc jego kąt nawisu jest zwykle niższy, chyba że maszyna jest dostrojona do kontrolowanego przepływu powietrza. TPU może opadać, ponieważ pozostaje gumowate i elastyczne nawet po schłodzeniu w porównaniu ze sztywnymi materiałami.',
+    },
+    {
+      type: 'proscons',
+      title: 'Zwiększanie chłodzenia nawisów',
+      items: [
+        { pro: 'Może zestalić pasma PLA zanim niepodparta krawędź opadnie.', con: 'Może osłabić adhezję warstw w materiałach wymagających retencji ciepła.' },
+        { pro: 'Poprawia ostre detale spodu i małe cechy nawisów.', con: 'Źle wycelowane kanały mogą chłodzić jedną stronę, pozostawiając drugą w nieladzie.' },
+        { pro: 'Często szybsze niż przeprojektowywanie podpór dla małych elementów.', con: 'Może generować hałas wentylatora, obciążenie elektryczne i wypaczanie dużych płaskich części.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Sprawdź kierunek nawiewu przed zaufaniem procentowi wentylatora',
+      html: 'Wartość wentylatora 100% w slicerze nie gwarantuje skutecznego chłodzenia przy pasmie. Zablokowany kanał, słaba dmuchawa, kształt silikonowej osłony lub modyfikacja głowicy mogą spowodować, że jedna strona dyszy otrzyma znacznie mniej nawiewu.',
+    },
+    { type: 'title', text: 'Różnice między materiałami: PLA, PETG, ABS i TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA to najłatwiejszy materiał referencyjny do testowania nawisów, ponieważ szybko sztywnieje i dobrze znosi silne chłodzenie. Dlatego odpowiednio dostrojone profile PLA często drukują bardziej strome ściany bez podpór niż tradycyjna reguła 45 stopni. PETG jest bardziej lepki i dłużej zatrzymuje ciepło. Może dawać wytrzymałe wydruki funkcjonalne, ale niepodparte spody mogą być błyszczące, strzępiaste lub zawinięte, jeśli prędkość i chłodzenie nie są kontrolowane. Nawy PETG często korzystają na spowolnieniu zewnętrznych ścian przed zwiększeniem nawiewu do maksimum.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS zachowuje się inaczej, ponieważ do zapobiegania wypaczaniu i pękaniu warstw często stosuje się ciepłą komorę i ograniczone chłodzenie. Te same warunki utrudniają nawisy. TPU niesie kolejne wyzwanie: materiał pozostaje elastyczny, więc pasmo może opadać lub rozmazywać się nawet wtedy, gdy nie jest już tak gorące jak przy dyszy. Kalkulator nadaje każdemu materiałowi osobne zachowanie bazowe i mnożnik, aby oddać te praktyczne różnice.',
+    },
+    {
+      type: 'table',
+      headers: ['Materiał', 'Zachowanie nawisu', 'Najlepsza pierwsza korekta'],
+      rows: [
+        ['PLA', 'Dobra sztywność i wysoka tolerancja chłodzenia.', 'Zwiększ chłodzenie i zwolnij zewnętrzne obwody.'],
+        ['PETG', 'Lepki, zatrzymuje ciepło, skłonny do błyszczącego opadania.', 'Zmniejsz prędkość i zastosuj umiarkowane chłodzenie.'],
+        ['ABS', 'Wymaga retencji ciepła, więc nawisy są mniej wybaczające.', 'Dostosuj orientację lub zastosuj podpory selektywne.'],
+        ['TPU', 'Elastyczne pasmo może odkształcać się po osadzeniu.', 'Stosuj bezpieczne kąty i wolny ruch.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Dlaczego wilgotny filament może imitować złe ustawienia nawisów',
+      html: 'Wilgoć może tworzyć mikroskopijne pęcherzyki pary i nierówną ekstruzję. Jeśli spód wygląda na pienisty, nierówny lub kosmaty, osusz filament zanim uznasz, że oszacowanie bezpiecznego kąta jest błędne.',
+    },
+    { type: 'title', text: 'Prędkość druku a czas termiczny', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Prędkość druku wpływa na nawisy, ponieważ zmienia czas termiczny. Przy wyższych prędkościach na sekundę nakładanych jest więcej gorącego materiału, a każdy punkt pasma ma mniej czasu pod użytecznym nawiewem, zanim ułożona zostanie następna sekcja. Szybkie zewnętrzne ściany mogą wyglądać akceptowalnie na powierzchniach pionowych, ale zawodzą przy nawisach, ponieważ pasmo jest wciąż miękkie, gdy jest niepodparte. Spowolnienie tylko obwodu nawisu jest często skuteczniejsze niż spowalnianie całego modelu.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Slicer może mieć osobne ustawienia prędkości ściany zewnętrznej, prędkości mostków, prędkości małych obwodów, prędkości nawisów i minimalnego czasu warstwy. Kalkulator używa głównej prędkości druku jako praktycznego wejścia, a następnie progresywnie zmniejsza wynik przy wysokich prędkościach. Jeśli model ma krótkie warstwy, dominujący wpływ może mieć minimalny czas warstwy i zachowanie wentylatora. Jeśli nawis to długa ciągła ściana, ważniejsze stają się prędkość obwodu i kierunek kanału chłodzącego.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Najpierw zwolnij zewnętrzne ściany, bo to ich powierzchnię użytkownik będzie oglądał.',
+        'Użyj spowolnienia specyficznego dla nawisów, jeśli slicer to obsługuje.',
+        'Utrzymuj ruchy podróżne wystarczająco szybkie, aby uniknąć przegrzewania małych elementów.',
+        'Nie oceniaj prędkości tylko na podstawie małej wieży; duże części zatrzymują ciepło inaczej.',
+        'Przetestuj ponownie po zmianie średnicy dyszy, ponieważ zmiana przepływu zmienia obciążenie termiczne.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Praktyczna kolejność dostrajania',
+      html: 'W przypadku granicznego nawisu bez podpór, wypróbuj silniejsze chłodzenie, mniejszą prędkość zewnętrznych ścian i niższą wysokość warstwy, zanim włączysz gęste podpory wszędzie.',
+    },
+    { type: 'title', text: 'Kiedy podpory są jednak właściwym rozwiązaniem', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Celem nie jest eliminacja podpór za wszelką cenę. Podpory są przydatne, gdy spód musi być wymiarowo dokładny, gdy materiał jest wrażliwy na ciepło, gdy powierzchnia estetyczna jest skierowana w dół lub gdy nawis zaczyna się w powietrzu bez kontaktu z poprzednią warstwą. Obliczona zdolność 60 stopni nie oznacza, że każda cecha pod kątem 60 stopni będzie wyglądać dobrze. Małe wyspy, ostre występy, otwory, wytłoczony tekst i wklęsłe spody mogą zawieść wcześniej niż gładka kalibracyjna pochylnia.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Podpory selektywne zwykle biją na głowę podpory globalne. Jeśli tylko jeden region przekracza obliczony bezpieczny kąt, pomaluj blokery i wymuszenia podpór, obróć część, sfazuj spód, podziel model lub dodaj małe żebro ofiarne. Podpory drzewiaste, organiczne i warstwy interfejsu mogą zmniejszyć blizny, jednocześnie utrzymując krytyczne pierwsze niepodparte pasma. W przypadku funkcjonalnych wsporników mała zmiana konstrukcji często oszczędza więcej materiału niż agresywna regulacja slicera.',
+    },
+    {
+      type: 'summary',
+      title: 'Użyj podpór, gdy',
+      items: [
+        'Obliczony bezpieczny kąt jest mniejszy niż kąt spodu modelu.',
+        'Spód musi być gładki, płaski lub wymiarowo dokładny.',
+        'Cecha zaczyna się jako wyspa bez poprzedniej warstwy do przylegania.',
+        'Materiał nie może użyć wystarczającego chłodzenia bez wypaczania lub słabego wiązania.',
+        'Nieudany nawis zrujnowałby długi wydruk w późnej fazie.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Czerwone ryzyko nie oznacza niemożliwości',
+      html: 'Czerwony wynik oznacza, że podpory są bezpieczniejszym domyślnym wyborem dla normalnego profilu konsumenckiego. Doświadczeni użytkownicy mogą odnieść sukces dzięki niestandardowym kanałom, dostrojonej prędkości nawisów, specjalnym ścieżkom slicera lub przeprojektowaniu modelu, ale margines jest wąski.',
+    },
+    { type: 'title', text: 'Jak zweryfikować oszacowanie za pomocą wieży nawisów', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Mała wieża testowa nawisów to najlepszy sposób na walidację oszacowania dla konkretnej drukarki. Wydrukuj wieżę schodzącą od 35 do 75 stopni, używając tego samego filamentu, dyszy, temperatury, wentylatora i prędkości ścian, które planujesz zastosować na docelowej części. Obejrzyj spód z boku i od dołu. Szukaj zawijania, nierównych pętli, odseparowanych krawędzi obwodów i błyszczącego opadania. Ostatni czysty stopień to Twój rzeczywisty bezpieczny kąt dla tego profilu.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Nie zmieniaj pięciu zmiennych między wydrukami wieży. Jeśli pierwsza wieża zawiedzie przy 48 stopniach, zwiększ chłodzenie lub zwolnij prędkość nawisu i powtórz. Jeśli druga wieża osiągnie 55 stopni, wiesz, która dźwignia pomogła. Jeśli wieża poprawia się z jednej strony, ale nie z drugiej, sprawdź symetrię kanału wentylatora. Jeśli każdy stopień wygląda źle, sprawdź temperaturę dyszy, mnożnik ekstruzji, wilgotność filamentu i sprzęt chłodzący, zanim uznasz, że podpory są nieuniknione.',
+    },
+    {
+      type: 'table',
+      headers: ['Obserwacja testowa', 'Prawdopodobna przyczyna', 'Następne działanie'],
+      rows: [
+        ['Dolna krawędź zawija się do góry', 'Nierównowaga cieplna i chłodzenia', 'Zwolnij obwód i popraw kierunek nawiewu.'],
+        ['Pętle opadają w dół', 'Udział niepodparty zbyt wysoki', 'Zmniejsz wysokość warstwy lub użyj podpór.'],
+        ['Jedna strona czystsza od drugiej', 'Niesymetryczny przepływ powietrza', 'Sprawdź kanał i ścieżkę dmuchawy.'],
+        ['Szorstki, pienisty spód', 'Wilgoć lub przegrzany filament', 'Osusz szpulę lub zmniejsz temperaturę dyszy.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Zapisz nazwę profilu',
+      html: 'Zachowaj osobny profil dla każdej dyszy, materiału i konfiguracji chłodzenia. Profil PLA 0,16 mm i profil PETG 0,28 mm nie powinny dzielić tego samego założenia bezpiecznego nawisu.',
+    },
+    { type: 'title', text: 'Projektowanie części z myślą o unikaniu podpór', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Najtańsza poprawka nawisu często powstaje w CAD. Zastąp ostry spód pod kątem 90 stopni sfazowaniem, dodaj kształt łzy do poziomych otworów, obróć część tak, aby najbardziej stroma powierzchnia była skierowana do góry, lub podziel model na dwie drukowałne połowy. Fazowanie 45 stopni może całkowicie usunąć potrzebę podpór, zachowując wytrzymałość. W przypadku otworów gwintowanych profile łezkowe i rombowe drukują się czyściej niż idealne okręgi, gdy górna część otworu w przeciwnym razie stałaby się mostkiem.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Projektowanie z myślą o wytwarzaniu zmniejsza również obróbkę końcową. Podpory zużywają materiał, wydłużają czas druku, pozostawiają blizny na powierzchniach i mogą łamać delikatne elementy podczas usuwania. Model, który respektuje bezpieczny kąt drukarki, drukuje się szybciej i bardziej powtarzalnie. Kalkulator pomaga w przeglądzie projektu: porównaj kąt spodu modelu z szacowanym bezpiecznym kątem, a następnie zdecyduj, czy przeprojektować, dostroić profil, czy podeprzeć tylko ryzykowny obszar.',
+    },
+    {
+      type: 'proscons',
+      title: 'Przeprojektowanie zamiast podpór',
+      items: [
+        { pro: 'Zmniejsza zużycie materiału i czas obróbki końcowej.', con: 'Może zmienić wygląd lub kształt funkcjonalny części.' },
+        { pro: 'Poprawia powtarzalność w farmach drukarek.', con: 'Wymaga dostępu do źródła CAD lub narzędzi do edycji siatki.' },
+        { pro: 'Może wzmocnić części poprzez lepsze ułożenie warstw.', con: 'Niektóre geometrie wciąż wymagają podpór dla dokładności.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Najlepsze ruchy projektowe bez podpór',
+      items: [
+        'Stosuj fazowania 45 stopni pod poziomymi występami.',
+        'Zamień okrągłe poziome otwory na łezki, gdy to możliwe.',
+        'Kieruj powierzchnie estetyczne do góry lub na boki.',
+        'Dziel części wzdłuż ukrytych szwów zamiast podpierać duży spód.',
+        'Używaj podpór tylko tam, gdzie kąt modelu przekracza przetestowany profil.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Czy 45 stopni jest zawsze bezpieczne dla nawisów w druku 3D?',
+      answer: 'Nie. Jest to przydatna reguła domyślna, ale materiał, chłodzenie, wysokość warstwy, szerokość linii, prędkość i wydajność kanału wentylatora mogą przesunąć praktyczną granicę w dół lub w górę.',
+    },
+    {
+      question: 'Dlaczego kalkulator ogranicza wyniki do 75 stopni?',
+      answer: 'Domowe drukarki FDM potrafią czasem wydrukować bardzo strome testowe nawisy, ale zalecanie wartości powyżej 75 stopni jest niemiarodajne dla normalnych części, dlatego narzędzie ogranicza oszacowanie do konserwatywnego zakresu domowego.',
+    },
+    {
+      question: 'Który materiał daje najlepsze nawisy bez podpór?',
+      answer: 'PLA jest zwykle najłatwiejszy, ponieważ szybko sztywnieje i dobrze znosi silne chłodzenie. PETG, ABS i TPU generalnie wymagają bardziej zachowawczych założeń dotyczących nawisów.',
+    },
+    {
+      question: 'Czy najpierw zwiększyć prędkość wentylatora, czy zmniejszyć prędkość druku?',
+      answer: 'Dla PLA zwiększ chłodzenie i zwolnij zewnętrzne ściany nawisów. Dla PETG, ABS lub części funkcjonalnych zrównoważ chłodzenie z adhezją warstw i ryzykiem wypaczania.',
+    },
+    {
+      question: 'Czy to może zastąpić kalibracyjną wieżę nawisów?',
+      answer: 'Nie. Zapewnia oszacowanie heurystyczne i dobry punkt wyjścia. Mała wieża testowa wciąż stanowi najlepszą walidację dla konkretnej drukarki, filamentu i profilu slicera.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Wprowadź geometrię ekstruzji', text: 'Ustaw wysokość warstwy i szerokość linii w slicerze używane w profilu.' },
+    { name: 'Wybierz materiał i chłodzenie', text: 'Wybierz PLA, PETG, ABS lub TPU oraz aktualny poziom chłodzenia.' },
+    { name: 'Dodaj prędkość druku', text: 'Wprowadź prędkość ściany zewnętrznej lub praktyczną prędkość druku dla obszaru nawisu.' },
+    { name: 'Porównaj wynik', text: 'Użyj bezpiecznego kąta i oceny ryzyka, aby zdecydować, czy dostroić, przeprojektować, czy włączyć podpory.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Kalkulator bezpiecznego kąta nawisu w druku 3D',
+      description: 'Oszacuj kąt nawisu FDM bez podpór na podstawie wysokości warstwy, szerokości linii, chłodzenia, materiału i prędkości.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Czy 45 stopni jest zawsze bezpieczne dla nawisów w druku 3D?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Nie. Jest to przydatna reguła domyślna, ale materiał, chłodzenie, wysokość warstwy, szerokość linii, prędkość i wydajność kanału wentylatora mogą przesunąć praktyczną granicę w dół lub w górę.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Jak oszacować bezpieczny kąt nawisu w drukarce 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Wprowadź wysokość warstwy i szerokość linii.' },
+        { '@type': 'HowToStep', text: 'Wybierz materiał i poziom chłodzenia.' },
+        { '@type': 'HowToStep', text: 'Wprowadź prędkość druku.' },
+        { '@type': 'HowToStep', text: 'Porównaj wynik z kątem spodu modelu.' },
+      ],
+    },
+  ],
+};

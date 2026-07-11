@@ -1,0 +1,371 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { OverhangSafeAngleSimulatorUI } from '../ui';
+
+export const content: ToolLocaleContent<OverhangSafeAngleSimulatorUI> = {
+  slug: 'kalkulator-sudut-overhang-aman',
+  title: 'Kalkulator Sudut Overhang Aman untuk Cetakan 3D',
+  description: 'Perkirakan sudut overhang maksimum tanpa penyangga yang dapat ditangani printer FDM Anda berdasarkan tinggi lapisan, lebar garis, pendinginan, material, dan kecepatan cetak.',
+  ui: {
+    controlsAriaLabel: 'Input sudut overhang aman',
+    resultsAriaLabel: 'Hasil sudut overhang aman',
+    unitSystemLabel: 'Satuan',
+    metricLabel: 'Metrik',
+    imperialLabel: 'AS',
+    profileLabel: 'Profil printer',
+    defaultProfileLabel: 'Pengaturan belum disimpan',
+    saveProfileLabel: 'Simpan profil',
+    geometryGroupLabel: 'Geometri ekstrusi',
+    coolingGroupLabel: 'Pendinginan lapisan',
+    materialGroupLabel: 'Material',
+    speedGroupLabel: 'Gerakan',
+    layerHeightLabel: 'Tinggi lapisan',
+    layerHeightHelp: 'Tinggi lapisan mengontrol seberapa banyak plastik baru yang harus ditopang oleh garis sebelumnya. Lapisan yang lebih tinggi biasanya mengurangi toleransi overhang.',
+    lineWidthLabel: 'Lebar garis',
+    lineWidthHelp: 'Lebar garis adalah lebar ekstrusi slicer, bukan hanya diameter nosel. Garis yang lebih lebar memberi lapisan berikutnya lebih banyak bidang tumpu.',
+    coolingLabel: 'Pendinginan bagian',
+    coolingHelp: 'Pendinginan menggambarkan seberapa cepat untaian baru menjadi cukup kaku untuk mempertahankan bentuknya sebelum melorot.',
+    lowCoolingLabel: 'Rendah',
+    mediumCoolingLabel: 'Sedang',
+    highCoolingLabel: 'Tinggi',
+    materialLabel: 'Filamen',
+    plaLabel: 'PLA',
+    petgLabel: 'PETG',
+    absLabel: 'ABS',
+    tpuLabel: 'TPU',
+    printSpeedLabel: 'Kecepatan cetak',
+    overhangHelp: 'Sudut overhang ditunjukkan terhadap dinding vertikal. Nilai yang lebih tinggi berarti untaian menjulur lebih jauh ke luar tanpa penyangga.',
+    angleLabel: 'Perkiraan sudut aman',
+    vectorLabel: 'Vektor overhang terhadap vertikal',
+    riskLabel: 'Umpan balik risiko',
+    safeRiskLabel: 'Hijau: aman',
+    cautiousRiskLabel: 'Kuning: hati-hati',
+    supportsRiskLabel: 'Merah: penyangga diperlukan',
+    reportButtonLabel: 'Simpan konfigurasi sebagai profil',
+    savedNoticeLabel: 'Profil disimpan di browser ini.',
+    coolingFactorLabel: 'Faktor pendinginan',
+    speedFactorLabel: 'Faktor kecepatan',
+    materialFactorLabel: 'Faktor material',
+    geometryFactorLabel: 'Faktor geometri',
+    ratioLabel: 'Rasio lapisan / garis',
+    educationLabel: 'Catatan edukasi',
+    tipIncreaseCooling: 'Meningkatkan pendinginan bagian hingga mendekati 100% pada perimeter luar sering kali meningkatkan overhang aman sekitar 5 hingga 10 derajat, terutama dengan PLA.',
+    tipSlowDown: 'Kecepatan perimeter yang tinggi memberi untaian lebih sedikit waktu untuk membeku. Cobalah memperlambat dinding luar sebelum menambahkan penyangga di mana-mana.',
+    tipLowerLayer: 'Rasio lapisan-ke-garis tinggi. Menurunkan tinggi lapisan atau menambah lebar garis memberi setiap untaian baru lebih banyak dukungan.',
+    tipPetgCaution: 'PETG menahan panas dan tetap lengket lebih lama daripada PLA. Pendinginan kuat membantu, tetapi terlalu banyak kipas dapat mengurangi daya rekat lapisan pada bagian fungsional.',
+    tipBaseline: 'Ini adalah perkiraan heuristik, bukan simulasi CFD. Konfirmasikan profil kritis dengan menara uji overhang kecil sebelum memulai cetakan panjang.',
+    optimizeOverhangsLabel: 'Optimalkan untuk overhang',
+    validationRangeLabel: 'Rasio lapisan / garis',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    mmsUnit: 'mm/s',
+    ipsUnit: 'in/s',
+    degreeUnit: '°',
+  },
+  seo: [
+    { type: 'title', text: 'Cara Memperkirakan Sudut Overhang Aman untuk Cetakan 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Overhang FDM berfungsi ketika setiap untaian baru memiliki kontak yang cukup dengan lapisan sebelumnya untuk tetap menempel saat mendingin. Aturan umum mengatakan bahwa printer dapat menangani sekitar <strong>45 derajat</strong> tanpa penyangga, tetapi angka itu hanyalah titik awal. Profil PLA dengan pendinginan baik, tinggi lapisan rendah, ekstrusi lebar, dan kecepatan sedang dapat mencetak dengan bersih di atas 55 derajat. Profil PETG, ABS, atau TPU dengan pendinginan lemah dapat melorot di bawah 45 derajat. Kalkulator ini memperlakukan kemampuan overhang sebagai perkiraan termal dan geometris praktis, bukan sudut universal tetap.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Hasilnya sengaja bersifat heuristik. Ini bukan model dinamika fluida komputasional, simulasi melorot elemen hingga, atau pengganti untuk slicing menara kalibrasi. Ini memberikan jawaban pertama yang kredibel dari variabel yang benar-benar dapat dikontrol oleh pembuat di printer: tinggi lapisan, lebar garis, pendinginan bagian, material, dan kecepatan. Nilainya dibatasi pada rentang printer rumahan sehingga tidak akan merekomendasikan sudut tidak realistis di atas 75 derajat bahkan ketika semua input mendukung.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '45°', label: 'aturan awal tradisional tanpa penyangga' },
+        { value: '55-60°', label: 'sering mungkin dengan PLA yang disetel dan pendinginan kuat' },
+        { value: '75°', label: 'batas atas kalkulator untuk printer FDM konsumen' },
+        { value: '0,08-0,32 mm', label: 'rentang tinggi lapisan yang tervalidasi' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Baca arah sudut dengan benar',
+      html: 'Alat ini melaporkan sudut overhang terhadap dinding vertikal, sesuai dengan cara banyak pengaturan penyangga dijelaskan di slicer. Angka yang lebih besar berarti jalur lebih condong ke luar dari vertikal dan lebih sulit dicetak tanpa penyangga.',
+    },
+    { type: 'title', text: 'Mengapa Aturan 45 Derajat Berguna tetapi Tidak Lengkap', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Aturan 45 derajat bertahan karena menggambarkan kondisi geometris sederhana: pada sekitar 45 derajat, sekitar setengah dari garis ekstrusi baru masih berada di atas material dari lapisan sebelumnya. Tumpang tindih itu memberi untaian bidang tumpu untuk merekat sementara tepi yang tidak ditopang mendingin. Jika garis berikutnya bergerak lebih jauh ke luar, bagian yang tidak ditopang bertambah, dan gravitasi memiliki lebih banyak pengaruh sebelum polimer menjadi cukup kaku untuk mempertahankan bentuknya.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Printer nyata menambahkan beberapa komplikasi. Slicer mungkin menggunakan lebar garis yang lebih lebar dari diameter nosel, yang mengubah seberapa banyak tumpang tindih yang ada. Lapisan 0,20 mm yang dicetak dengan garis 0,45 mm memiliki rasio dukungan yang berbeda dari lapisan 0,28 mm yang dicetak dengan garis 0,40 mm. Aliran udara pendingin, kecepatan kepala alat, suhu nosel, suhu ruang, viskositas material, dan urutan perimeter semuanya mengubah apakah untaian membeku di tempat atau melorot.',
+    },
+    {
+      type: 'table',
+      headers: ['Variabel', 'Mengapa mengubah overhang', 'Langkah penyesuaian umum'],
+      rows: [
+        ['Tinggi lapisan', 'Lapisan yang lebih tinggi mendorong untaian lebih agresif ke luar untuk sudut dinding yang sama.', 'Kurangi tinggi lapisan dinding luar saat detail penting.'],
+        ['Lebar garis', 'Garis yang lebih lebar meningkatkan area kontak dan dapat menahan offset yang sedikit lebih besar.', 'Gunakan lebar garis luar yang sedikit lebih lebar, misalnya 0,44 hingga 0,48 mm pada nosel 0,4 mm.'],
+        ['Pendinginan', 'Untaian yang mengeras dengan cepat memiliki lebih sedikit waktu untuk melorot.', 'Naikkan kecepatan kipas untuk zona overhang PLA.'],
+        ['Kecepatan', 'Gerakan cepat meletakkan plastik panas dengan cepat dan mengurangi waktu pendinginan per milimeter.', 'Perlambat perimeter luar dan dinding overhang.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Gunakan kalkulator sebagai alat keputusan slicer',
+      html: 'Jika model memiliki sisi bawah 58 derajat dan kalkulator memperkirakan 52 derajat untuk profil PETG saat ini, aktifkan penyangga hanya untuk fitur itu atau setel pendinginan dan kecepatan sebelum mencetak seluruh bagian.',
+    },
+    { type: 'title', text: 'Tinggi Lapisan dan Lebar Garis: Geometri di Balik Melorotnya Overhang', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Tinggi lapisan dan lebar garis menentukan undakan fisik dinding. Tinggi lapisan yang lebih rendah memudahkan overhang karena setiap lapisan baru hanya bergerak sedikit ke luar. Garis ekstrusi yang lebih lebar juga membantu karena menciptakan basis kontak yang lebih luas. Sinyal praktis yang penting adalah <strong>rasio tinggi lapisan terhadap lebar garis</strong>. Rasio rendah berarti lebih banyak material horizontal tersedia untuk mendukung untaian berikutnya. Rasio tinggi berarti untaian baru bertengger di tepi yang lebih sempit.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Untuk nosel 0,4 mm, lebar garis slicer umum sekitar 0,42 mm hingga 0,48 mm. Lapisan 0,16 mm dengan garis 0,45 mm bersifat konservatif untuk overhang; lapisan 0,30 mm dengan garis 0,40 mm meminta lebih banyak dari polimer dan pendinginan. Kalkulator menghargai geometri yang menguntungkan karena mengurangi fraksi tidak tertopang dari setiap manik, tetapi juga membatasi hasil karena geometri saja tidak dapat mengalahkan panas, aliran udara, dan batas akselerasi.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Rasio rendah',
+          description: 'Tinggi lapisan kecil dibandingkan dengan lebar garis memberikan perilaku overhang tanpa penyangga terbersih.',
+          points: ['Permukaan lebih baik di bawah lereng', 'Risiko melorot lebih rendah', 'Waktu cetak lebih lama'],
+        },
+        {
+          title: 'Rasio seimbang',
+          description: 'Pengaturan produksi umum bekerja dengan baik ketika pendinginan dan material juga wajar.',
+          highlight: true,
+          points: ['Keseimbangan kecepatan-kualitas baik', 'Bekerja untuk banyak bagian PLA', 'Masih perlu pengujian mendekati 60 derajat'],
+        },
+        {
+          title: 'Rasio tinggi',
+          description: 'Lapisan besar dan garis sempit mengurangi bidang tumpu di bawah setiap manik baru.',
+          points: ['Undakan lebih terlihat', 'Risiko lengkung bawah lebih tinggi', 'Penyangga menjadi berguna lebih awal'],
+        },
+      ],
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Lebar garis', definition: 'Lebar ekstrusi yang direncanakan di slicer. Mungkin sedikit lebih lebar dari diameter nosel fisik.' },
+        { term: 'Tinggi lapisan', definition: 'Ketebalan vertikal setiap lapisan yang dicetak.' },
+        { term: 'Fraksi tidak tertopang', definition: 'Bagian dari manik ekstrusi baru yang melampaui lapisan sebelumnya.' },
+        { term: 'Melorot', definition: 'Deformasi ke bawah dari untaian panas sebelum menjadi kaku.' },
+      ],
+    },
+    { type: 'title', text: 'Pendinginan: Mengapa Udara Kipas Sering Menambah 5 hingga 10 Derajat', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Pendinginan adalah tuas tercepat untuk overhang PLA. Untaian yang baru diekstrusi keluar dari nosel dalam keadaan lunak, mengkilap, dan mudah berubah bentuk. Aliran udara yang kuat dan terarah meningkatkan kecepatan kulit luar mengeras. Ketika untaian menjadi mandiri dengan cepat, ia dapat menjembatani jarak tanpa penyangga yang lebih besar sebelum gravitasi meninggalkan melorot yang terlihat. Inilah sebabnya mengapa desain saluran kipas, kesehatan blower, dan orientasi cetak dapat mengubah hasil overhang bahkan ketika nilai G-code identik.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Kipas yang lebih banyak tidak otomatis lebih baik untuk semua material. PLA biasanya mendapat manfaat dari pendinginan tinggi pada perimeter overhang. PETG dapat menggunakan pendinginan, tetapi kipas berlebihan dapat mengurangi daya rekat lapisan atau membuat permukaan keruh. ABS sering membutuhkan pendinginan terbatas dan lingkungan hangat untuk menghindari lengkungan, sehingga sudut overhangnya biasanya lebih rendah kecuali mesin disetel untuk aliran udara terkontrol. TPU dapat melorot karena tetap kenyal dan fleksibel bahkan setelah pendinginan dibandingkan dengan material kaku.',
+    },
+    {
+      type: 'proscons',
+      title: 'Meningkatkan pendinginan bagian untuk overhang',
+      items: [
+        { pro: 'Dapat membekukan untaian PLA sebelum tepi yang tidak ditopang melorot.', con: 'Dapat melemahkan daya rekat lapisan pada material yang membutuhkan retensi panas.' },
+        { pro: 'Memperbaiki detail sisi bawah yang tajam dan fitur overhang kecil.', con: 'Saluran yang diarahkan buruk dapat mendinginkan satu sisi dan meninggalkan sisi berlawanan berantakan.' },
+        { pro: 'Sering lebih cepat daripada mendesain ulang penyangga untuk fitur kecil.', con: 'Dapat menimbulkan kebisingan kipas, beban listrik, dan lengkungan pada bagian datar besar.' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Periksa arah aliran udara sebelum mempercayai persentase kipas',
+      html: 'Nilai kipas slicer 100% tidak menjamin pendinginan yang berguna pada manik. Saluran tersumbat, blower lemah, bentuk kaus silikon, atau modifikasi kepala alat dapat membuat satu sisi nosel memiliki aliran udara yang jauh lebih sedikit.',
+    },
+    { type: 'title', text: 'Perbedaan Material: PLA, PETG, ABS, dan TPU', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'PLA adalah material referensi termudah untuk pengujian overhang karena cepat mengeras dan menerima pendinginan bagian yang kuat. Itulah sebabnya profil PLA yang disetel sering mencetak dinding tanpa penyangga lebih curam dari aturan 45 derajat tradisional. PETG lebih lengket dan menahan panas lebih lama. Ia dapat menghasilkan cetakan fungsional yang kuat, tetapi sisi bawah tanpa penyangga mungkin terlihat mengkilap, berserabut, atau melengkung jika kecepatan dan pendinginan tidak dikendalikan. Overhang PETG sering mendapat manfaat dari memperlambat dinding luar sebelum mendorong kipas ke maksimum.',
+    },
+    {
+      type: 'paragraph',
+      html: 'ABS berperilaku berbeda karena ruang hangat dan pendinginan terbatas sering digunakan untuk mencegah lengkungan dan retakan lapisan. Kondisi yang sama membuat lereng tanpa penyangga lebih sulit. TPU membawa tantangan lain: material tetap fleksibel, sehingga untaian dapat melorot atau luntur bahkan ketika tidak lagi sepanas di nosel. Kalkulator memberikan setiap material perilaku dasar dan pengali terpisah untuk mencerminkan perbedaan praktis ini.',
+    },
+    {
+      type: 'table',
+      headers: ['Material', 'Perilaku overhang', 'Penyesuaian pertama terbaik'],
+      rows: [
+        ['PLA', 'Kekakuan baik dan toleransi pendinginan kuat.', 'Tingkatkan pendinginan dan perlambat perimeter luar.'],
+        ['PETG', 'Lengket, menahan panas, rentan melorot mengkilap.', 'Kurangi kecepatan dan gunakan pendinginan sedang.'],
+        ['ABS', 'Membutuhkan retensi panas, sehingga lereng tanpa penyangga kurang toleran.', 'Sesuaikan orientasi atau gunakan penyangga selektif.'],
+        ['TPU', 'Untaian fleksibel dapat berubah bentuk setelah deposisi.', 'Gunakan sudut konservatif dan gerakan lambat.'],
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Mengapa filamen basah bisa meniru pengaturan overhang yang buruk',
+      html: 'Kelembaban dapat menciptakan gelembung uap kecil dan ekstrusi tidak rata. Jika sisi bawah terlihat berbusa, tidak rata, atau berbulu, keringkan filamen sebelum menganggap perkiraan sudut aman salah.',
+    },
+    { type: 'title', text: 'Kecepatan Cetak dan Waktu Termal', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Kecepatan cetak mempengaruhi overhang karena mengubah waktu termal. Pada kecepatan lebih tinggi, lebih banyak material panas yang diendapkan per detik, dan setiap titik untaian memiliki lebih sedikit waktu di bawah aliran udara yang berguna sebelum bagian berikutnya diletakkan. Dinding luar yang cepat mungkin terlihat dapat diterima pada permukaan vertikal tetapi gagal di bawah overhang karena manik masih lunak saat tidak ditopang. Memperlambat hanya perimeter overhang sering lebih efisien daripada memperlambat seluruh model.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Slicer mungkin memiliki kontrol terpisah untuk kecepatan dinding luar, kecepatan jembatan, kecepatan perimeter kecil, kecepatan overhang, dan waktu lapisan minimum. Kalkulator menggunakan kecepatan cetak utama sebagai input praktis, lalu menghukum kecepatan tinggi secara progresif. Jika model memiliki lapisan pendek, waktu lapisan minimum dan perilaku kipas mungkin mendominasi. Jika overhang adalah dinding kontinu panjang, kecepatan perimeter dan arah saluran pendinginan menjadi lebih penting.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Perlambat dinding luar terlebih dahulu karena itu adalah permukaan yang akan diperiksa pengguna.',
+        'Gunakan perlambatan khusus overhang saat slicer mendukungnya.',
+        'Jaga gerakan perjalanan cukup cepat untuk menghindari pemanasan fitur kecil.',
+        'Hindari menilai kecepatan hanya dari menara kecil; bagian besar menahan panas secara berbeda.',
+        'Uji ulang setelah mengganti ukuran nosel karena laju aliran mengubah beban termal.',
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Urutan penyetelan praktis',
+      html: 'Untuk lereng tanpa penyangga yang berada di batas, coba pendinginan lebih kuat, kecepatan dinding luar lebih rendah, dan tinggi lapisan lebih rendah sebelum mengaktifkan penyangga rapat di mana-mana.',
+    },
+    { type: 'title', text: 'Kapan Penyangga Masih Menjadi Jawaban yang Tepat', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Tujuannya bukan untuk menghilangkan penyangga dengan cara apa pun. Penyangga berguna ketika sisi bawah harus akurat secara dimensi, ketika material sensitif terhadap panas, ketika permukaan kosmetik menghadap ke bawah, atau ketika overhang dimulai di udara tanpa kontak lapisan sebelumnya. Kemampuan 60 derajat yang dihitung tidak berarti setiap fitur 60 derajat akan terlihat bagus. Pulau kecil, tepi mendadak, lubang, teks timbul, dan sisi bawah cekung bisa gagal lebih awal dari tanjakan kalibrasi yang mulus.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Penyangga selektif biasanya lebih baik daripada penyangga global. Jika hanya satu wilayah yang melebihi sudut aman yang dihitung, cat pemblokir dan pemaksa penyangga, putar bagian, chamfer sisi bawah, bagi model, atau tambahkan rusuk pengorbanan kecil. Penyangga pohon, penyangga organik, dan lapisan antarmuka dapat mengurangi bekas luka sambil menahan untaian tanpa penyangga kritis pertama. Untuk braket fungsional, perubahan desain kecil sering menghemat lebih banyak material daripada penyetelan slicer yang agresif.',
+    },
+    {
+      type: 'summary',
+      title: 'Gunakan penyangga ketika',
+      items: [
+        'Sudut aman yang dihitung berada di bawah sudut sisi bawah model.',
+        'Sisi bawah harus halus, rata, atau akurat secara dimensi.',
+        'Fitur dimulai sebagai pulau tanpa lapisan sebelumnya untuk ditempeli.',
+        'Material tidak dapat menggunakan pendinginan yang cukup tanpa melengkung atau melemahkan daya rekat.',
+        'Overhang yang gagal akan merusak cetakan panjang di akhir pekerjaan.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Risiko merah tidak berarti tidak mungkin',
+      html: 'Hasil merah berarti penyangga adalah default yang lebih aman untuk profil konsumen normal. Pengguna ahli mungkin masih berhasil dengan saluran khusus, kecepatan overhang yang disetel, jalur slicer khusus, atau desain ulang model, tetapi marginnya sempit.',
+    },
+    { type: 'title', text: 'Cara Memvalidasi Perkiraan dengan Menara Overhang', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Menara uji overhang kecil adalah cara terbaik untuk memvalidasi perkiraan untuk printer tertentu. Cetak menara yang bertahap dari 35 hingga 75 derajat menggunakan filamen, nosel, suhu, kipas, dan kecepatan dinding yang sama yang Anda rencanakan untuk digunakan pada bagian sebenarnya. Periksa sisi bawah dari samping dan dari bawah. Cari lengkungan, lingkaran kasar, tepi perimeter terpisah, dan melorot mengkilap. Anak tangga bersih terakhir adalah sudut aman nyata Anda untuk profil itu.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Jangan mengubah lima variabel di antara pengujian menara. Jika menara pertama gagal pada 48 derajat, tingkatkan pendinginan atau perlambat kecepatan overhang dan ulangi. Jika menara kedua mencapai 55 derajat, Anda tahu tuas mana yang membantu. Jika menara membaik di satu sisi tetapi tidak di sisi lain, periksa simetri saluran kipas. Jika setiap langkah terlihat buruk, periksa suhu nosel, pengali ekstrusi, filamen basah, dan perangkat keras pendinginan sebelum menganggap penyangga tidak terhindarkan.',
+    },
+    {
+      type: 'table',
+      headers: ['Pengamatan', 'Kemungkinan penyebab', 'Tindakan selanjutnya'],
+      rows: [
+        ['Tepi bawah melengkung ke atas', 'Ketidakseimbangan panas dan pendinginan', 'Perlambat perimeter dan perbaiki arah kipas.'],
+        ['Lingkaran melorot ke bawah', 'Fraksi tidak tertopang terlalu tinggi', 'Kurangi tinggi lapisan atau gunakan penyangga.'],
+        ['Satu sisi lebih bersih dari yang lain', 'Aliran udara asimetris', 'Periksa saluran dan jalur blower.'],
+        ['Sisi bawah kasar dan berbusa', 'Kelembaban atau filamen terlalu panas', 'Keringkan gulungan atau kurangi suhu nosel.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Catat nama profil',
+      html: 'Simpan profil terpisah untuk setiap nosel, material, dan pengaturan pendinginan. Profil PLA 0,16 mm dan profil PETG 0,28 mm tidak boleh berbagi asumsi overhang aman yang sama.',
+    },
+    { type: 'title', text: 'Mendesain Bagian untuk Menghindari Penyangga', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Perbaikan overhang termurah sering terjadi di CAD. Ganti sisi bawah 90 derajat yang tajam dengan chamfer, tambahkan bentuk tetesan air mata ke lubang horizontal, putar bagian sehingga permukaan tercuram mengarah ke atas, atau bagi model menjadi dua bagian yang dapat dicetak. Chamfer 45 derajat dapat menghilangkan kebutuhan penyangga sepenuhnya sambil mempertahankan kekuatan. Untuk lubang sekrup, profil tetesan air mata dan berlian mencetak lebih bersih daripada lingkaran sempurna ketika bagian atas lubang akan menjadi jembatan.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Desain yang sadar manufaktur juga mengurangi pasca-pemrosesan. Penyangga mengonsumsi material, menambah waktu cetak, meninggalkan bekas pada permukaan, dan dapat merusak fitur halus selama pelepasan. Model yang menghormati sudut aman printer mencetak lebih cepat dan lebih konsisten. Kalkulator membantu selama peninjauan desain: bandingkan sudut sisi bawah model terhadap sudut aman yang diperkirakan, lalu putuskan apakah akan mendesain ulang, menyetel profil, atau hanya menyangga area berisiko.',
+    },
+    {
+      type: 'proscons',
+      title: 'Mendesain ulang daripada menyangga',
+      items: [
+        { pro: 'Mengurangi material dan waktu pasca-pemrosesan.', con: 'Dapat mengubah bentuk visual atau fungsional bagian.' },
+        { pro: 'Meningkatkan pengulangan di seluruh farm cetak.', con: 'Membutuhkan akses ke sumber CAD atau alat pengeditan mesh.' },
+        { pro: 'Dapat memperkuat bagian dengan menyelaraskan lapisan lebih baik.', con: 'Beberapa geometri masih membutuhkan penyangga untuk akurasi.' },
+      ],
+    },
+    {
+      type: 'summary',
+      title: 'Langkah desain terbaik tanpa penyangga',
+      items: [
+        'Gunakan chamfer 45 derajat di bawah tepi horizontal.',
+        'Ubah lubang horizontal bundar menjadi tetesan air mata bila memungkinkan.',
+        'Orientasikan permukaan kosmetik ke atas atau ke samping.',
+        'Bagi bagian di sepanjang jahitan tersembunyi daripada menyangga sisi bawah yang besar.',
+        'Gunakan penyangga hanya di mana sudut model melebihi profil yang diuji.',
+      ],
+    },
+  ],
+  faq: [
+    {
+      question: 'Apakah 45 derajat selalu aman untuk overhang printer 3D?',
+      answer: 'Tidak. Ini adalah aturan default yang berguna, tetapi material, pendinginan, tinggi lapisan, lebar garis, kecepatan, dan kinerja saluran kipas dapat menggeser batas praktis lebih rendah atau lebih tinggi.',
+    },
+    {
+      question: 'Mengapa kalkulator membatasi hasil hingga 75 derajat?',
+      answer: 'Printer FDM konsumen terkadang dapat mencetak bentuk uji overhang yang sangat curam, tetapi merekomendasikan nilai di atas 75 derajat tidak dapat diandalkan untuk bagian normal, sehingga alat membatasi perkiraan ke rentang rumahan yang konservatif.',
+    },
+    {
+      question: 'Material mana yang mencetak overhang tanpa penyangga terbaik?',
+      answer: 'PLA biasanya paling mudah karena cepat mengeras dan mentolerir pendinginan bagian yang kuat. PETG, ABS, dan TPU umumnya membutuhkan asumsi overhang yang lebih konservatif.',
+    },
+    {
+      question: 'Haruskah saya meningkatkan kecepatan kipas atau menurunkan kecepatan cetak terlebih dahulu?',
+      answer: 'Untuk PLA, tingkatkan pendinginan dan perlambat dinding luar overhang. Untuk PETG, ABS, atau bagian fungsional, seimbangkan pendinginan dengan daya rekat lapisan dan risiko lengkungan.',
+    },
+    {
+      question: 'Bisakah ini menggantikan menara kalibrasi overhang?',
+      answer: 'Tidak. Ini memberikan perkiraan heuristik dan titik awal yang baik. Menara kecil tetap menjadi validasi terbaik untuk printer, filamen, dan profil slicer tertentu.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Masukkan geometri ekstrusi', text: 'Atur tinggi lapisan dan lebar garis slicer yang digunakan oleh profil.' },
+    { name: 'Pilih material dan pendinginan', text: 'Pilih PLA, PETG, ABS, atau TPU dan tingkat pendinginan bagian saat ini.' },
+    { name: 'Tambahkan kecepatan cetak', text: 'Masukkan kecepatan dinding luar atau kecepatan cetak praktis untuk area overhang.' },
+    { name: 'Bandingkan hasilnya', text: 'Gunakan sudut aman dan umpan balik risiko untuk memutuskan apakah akan menyetel, mendesain ulang, atau mengaktifkan penyangga.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Kalkulator Sudut Overhang Aman untuk Cetakan 3D',
+      description: 'Perkirakan sudut overhang FDM tanpa penyangga dari tinggi lapisan, lebar garis, pendinginan, material, dan kecepatan.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'All',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Apakah 45 derajat selalu aman untuk overhang printer 3D?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Tidak. Ini adalah aturan default yang berguna, tetapi material, pendinginan, tinggi lapisan, lebar garis, kecepatan, dan kinerja saluran kipas dapat menggeser batas praktis lebih rendah atau lebih tinggi.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Cara memperkirakan sudut overhang aman printer 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Masukkan tinggi lapisan dan lebar garis.' },
+        { '@type': 'HowToStep', text: 'Pilih material dan tingkat pendinginan.' },
+        { '@type': 'HowToStep', text: 'Masukkan kecepatan cetak.' },
+        { '@type': 'HowToStep', text: 'Bandingkan hasilnya dengan sudut sisi bawah model.' },
+      ],
+    },
+  ],
+};

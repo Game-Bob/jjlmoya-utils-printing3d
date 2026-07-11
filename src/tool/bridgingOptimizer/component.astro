@@ -1,0 +1,287 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { BridgingOptimizerUI } from './ui';
+import './bridging-optimizer.css';
+
+interface Props {
+  ui: BridgingOptimizerUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="bro-root" id="main-tool">
+  <section class="bro-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="bro-controls" onsubmit="return false;">
+      <div class="bro-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-bro-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-bro-units="imperial">{ui.imperialLabel}</button>
+      </div>
+
+      <fieldset>
+        <legend>{ui.geometryGroupLabel}</legend>
+        <label>
+          <span>{ui.bridgeLengthLabel}<small title={ui.bridgeLengthHelp} aria-hidden="true"><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="bro-length" type="number" min="5" max="150" step="1" value="45" /><em id="bro-length-unit">{ui.mmUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.lineWidthLabel}<small title={ui.lineWidthHelp} aria-hidden="true"><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="bro-line" type="number" min="0.25" max="1.2" step="0.01" value="0.42" /><em id="bro-line-unit">{ui.mmUnit}</em></b>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.materialGroupLabel}</legend>
+        <label>
+          <span>{ui.materialLabel}</span>
+          <select id="bro-material">
+            <option value="pla" selected>{ui.plaLabel}</option>
+            <option value="petg">{ui.petgLabel}</option>
+            <option value="abs">{ui.absLabel}</option>
+            <option value="tpu">{ui.tpuLabel}</option>
+            <option value="asa">{ui.asaLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.thermalGroupLabel}</legend>
+        <label>
+          <span>{ui.baseSpeedLabel}<small title={ui.baseSpeedHelp} aria-hidden="true"><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="bro-speed" type="number" min="15" max="180" step="1" value="60" /><em id="bro-speed-unit">{ui.mmsUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.temperatureLabel}<small title={ui.temperatureHelp} aria-hidden="true"><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="bro-temp" type="number" min="170" max="290" step="1" value="205" /><em id="bro-temp-unit">{ui.celsiusUnit}</em></b>
+        </label>
+      </fieldset>
+    </form>
+
+    <div class="bro-results" aria-label={ui.resultsAriaLabel}>
+      <div class="bro-visual">
+        <svg class="bro-bridge" viewBox="0 0 420 230" role="img" aria-label={ui.sagCurveLabel}>
+          <path class="bro-grid" d="M50 46H370M50 86H370M50 126H370M50 166H370" />
+          <path class="bro-pillar" d="M54 190V54H104V190M316 190V54H366V190" />
+          <path class="bro-span-shadow" d="M104 74C160 74 190 74 210 74C230 74 260 74 316 74" />
+          <path class="bro-span" id="bro-span" d="M104 74C160 74 190 92 210 92C230 92 260 74 316 74" />
+          <circle class="bro-anchor" cx="104" cy="74" r="7" />
+          <circle class="bro-anchor" cx="316" cy="74" r="7" />
+          <text class="bro-svg-label" id="bro-svg-label" x="210" y="132" text-anchor="middle"></text>
+        </svg>
+        <aside class="bro-risk">
+          <span>{ui.viabilityLabel}</span>
+          <b id="bro-risk-label">{ui.greenRiskLabel}</b>
+        </aside>
+      </div>
+
+      <div class="bro-slicer">
+        <span class="bro-kicker">{ui.slicerSettingsLabel}</span>
+        <article>
+          <i aria-hidden="true"><Icon name="mdi:speedometer" size={20} /></i>
+          <span>{ui.bridgeSpeedLabel}</span>
+          <b><output id="bro-out-speed">0</output><small id="bro-out-speed-unit">{ui.mmsUnit}</small></b>
+        </article>
+        <article>
+          <i aria-hidden="true"><Icon name="mdi:fan" size={20} /></i>
+          <span>{ui.bridgeFanLabel}</span>
+          <b><output id="bro-out-fan">0</output><small>{ui.percentUnit}</small></b>
+        </article>
+        <article>
+          <i aria-hidden="true"><Icon name="mdi:water-percent" size={20} /></i>
+          <span>{ui.bridgeFlowLabel}</span>
+          <b><output id="bro-out-flow">0</output><small>{ui.percentUnit}</small></b>
+        </article>
+      </div>
+
+      <div class="bro-diagnostics">
+        <article><span>{ui.sagIndexLabel}</span><b id="bro-sag-index">0</b></article>
+        <article><span>{ui.estimatedSagLabel}</span><b><output id="bro-sag-mm">0</output><small id="bro-sag-unit">{ui.mmUnit}</small></b></article>
+        <article><span>{ui.maxLengthLabel}</span><b><output id="bro-max-length">0</output><small id="bro-max-unit">{ui.mmUnit}</small></b></article>
+      </div>
+
+      <div class="bro-copy">
+        <span>{ui.copyBlockLabel}</span>
+        <pre id="bro-copy-text"></pre>
+        <button type="button" id="bro-copy-button"><Icon name="mdi:content-copy" size={18} /> {ui.copyBlockLabel}</button>
+        <p id="bro-copied" hidden>{ui.copiedLabel}</p>
+      </div>
+
+      <div class="bro-education">
+        <span>{ui.educationLabel}</span>
+        <p>{ui.educationText}</p>
+        <b id="bro-advice">{ui.adviceSafe}</b>
+      </div>
+    </div>
+
+    <span id="bro-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-mms={ui.mmsUnit} data-ips={ui.ipsUnit} data-c={ui.celsiusUnit} data-f={ui.fahrenheitUnit} data-percent={ui.percentUnit}></span>
+    <span id="bro-labels" hidden data-risk-green={ui.greenRiskLabel} data-risk-orange={ui.orangeRiskLabel} data-risk-red={ui.redRiskLabel} data-advice-safe={ui.adviceSafe} data-advice-critical={ui.adviceCritical} data-advice-supports={ui.adviceSupports} data-advice-high-temp={ui.adviceHighTemp} data-advice-flexible={ui.adviceFlexible} data-cura={ui.curaLabel} data-prusa={ui.prusaLabel} data-cura-speed={ui.curaSpeedFieldLabel} data-cura-fan={ui.curaFanFieldLabel} data-cura-flow={ui.curaFlowFieldLabel} data-prusa-speed={ui.prusaSpeedFieldLabel} data-prusa-fan={ui.prusaFanFieldLabel} data-prusa-flow={ui.prusaFlowFieldLabel}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateBridgingOptimizer, type BridgeMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class BridgingOptimizerTool {
+    private units: UnitSystem = 'metric';
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private select(id: string) { return document.getElementById(id) as HTMLSelectElement; }
+    private data() { return (document.getElementById('bro-data') as HTMLElement).dataset; }
+    private labels() { return (document.getElementById('bro-labels') as HTMLElement).dataset; }
+    private numberValue(id: string) { return parseFloat(this.input(id).value) || 0; }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-bro-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.broUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      ['bro-length', 'bro-line', 'bro-speed', 'bro-temp'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      this.select('bro-material')?.addEventListener('input', () => this.update());
+      this.input('bro-copy-button')?.addEventListener('click', () => this.copySettings());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const lengthMm = this.lengthMm('bro-length');
+      const lineMm = this.lengthMm('bro-line');
+      const speedMms = this.speedMms();
+      const tempC = this.temperatureC();
+      this.units = units;
+      this.input('bro-length').value = this.formatLength(lengthMm, 1);
+      this.input('bro-line').value = this.formatLength(lineMm, 3);
+      this.input('bro-speed').value = this.formatSpeed(speedMms);
+      this.input('bro-temp').value = this.formatTemperature(tempC);
+      this.syncUnits();
+      this.update();
+    }
+
+    private lengthUnit() {
+      return this.units === 'metric' ? this.data().mm || '' : this.data().inch || '';
+    }
+
+    private speedUnit() {
+      return this.units === 'metric' ? this.data().mms || '' : this.data().ips || '';
+    }
+
+    private temperatureUnit() {
+      return this.units === 'metric' ? this.data().c || '' : this.data().f || '';
+    }
+
+    private syncUnits() {
+      const lengthUnit = this.lengthUnit();
+      this.text('bro-length-unit', lengthUnit);
+      this.text('bro-line-unit', lengthUnit);
+      this.text('bro-speed-unit', this.speedUnit());
+      this.text('bro-temp-unit', this.temperatureUnit());
+      this.text('bro-out-speed-unit', this.speedUnit());
+      this.text('bro-sag-unit', lengthUnit);
+      this.text('bro-max-unit', lengthUnit);
+      document.querySelectorAll('[data-bro-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.broUnits === this.units));
+    }
+
+    private lengthMm(id: string) {
+      const raw = this.numberValue(id);
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private speedMms() {
+      const raw = this.numberValue('bro-speed');
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private temperatureC() {
+      const raw = this.numberValue('bro-temp');
+      return this.units === 'metric' ? raw : (raw - 32) * 5 / 9;
+    }
+
+    private formatLength(mm: number, digits = 1) {
+      return this.units === 'metric' ? mm.toFixed(digits > 1 ? 2 : 1) : (mm / 25.4).toFixed(digits);
+    }
+
+    private formatSpeed(mms: number) {
+      return this.units === 'metric' ? mms.toFixed(0) : (mms / 25.4).toFixed(2);
+    }
+
+    private formatTemperature(c: number) {
+      return this.units === 'metric' ? c.toFixed(0) : (c * 9 / 5 + 32).toFixed(0);
+    }
+
+    private currentParams() {
+      return {
+        bridgeLengthMm: this.lengthMm('bro-length'),
+        material: this.select('bro-material').value as BridgeMaterial,
+        baseSpeedMms: this.speedMms(),
+        extrusionTemperatureC: this.temperatureC(),
+        lineWidthMm: this.lengthMm('bro-line'),
+      };
+    }
+
+    private update() {
+      this.syncUnits();
+      const result = calculateBridgingOptimizer(this.currentParams());
+      this.text('bro-out-speed', this.units === 'metric' ? result.bridgeSpeedMms.toFixed(1) : (result.bridgeSpeedMms / 25.4).toFixed(2));
+      this.text('bro-out-fan', result.bridgeFanSpeedPercent.toString());
+      this.text('bro-out-flow', result.bridgeFlowRatioPercent.toFixed(1));
+      this.text('bro-sag-index', result.sagIndex.toFixed(1));
+      this.text('bro-sag-mm', this.formatLength(result.estimatedSagMm, 2));
+      this.text('bro-max-length', this.formatLength(result.maxRecommendedLengthMm, 1));
+      this.renderRisk(result.riskLevel);
+      this.renderCurve(result.estimatedSagMm, result.sagIndex, this.currentParams().bridgeLengthMm);
+      this.renderCopyBlock(result);
+      this.renderAdvice(result.adviceKey);
+    }
+
+    private renderRisk(risk: string) {
+      document.querySelector('.bro-root')?.setAttribute('data-risk', risk);
+      const label = this.labels()[`risk${risk.charAt(0).toUpperCase()}${risk.slice(1)}`] || risk;
+      this.text('bro-risk-label', label);
+    }
+
+    private renderAdvice(key: string) {
+      const attr = `advice${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      this.text('bro-advice', this.labels()[attr] || '');
+    }
+
+    private renderCurve(sagMm: number, sagIndex: number, lengthMm: number) {
+      const sag = Math.min(94, 12 + sagMm * 4.2 + sagIndex * 0.28);
+      const d = `M104 74C152 74 176 ${74 + sag.toFixed(1)} 210 ${74 + sag.toFixed(1)}C244 ${74 + sag.toFixed(1)} 268 74 316 74`;
+      document.getElementById('bro-span')?.setAttribute('d', d);
+      this.text('bro-svg-label', `${lengthMm.toFixed(0)} ${this.data().mm}`);
+    }
+
+    private renderCopyBlock(result: ReturnType<typeof calculateBridgingOptimizer>) {
+      const speed = this.units === 'metric' ? `${result.bridgeSpeedMms.toFixed(1)} ${this.data().mms}` : `${(result.bridgeSpeedMms / 25.4).toFixed(2)} ${this.data().ips}`;
+      const text = [
+        `${this.labels().curaSpeed}: ${speed}`,
+        `${this.labels().curaFan}: ${result.bridgeFanSpeedPercent}%`,
+        `${this.labels().curaFlow}: ${result.bridgeFlowRatioPercent.toFixed(1)}%`,
+        '',
+        `${this.labels().prusaSpeed}: ${speed}`,
+        `${this.labels().prusaFan}: ${result.bridgeFanSpeedPercent}%`,
+        `${this.labels().prusaFlow}: ${(result.bridgeFlowRatioPercent / 100).toFixed(3)}`,
+      ].join('\n');
+      this.text('bro-copy-text', text);
+    }
+
+    private async copySettings() {
+      const text = document.getElementById('bro-copy-text')?.textContent || '';
+      await navigator.clipboard?.writeText(text);
+      document.getElementById('bro-copied')?.removeAttribute('hidden');
+    }
+
+    private text(id: string, value: string) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
+  }
+
+  const initBridgingOptimizerTool = () => new BridgingOptimizerTool();
+  document.addEventListener('astro:page-load', initBridgingOptimizerTool);
+  initBridgingOptimizerTool();
+</script>

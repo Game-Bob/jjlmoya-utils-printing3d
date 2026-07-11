@@ -1,0 +1,338 @@
+import { bibliography } from '../bibliography';
+import type { ToolLocaleContent } from '../../../types';
+import type { BedMeshAnalyzerUI } from '../ui';
+
+export const content: ToolLocaleContent<BedMeshAnalyzerUI> = {
+  slug: 'analisator-jaring-tidur',
+  title: 'Analisator Jaring Tempat Tidur Printer 3D',
+  description: 'Parsing data jaring tempat tidur Marlin atau Klipper, visualisasikan permukaan, diagnosis kemiringan atau lengkungan, dan konversi kesalahan Z menjadi instruksi putaran sekrup.',
+  ui: {
+    controlsAriaLabel: 'Input analisator jaring tempat tidur',
+    resultsAriaLabel: 'Hasil analisator jaring tempat tidur',
+    dataLabel: 'Data jaring mentah',
+    dataPlaceholder: 'Tempel hasil perintah G29 Anda di sini...',
+    sampleButtonLabel: 'Gunakan contoh jaring',
+    levelingPointsLabel: 'Titik perataan',
+    threePointLabel: '3 titik',
+    fourPointLabel: '4 titik',
+    screwTypeLabel: 'Tipe sekrup',
+    customScrewLabel: 'Lainnya',
+    pitchLabel: 'Jarak ulir',
+    unitSystemLabel: 'Satuan',
+    metricLabel: 'Metrik',
+    imperialLabel: 'Imperial',
+    heatmapLabel: 'Topografi tempat tidur interaktif',
+    lowScaleLabel: 'Rendah',
+    flatScaleLabel: 'Rata',
+    highScaleLabel: 'Tinggi',
+    healthLabel: 'Kesehatan kerataan',
+    rangeLabel: 'Varians total',
+    meshSizeLabel: 'Ukuran jaring',
+    meanLabel: 'Rata-rata Z',
+    diagnosisLabel: 'Diagnosis',
+    instructionsLabel: 'Instruksi penyesuaian mekanis',
+    cornerHeader: 'Sudut',
+    deltaHeader: 'Koreksi',
+    actionHeader: 'Tindakan',
+    frontLeft: 'Depan kiri',
+    frontRight: 'Depan kanan',
+    rearLeft: 'Belakang kiri',
+    rearRight: 'Belakang kanan',
+    rearCenter: 'Belakang tengah',
+    clockwiseLabel: 'putar searah jarum jam',
+    counterClockwiseLabel: 'putar berlawanan arah jarum jam',
+    noTurnLabel: 'biarkan sekrup ini apa adanya',
+    raiseLabel: 'Naikkan tempat tidur sebesar',
+    lowerLabel: 'Turunkan tempat tidur sebesar',
+    warningWarped: 'Lengkungan berlebihan: masalahnya mungkin pada permukaan, bukan hanya perataan. Pertimbangkan mengganti atau meratakan plat cetak.',
+    parseError: 'Jaring tidak dapat diuraikan. Tempel baris nilai Z desimal dari G29, M420 V, atau BED_MESH_OUTPUT Klipper.',
+    notEnoughNumbers: 'Jumlah angka jaring tidak mencukupi. Jaring yang valid membutuhkan setidaknya dua baris dan dua kolom.',
+    raggedRows: 'Baris yang terdeteksi tidak memiliki panjang yang sama. Periksa apakah ada output jaring yang terpotong atau rusak.',
+    badPitch: 'Jarak ulir harus lebih besar dari nol.',
+    diagnosisFlat: 'Tempat tidur sudah hampir rata. Hanya perlu penyesuaian lapisan pertama yang halus.',
+    diagnosisFrontHigh: 'Sisi depan lebih tinggi dari sisi belakang. Perbaiki sekrup depan sebelum mengejar titik individual.',
+    diagnosisRearHigh: 'Sisi belakang lebih tinggi dari sisi depan. Perbaiki sekrup belakang terlebih dahulu.',
+    diagnosisLeftHigh: 'Sisi kiri lebih tinggi dari sisi kanan. Ini sebagian besar kemiringan sumbu X di seluruh tempat tidur.',
+    diagnosisRightHigh: 'Sisi kanan lebih tinggi dari sisi kiri. Ini sebagian besar kemiringan sumbu X di seluruh tempat tidur.',
+    diagnosisTwisted: 'Sudut yang berlawanan tidak cocok. Tempat tidur bengkok atau gantry tidak sejajar secara konsisten.',
+    diagnosisConcave: 'Bagian tengah lebih rendah dari sudut-sudut. Sekrup perata tidak dapat sepenuhnya menghilangkan bentuk cekung ini.',
+    diagnosisConvex: 'Bagian tengah lebih tinggi dari sudut-sudut. Periksa magnet, klip, tekanan plat, atau pelengkungan termal.',
+    diagnosisWarped: 'Rentang Z di atas 0,5 mm, yang menunjukkan lengkungan permukaan berlebihan, bukan kesalahan perataan biasa.',
+    mmUnit: 'mm',
+    inchUnit: 'in',
+    degreeUnit: 'derajat',
+  },
+  seo: [
+    { type: 'title', text: 'Cara Membaca Jaring Tempat Tidur Printer 3D', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Jaring tempat tidur adalah kisi-kisi pengukuran offset Z yang dikumpulkan oleh probe atau sensor nosel di seluruh area cetak. Firmware seperti Marlin dan Klipper menggunakan kisi-kisi tersebut untuk mengkompensasi perbedaan ketinggian kecil saat mencetak lapisan pertama. Angka-angka biasanya dinyatakan dalam milimeter: nilai positif berarti titik yang diprobes tinggi relatif terhadap bidang referensi yang dipilih, dan nilai negatif berarti rendah. Pertanyaan praktisnya bukan hanya apakah firmware dapat mengkompensasinya. Pertanyaan pentingnya adalah apakah tempat tidur fisik, gantry, dan sekrup perata cukup presisi sehingga kompensasi tidak harus bekerja terlalu keras.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Analisator ini mengubah output jaring mentah menjadi tiga keputusan: seberapa besar variasi Z total yang ada, apakah bentuknya menyerupai kemiringan atau deformasi, dan sekrup mana yang harus disetel. Perbedaan ini penting karena tempat tidur miring dan tempat tidur melengkung memerlukan perbaikan yang berbeda. Kemiringan sering dapat diperbaiki dengan memutar sekrup sudut. Plat kaca cekung, lembaran magnetik melengkung, kereta Y longgar, atau gantry bengkok tetap dapat menghasilkan lapisan pertama yang buruk bahkan setelah setiap sudut diratakan dengan sempurna.',
+    },
+    {
+      type: 'stats',
+      columns: 4,
+      items: [
+        { value: '0,00 mm', label: 'rentang ideal, jarang tercapai pada tempat tidur nyata' },
+        { value: '0,10 mm', label: 'biasanya sangat baik untuk lapisan pertama FDM umum' },
+        { value: '0,30 mm', label: 'terlihat tetapi sering masih bisa dicetak dengan kompensasi jaring' },
+        { value: '0,50 mm+', label: 'permukaan atau mekanik harus diperiksa' },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'info',
+      title: 'Nilai jaring bukan perintah sekrup itu sendiri',
+      html: 'Firmware melaporkan peta ketinggian. Instruksi sekrup diturunkan dari rata-rata sudut, jarak ulir, dan arah mekanis penyesuaian. Selalu lakukan perubahan kecil, lakukan homing ulang, dan probes kembali.',
+    },
+    { type: 'title', text: 'Arti Nilai G29 dan BED_MESH_OUTPUT', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Pengguna Marlin sering mendapatkan data tempat tidur melalui <code>G29</code>, <code>M420 V</code>, atau laporan perataan di terminal. Pengguna Klipper dapat memeriksa jaring dengan <code>BED_MESH_OUTPUT</code>, antarmuka web, atau data profil yang tersimpan. Format outputnya berbeda, tetapi data pentingnya sama: baris dan kolom pengukuran Z desimal. Beberapa laporan menyertakan label, koordinat, karakter kurung, nomor indeks, atau teks firmware. Parser yang baik harus mengabaikan teks di sekitarnya dan hanya mengekstrak angka pengukuran yang membentuk jaring.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Tempelan jaring yang paling andal adalah blok persegi panjang di mana setiap baris memiliki jumlah nilai yang sama. Jaring 3x3 memiliki 9 nilai, jaring 5x5 memiliki 25 nilai, dan jaring 7x7 memiliki 49 nilai. Jaring persegi panjang juga dapat valid jika kisi probing menggunakan jumlah X dan Y yang berbeda. Jika baris memiliki panjang yang tidak konsisten, data mungkin tidak lengkap atau tercampur dengan angka yang tidak terkait seperti koordinat, kecepatan umpan, atau penghitung perintah. Dalam hal ini, jalankan ulang laporan dan tempel hanya kisi numeriknya.',
+    },
+    {
+      type: 'table',
+      headers: ['Petunjuk output', 'Arti yang disarankan', 'Tindakan'],
+      rows: [
+        ['Baris memiliki panjang sama', 'Jaring mungkin lengkap.', 'Analisis langsung dan bandingkan varians total.'],
+        ['Satu baris lebih pendek', 'Salinan terminal mungkin terpotong.', 'Salin laporan lagi dari awal.'],
+        ['Banyak angka ekstra', 'Tempelan menyertakan label indeks atau koordinat.', 'Tempel hanya bagian matriks jika memungkinkan.'],
+        ['Hanya satu baris panjang', 'Alat dapat mencoba rekonstruksi persegi.', 'Gunakan 9, 25, 49, atau jumlah persegi lainnya.'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Probes setelah pemanasan',
+      html: 'Untuk data yang bermakna, panaskan tempat tidur ke suhu cetak dan tunggu stabilisasi termal sebelum memprobes. Plat aluminium dan lembaran magnetik dapat berubah bentuk setelah beberapa menit pada suhu tinggi.',
+    },
+    { type: 'title', text: 'Varians Total: Angka yang Memprediksi Masalah Lapisan Pertama', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Varians total adalah selisih mutlak antara nilai jaring tertinggi dan terendah. Jika titik maksimum adalah +0,180 mm dan titik minimum adalah -0,120 mm, varians totalnya adalah 0,300 mm. Angka tunggal ini mudah dipahami karena menggambarkan seluruh kerja vertikal yang harus diserap firmware di seluruh tempat tidur. Varians kecil berarti jarak nosel tetap serupa dari depan ke belakang dan kiri ke kanan. Varians besar berarti satu area mungkin tertekan sementara area lain masih kesulitan menempel.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Kisaran yang dapat diterima tergantung pada tinggi lapisan, ukuran nosel, filamen, tekstur permukaan, dan seberapa agresif tekanan lapisan pertama. Dengan lapisan pertama 0,20 mm, rentang permukaan 0,10 mm biasanya nyaman. Rentang 0,30 mm masih bisa mencetak jika kompensasi jaring diaktifkan dan tinggi fade diatur dengan wajar, tetapi meninggalkan lebih sedikit margin. Di atas 0,50 mm, pengguna harus mencurigai masalah mekanis atau permukaan karena tempat tidur tidak lagi hanya sedikit tidak rata.',
+    },
+    {
+      type: 'comparative',
+      columns: 3,
+      items: [
+        {
+          title: 'Di bawah 0,10 mm',
+          description: 'Sangat baik untuk sebagian besar printer FDM konsumen. Penyetelan lapisan pertama sebagian besar tentang offset Z dan kebersihan permukaan.',
+          highlight: true,
+          points: ['Koreksi sekrup minimal', 'Beban kompensasi rendah', 'Pengulangan yang baik'],
+        },
+        {
+          title: '0,10 hingga 0,30 mm',
+          description: 'Umum pada mesin hobi. Kompensasi jaring dapat membantu, tetapi perataan sudut dapat meningkatkan daya rekat.',
+          points: ['Pengulangan probe penting', 'Perhatikan tepi dan sudut', 'Setel sekrup dalam langkah kecil'],
+        },
+        {
+          title: 'Di atas 0,50 mm',
+          description: 'Kemungkinan lengkungan, pergerakan kereta, tekanan plat, atau kesalahan gantry. Perataan sekrup saja mungkin tidak menyelesaikannya.',
+          points: ['Periksa perangkat keras', 'Periksa kondisi panas', 'Pertimbangkan plat baru'],
+        },
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'warning',
+      title: 'Rentang yang baik tetap bisa mencetak buruk',
+      html: 'Jika rentangnya kecil tetapi lapisan pertama gagal, periksa offset Z, ekstrusi, PEI kotor, pengulangan probe, kotoran nosel, dan apakah profil jaring benar-benar dimuat sebelum mencetak.',
+    },
+    { type: 'title', text: 'Kemiringan, Pelintiran, Cekung, dan Cembung', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Jaring tempat tidur lebih dari sekadar nilai maksimum dan minimum. Distribusinya memberi tahu Anda jenis koreksi apa yang realistis. Jika seluruh baris depan tinggi dan baris belakang rendah, tempat tidur miring secara global dari depan ke belakang. Jika sisi kiri tinggi dan sisi kanan rendah, tempat tidur miring di sumbu X. Kasus-kasus tersebut ideal untuk penyesuaian sekrup karena bidang tempat tidur fisik tidak sejajar dengan bidang gerak nosel.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Jaring terpuntir berbeda: satu pasangan diagonal tinggi sementara pasangan diagonal berlawanan rendah. Ini bisa disebabkan oleh kompresi sekrup yang tidak merata, kereta Y yang melengkung, gantry X yang tidak siku, atau plat penyangga tempat tidur yang melentur. Jaring cekung memiliki bagian tengah lebih rendah dari sudut-sudut, sedangkan jaring cembung memiliki bagian tengah lebih tinggi dari sudut-sudut. Sekrup di tepi tidak dapat sepenuhnya menghilangkan lengkungan tengah karena tidak mengontrol langsung bagian tengah plat cetak.',
+    },
+    {
+      type: 'glossary',
+      items: [
+        { term: 'Kemiringan', definition: 'Perbedaan ketinggian yang sebagian besar planar di mana satu sisi tempat tidur lebih tinggi dari sisi yang berlawanan.' },
+        { term: 'Pelintiran', definition: 'Ketidakcocokan diagonal di mana sudut yang berlawanan tidak sepakat, sering disebabkan oleh dukungan yang tidak merata atau keselarasan rangka.' },
+        { term: 'Tempat tidur cekung', definition: 'Permukaan di mana bagian tengah lebih rendah dari sudut atau tepi di sekitarnya.' },
+        { term: 'Tempat tidur cembung', definition: 'Permukaan di mana bagian tengah lebih tinggi dari sudut atau tepi di sekitarnya.' },
+        { term: 'Lengkungan', definition: 'Bentuk tidak planar yang cukup besar sehingga perataan sekrup normal tidak dapat menghilangkannya.' },
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Mengapa tonjolan tengah sulit diperbaiki dengan sekrup sudut',
+      html: 'Sekrup sudut menentukan bidang penyangga di tepi tempat tidur. Jika bagian tengah melengkung ke atas karena panas, magnet, klip, atau tekanan plat, menurunkan sudut dapat memperburuk tepi sementara bagian tengah tetap tinggi.',
+    },
+    { type: 'title', text: 'Mengonversi Kesalahan Z Menjadi Putaran Sekrup', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Konversi mekanis didasarkan pada jarak ulir. Jarak ulir adalah perjalanan vertikal yang dihasilkan oleh satu putaran penuh sekrup. Sekrup kasar M3 umum memiliki jarak 0,50 mm, M4 kasar sekitar 0,70 mm, dan M5 kasar sekitar 0,80 mm. Jika sebuah sudut perlu bergerak sebesar 0,125 mm pada sekrup M3, rotasinya adalah <code>0,125 x 360 / 0,50 = 90 derajat</code>, yaitu seperempat putaran. Ini jauh lebih mudah ditindaklanjuti daripada angka Z abstrak.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Arahnya tergantung pada mekanika printer. Banyak printer spring-bed menaikkan tempat tidur ke arah nosel ketika kenop diputar berlawanan arah jarum jam dari bawah, tetapi mesin berbeda. Analisator menggunakan gaya instruksi konvensional dan menunjukkan apakah sudut harus dinaikkan atau diturunkan. Jika arah kenop printer Anda terbalik, pertahankan koreksi milimeter dan fraksi putaran, tetapi balikkan arahnya. Alur kerja teraman adalah memindahkan satu sekrup setengah dari jumlah yang direkomendasikan, probes lagi, lalu ulangi.',
+    },
+    {
+      type: 'table',
+      headers: ['Sekrup', 'Jarak ulir kasar tipikal', 'Koreksi 0,10 mm', 'Koreksi 0,20 mm'],
+      rows: [
+        ['M3', '0,50 mm / putaran', '72 derajat', '144 derajat'],
+        ['M4', '0,70 mm / putaran', '51 derajat', '103 derajat'],
+        ['M5', '0,80 mm / putaran', '45 derajat', '90 derajat'],
+        ['Kustom', 'Nilai pengguna', '360 x 0,10 / jarak ulir', '360 x 0,20 / jarak ulir'],
+      ],
+    },
+    {
+      type: 'tip',
+      title: 'Jangan mengejar 0,02 mm terakhir secara mekanis',
+      html: 'Pengulangan probe, suhu tempat tidur, dan kompresi pegas dapat dengan mudah bergerak sebesar seperseratus milimeter. Berhentilah ketika jaring sudah dalam rentang praktis dan gunakan offset Z untuk nuansa lapisan pertama akhir.',
+    },
+    { type: 'title', text: 'Perataan Tempat Tidur Tiga Titik versus Empat Titik', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Perataan tiga titik elegan secara mekanis karena tiga titik menentukan bidang tanpa memberikan batasan berlebih. Tempat tidur tiga sekrup biasanya memiliki dua sekrup depan dan satu sekrup belakang tengah, atau tata letak segitiga serupa. Perataan empat titik umum pada banyak tempat tidur Cartesian, tetapi empat sekrup dapat saling bertentangan: mengencangkan satu sudut dapat melenturkan tempat tidur atau mengubah beban pada sudut yang berlawanan. Analisator mendukung keduanya karena set instruksi yang benar tergantung pada mesin.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Untuk tempat tidur empat titik, analisator membandingkan keempat sudut dan memberikan instruksi untuk masing-masing. Untuk tempat tidur tiga titik, ia menggunakan depan kiri, depan kanan, dan belakang tengah. Ini tidak dapat mengetahui posisi fisik yang tepat dari setiap model printer, jadi perlakukan label sebagai peta: depan adalah tepi terdekat dengan pengguna di sebagian besar tempat tidur, dan belakang adalah tepi belakang. Jika sistem koordinat Anda terbalik, rotasikan instruksi secara mental agar sesuai dengan mesin Anda sebelum menyentuh sekrup.',
+    },
+    {
+      type: 'proscons',
+      title: 'Perbandingan sistem perataan',
+      items: [
+        { pro: 'Tiga sekrup menentukan bidang yang stabil dengan lebih sedikit interaksi.', con: 'Tidak semua printer dibuat untuk pola dukungan segitiga.' },
+        { pro: 'Empat sekrup cocok dengan banyak tempat tidur printer standar dan mudah dipahami.', con: 'Mereka dapat memberikan batasan berlebih pada plat tipis dan menciptakan pelintiran.' },
+        { pro: 'Kompensasi jaring dapat menyembunyikan kesalahan kecil yang tersisa.', con: 'Tidak dapat menghilangkan mekanik longgar, plat melengkung, atau data probe buruk.' },
+      ],
+    },
+    {
+      type: 'message',
+      title: 'Urutan penyesuaian yang disarankan',
+      html: 'Perbaiki kemiringan global terlebih dahulu, kemudian pelintiran diagonal, lalu jalankan jaring baru. Hindari membuat perubahan besar pada semua sekrup sekaligus karena setiap sekrup mengubah bidang yang digunakan oleh sekrup lainnya.',
+    },
+    { type: 'title', text: 'Mengapa Kompensasi Jaring Bukan Pengganti Mekanik', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Kompensasi jaring tempat tidur menggerakkan Z saat mencetak sehingga nosel mengikuti permukaan yang diukur. Ini kuat, tetapi memiliki batas. Rentang jaring yang besar menyebabkan gerakan Z yang terlihat, dapat mempengaruhi tekanan ekstrusi pada lapisan pertama, dan dapat membuat dasar bagian sedikit berbentuk seperti tempat tidur. Jika jaring memudar selama beberapa milimeter, lapisan bawah mungkin secara bertahap bertransisi dari bentuk tempat tidur ke bentuk model nominal. Itu dapat diterima untuk koreksi kecil tetapi tidak diinginkan untuk lengkungan parah.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Mekanik yang baik mengurangi jumlah koreksi yang diperlukan. Periksa apakah roda atau rel kereta tempat tidur tidak memiliki serat, dudukan probe kaku, nosel bersih sebelum memprobes, plat cetak terpasang konsisten, dan gantry siku. Pada tempat tidur dengan pegas, pegas yang lebih kuat atau spacer silikon dapat meningkatkan pengulangan. Pada sistem PEI magnetik, kotoran di bawah lembaran dapat menciptakan titik tinggi lokal yang muncul sebagai tonjolan misterius di jaring.',
+    },
+    {
+      type: 'list',
+      items: [
+        'Bersihkan nosel sebelum memprobes jika nosel menyentuh permukaan.',
+        'Panaskan tempat tidur dan tunggu cukup lama hingga plat berhenti bergerak secara termal.',
+        'Konfirmasi bahwa jaring yang tersimpan dimuat dalam urutan mulai cetak.',
+        'Periksa klip tempat tidur, magnet, dan dudukan lembaran untuk titik tinggi lokal.',
+        'Periksa kembali kesikuan gantry ketika jaring menunjukkan pelintiran diagonal.',
+      ],
+    },
+    {
+      type: 'diagnostic',
+      variant: 'error',
+      title: 'Di atas 0,5 mm adalah investigasi perangkat keras',
+      html: 'Ketika varians total melebihi 0,5 mm, jangan terus memutar sekrup tanpa batas. Carilah plat bengkok, kereta longgar, spacer tidak merata, kesalahan offset probe, atau permukaan yang berubah bentuk saat dipanaskan.',
+    },
+    { type: 'title', text: 'Alur Kerja Praktis untuk Lapisan Pertama yang Lebih Baik', level: 2 },
+    {
+      type: 'paragraph',
+      html: 'Mulailah dengan printer yang stabil secara mekanis. Panaskan tempat tidur, tunggu, lakukan homing semua sumbu, dan jalankan jaring. Tempel data ke analisator dan baca varians total terlebih dahulu. Jika rentangnya ekstrem, berhenti dan periksa perangkat keras. Jika rentangnya sedang dan diagnosis mengatakan depan, belakang, kiri, atau kanan tinggi, terapkan rekomendasi sekrup secara bertahap. Probes kembali setelah setiap langkah. Dua langkah konservatif biasanya lebih baik dari satu langkah agresif karena kompresi pegas dan lentur tempat tidur tidak sepenuhnya linear.',
+    },
+    {
+      type: 'paragraph',
+      html: 'Setelah jaring masuk akal, berhenti menyetel sekrup dan sesuaikan lapisan pertama dengan offset Z, lebar ekstrusi, kecepatan, dan persiapan permukaan. Tempat tidur yang diratakan sempurna dengan offset Z yang salah tetap gagal. Tempat tidur yang sedikit tidak sempurna dengan lembaran PEI bersih, offset Z benar, dan kompensasi jaring aktif dapat mencetak dengan indah. Analisator dirancang untuk menjawab pertanyaan mekanis terlebih dahulu: di mana pengguna harus memutar, seberapa jauh, dan apakah memutar sekrup bahkan merupakan perbaikan yang tepat.',
+    },
+    {
+      type: 'summary',
+      title: 'Alur kerja jaring tempat tidur terbaik',
+      items: [
+        'Probes pada suhu cetak, bukan dalam keadaan dingin.',
+        'Gunakan varians total untuk memutuskan apakah jaring biasa atau berlebihan.',
+        'Klasifikasikan bentuk sebelum menyetel sekrup.',
+        'Konversi kesalahan sudut menjadi rotasi jarak ulir.',
+        'Probes ulang setelah koreksi kecil dan berhenti ketika kesalahan yang tersisa masih praktis.',
+      ],
+    },
+    {
+      type: 'card',
+      title: 'Tujuannya bukan grafik yang indah',
+      html: 'Hasil yang berguna adalah lapisan pertama yang lebih baik. Gambar jaring membantu Anda melihat permukaan, tetapi tabel sekrup adalah bagian yang mengubah pengukuran menjadi perbaikan.',
+    },
+  ],
+  faq: [
+    {
+      question: 'Bisakah saya menempelkan data jaring Marlin dan Klipper?',
+      answer: 'Ya. Parser mengekstrak nilai Z desimal dari teks multi-baris, sehingga berfungsi dengan laporan gaya G29, M420 V, dan BED_MESH_OUTPUT umum ketika kisi numerik tersedia.',
+    },
+    {
+      question: 'Berapa varians jaring tempat tidur yang dapat diterima?',
+      answer: 'Di bawah 0,10 mm sangat baik, 0,10 hingga 0,30 mm umum dan biasanya masih bisa dicetak dengan kompensasi jaring, dan di atas 0,50 mm menunjukkan masalah permukaan atau mekanis.',
+    },
+    {
+      question: 'Mengapa alat memperingatkan tentang lengkungan di atas 0,5 mm?',
+      answer: 'Pada rentang itu, perataan sekrup sering bukan lagi masalah utama. Plat cetak, kereta, probe, atau gantry mungkin melengkung, longgar, atau terdistorsi secara termal.',
+    },
+    {
+      question: 'Apakah instruksi arah sekrup berlaku untuk setiap printer?',
+      answer: 'Tidak. Milimeter dan derajat yang dihitung bersifat universal, tetapi arah kenop dapat bervariasi antar mesin. Jika tempat tidur Anda bergerak berlawanan dengan label, balikkan arahnya dan pertahankan jumlah yang sama.',
+    },
+    {
+      question: 'Apakah kompensasi jaring menggantikan perataan manual?',
+      answer: 'Tidak. Kompensasi jaring paling baik untuk kesalahan sisa kecil. Perataan mekanis menjaga koreksi tetap kecil dan meningkatkan konsistensi lapisan pertama.',
+    },
+  ],
+  bibliography,
+  howTo: [
+    { name: 'Tempel output jaring', text: 'Salin jaring tempat tidur numerik dari Marlin atau Klipper dan tempel ke dalam bidang data mentah.' },
+    { name: 'Pilih mekanik', text: 'Pilih tiga atau empat titik perataan dan jarak ulir sekrup yang digunakan printer.' },
+    { name: 'Baca diagnosis', text: 'Periksa apakah permukaan miring, terpuntir, cekung, cembung, atau melengkung berlebihan.' },
+    { name: 'Sesuaikan dengan hati-hati', text: 'Putar setiap sekrup sesuai fraksi yang direkomendasikan, lalu probes kembali sebelum melakukan langkah berikutnya.' },
+  ],
+  schemas: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Analisator Jaring Tempat Tidur Printer 3D',
+      description: 'Analisis data jaring tempat tidur Marlin dan Klipper dan konversi kesalahan sudut Z menjadi instruksi putaran sekrup perata.',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Semua',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Berapa varians jaring tempat tidur yang dapat diterima?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Di bawah 0,10 mm sangat baik, 0,10 hingga 0,30 mm umum dan biasanya masih bisa dicetak dengan kompensasi jaring, dan di atas 0,50 mm menunjukkan masalah permukaan atau mekanis.',
+          },
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Cara menganalisis jaring tempat tidur printer 3D',
+      step: [
+        { '@type': 'HowToStep', text: 'Tempel data jaring Marlin atau Klipper mentah.' },
+        { '@type': 'HowToStep', text: 'Pilih jumlah titik perataan dan jarak ulir sekrup.' },
+        { '@type': 'HowToStep', text: 'Baca varians, diagnosis, dan peta panas.' },
+        { '@type': 'HowToStep', text: 'Terapkan instruksi putaran sekrup dan probes kembali.' },
+      ],
+    },
+  ],
+};
