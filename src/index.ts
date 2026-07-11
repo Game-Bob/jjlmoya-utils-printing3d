@@ -50,3 +50,5 @@ export { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOpti
 export { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator/index';
 
 export { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator/index';
+
+export { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator/index';

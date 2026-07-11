@@ -16,6 +16,7 @@ export { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEs
 export { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 export { printDurationEstimator } from './tool/printDurationEstimator/entry';
 export { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
+export { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -36,6 +37,7 @@ import { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEs
 import { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 import { printDurationEstimator } from './tool/printDurationEstimator/entry';
 import { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
+import { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -56,4 +58,5 @@ export const ALL_ENTRIES = [
   printTimeWorkflowOptimizer,
   printDurationEstimator,
   resinRealCostCalculator,
+  retractionStringingCalibrator,
 ];

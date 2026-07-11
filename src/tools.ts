@@ -18,6 +18,7 @@ import { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisSt
 import { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOptimizer';
 import { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator';
 import { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator';
+import { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -38,4 +39,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL,
   PRINT_DURATION_ESTIMATOR_TOOL,
   RESIN_REAL_COST_CALCULATOR_TOOL,
+  RETRACTION_STRINGING_CALIBRATOR_TOOL,
 ];

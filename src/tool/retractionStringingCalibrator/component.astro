@@ -1,0 +1,392 @@
+---
+import type { RetractionStringingCalibratorUI } from './ui';
+import './retraction-stringing-calibrator.css';
+
+interface Props {
+  ui: RetractionStringingCalibratorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="rsc-root" id="main-tool">
+  <section class="rsc-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="rsc-controls" onsubmit="return false;">
+      <div class="rsc-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-rsc-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-rsc-units="imperial">{ui.imperialLabel}</button>
+      </div>
+      <fieldset>
+        <legend>{ui.presetLabel}</legend>
+        <label>
+          <span>{ui.presetLabel}</span>
+          <select id="rsc-preset">
+            <option value="default">{ui.presetDefaultLabel}</option>
+          </select>
+        </label>
+        <button class="rsc-secondary" id="rsc-save-preset" type="button">{ui.savePresetLabel}</button>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.systemGroupLabel}</legend>
+        <label class="rsc-tip">
+          <span>{ui.extrusionSystemLabel}<small title={ui.extrusionSystemHelp}>?</small></span>
+          <select id="rsc-system">
+            <option value="direct">{ui.directLabel}</option>
+            <option value="bowden" selected>{ui.bowdenLabel}</option>
+          </select>
+        </label>
+        <label id="rsc-ptfe-row">
+          <span>{ui.ptfeTubeLengthLabel}</span>
+          <b><input id="rsc-ptfe" type="number" min="150" step="10" value="650" /><em id="rsc-length-unit-a">{ui.mmUnit}</em></b>
+        </label>
+        <p class="rsc-inline-warning" id="rsc-tube-warning" hidden>{ui.tubeLengthWarning}</p>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.hotendGroupLabel}</legend>
+        <label>
+          <span>{ui.nozzleDiameterLabel}</span>
+          <b><input id="rsc-nozzle" type="number" min="0.2" step="0.05" value="0.4" /><em id="rsc-length-unit-b">{ui.mmUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.printTemperatureLabel}</span>
+          <b><input id="rsc-temp" type="number" min="150" step="1" value="210" /><em id="rsc-temp-unit">{ui.tempMetricUnit}</em></b>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.materialGroupLabel}</legend>
+        <label>
+          <span>{ui.materialLabel}</span>
+          <select id="rsc-material">
+            <option value="pla" selected>{ui.plaLabel}</option>
+            <option value="petg">{ui.petgLabel}</option>
+            <option value="tpu">{ui.tpuLabel}</option>
+            <option value="abs">{ui.absLabel}</option>
+            <option value="nylon">{ui.nylonLabel}</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>{ui.tuningGroupLabel}</legend>
+        <label class="rsc-range">
+          <span>{ui.stringingSeverityLabel}</span>
+          <output id="rsc-severity-out">5</output>
+          <input id="rsc-severity" type="range" min="0" max="10" step="1" value="5" />
+          <i>{ui.severityLowLabel}</i><i>{ui.severityHighLabel}</i>
+        </label>
+      </fieldset>
+    </form>
+
+    <div class="rsc-results" aria-label={ui.resultsAriaLabel}>
+      <div class="rsc-gauge">
+        <span>{ui.suggestedDistanceLabel}</span>
+        <b><output id="rsc-distance">0</output><small id="rsc-length-unit-c">{ui.mmUnit}</small></b>
+        <i><em id="rsc-pressure-bar"></em></i>
+      </div>
+      <div class="rsc-curve" aria-label={ui.probabilityLabel}>
+        <span>{ui.probabilityLabel}</span>
+        <div class="rsc-curve-track">
+          <i id="rsc-safe-band"></i>
+          <em id="rsc-optimum"></em>
+        </div>
+        <div class="rsc-curve-labels">
+          <small id="rsc-curve-min">0</small>
+          <small id="rsc-curve-mid">0</small>
+          <small id="rsc-curve-max">0</small>
+        </div>
+      </div>
+      <div class="rsc-metrics">
+        <article><span>{ui.testRangeLabel}</span><b><output id="rsc-distance-range">0</output></b></article>
+        <article><span>{ui.speedRangeLabel}</span><b><output id="rsc-speed-range">0</output></b></article>
+        <article><span>{ui.safetyLimitLabel}</span><b><output id="rsc-safety">0</output></b></article>
+        <article class="rsc-tip"><span>{ui.heatCreepLabel}<small title={ui.heatCreepHelp}>?</small></span><b id="rsc-risk">{ui.lowRiskLabel}</b></article>
+      </div>
+      <aside class="rsc-plan">
+        <span><i aria-hidden="true">!</i>{ui.planLabel}</span>
+        <b id="rsc-rec">{ui.recBalanced}</b>
+        <p id="rsc-warning" hidden>{ui.heatCreepWarning}</p>
+        <p id="rsc-humidity" hidden>{ui.humidityDiagnostic}</p>
+        <button class="rsc-download" id="rsc-download" type="button">{ui.downloadGcodeLabel}</button>
+      </aside>
+      <div class="rsc-guide">
+        <span>{ui.calibrationGuideLabel}</span>
+        <ol>
+          <li>{ui.guideStepOne}</li>
+          <li>{ui.guideStepTwo}</li>
+          <li>{ui.guideStepThree}</li>
+          <li>{ui.guideStepFour}</li>
+        </ol>
+      </div>
+      <table class="rsc-table" aria-label={ui.comparisonLabel}>
+        <thead><tr><th>{ui.tableSystemHeader}</th><th>{ui.tableMaterialHeader}</th><th>{ui.tableDistanceHeader}</th><th>{ui.tableSpeedHeader}</th></tr></thead>
+        <tbody>
+          <tr><td>{ui.directLabel}</td><td>{ui.plaLabel}</td><td>{ui.directPlaDistance}</td><td>{ui.directPlaSpeed}</td></tr>
+          <tr><td>{ui.bowdenLabel}</td><td>{ui.petgLabel}</td><td>{ui.bowdenPetgDistance}</td><td>{ui.bowdenPetgSpeed}</td></tr>
+          <tr><td>{ui.directLabel}</td><td>{ui.tpuLabel}</td><td>{ui.directTpuDistance}</td><td>{ui.directTpuSpeed}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <span id="rsc-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-mms={ui.mmsUnit} data-ips={ui.ipsUnit} data-temp-metric={ui.tempMetricUnit} data-temp-imperial={ui.tempImperialUnit} data-preset-default={ui.presetDefaultLabel} data-gcode-file-name={ui.gcodeFileName} data-gcode-generated-comment={ui.gcodeGeneratedComment} data-gcode-material-comment={ui.gcodeMaterialComment} data-gcode-system-comment={ui.gcodeSystemComment} data-gcode-nozzle-temperature-comment={ui.gcodeNozzleTemperatureComment} data-gcode-test-segment-comment={ui.gcodeTestSegmentComment}></span>
+    <span id="rsc-labels" hidden data-risk-low={ui.lowRiskLabel} data-risk-watch={ui.watchRiskLabel} data-risk-high={ui.highRiskLabel} data-rec-balanced={ui.recBalanced} data-rec-lower-temperature={ui.recLowerTemperature} data-rec-reduce-distance={ui.recReduceDistance} data-rec-slow-flexible={ui.recSlowFlexible} data-rec-check-bowden={ui.recCheckBowden}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateRetractionStringing, type ExtrusionSystem, type FilamentMaterial } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class RetractionStringingTool {
+    private readonly storageKey = 'jjlmoya-printing3d-retraction-presets-v1';
+    private units: UnitSystem = 'metric';
+    private lastResult: ReturnType<typeof calculateRetractionStringing> | null = null;
+
+    constructor() {
+      this.loadPresets();
+      this.bind();
+      this.updateVisibility();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private select(id: string) { return document.getElementById(id) as HTMLSelectElement; }
+    private numberValue(id: string) { return parseFloat(this.input(id).value) || 0; }
+    private labels() { return (document.getElementById('rsc-labels') as HTMLElement).dataset; }
+    private data() { return (document.getElementById('rsc-data') as HTMLElement).dataset; }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-rsc-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.rscUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      ['rsc-ptfe', 'rsc-nozzle', 'rsc-temp', 'rsc-severity'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      ['rsc-system', 'rsc-material'].forEach((id) => this.select(id)?.addEventListener('input', () => {
+        this.updateVisibility();
+        this.update();
+      }));
+      this.select('rsc-preset')?.addEventListener('input', () => this.applyPreset());
+      this.input('rsc-save-preset')?.addEventListener('click', () => this.savePreset());
+      this.input('rsc-download')?.addEventListener('click', () => this.downloadGcode());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const ptfeMm = this.lengthMm('rsc-ptfe');
+      const nozzleMm = this.lengthMm('rsc-nozzle');
+      const tempC = this.tempC();
+      this.units = units;
+      this.input('rsc-ptfe').value = this.formatLength(ptfeMm, ptfeMm > 10);
+      this.input('rsc-nozzle').value = this.formatLength(nozzleMm, false);
+      this.input('rsc-temp').value = this.units === 'metric' ? tempC.toFixed(0) : ((tempC * 9 / 5) + 32).toFixed(0);
+      this.syncUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      const lengthUnit = this.units === 'metric' ? this.data().mm || '' : this.data().inch || '';
+      this.text('rsc-length-unit-a', lengthUnit);
+      this.text('rsc-length-unit-b', lengthUnit);
+      this.text('rsc-length-unit-c', lengthUnit);
+      this.text('rsc-temp-unit', this.units === 'metric' ? this.data().tempMetric || '' : this.data().tempImperial || '');
+      document.querySelectorAll('[data-rsc-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.rscUnits === this.units));
+    }
+
+    private lengthMm(id: string) {
+      const raw = this.numberValue(id);
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private formatLength(mm: number, coarse: boolean) {
+      if (this.units === 'metric') return coarse ? mm.toFixed(0) : mm.toFixed(2);
+      const inches = mm / 25.4;
+      return coarse ? inches.toFixed(1) : inches.toFixed(3);
+    }
+
+    private tempC() {
+      const raw = this.numberValue('rsc-temp');
+      return this.units === 'metric' ? raw : (raw - 32) * 5 / 9;
+    }
+
+    private speed(valueMms: number) {
+      return this.units === 'metric' ? `${valueMms.toFixed(0)} ${this.data().mms || ''}` : `${(valueMms / 25.4).toFixed(2)} ${this.data().ips || ''}`;
+    }
+
+    private updateVisibility() {
+      const isBowden = this.select('rsc-system').value === 'bowden';
+      document.getElementById('rsc-ptfe-row')?.toggleAttribute('hidden', !isBowden);
+      document.querySelector('.rsc-root')?.setAttribute('data-system', isBowden ? 'bowden' : 'direct');
+    }
+
+    private currentParams() {
+      return {
+        extrusionSystem: this.select('rsc-system').value as ExtrusionSystem,
+        material: this.select('rsc-material').value as FilamentMaterial,
+        ptfeTubeLengthMm: this.lengthMm('rsc-ptfe'),
+        nozzleDiameterMm: this.lengthMm('rsc-nozzle'),
+        printTemperatureC: this.tempC(),
+        stringingSeverity: this.numberValue('rsc-severity'),
+      };
+    }
+
+    private update() {
+      this.syncUnits();
+      const params = this.currentParams();
+      const result = calculateRetractionStringing(params);
+      this.lastResult = result;
+      this.renderResult(result, params);
+    }
+
+    private renderResult(result: ReturnType<typeof calculateRetractionStringing>, params: ReturnType<RetractionStringingTool['currentParams']>) {
+      this.text('rsc-distance', this.formatLength(result.suggestedDistanceMm, false));
+      this.renderRanges(result);
+      this.renderLabels(result);
+      this.updateCurve(result);
+      this.updateStateBlocks(result, params);
+    }
+
+    private renderRanges(result: ReturnType<typeof calculateRetractionStringing>) {
+      this.text('rsc-distance-range', `${this.formatLength(result.testMinDistanceMm, false)} - ${this.formatLength(result.testMaxDistanceMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`);
+      this.text('rsc-speed-range', `${this.speed(result.testMinSpeedMms)} - ${this.speed(result.testMaxSpeedMms)}`);
+      this.text('rsc-safety', `${this.formatLength(result.safetyLimitMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`);
+    }
+
+    private renderLabels(result: ReturnType<typeof calculateRetractionStringing>) {
+      this.text('rsc-risk', this.labels()[`risk${result.heatCreepRisk.charAt(0).toUpperCase()}${result.heatCreepRisk.slice(1)}`] || result.heatCreepRisk);
+      this.text('rsc-rec', this.labels()[`rec${result.recommendationKey.charAt(0).toUpperCase()}${result.recommendationKey.slice(1)}`] || result.recommendationKey);
+      this.text('rsc-severity-out', this.input('rsc-severity').value);
+    }
+
+    private updateStateBlocks(result: ReturnType<typeof calculateRetractionStringing>, params: ReturnType<RetractionStringingTool['currentParams']>) {
+      const bar = document.getElementById('rsc-pressure-bar') as HTMLElement;
+      if (bar) bar.style.width = `${result.pressureScore}%`;
+      document.querySelector('.rsc-root')?.setAttribute('data-risk', result.heatCreepRisk);
+      document.getElementById('rsc-warning')?.toggleAttribute('hidden', result.heatCreepRisk !== 'high');
+      document.getElementById('rsc-humidity')?.toggleAttribute('hidden', !this.shouldShowHumidityHint(params));
+      document.getElementById('rsc-tube-warning')?.toggleAttribute('hidden', !(params.extrusionSystem === 'bowden' && params.ptfeTubeLengthMm > 900));
+    }
+
+    private updateCurve(result: ReturnType<typeof calculateRetractionStringing>) {
+      const safeBand = document.getElementById('rsc-safe-band') as HTMLElement;
+      const optimum = document.getElementById('rsc-optimum') as HTMLElement;
+      const minPct = Math.max(0, (result.testMinDistanceMm / result.safetyLimitMm) * 100);
+      const maxPct = Math.min(100, (result.testMaxDistanceMm / result.safetyLimitMm) * 100);
+      const midPct = Math.min(100, (result.suggestedDistanceMm / result.safetyLimitMm) * 100);
+      if (safeBand) {
+        safeBand.style.left = `${minPct}%`;
+        safeBand.style.width = `${Math.max(8, maxPct - minPct)}%`;
+      }
+      if (optimum) optimum.style.left = `${midPct}%`;
+      this.text('rsc-curve-min', `${this.formatLength(result.testMinDistanceMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`);
+      this.text('rsc-curve-mid', `${this.formatLength(result.suggestedDistanceMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`);
+      this.text('rsc-curve-max', `${this.formatLength(result.testMaxDistanceMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`);
+    }
+
+    private shouldShowHumidityHint(params: ReturnType<RetractionStringingTool['currentParams']>) {
+      return params.stringingSeverity >= 8 && params.printTemperatureC >= 230 && ['petg', 'tpu', 'nylon'].includes(params.material);
+    }
+
+    private storedPresets(): Record<string, ReturnType<RetractionStringingTool['currentParams']>> {
+      try {
+        return JSON.parse(window.localStorage?.getItem(this.storageKey) || '{}') as Record<string, ReturnType<RetractionStringingTool['currentParams']>>;
+      } catch {
+        return {};
+      }
+    }
+
+    private loadPresets() {
+      const select = document.getElementById('rsc-preset') as HTMLSelectElement | null;
+      if (!select) return;
+      const presets = this.storedPresets();
+      Object.keys(presets).forEach((name) => select.add(new Option(name, name)));
+    }
+
+    private applyPreset() {
+      const name = this.select('rsc-preset').value;
+      const preset = this.storedPresets()[name];
+      if (!preset) return;
+      this.select('rsc-system').value = preset.extrusionSystem;
+      this.select('rsc-material').value = preset.material;
+      this.input('rsc-ptfe').value = this.formatLength(preset.ptfeTubeLengthMm, true);
+      this.input('rsc-nozzle').value = this.formatLength(preset.nozzleDiameterMm, false);
+      this.input('rsc-temp').value = this.units === 'metric' ? preset.printTemperatureC.toFixed(0) : ((preset.printTemperatureC * 9 / 5) + 32).toFixed(0);
+      this.input('rsc-severity').value = String(preset.stringingSeverity);
+      this.updateVisibility();
+      this.update();
+    }
+
+    private savePreset() {
+      const params = this.currentParams();
+      const material = this.select('rsc-material').selectedOptions[0]?.textContent || params.material;
+      const name = `${this.select('rsc-system').value} ${material} ${this.formatLength(params.nozzleDiameterMm, false)} ${this.units === 'metric' ? this.data().mm : this.data().inch}`;
+      const presets = this.storedPresets();
+      presets[name] = params;
+      window.localStorage?.setItem(this.storageKey, JSON.stringify(presets));
+      const select = this.select('rsc-preset');
+      if (!Array.from(select.options).some((option) => option.value === name)) select.add(new Option(name, name));
+      select.value = name;
+    }
+
+    private downloadGcode() {
+      if (!this.lastResult) return;
+      const lines = this.buildGcodeLines(this.currentParams(), this.lastResult);
+      const blob = new Blob([`${lines.join('\n')}\n`], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      this.downloadBlob(url);
+      URL.revokeObjectURL(url);
+    }
+
+    private buildGcodeLines(params: ReturnType<RetractionStringingTool['currentParams']>, result: ReturnType<typeof calculateRetractionStringing>) {
+      const lines = this.gcodeHeader(params);
+      this.appendGcodeSegments(lines, result);
+      lines.push('M104 S0', 'M140 S0', 'G1 X0 Y200 F6000', 'M84');
+      return lines;
+    }
+
+    private gcodeHeader(params: ReturnType<RetractionStringingTool['currentParams']>) {
+      return [
+        `; ${this.data().gcodeGeneratedComment || ''}`,
+        `; ${this.data().gcodeMaterialComment}: ${params.material}`,
+        `; ${this.data().gcodeSystemComment}: ${params.extrusionSystem}`,
+        `; ${this.data().gcodeNozzleTemperatureComment}: ${params.printTemperatureC.toFixed(0)} C`,
+        'G21',
+        'G90',
+        'M82',
+        `M104 S${params.printTemperatureC.toFixed(0)}`,
+        `M109 S${params.printTemperatureC.toFixed(0)}`,
+        'G28',
+        'G1 Z0.28 F900',
+        'G1 X20 Y20 F6000',
+      ];
+    }
+
+    private appendGcodeSegments(lines: string[], result: ReturnType<typeof calculateRetractionStringing>) {
+      const distances = [result.testMinDistanceMm, result.suggestedDistanceMm, result.testMaxDistanceMm];
+      distances.forEach((distance, index) => this.appendGcodeSegment(lines, distance, index, result));
+    }
+
+    private appendGcodeSegment(lines: string[], distance: number, index: number, result: ReturnType<typeof calculateRetractionStringing>) {
+      const x = 25 + index * 35;
+      lines.push(`; ${this.data().gcodeTestSegmentComment} ${index + 1}: ${distance.toFixed(2)} mm retraction`);
+      lines.push(`M207 S${distance.toFixed(2)} F${result.suggestedSpeedMms * 60}`);
+      lines.push(`G1 X${x} Y30 E${2 + index} F900`);
+      lines.push('G10');
+      lines.push(`G1 X${x} Y90 F${result.travelSpeedMms * 60}`);
+      lines.push('G11');
+    }
+
+    private downloadBlob(url: string) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = this.data().gcodeFileName || '';
+      link.click();
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+  }
+
+  const initRetractionStringingTool = () => new RetractionStringingTool();
+  document.addEventListener('astro:page-load', initRetractionStringingTool);
+  initRetractionStringingTool();
+</script>
