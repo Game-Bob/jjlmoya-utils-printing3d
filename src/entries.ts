@@ -21,6 +21,7 @@ export { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/en
 export { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
 export { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 export { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
+export { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -46,6 +47,7 @@ import { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/en
 import { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
 import { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 import { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
+import { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -71,4 +73,5 @@ export const ALL_ENTRIES = [
   bedMeshAnalyzer,
   bridgingOptimizer,
   bulkFilamentRoiEstimator,
+  wallPerimeterOptimizer,
 ];

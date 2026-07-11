@@ -60,3 +60,5 @@ export { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer/index';
 export { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer/index';
 
 export { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimator/index';
+
+export { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer/index';

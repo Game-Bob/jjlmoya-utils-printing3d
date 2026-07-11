@@ -1,0 +1,249 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { WallPerimeterOptimizerUI } from './ui';
+import './wall-perimeter-optimizer.css';
+
+interface Props {
+  ui: WallPerimeterOptimizerUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="wpo-root" id="main-tool">
+  <section class="wpo-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="wpo-controls" onsubmit="return false;">
+      <div class="wpo-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-wpo-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-wpo-units="imperial">{ui.imperialLabel}</button>
+      </div>
+
+      <label>
+        <span class="wpo-field-label"><span>{ui.nozzleLabel}</span><button type="button" class="wpo-help" aria-label={ui.tooltipLabel} data-tooltip={ui.nozzleHelp}><Icon name="mdi:help-circle-outline" size={12} /></button></span>
+        <b><input id="wpo-nozzle" type="number" min="0.1" max="1.2" step="0.01" value="0.4" /><em id="wpo-nozzle-unit">{ui.mmUnit}</em></b>
+      </label>
+
+      <div class="wpo-nozzles" aria-label={ui.commonNozzlesLabel}>
+        {[0.2, 0.4, 0.6, 0.8].map((value) => <button type="button" data-wpo-nozzle={value}>{value.toFixed(1)}</button>)}
+      </div>
+
+      <label>
+        <span class="wpo-field-label"><span>{ui.lineWidthLabel}</span><button type="button" class="wpo-help" aria-label={ui.tooltipLabel} data-tooltip={ui.lineWidthHelp}><Icon name="mdi:help-circle-outline" size={12} /></button></span>
+        <b><input id="wpo-line" type="number" min="0.32" max="0.48" step="0.01" value="0.42" /><em id="wpo-line-unit">{ui.mmUnit}</em></b>
+      </label>
+
+      <label>
+        <span class="wpo-field-label"><span>{ui.cadThicknessLabel}</span><button type="button" class="wpo-help" aria-label={ui.tooltipLabel} data-tooltip={ui.cadThicknessHelp}><Icon name="mdi:help-circle-outline" size={12} /></button></span>
+        <b><input id="wpo-cad" type="number" min="0.05" max="80" step="0.01" value="1.2" /><em id="wpo-cad-unit">{ui.mmUnit}</em></b>
+      </label>
+
+      <div class="wpo-range">
+        <span>{ui.safeRangeLabel}</span>
+        <output id="wpo-safe-range"></output>
+      </div>
+
+      <div class="wpo-strategy">
+        <span class="wpo-field-label"><span>{ui.infillStrategyLabel}</span><button type="button" class="wpo-help" aria-label={ui.tooltipLabel} data-tooltip={ui.solidInfillTip}><Icon name="mdi:help-circle-outline" size={12} /></button></span>
+        <div role="group" aria-label={ui.infillStrategyLabel}>
+          <button type="button" class="active" data-wpo-strategy="perimeters">{ui.perimeterFirstLabel}</button>
+          <button type="button" data-wpo-strategy="solid">{ui.solidInfillFallbackLabel}</button>
+        </div>
+        <p id="wpo-strategy-tip" hidden>{ui.solidInfillTip}</p>
+      </div>
+    </form>
+
+    <div class="wpo-results" aria-label={ui.resultsAriaLabel}>
+      <div class="wpo-visual-card">
+        <svg class="wpo-wall" viewBox="0 0 520 230" role="img" aria-label={ui.visualLabel}>
+          <rect class="wpo-cad-envelope" x="40" y="58" width="440" height="96" rx="4" />
+          <line class="wpo-center" x1="40" y1="106" x2="480" y2="106" />
+          <g id="wpo-lines"></g>
+          <text class="wpo-cad-label" x="260" y="186" text-anchor="middle">{ui.cadEnvelopeLabel}</text>
+        </svg>
+        <div class="wpo-verdict" data-verdict-box>
+          <div class="wpo-verdict-header">
+            <span class="wpo-verdict-icon exact"><Icon name="mdi:check-circle-outline" size={24} /></span>
+            <span class="wpo-verdict-icon adjust"><Icon name="mdi:alert-circle-outline" size={24} /></span>
+            <span class="wpo-verdict-icon impossible"><Icon name="mdi:alert-octagon-outline" size={24} /></span>
+            <div>
+              <span>{ui.verdictLabel}</span>
+              <b id="wpo-verdict-label">{ui.exactLabel}</b>
+            </div>
+          </div>
+          <p id="wpo-message">{ui.messageExact}</p>
+        </div>
+      </div>
+
+      <div class="wpo-metrics">
+        <article><span>{ui.recommendedPerimetersLabel}</span><b id="wpo-perimeters"></b></article>
+        <article><span>{ui.realThicknessLabel}</span><b><output id="wpo-real"></output><small id="wpo-real-unit">{ui.mmUnit}</small></b></article>
+        <article><span>{ui.residualLabel}</span><b><output id="wpo-residual"></output><small id="wpo-residual-unit">{ui.mmUnit}</small></b></article>
+        <article class="wpo-adjust"><span>{ui.adjustedWidthLabel}</span><b><output id="wpo-adjusted"></output><small id="wpo-adjusted-unit">{ui.mmUnit}</small></b></article>
+      </div>
+
+      <div class="wpo-copy">
+        <span>{ui.slicerBlockLabel}</span>
+        <pre id="wpo-copy-text"></pre>
+        <button type="button" id="wpo-copy-button"><Icon name="mdi:content-copy" size={18} /> {ui.copyLabel}</button>
+        <p id="wpo-copied" hidden>{ui.copiedLabel}</p>
+      </div>
+
+      <div class="wpo-table-wrap">
+        <span>{ui.compareLabel}</span>
+        <table>
+          <thead>
+            <tr><th>{ui.perimetersColumn}</th><th>{ui.lineWidthColumn}</th><th>{ui.realThicknessColumn}</th><th>{ui.errorColumn}</th></tr>
+          </thead>
+          <tbody id="wpo-candidates"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <span id="wpo-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit}></span>
+    <span id="wpo-labels" hidden data-exact={ui.exactLabel} data-adjust={ui.adjustLabel} data-impossible={ui.impossibleLabel} data-message-exact={ui.messageExact} data-message-adjust={ui.messageAdjust} data-message-too-thin={ui.messageTooThin} data-message-outside-range={ui.messageOutsideRange} data-slicer={ui.slicerBlockLabel} data-perimeters={ui.perimetersUnitLabel} data-line={ui.lineWidthLabel} data-solid-note={ui.copySolidInfillNote} data-no-adjustment={ui.noAdjustmentLabel}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateWallPerimeterOptimizer } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class WallPerimeterOptimizerTool {
+    private units: UnitSystem = 'metric';
+    private strategy: 'perimeters' | 'solid' = 'perimeters';
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private data() { return (document.getElementById('wpo-data') as HTMLElement).dataset; }
+    private labels() { return (document.getElementById('wpo-labels') as HTMLElement).dataset; }
+    private numberValue(id: string) { return parseFloat(this.input(id).value) || 0; }
+    private toMm(value: number) { return this.units === 'metric' ? value : value * 25.4; }
+    private fromMm(mm: number, digits = 2) { return this.units === 'metric' ? mm.toFixed(digits) : (mm / 25.4).toFixed(digits + 1); }
+    private unit() { return this.units === 'metric' ? this.data().mm || '' : this.data().inch || ''; }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-wpo-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.wpoUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      document.querySelectorAll<HTMLButtonElement>('[data-wpo-nozzle]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const mm = parseFloat(button.dataset.wpoNozzle || '0.4');
+          this.input('wpo-nozzle').value = this.fromMm(mm, 2);
+          this.input('wpo-line').value = this.fromMm(mm * 1.05, 2);
+          this.update();
+        });
+      });
+      document.querySelectorAll<HTMLElement>('[data-wpo-strategy]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.strategy = button.dataset.wpoStrategy === 'solid' ? 'solid' : 'perimeters';
+          this.update();
+        });
+      });
+      ['wpo-nozzle', 'wpo-line', 'wpo-cad'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      this.input('wpo-copy-button')?.addEventListener('click', () => this.copySettings());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const nozzle = this.toMm(this.numberValue('wpo-nozzle'));
+      const line = this.toMm(this.numberValue('wpo-line'));
+      const cad = this.toMm(this.numberValue('wpo-cad'));
+      this.units = units;
+      this.input('wpo-nozzle').value = this.fromMm(nozzle, 2);
+      this.input('wpo-line').value = this.fromMm(line, 2);
+      this.input('wpo-cad').value = this.fromMm(cad, 2);
+      this.update();
+    }
+
+    private params() {
+      return {
+        nozzleDiameterMm: this.toMm(this.numberValue('wpo-nozzle')),
+        lineWidthMm: this.toMm(this.numberValue('wpo-line')),
+        cadWallThicknessMm: this.toMm(this.numberValue('wpo-cad')),
+      };
+    }
+
+    private update() {
+      const params = this.params();
+      const result = calculateWallPerimeterOptimizer(params);
+      this.syncLineLimits(result.safeMinLineWidthMm, result.safeMaxLineWidthMm);
+      const effectiveLine = result.adjustedLineWidthMm || result.lineWidthMm;
+      this.text('wpo-perimeters', String(result.perimeters));
+      this.text('wpo-real', this.fromMm(result.adjustedRealThicknessMm || result.realThicknessMm, 2));
+      this.text('wpo-residual', this.fromMm(result.adjustedResidualMm ?? result.residualMm, 2));
+      this.text('wpo-adjusted', result.adjustedLineWidthMm ? this.fromMm(result.adjustedLineWidthMm, 2) : this.labels().noAdjustment || '');
+      this.renderVerdict(result.verdict, result.messageKey);
+      this.renderVisual(result.perimeters, effectiveLine, params.cadWallThicknessMm);
+      this.renderCandidates(result.candidates);
+      this.renderCopy(result.perimeters, effectiveLine);
+      this.syncUnits();
+    }
+
+    private syncLineLimits(minMm: number, maxMm: number) {
+      const min = this.units === 'metric' ? minMm : minMm / 25.4;
+      const max = this.units === 'metric' ? maxMm : maxMm / 25.4;
+      this.input('wpo-line').min = min.toFixed(3);
+      this.input('wpo-line').max = max.toFixed(3);
+      this.text('wpo-safe-range', `${this.fromMm(minMm, 2)}-${this.fromMm(maxMm, 2)} ${this.unit()}`);
+    }
+
+    private syncUnits() {
+      ['wpo-nozzle-unit', 'wpo-line-unit', 'wpo-cad-unit', 'wpo-real-unit', 'wpo-residual-unit', 'wpo-adjusted-unit'].forEach((id) => this.text(id, this.unit()));
+      document.querySelectorAll('[data-wpo-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.wpoUnits === this.units));
+      document.querySelectorAll('[data-wpo-strategy]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.wpoStrategy === this.strategy));
+      document.getElementById('wpo-strategy-tip')?.toggleAttribute('hidden', this.strategy !== 'solid');
+    }
+
+    private renderVerdict(verdict: string, messageKey: string) {
+      document.querySelector('.wpo-root')?.setAttribute('data-verdict', verdict);
+      this.text('wpo-verdict-label', this.labels()[verdict] || verdict);
+      const key = `message${messageKey.charAt(0).toUpperCase()}${messageKey.slice(1)}`;
+      this.text('wpo-message', this.labels()[key] || '');
+    }
+
+    private renderVisual(perimeters: number, lineWidthMm: number, cadMm: number) {
+      const group = document.getElementById('wpo-lines');
+      if (!group) return;
+      const scale = 440 / Math.max(cadMm, lineWidthMm * perimeters);
+      const lineWidthPx = Math.max(14, lineWidthMm * scale);
+      const totalPx = lineWidthPx * perimeters;
+      const start = 260 - totalPx / 2;
+      group.innerHTML = Array.from({ length: perimeters }, (_, index) => {
+        const x = start + index * lineWidthPx;
+        return `<rect class="wpo-line" x="${x.toFixed(2)}" y="69" width="${Math.max(8, lineWidthPx - 3).toFixed(2)}" height="74" rx="6"></rect>`;
+      }).join('');
+    }
+
+    private renderCandidates(candidates: ReturnType<typeof calculateWallPerimeterOptimizer>['candidates']) {
+      const body = document.getElementById('wpo-candidates');
+      if (!body) return;
+      body.innerHTML = candidates.map((candidate) => `<tr><td>${candidate.perimeters}</td><td>${this.fromMm(candidate.lineWidthMm, 2)}</td><td>${this.fromMm(candidate.realThicknessMm, 2)}</td><td>${this.fromMm(candidate.residualMm, 2)}</td></tr>`).join('');
+    }
+
+    private renderCopy(perimeters: number, lineWidthMm: number) {
+      const lines = [`${this.labels().slicer}: ${perimeters} ${this.labels().perimeters}, ${this.labels().line} ${this.fromMm(lineWidthMm, 2)} ${this.unit()}`];
+      if (this.strategy === 'solid') lines.push(this.labels().solidNote || '');
+      const text = lines.join('\n');
+      this.text('wpo-copy-text', text);
+    }
+
+    private async copySettings() {
+      await navigator.clipboard?.writeText(document.getElementById('wpo-copy-text')?.textContent || '');
+      document.getElementById('wpo-copied')?.removeAttribute('hidden');
+    }
+
+    private text(id: string, value: string) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
+  }
+
+  const initWallPerimeterOptimizerTool = () => new WallPerimeterOptimizerTool();
+  document.addEventListener('astro:page-load', initWallPerimeterOptimizerTool);
+  initWallPerimeterOptimizerTool();
+</script>
