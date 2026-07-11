@@ -1,0 +1,409 @@
+---
+import type { BulkFilamentRoiEstimatorUI } from './ui';
+import './bulk-filament-roi-estimator.css';
+
+interface Props {
+  ui: BulkFilamentRoiEstimatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="bfroi-root"
+  data-label-profitable={ui.profitableLabel}
+  data-label-neutral={ui.neutralLabel}
+  data-label-poor={ui.poorLabel}
+  data-label-warning-title={ui.humidityWarningTitle}
+  data-label-warning-text={ui.humidityWarning}
+  data-label-safe-text={ui.safeMessage}
+  data-label-months-unit={ui.monthsUnit}
+  data-label-kg-unit={ui.kgUnit}
+  data-label-lb-unit={ui.lbUnit}
+  data-label-cost-gram={ui.costPerGramMetric}
+  data-label-cost-ounce={ui.costPerOunceMetric}
+  data-label-standard-metric={ui.tableStandardLabel}
+  data-label-standard-imperial={ui.tableStandardImperialLabel}
+  data-label-other-weight={ui.otherWeightLabel}
+>
+  <div class="bfroi-controls">
+    <section class="bfroi-section bfroi-money">
+      <div class="bfroi-field">
+        <span>{ui.currencyLabel}</span>
+        <div class="bfroi-menu" data-menu="currency">
+          <button type="button" class="bfroi-menu-button" id="bfroi-currency-button" aria-haspopup="listbox" aria-expanded="false" data-value="EUR">€</button>
+          <div class="bfroi-menu-list" role="listbox">
+            <button type="button" role="option" data-value="EUR" data-label="€">€</button>
+            <button type="button" role="option" data-value="USD" data-label="$">$</button>
+            <button type="button" role="option" data-value="GBP" data-label="£">£</button>
+            <button type="button" role="option" data-value="JPY" data-label="¥">¥</button>
+            <button type="button" role="option" data-value="CAD" data-label="C$">C$</button>
+            <button type="button" role="option" data-value="AUD" data-label="A$">A$</button>
+            <button type="button" role="option" data-value="CHF" data-label="CHF">CHF</button>
+            <button type="button" role="option" data-value="MXN" data-label="MX$">MX$</button>
+            <button type="button" role="option" data-value="BRL" data-label="R$">R$</button>
+          </div>
+        </div>
+      </div>
+      <div class="bfroi-field">
+        <span>{ui.unitSystemLabel}</span>
+        <div class="bfroi-segment" id="bfroi-unit-system" role="group" aria-label={ui.unitSystemLabel}>
+          <button type="button" data-unit-system="metric" aria-pressed="true">{ui.metricLabel}</button>
+          <button type="button" data-unit-system="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bfroi-section">
+      <h3>{ui.standardTitle}</h3>
+      <label class="bfroi-field">
+        <span>{ui.standardWeightLabel}</span>
+        <div class="bfroi-input"><input id="bfroi-standard-weight" type="number" value="1" min="0.1" step="0.1" /><b data-weight-unit>{ui.kgUnit}</b></div>
+      </label>
+      <label class="bfroi-field">
+        <span>{ui.standardPriceLabel}</span>
+        <input id="bfroi-standard-price" type="number" value="24.99" min="0" step="0.01" />
+      </label>
+    </section>
+
+    <section class="bfroi-section">
+      <h3>{ui.bulkTitle}</h3>
+      <div class="bfroi-field">
+        <span>{ui.bulkWeightLabel}</span>
+        <div class="bfroi-menu" data-menu="bulk-preset">
+          <button type="button" class="bfroi-menu-button" id="bfroi-bulk-preset-button" aria-haspopup="listbox" aria-expanded="false" data-value="3">{ui.bulkPresetThreeMetricLabel}</button>
+          <div class="bfroi-menu-list" role="listbox">
+            <button type="button" role="option" data-value="3" data-label-metric={ui.bulkPresetThreeMetricLabel} data-label-imperial={ui.bulkPresetThreeImperialLabel}>{ui.bulkPresetThreeMetricLabel}</button>
+            <button type="button" role="option" data-value="5" data-label-metric={ui.bulkPresetFiveMetricLabel} data-label-imperial={ui.bulkPresetFiveImperialLabel}>{ui.bulkPresetFiveMetricLabel}</button>
+            <button type="button" role="option" data-value="custom" data-label-metric={ui.otherWeightLabel} data-label-imperial={ui.otherWeightLabel}>{ui.otherWeightLabel}</button>
+          </div>
+        </div>
+      </div>
+      <label class="bfroi-field" id="bfroi-custom-wrap" hidden>
+        <span>{ui.customWeightLabel}</span>
+        <div class="bfroi-input"><input id="bfroi-bulk-weight" type="number" value="3" min="0.5" step="0.1" /><b data-weight-unit>{ui.kgUnit}</b></div>
+      </label>
+      <label class="bfroi-field">
+        <span>{ui.bulkPriceLabel}</span>
+        <input id="bfroi-bulk-price" type="number" value="59.99" min="0" step="0.01" />
+      </label>
+    </section>
+
+    <section class="bfroi-section">
+      <h3>{ui.consumptionTitle}</h3>
+      <label class="bfroi-field">
+        <span>{ui.monthlyUseLabel}</span>
+        <div class="bfroi-input"><input id="bfroi-monthly-use" type="number" value="0.8" min="0.05" step="0.05" /><b data-weight-unit>{ui.kgUnit}</b></div>
+      </label>
+      <label class="bfroi-field">
+        <span>{ui.safeStorageLabel}</span>
+        <div class="bfroi-input"><input id="bfroi-safe-months" type="number" value="3" min="0.5" step="0.5" /><b>{ui.monthsUnit}</b></div>
+      </label>
+    </section>
+  </div>
+
+  <div class="bfroi-results">
+    <section class="bfroi-hero">
+      <span>{ui.realSavingsLabel}</span>
+      <strong id="bfroi-real-savings">0</strong>
+      <div class="bfroi-meter"><i id="bfroi-meter-fill"></i></div>
+    </section>
+
+    <section class="bfroi-kpis">
+      <div><span>{ui.grossSavingsLabel}</span><b id="bfroi-gross-savings">0</b></div>
+      <div><span>{ui.riskPenaltyLabel}</span><b id="bfroi-risk-penalty">0</b></div>
+      <div><span>{ui.breakEvenLabel}</span><b id="bfroi-consumption-months">0</b></div>
+      <div><span>{ui.viabilityLabel}</span><b id="bfroi-viability">-</b></div>
+    </section>
+
+    <section class="bfroi-table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>{ui.tableMetricLabel}</th>
+            <th id="bfroi-standard-table-label">{ui.tableStandardLabel}</th>
+            <th>{ui.tableBulkLabel}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td id="bfroi-cost-unit-label">{ui.costPerGramMetric}</td><td id="bfroi-standard-cpg">0</td><td id="bfroi-bulk-cpg">0</td></tr>
+          <tr><td>{ui.totalSpoolMetric}</td><td id="bfroi-standard-total">0</td><td id="bfroi-bulk-total">0</td></tr>
+          <tr><td>{ui.usableWindowMetric}</td><td id="bfroi-standard-window">0</td><td id="bfroi-bulk-window">0</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="bfroi-warning" id="bfroi-warning">
+      <b id="bfroi-warning-title">{ui.humidityWarningTitle}</b>
+      <p id="bfroi-warning-text">{ui.humidityWarning}</p>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateBulkFilamentRoi } from './logic';
+  import type { BulkFilamentRoiParams, BulkFilamentRoiResult, CurrencyCode } from './logic';
+
+  type LabelMap = Record<string, string>;
+
+  const getDatasetLabel = (root: HTMLElement, key: string) => root.dataset[key] ?? '';
+
+  const createLabels = (root: HTMLElement): LabelMap => ({
+    profitable: getDatasetLabel(root, 'labelProfitable'),
+    neutral: getDatasetLabel(root, 'labelNeutral'),
+    poor: getDatasetLabel(root, 'labelPoor'),
+    warningTitle: getDatasetLabel(root, 'labelWarningTitle'),
+    warningText: getDatasetLabel(root, 'labelWarningText'),
+    safeText: getDatasetLabel(root, 'labelSafeText'),
+    monthsUnit: getDatasetLabel(root, 'labelMonthsUnit'),
+    kgUnit: getDatasetLabel(root, 'labelKgUnit'),
+    lbUnit: getDatasetLabel(root, 'labelLbUnit'),
+    costGram: getDatasetLabel(root, 'labelCostGram'),
+    costOunce: getDatasetLabel(root, 'labelCostOunce'),
+  });
+
+  class BulkFilamentRoiEstimator {
+    private root: HTMLElement;
+    private inputs: Record<string, HTMLInputElement> = {};
+    private outputs: Record<string, HTMLElement> = {};
+    private labels: Record<string, string>;
+    private currency: CurrencyCode = 'EUR';
+    private bulkPreset = '3';
+    private unitSystem: 'metric' | 'imperial' = 'metric';
+    private exchangeRates: Record<CurrencyCode, number> = {
+      EUR: 1,
+      USD: 1.09,
+      GBP: 0.84,
+      JPY: 171,
+      CAD: 1.49,
+      AUD: 1.65,
+      CHF: 0.96,
+      MXN: 19.6,
+      BRL: 5.95,
+    };
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.labels = createLabels(root);
+      this.bindElements();
+      this.bindEvents();
+      this.calculate();
+    }
+
+    private bindElements() {
+      const inputIds = ['standard-weight', 'standard-price', 'bulk-weight', 'bulk-price', 'monthly-use', 'safe-months'];
+      inputIds.forEach((id) => {
+        this.inputs[id] = this.root.querySelector(`#bfroi-${id}`) as HTMLInputElement;
+      });
+
+      const outputIds = ['real-savings', 'gross-savings', 'risk-penalty', 'consumption-months', 'viability', 'standard-cpg', 'bulk-cpg', 'standard-total', 'bulk-total', 'standard-window', 'bulk-window', 'meter-fill', 'warning', 'warning-title', 'warning-text', 'cost-unit-label', 'standard-table-label'];
+      outputIds.forEach((id) => {
+        this.outputs[id] = this.root.querySelector(`#bfroi-${id}`) as HTMLElement;
+      });
+    }
+
+    private bindEvents() {
+      Object.values(this.inputs).forEach((input) => input?.addEventListener('input', () => this.calculate()));
+      this.root.querySelectorAll<HTMLElement>('.bfroi-menu-button').forEach((button) => {
+        button.addEventListener('click', () => this.toggleMenu(button));
+      });
+      this.root.querySelectorAll<HTMLButtonElement>('.bfroi-menu-list button').forEach((button) => {
+        button.addEventListener('click', () => this.chooseMenuOption(button));
+      });
+      this.root.querySelectorAll<HTMLButtonElement>('[data-unit-system]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnitSystem(button.dataset.unitSystem === 'imperial' ? 'imperial' : 'metric'));
+      });
+      document.addEventListener('click', (event) => {
+        if (!this.root.contains(event.target as Node)) this.closeMenus();
+      });
+    }
+
+    private input(id: string) {
+      return this.inputs[id] as HTMLInputElement;
+    }
+
+    private output(id: string) {
+      return this.outputs[id] as HTMLElement;
+    }
+
+    private label(id: string) {
+      return this.labels[id] ?? '';
+    }
+
+    private numberValue(id: string, fallback: number) {
+      const value = parseFloat(this.input(id).value || '');
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    private toKg(value: number) {
+      return this.unitSystem === 'imperial' ? value / 2.2046226218 : value;
+    }
+
+    private toggleMenu(button: HTMLElement) {
+      const menu = button.closest('.bfroi-menu') as HTMLElement;
+      const isOpen = menu.dataset.open === 'true';
+      this.closeMenus();
+      menu.dataset.open = isOpen ? 'false' : 'true';
+      button.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    private closeMenus() {
+      this.root.querySelectorAll<HTMLElement>('.bfroi-menu').forEach((menu) => {
+        menu.dataset.open = 'false';
+        menu.querySelector('.bfroi-menu-button')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    private chooseMenuOption(option: HTMLButtonElement) {
+      const menu = option.closest('.bfroi-menu') as HTMLElement;
+      const button = menu.querySelector('.bfroi-menu-button') as HTMLButtonElement;
+      const value = option.dataset.value || '';
+      if (menu.dataset.menu === 'currency') {
+        this.setCurrency(value as CurrencyCode);
+        button.dataset.value = value;
+        button.textContent = option.dataset.label || value;
+      }
+      if (menu.dataset.menu === 'bulk-preset') {
+        this.bulkPreset = value;
+        button.dataset.value = value;
+        button.textContent = this.optionLabel(option);
+      }
+      this.closeMenus();
+      this.calculate();
+    }
+
+    private setCurrency(next: CurrencyCode) {
+      if (next === this.currency) return;
+      const rate = this.exchangeRates[next] / this.exchangeRates[this.currency];
+      ['standard-price', 'bulk-price'].forEach((id) => {
+        const converted = this.numberValue(id, 0) * rate;
+        this.input(id).value = converted.toFixed(this.currencyDecimals(next));
+      });
+      this.currency = next;
+    }
+
+    private currencyDecimals(currency: CurrencyCode) {
+      return currency === 'JPY' ? 0 : 2;
+    }
+
+    private optionLabel(option: HTMLElement) {
+      return this.unitSystem === 'imperial'
+        ? option.dataset.labelImperial || option.textContent || ''
+        : option.dataset.labelMetric || option.textContent || '';
+    }
+
+    private refreshMenuLabels() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-menu="bulk-preset"] .bfroi-menu-list button').forEach((option) => {
+        option.textContent = this.optionLabel(option);
+        if (option.dataset.value === this.bulkPreset) {
+          const button = this.root.querySelector<HTMLButtonElement>('#bfroi-bulk-preset-button');
+          if (button) button.textContent = this.optionLabel(option);
+        }
+      });
+    }
+
+    private setUnitSystem(next: 'metric' | 'imperial') {
+      if (next === this.unitSystem) return;
+      const weights = ['standard-weight', 'bulk-weight', 'monthly-use'];
+      weights.forEach((id) => {
+        const currentKg = this.toKg(this.numberValue(id, 0));
+        this.input(id).value = this.fromKgFor(currentKg, next).toFixed(next === 'imperial' ? 2 : 2).replace(/\.?0+$/, '');
+      });
+      this.unitSystem = next;
+      this.root.querySelectorAll<HTMLButtonElement>('[data-unit-system]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.unitSystem === next));
+      });
+      this.root.querySelectorAll<HTMLElement>('[data-weight-unit]').forEach((unit) => {
+        unit.textContent = next === 'imperial' ? this.label('lbUnit') : this.label('kgUnit');
+      });
+      this.refreshMenuLabels();
+      this.calculate();
+    }
+
+    private fromKgFor(value: number, system: 'metric' | 'imperial') {
+      return system === 'imperial' ? value * 2.2046226218 : value;
+    }
+
+    private activeCostLabel() {
+      return this.unitSystem === 'imperial' ? this.label('costOunce') : this.label('costGram');
+    }
+
+    private activeStandardLabel() {
+      const key = this.unitSystem === 'imperial' ? 'labelStandardImperial' : 'labelStandardMetric';
+      return this.root.dataset[key] ?? '';
+    }
+
+    private riskTitle(result: BulkFilamentRoiResult) {
+      return result.degradationRisk ? this.label('warningTitle') : this.label('neutral');
+    }
+
+    private riskText(result: BulkFilamentRoiResult) {
+      return result.degradationRisk ? this.label('warningText') : this.label('safeText');
+    }
+
+    private params(): BulkFilamentRoiParams {
+      const customWrap = this.root.querySelector('#bfroi-custom-wrap') as HTMLElement;
+      const bulkWeightKg = this.bulkPreset === 'custom' ? this.toKg(this.numberValue('bulk-weight', 3)) : parseFloat(this.bulkPreset);
+      customWrap.hidden = this.bulkPreset !== 'custom';
+
+      return {
+        currency: this.currency,
+        standardPrice: this.numberValue('standard-price', 0),
+        standardWeightKg: this.toKg(this.numberValue('standard-weight', 1)),
+        bulkPrice: this.numberValue('bulk-price', 0),
+        bulkWeightKg,
+        monthlyConsumptionKg: this.toKg(this.numberValue('monthly-use', 0.1)),
+        safeStorageMonths: this.numberValue('safe-months', 3),
+      };
+    }
+
+    private money(value: number, currency: CurrencyCode, digits = 2) {
+      return new Intl.NumberFormat('en', { style: 'currency', currency, maximumFractionDigits: digits, minimumFractionDigits: currency === 'JPY' ? 0 : undefined }).format(value);
+    }
+
+    private updateFinancialOutputs(result: BulkFilamentRoiResult, params: BulkFilamentRoiParams) {
+      const currency = params.currency;
+      this.output('real-savings').textContent = this.money(result.realSavings, currency);
+      this.output('gross-savings').textContent = this.money(result.grossSavings, currency);
+      this.output('risk-penalty').textContent = this.money(result.riskPenalty, currency);
+      this.output('standard-total').textContent = this.money(params.standardPrice, currency);
+      this.output('bulk-total').textContent = this.money(params.bulkPrice, currency);
+    }
+
+    private updateTableOutputs(result: BulkFilamentRoiResult, params: BulkFilamentRoiParams) {
+      const currency = params.currency;
+      const unitCostFactor = this.unitSystem === 'imperial' ? 28.349523125 : 1;
+      this.output('cost-unit-label').textContent = this.activeCostLabel();
+      this.output('standard-table-label').textContent = this.activeStandardLabel();
+      this.output('standard-cpg').textContent = this.money(result.standardCostPerGram * unitCostFactor, currency, 4);
+      this.output('bulk-cpg').textContent = this.money(result.bulkCostPerGram * unitCostFactor, currency, 4);
+      this.output('standard-window').textContent = `${(params.standardWeightKg / params.monthlyConsumptionKg).toFixed(1)} ${this.label('monthsUnit')}`;
+      this.output('bulk-window').textContent = `${result.consumptionMonths.toFixed(1)} ${this.label('monthsUnit')}`;
+    }
+
+    private updateRiskOutputs(result: BulkFilamentRoiResult) {
+      this.output('consumption-months').textContent = `${result.consumptionMonths.toFixed(1)} ${this.label('monthsUnit')}`;
+      this.output('viability').textContent = this.label(result.viability);
+      this.output('meter-fill').style.width = `${Math.max(4, Math.min(100, result.savingsRate * 300))}%`;
+      this.output('viability').dataset.state = result.viability;
+      this.output('warning').dataset.risk = result.degradationRisk ? 'high' : 'low';
+      this.output('warning-title').textContent = this.riskTitle(result);
+      this.output('warning-text').textContent = this.riskText(result);
+    }
+
+    private calculate() {
+      const params = this.params();
+      const result = calculateBulkFilamentRoi(params);
+      this.updateFinancialOutputs(result, params);
+      this.updateTableOutputs(result, params);
+      this.updateRiskOutputs(result);
+    }
+  }
+
+  const initBulkFilamentRoi = () => {
+    document.querySelectorAll<HTMLElement>('.bfroi-root').forEach((root) => new BulkFilamentRoiEstimator(root));
+  };
+
+  document.addEventListener('astro:page-load', initBulkFilamentRoi);
+  initBulkFilamentRoi();
+</script>

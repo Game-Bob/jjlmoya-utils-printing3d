@@ -22,6 +22,7 @@ import { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringing
 import { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimulator';
 import { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer';
 import { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer';
+import { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -46,4 +47,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL,
   BED_MESH_ANALYZER_TOOL,
   BRIDGING_OPTIMIZER_TOOL,
+  BULK_FILAMENT_ROI_ESTIMATOR_TOOL,
 ];

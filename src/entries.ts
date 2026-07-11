@@ -20,6 +20,7 @@ export { retractionStringingCalibrator } from './tool/retractionStringingCalibra
 export { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
 export { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
 export { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
+export { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -44,6 +45,7 @@ import { retractionStringingCalibrator } from './tool/retractionStringingCalibra
 import { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
 import { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
 import { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
+import { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -68,4 +70,5 @@ export const ALL_ENTRIES = [
   overhangSafeAngleSimulator,
   bedMeshAnalyzer,
   bridgingOptimizer,
+  bulkFilamentRoiEstimator,
 ];

@@ -58,3 +58,5 @@ export { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimu
 export { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer/index';
 
 export { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer/index';
+
+export { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimator/index';
