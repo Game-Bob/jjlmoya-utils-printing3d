@@ -23,6 +23,7 @@ export { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 export { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
 export { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 export { warpingRiskSimulator } from './tool/warpingRiskSimulator/entry';
+export { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -50,6 +51,7 @@ import { bridgingOptimizer } from './tool/bridgingOptimizer/entry';
 import { bulkFilamentRoiEstimator } from './tool/bulkFilamentRoiEstimator/entry';
 import { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 import { warpingRiskSimulator } from './tool/warpingRiskSimulator/entry';
+import { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -77,4 +79,5 @@ export const ALL_ENTRIES = [
   bulkFilamentRoiEstimator,
   wallPerimeterOptimizer,
   warpingRiskSimulator,
+  kinematicRingingCalculator,
 ];

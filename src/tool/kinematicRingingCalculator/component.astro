@@ -1,0 +1,388 @@
+---
+import './3d-printer-acceleration-jerk-ringing-calculator.css';
+import type { KinematicRingingCalculatorUI } from './ui';
+
+interface Props {
+  ui: KinematicRingingCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="ringlab"
+  id="main-tool"
+  data-copy={ui.copyButton}
+  data-copied={ui.copiedButton}
+  data-template={ui.copyTemplate}
+  data-note-template={ui.noteTemplate}
+  data-invalid={ui.invalidMassMessage}
+  data-g={ui.gUnit}
+  data-oz={ui.ozUnit}
+  data-mms={ui.mmSUnit}
+  data-mms2={ui.mmS2Unit}
+  data-percent={ui.percentUnit}
+  data-auto-safety="Auto"
+>
+  <div class="ringlab-strip">
+    <div class="ringlab-presets" role="group" aria-label={ui.presetLabel}>
+      <button type="button" class="active" data-preset="ender" data-toolhead="280" data-bed="780" data-speed="80" data-kinematic="cartesian" data-rigidity="medium">{ui.enderPreset}</button>
+      <button type="button" data-preset="prusa" data-toolhead="360" data-bed="620" data-speed="120" data-kinematic="cartesian" data-rigidity="high">{ui.prusaPreset}</button>
+      <button type="button" data-preset="v0" data-toolhead="230" data-bed="1" data-speed="160" data-kinematic="corexy" data-rigidity="high">{ui.voronV0Preset}</button>
+      <button type="button" data-preset="voron" data-toolhead="420" data-bed="1" data-speed="180" data-kinematic="corexy" data-rigidity="high">{ui.voronPreset}</button>
+      <button type="button" data-preset="custom">{ui.customPreset}</button>
+    </div>
+    <div class="ringlab-units" role="group" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="active" data-units="metric">{ui.metricLabel}</button>
+      <button type="button" data-units="imperial">{ui.imperialLabel}</button>
+    </div>
+  </div>
+
+  <div class="ringlab-grid">
+    <section class="ringlab-readout" aria-label={ui.resultsAriaLabel}>
+      <div class="ringlab-meter">
+        <div class="ringlab-meter-head">
+          <span>{ui.accelerationLabel}</span>
+          <b id="ringlab-risk">low</b>
+        </div>
+        <strong><span id="ringlab-accel">0</span><small>{ui.mmS2Unit}</small></strong>
+        <div class="ringlab-scale" aria-hidden="true">
+          <i id="ringlab-accel-bar"></i>
+        </div>
+      </div>
+
+      <div class="ringlab-oscilloscope" aria-hidden="true">
+        <div class="ringlab-axis-line"></div>
+        <i class="ringlab-pulse a"></i>
+        <i class="ringlab-pulse b"></i>
+        <i class="ringlab-carriage" id="ringlab-mass-dot"></i>
+      </div>
+
+      <div class="ringlab-cells" role="table">
+        <div role="row"><span role="cell">{ui.transitionLabel}<i tabindex="0" data-tip={ui.transitionHelp}>?</i></span><b role="cell"><span id="ringlab-transition">0</span><small id="ringlab-transition-name">SCV</small></b></div>
+        <div role="row"><span role="cell">{ui.effectiveMassLabel}<i tabindex="0" data-tip={ui.effectiveMassHelp}>?</i></span><b role="cell"><span id="ringlab-mass">0</span><small id="ringlab-mass-unit">{ui.gUnit}</small></b></div>
+        <div role="row"><span role="cell">{ui.theoreticalLabel}</span><b role="cell"><span id="ringlab-theoretical">0</span><small>{ui.mmS2Unit}</small></b></div>
+        <div role="row"><span role="cell">{ui.safetyLabel}<i tabindex="0" data-tip={ui.safetyHelp}>?</i></span><b role="cell"><span id="ringlab-safety">0</span><small>{ui.percentUnit}</small></b></div>
+        <div role="row" class="ringlab-wide"><span role="cell">{ui.axisLabel}</span><b role="cell" id="ringlab-axis">xy</b></div>
+      </div>
+      <p class="ringlab-note"><span>{ui.noteLabel}</span><em id="ringlab-note"></em></p>
+      <pre id="ringlab-config"></pre>
+      <button type="button" class="ringlab-copy" id="ringlab-copy">{ui.copyButton}</button>
+    </section>
+
+    <section class="ringlab-controls" aria-label={ui.controlsAriaLabel}>
+      <div class="ringlab-fields">
+        <label>
+          <span>{ui.toolheadMassLabel}<i tabindex="0" data-tip={ui.toolheadMassHelp}>?</i></span>
+          <input id="ringlab-toolhead" type="number" min="1" step="1" value="280" />
+          <b id="ringlab-toolhead-unit">{ui.gUnit}</b>
+        </label>
+        <label>
+          <span>{ui.bedMassLabel}<i tabindex="0" data-tip={ui.bedMassHelp}>?</i></span>
+          <input id="ringlab-bed" type="number" min="1" step="1" value="780" />
+          <b id="ringlab-bed-unit">{ui.gUnit}</b>
+        </label>
+        <label>
+          <span>{ui.targetSpeedLabel}</span>
+          <input id="ringlab-speed" type="number" min="1" max="600" step="1" value="80" />
+          <b>{ui.mmSUnit}</b>
+        </label>
+      </div>
+
+      <div class="ringlab-mini-presets" role="group" aria-label={ui.massPresetLabel}>
+        <span>{ui.massPresetLabel}</span>
+        <div>
+          <button type="button" data-mass-profile data-toolhead="280" data-bed="780" data-kinematic="cartesian" data-rigidity="medium">{ui.enderPreset}</button>
+          <button type="button" data-mass-profile data-toolhead="360" data-bed="620" data-kinematic="cartesian" data-rigidity="high">{ui.prusaPreset}</button>
+          <button type="button" data-mass-profile data-toolhead="230" data-bed="1" data-kinematic="corexy" data-rigidity="high">{ui.voronV0Preset}</button>
+        </div>
+      </div>
+
+      <div class="ringlab-segment" role="group" aria-label={ui.kinematicsLabel}>
+        <span>{ui.kinematicsLabel}</span>
+        <div>
+          <button type="button" class="active" data-kinematic-option="cartesian">{ui.cartesianLabel}</button>
+          <button type="button" data-kinematic-option="corexy">{ui.corexyLabel}</button>
+          <button type="button" data-kinematic-option="delta">{ui.deltaLabel}</button>
+        </div>
+      </div>
+
+      <div class="ringlab-segment" role="group" aria-label={ui.rigidityLabel}>
+        <span>{ui.rigidityLabel}</span>
+        <div>
+          <button type="button" data-rigidity-option="low">{ui.lowRigidityLabel}</button>
+          <button type="button" class="active" data-rigidity-option="medium">{ui.mediumRigidityLabel}</button>
+          <button type="button" data-rigidity-option="high">{ui.highRigidityLabel}</button>
+        </div>
+      </div>
+
+      <div class="ringlab-firmware" role="group" aria-label={ui.firmwareLabel}>
+        <button type="button" class="active" data-firmware="klipper">{ui.klipperLabel}</button>
+        <button type="button" data-firmware="marlin">{ui.marlinLabel}</button>
+      </div>
+
+      <label class="ringlab-check" data-klipper-option>
+        <input id="ringlab-max-accel-to-decel" type="checkbox" />
+        <span>{ui.maxAccelToDecelLabel}<i tabindex="0" data-tip={ui.maxAccelToDecelHelp}>?</i></span>
+      </label>
+
+      <div class="ringlab-expert">
+        <button type="button" id="ringlab-expert-toggle" aria-expanded="false">{ui.expertModeLabel}</button>
+        <label id="ringlab-expert-panel" hidden>
+          <span>{ui.manualSafetyLabel}</span>
+          <input id="ringlab-safety-slider" type="range" min="50" max="95" step="1" value="74" />
+          <output id="ringlab-safety-output">74%</output>
+        </label>
+      </div>
+      <p id="ringlab-validation" aria-live="polite"></p>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { calculateKinematicRinging, type FirmwareFlavor, type KinematicType, type RigidityLevel } from './logic';
+
+  class RingLab {
+    private root = document.getElementById('main-tool') as HTMLElement;
+    private units: 'metric' | 'imperial' = 'metric';
+    private firmware: FirmwareFlavor = 'klipper';
+    private kinematic: KinematicType = 'cartesian';
+    private rigidity: RigidityLevel = 'medium';
+    private expertMode = false;
+    private includeMaxAccelToDecel = false;
+    private toolheadG = 280;
+    private bedG = 780;
+
+    constructor() {
+      this.bindPresets();
+      this.bindMassProfiles();
+      this.bindUnits();
+      this.bindSegments();
+      this.bindFirmware();
+      this.bindAdvanced();
+      this.bindInputs();
+      this.bindCopy();
+      this.reflectFirmwareOptions();
+      this.update();
+    }
+
+    private input(id: string) {
+      return document.getElementById(id) as HTMLInputElement;
+    }
+
+    private text(id: string, value: string) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    private lbl(name: string) {
+      return this.root.dataset[name] || '';
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private captureMasses() {
+      this.toolheadG = this.units === 'imperial' ? this.value('ringlab-toolhead') * 28.3495 : this.value('ringlab-toolhead');
+      this.bedG = this.units === 'imperial' ? this.value('ringlab-bed') * 28.3495 : this.value('ringlab-bed');
+    }
+
+    private setActive(selector: string, active: HTMLElement) {
+      document.querySelectorAll(selector).forEach((item) => item.classList.toggle('active', item === active));
+    }
+
+    private bindPresets() {
+      document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.setActive('[data-preset]', button);
+          if (button.dataset.preset === 'custom') return;
+          this.toolheadG = parseFloat(button.dataset.toolhead || '280');
+          this.bedG = parseFloat(button.dataset.bed || '780');
+          this.kinematic = (button.dataset.kinematic || 'cartesian') as KinematicType;
+          this.rigidity = (button.dataset.rigidity || 'medium') as RigidityLevel;
+          this.input('ringlab-speed').value = button.dataset.speed || '80';
+          this.reflectSegments();
+          this.renderMassInputs();
+          this.update();
+        });
+      });
+    }
+
+    private applyProfile(button: HTMLButtonElement) {
+      this.toolheadG = parseFloat(button.dataset.toolhead || '280');
+      this.bedG = parseFloat(button.dataset.bed || '780');
+      this.kinematic = (button.dataset.kinematic || this.kinematic) as KinematicType;
+      this.rigidity = (button.dataset.rigidity || this.rigidity) as RigidityLevel;
+      this.reflectSegments();
+      this.renderMassInputs();
+      this.update();
+    }
+
+    private bindMassProfiles() {
+      document.querySelectorAll<HTMLButtonElement>('[data-mass-profile]').forEach((button) => {
+        button.addEventListener('click', () => this.applyProfile(button));
+      });
+    }
+
+    private bindUnits() {
+      document.querySelectorAll<HTMLButtonElement>('[data-units]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.captureMasses();
+          this.units = button.dataset.units === 'imperial' ? 'imperial' : 'metric';
+          this.setActive('[data-units]', button);
+          this.renderMassInputs();
+          this.update();
+        });
+      });
+    }
+
+    private bindSegments() {
+      document.querySelectorAll<HTMLButtonElement>('[data-kinematic-option]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.kinematic = (button.dataset.kinematicOption || 'cartesian') as KinematicType;
+          this.setActive('[data-kinematic-option]', button);
+          this.update();
+        });
+      });
+
+      document.querySelectorAll<HTMLButtonElement>('[data-rigidity-option]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.rigidity = (button.dataset.rigidityOption || 'medium') as RigidityLevel;
+          this.setActive('[data-rigidity-option]', button);
+          this.update();
+        });
+      });
+    }
+
+    private bindFirmware() {
+      document.querySelectorAll<HTMLButtonElement>('[data-firmware]').forEach((button) => {
+        button.addEventListener('click', () => {
+          this.firmware = button.dataset.firmware === 'marlin' ? 'marlin' : 'klipper';
+          this.setActive('[data-firmware]', button);
+          this.reflectFirmwareOptions();
+          this.update();
+        });
+      });
+    }
+
+    private bindAdvanced() {
+      const panel = document.getElementById('ringlab-expert-panel') as HTMLLabelElement | null;
+      const toggle = document.getElementById('ringlab-expert-toggle');
+      toggle?.addEventListener('click', () => {
+        this.expertMode = !this.expertMode;
+        if (panel) panel.hidden = !this.expertMode;
+        toggle.setAttribute('aria-expanded', `${this.expertMode}`);
+        this.update();
+      });
+
+      this.input('ringlab-safety-slider').addEventListener('input', () => {
+        this.text('ringlab-safety-output', `${this.value('ringlab-safety-slider').toFixed(0)}%`);
+        this.update();
+      });
+
+      this.input('ringlab-max-accel-to-decel').addEventListener('change', () => {
+        this.includeMaxAccelToDecel = this.input('ringlab-max-accel-to-decel').checked;
+        this.update();
+      });
+    }
+
+    private bindInputs() {
+      ['ringlab-toolhead', 'ringlab-bed', 'ringlab-speed'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('input', () => this.update());
+      });
+    }
+
+    private reflectFirmwareOptions() {
+      document.querySelectorAll<HTMLElement>('[data-klipper-option]').forEach((item) => {
+        item.classList.toggle('ringlab-hidden', this.firmware !== 'klipper');
+      });
+    }
+
+    private bindCopy() {
+      document.getElementById('ringlab-copy')?.addEventListener('click', () => this.copy());
+    }
+
+    private renderMassInputs() {
+      const isImperial = this.units === 'imperial';
+      this.input('ringlab-toolhead').value = isImperial ? (this.toolheadG / 28.3495).toFixed(1) : this.toolheadG.toFixed(0);
+      this.input('ringlab-bed').value = isImperial ? (this.bedG / 28.3495).toFixed(1) : this.bedG.toFixed(0);
+      this.text('ringlab-toolhead-unit', isImperial ? this.lbl('oz') : this.lbl('g'));
+      this.text('ringlab-bed-unit', isImperial ? this.lbl('oz') : this.lbl('g'));
+      this.text('ringlab-mass-unit', isImperial ? this.lbl('oz') : this.lbl('g'));
+    }
+
+    private reflectSegments() {
+      document.querySelectorAll<HTMLButtonElement>('[data-kinematic-option]').forEach((button) => {
+        button.classList.toggle('active', button.dataset.kinematicOption === this.kinematic);
+      });
+      document.querySelectorAll<HTMLButtonElement>('[data-rigidity-option]').forEach((button) => {
+        button.classList.toggle('active', button.dataset.rigidityOption === this.rigidity);
+      });
+    }
+
+    private params() {
+      this.captureMasses();
+      return {
+        toolheadMassG: this.toolheadG,
+        bedMassG: this.bedG,
+        targetSpeedMmS: this.value('ringlab-speed'),
+        kinematicType: this.kinematic,
+        rigidityLevel: this.rigidity,
+        firmware: this.firmware,
+        safetyCoefficientOverride: this.expertMode ? this.value('ringlab-safety-slider') / 100 : undefined,
+        includeMaxAccelToDecel: this.firmware === 'klipper' && this.includeMaxAccelToDecel,
+        noteTemplate: this.root.dataset.noteTemplate,
+      };
+    }
+
+    private update() {
+      const invalid = this.value('ringlab-toolhead') <= 0 || this.value('ringlab-bed') <= 0 || this.value('ringlab-speed') <= 0;
+      this.text('ringlab-validation', invalid ? this.lbl('invalid') : '');
+      const result = calculateKinematicRinging(this.params());
+      const massDisplay = this.units === 'imperial' ? result.movingMassG / 28.3495 : result.movingMassG;
+
+      this.text('ringlab-accel', result.recommendedAccelerationMmS2.toFixed(0));
+      this.text('ringlab-transition', result.transitionLimitMmS.toFixed(1));
+      this.text('ringlab-transition-name', result.firmwareText);
+      this.text('ringlab-mass', massDisplay.toFixed(this.units === 'imperial' ? 1 : 0));
+      this.text('ringlab-theoretical', result.theoreticalAccelerationMmS2.toFixed(0));
+      this.text('ringlab-safety', (result.safetyCoefficient * 100).toFixed(0));
+      this.text('ringlab-axis', result.limitingAxis);
+      this.text('ringlab-risk', result.ringingRisk);
+      this.text('ringlab-note', result.note);
+      this.text('ringlab-config', result.configText);
+      this.root.dataset.risk = result.ringingRisk;
+      const dot = document.getElementById('ringlab-mass-dot');
+      if (dot) dot.style.left = `${Math.min(Math.max(result.movingMassG / 9, 12), 88)}%`;
+      const bar = document.getElementById('ringlab-accel-bar');
+      if (bar) bar.style.width = `${Math.min(Math.max(result.recommendedAccelerationMmS2 / 160, 12), 100)}%`;
+      const accelerationIntensity = Math.min(Math.max(result.recommendedAccelerationMmS2 / 12000, 0), 1);
+      this.root.style.setProperty('--pulse-scale-x', `${1 + accelerationIntensity * .65}`);
+      this.root.style.setProperty('--pulse-scale-y', `${1 - accelerationIntensity * .35}`);
+    }
+
+    private copy() {
+      const result = calculateKinematicRinging(this.params());
+      const text = this.lbl('template')
+        .replace('{accel}', result.recommendedAccelerationMmS2.toFixed(0))
+        .replace('{transitionName}', result.firmwareText)
+        .replace('{transition}', result.transitionLimitMmS.toFixed(1))
+        .replace('{mass}', result.movingMassG.toFixed(0))
+        .replace('{config}', result.configText);
+      navigator.clipboard?.writeText(text);
+      const button = document.getElementById('ringlab-copy');
+      if (!button) return;
+      button.textContent = this.lbl('copied');
+      button.classList.add('copied');
+      setTimeout(() => {
+        button.textContent = this.lbl('copy');
+        button.classList.remove('copied');
+      }, 1100);
+    }
+  }
+
+  const initRingLab = () => new RingLab();
+  document.addEventListener('astro:page-load', initRingLab);
+  initRingLab();
+</script>

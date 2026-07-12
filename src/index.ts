@@ -64,3 +64,5 @@ export { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimato
 export { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer/index';
 
 export { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator/index';
+
+export { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator/index';

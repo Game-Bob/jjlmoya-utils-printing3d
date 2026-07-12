@@ -25,6 +25,7 @@ import { BRIDGING_OPTIMIZER_TOOL } from './tool/bridgingOptimizer';
 import { BULK_FILAMENT_ROI_ESTIMATOR_TOOL } from './tool/bulkFilamentRoiEstimator';
 import { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer';
 import { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator';
+import { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -52,4 +53,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   BULK_FILAMENT_ROI_ESTIMATOR_TOOL,
   WALL_PERIMETER_OPTIMIZER_TOOL,
   WARPING_RISK_SIMULATOR_TOOL,
+  KINEMATIC_RINGING_CALCULATOR_TOOL,
 ];
