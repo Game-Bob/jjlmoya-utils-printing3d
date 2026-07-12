@@ -1,0 +1,36 @@
+export interface EStepsCalibrationCalculatorUI {
+  unitSystemLabel: string;
+  metricLabel: string;
+  imperialLabel: string;
+  inputGroupLabel: string;
+  currentEStepsLabel: string;
+  requestedLengthLabel: string;
+  actualLengthLabel: string;
+  newEStepsLabel: string;
+  errorLabel: string;
+  commandLabel: string;
+  copyCommandLabel: string;
+  copiedLabel: string;
+  normalStatusLabel: string;
+  criticalStatusLabel: string;
+  normalMessage: string;
+  criticalMessage: string;
+  diagnosticTitle: string;
+  diagnosticOne: string;
+  diagnosticTwo: string;
+  diagnosticThree: string;
+  referenceTitle: string;
+  formulaLabel: string;
+  formulaText: string;
+  safeBandLabel: string;
+  safeBandText: string;
+  criticalBandLabel: string;
+  criticalBandText: string;
+  repeatTestLabel: string;
+  repeatTestText: string;
+  mmUnit: string;
+  inchUnit: string;
+  stepsUnit: string;
+  controlsAriaLabel: string;
+  resultsAriaLabel: string;
+}

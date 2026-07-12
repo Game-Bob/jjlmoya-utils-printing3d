@@ -1,0 +1,173 @@
+---
+import type { EStepsCalibrationCalculatorUI } from './ui';
+import './e-steps-calibration-calculator.css';
+
+interface Props {
+  ui: EStepsCalibrationCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="esc-root" id="main-tool">
+  <section class="esc-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="esc-panel esc-controls" onsubmit="return false;">
+      <div class="esc-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-esc-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-esc-units="imperial">{ui.imperialLabel}</button>
+      </div>
+      <fieldset>
+        <legend>{ui.inputGroupLabel}</legend>
+        <label>
+          <span>{ui.currentEStepsLabel}</span>
+          <b><input id="esc-current" type="number" min="1" step="0.01" value="93" /><em>{ui.stepsUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.requestedLengthLabel}</span>
+          <b><input id="esc-requested" type="number" min="0.1" step="0.1" value="100" /><em id="esc-unit-a">{ui.mmUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.actualLengthLabel}</span>
+          <b><input id="esc-actual" type="number" min="0.1" step="0.1" value="96" /><em id="esc-unit-b">{ui.mmUnit}</em></b>
+        </label>
+      </fieldset>
+      <aside class="esc-reference">
+        <span>{ui.referenceTitle}</span>
+        <dl>
+          <div>
+            <dt>{ui.formulaLabel}</dt>
+            <dd><code>{ui.formulaText}</code></dd>
+          </div>
+          <div>
+            <dt>{ui.safeBandLabel}</dt>
+            <dd>{ui.safeBandText}</dd>
+          </div>
+          <div>
+            <dt>{ui.criticalBandLabel}</dt>
+            <dd>{ui.criticalBandText}</dd>
+          </div>
+          <div>
+            <dt>{ui.repeatTestLabel}</dt>
+            <dd>{ui.repeatTestText}</dd>
+          </div>
+        </dl>
+      </aside>
+    </form>
+
+    <div class="esc-panel esc-results" aria-label={ui.resultsAriaLabel}>
+      <div class="esc-status" id="esc-status">
+        <span id="esc-status-label">{ui.normalStatusLabel}</span>
+        <p id="esc-status-message">{ui.normalMessage}</p>
+      </div>
+      <div class="esc-primary">
+        <span>{ui.newEStepsLabel}</span>
+        <b><output id="esc-new">0.00</output></b>
+      </div>
+      <div class="esc-metrics">
+        <article><span>{ui.errorLabel}</span><b><output id="esc-error">0.00%</output></b></article>
+        <article><span>{ui.commandLabel}</span><code id="esc-command">M92 E0.00</code></article>
+      </div>
+      <button class="esc-copy" id="esc-copy" type="button">{ui.copyCommandLabel}</button>
+      <aside class="esc-diagnostic">
+        <span>{ui.diagnosticTitle}</span>
+        <ol>
+          <li>{ui.diagnosticOne}</li>
+          <li>{ui.diagnosticTwo}</li>
+          <li>{ui.diagnosticThree}</li>
+        </ol>
+      </aside>
+    </div>
+    <span id="esc-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-copy={ui.copyCommandLabel} data-copied={ui.copiedLabel} data-normal-label={ui.normalStatusLabel} data-critical-label={ui.criticalStatusLabel} data-normal-message={ui.normalMessage} data-critical-message={ui.criticalMessage}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateEStepsCalibration } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class EStepsCalibrationTool {
+    private units: UnitSystem = 'metric';
+    private lastCommand = '';
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private data() { return (document.getElementById('esc-data') as HTMLElement).dataset; }
+    private numberValue(id: string) { return parseFloat(this.input(id).value) || 0; }
+
+    private bind() {
+      ['esc-current', 'esc-requested', 'esc-actual'].forEach((id) => this.input(id)?.addEventListener('input', () => this.update()));
+      document.querySelectorAll<HTMLElement>('[data-esc-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.escUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      this.input('esc-copy')?.addEventListener('click', () => this.copyCommand());
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (this.units === units) return;
+      const requestedMm = this.lengthMm('esc-requested');
+      const actualMm = this.lengthMm('esc-actual');
+      this.units = units;
+      this.input('esc-requested').value = this.formatLength(requestedMm);
+      this.input('esc-actual').value = this.formatLength(actualMm);
+      this.syncUnits();
+      this.update();
+    }
+
+    private syncUnits() {
+      const unit = this.units === 'metric' ? this.data().mm || '' : this.data().inch || '';
+      this.text('esc-unit-a', unit);
+      this.text('esc-unit-b', unit);
+      document.querySelectorAll('[data-esc-units]').forEach((item) => item.classList.toggle('active', (item as HTMLElement).dataset.escUnits === this.units));
+    }
+
+    private lengthMm(id: string) {
+      const raw = this.numberValue(id);
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private formatLength(mm: number) {
+      return this.units === 'metric' ? mm.toFixed(1) : (mm / 25.4).toFixed(3);
+    }
+
+    private update() {
+      this.syncUnits();
+      const result = calculateEStepsCalibration({
+        currentESteps: this.numberValue('esc-current'),
+        requestedLengthMm: this.lengthMm('esc-requested'),
+        actualLengthMm: this.lengthMm('esc-actual'),
+      });
+      this.lastCommand = result.command;
+      this.text('esc-new', result.newESteps.toFixed(2));
+      this.text('esc-error', `${result.errorPercent.toFixed(2)}%`);
+      this.text('esc-command', result.command);
+      this.renderStatus(result.isCritical);
+      this.text('esc-copy', this.data().copy || '');
+    }
+
+    private renderStatus(isCritical: boolean) {
+      document.querySelector('.esc-root')?.setAttribute('data-critical', String(isCritical));
+      this.text('esc-status-label', isCritical ? this.data().criticalLabel || '' : this.data().normalLabel || '');
+      this.text('esc-status-message', isCritical ? this.data().criticalMessage || '' : this.data().normalMessage || '');
+    }
+
+    private async copyCommand() {
+      await navigator.clipboard?.writeText(this.lastCommand);
+      this.text('esc-copy', this.data().copied || '');
+      window.setTimeout(() => this.text('esc-copy', this.data().copy || ''), 1400);
+    }
+
+    private text(id: string, value: string) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+  }
+
+  const initEStepsCalibrationTool = () => new EStepsCalibrationTool();
+  document.addEventListener('astro:page-load', initEStepsCalibrationTool);
+  initEStepsCalibrationTool();
+</script>

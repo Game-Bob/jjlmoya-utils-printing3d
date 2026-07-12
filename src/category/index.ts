@@ -25,6 +25,7 @@ import { bulkFilamentRoiEstimator } from '../tool/bulkFilamentRoiEstimator/entry
 import { wallPerimeterOptimizer } from '../tool/wallPerimeterOptimizer/entry';
 import { warpingRiskSimulator } from '../tool/warpingRiskSimulator/entry';
 import { kinematicRingingCalculator } from '../tool/kinematicRingingCalculator/entry';
+import { eStepsCalibrationCalculator } from '../tool/eStepsCalibrationCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -55,6 +56,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     wallPerimeterOptimizer,
     warpingRiskSimulator,
     kinematicRingingCalculator,
+    eStepsCalibrationCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

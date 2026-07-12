@@ -66,3 +66,5 @@ export { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer/ind
 export { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator/index';
 
 export { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator/index';
+
+export { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator/index';
