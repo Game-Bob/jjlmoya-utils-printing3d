@@ -1,0 +1,253 @@
+---
+import type { ResinHollowingDrainageCalculatorUI } from './ui';
+import './sla-resin-hollowing-drainage-calculator.css';
+
+interface Props {
+  ui: ResinHollowingDrainageCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="rhd-root"
+  data-resin-hollowing-drainage
+  data-cm3-unit={ui.cm3Unit}
+  data-cubic-in-unit={ui.cubicInUnit}
+  data-mm-unit={ui.mmUnit}
+  data-inch-unit={ui.inchUnit}
+  data-ml-unit={ui.mlUnit}
+>
+  <section class="rhd-input-panel" aria-label={ui.modelInputsLabel}>
+    <div class="rhd-toolbar">
+      <strong>{ui.modelInputsLabel}</strong>
+      <div class="rhd-unit-toggle" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="is-active" data-system="metric">{ui.metricLabel}</button>
+        <button type="button" data-system="imperial">{ui.imperialLabel}</button>
+      </div>
+    </div>
+
+    <div class="rhd-grid">
+      <label class="rhd-field">
+        <span>{ui.volumeLabel}</span>
+        <b>
+          <input id="rhd-volume" type="number" min="0" step="1" value="85" />
+          <em data-volume-unit>{ui.cm3Unit}</em>
+        </b>
+      </label>
+      <label class="rhd-field">
+        <span>{ui.heightLabel}</span>
+        <b>
+          <input id="rhd-height" type="number" min="0" step="1" value="120" />
+          <em data-length-unit>{ui.mmUnit}</em>
+        </b>
+      </label>
+      <label class="rhd-select-field" for="rhd-complexity">
+        <span>{ui.complexityLabel}</span>
+        <b class="rhd-select-wrap">
+          <select id="rhd-complexity">
+            <option value="simple">{ui.simpleLabel}</option>
+            <option value="moderate" selected>{ui.moderateLabel}</option>
+            <option value="high">{ui.highLabel}</option>
+          </select>
+        </b>
+      </label>
+      <label class="rhd-select-field" for="rhd-resin">
+        <span>{ui.resinTypeLabel}</span>
+        <b class="rhd-select-wrap">
+          <select id="rhd-resin">
+            <option value="standard" selected>{ui.standardLabel}</option>
+            <option value="tough">{ui.toughLabel}</option>
+            <option value="engineering">{ui.engineeringLabel}</option>
+          </select>
+        </b>
+      </label>
+    </div>
+  </section>
+
+  <section class="rhd-output-panel" aria-label={ui.resultsLabel}>
+    <div class="rhd-primary-results">
+      <div>
+        <span>{ui.wallThicknessLabel}</span>
+        <strong id="rhd-wall">0 {ui.mmUnit}</strong>
+      </div>
+      <div>
+        <span>{ui.drainDiameterLabel}</span>
+        <strong id="rhd-drain">0 {ui.mmUnit}</strong>
+      </div>
+      <div>
+        <span>{ui.drainHoleCountLabel}</span>
+        <strong id="rhd-holes">0</strong>
+      </div>
+    </div>
+
+    <div class="rhd-saving">
+      <span>{ui.adjustedSavingLabel}</span>
+      <strong id="rhd-saving">0 {ui.mlUnit}</strong>
+      <small>{ui.adjustedSavingNote}</small>
+    </div>
+
+    <div class="rhd-breakdown">
+      <div>
+        <span>{ui.theoreticalSavingLabel}</span>
+        <b id="rhd-theoretical">0 {ui.mlUnit}</b>
+      </div>
+      <div>
+        <span class="rhd-help-label">
+          {ui.trapFactorLabel}
+          <button type="button" class="rhd-help" aria-label={ui.trapFactorHelp} title={ui.trapFactorHelp}>?</button>
+        </span>
+        <b id="rhd-trap-factor">0%</b>
+      </div>
+      <div>
+        <span>{ui.trappedAllowanceLabel}</span>
+        <b id="rhd-trapped">0 {ui.mlUnit}</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="rhd-safety" aria-label={ui.mechanicalSafetyTitle}>
+    <h3>{ui.mechanicalSafetyTitle}</h3>
+    <div class="rhd-drain-note">{ui.drainPlacementNote}</div>
+    <p>{ui.vacuumWarning}</p>
+    <p>{ui.trappedResinWarning}</p>
+  </section>
+
+  <section class="rhd-checklist" aria-label={ui.checklistTitle}>
+    <h3>{ui.checklistTitle}</h3>
+    <ul>
+      {ui.checklistItems.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+</div>
+
+<script>
+  import {
+    calculateHollowingDrainage,
+    type HollowingComplexity,
+    type ResinType,
+  } from './logic';
+
+  const CM3_PER_CUBIC_INCH = 16.387064;
+  const MM_PER_INCH = 25.4;
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class ResinHollowingDrainageApp {
+    private root: HTMLElement;
+    private system: UnitSystem = 'metric';
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.bind();
+      this.calculate();
+    }
+
+    private input(id: string) {
+      return this.root.querySelector<HTMLInputElement>(`#${id}`) as HTMLInputElement;
+    }
+
+    private select(id: string) {
+      return this.root.querySelector<HTMLSelectElement>(`#${id}`) as HTMLSelectElement;
+    }
+
+    private output(id: string) {
+      return this.root.querySelector<HTMLElement>(`#${id}`) as HTMLElement;
+    }
+
+    private value(id: string) {
+      return parseFloat(this.input(id).value) || 0;
+    }
+
+    private bind() {
+      this.root.querySelectorAll('input, select').forEach((control) => {
+        control.addEventListener('input', () => this.calculate());
+        control.addEventListener('change', () => this.calculate());
+      });
+      this.root.querySelectorAll<HTMLButtonElement>('[data-system]').forEach((button) => {
+        button.addEventListener('click', () => this.setSystem(button.dataset.system === 'imperial' ? 'imperial' : 'metric'));
+      });
+    }
+
+    private setSystem(next: UnitSystem) {
+      if (this.system === next) return;
+      const volumeCm3 = this.volumeCm3();
+      const heightMm = this.heightMm();
+      this.system = next;
+      this.input('rhd-volume').value = this.displayVolume(volumeCm3).toFixed(next === 'imperial' ? 2 : 1);
+      this.input('rhd-height').value = this.displayLength(heightMm).toFixed(next === 'imperial' ? 2 : 1);
+      this.syncUnits();
+      this.calculate();
+    }
+
+    private volumeCm3() {
+      const visible = this.value('rhd-volume');
+      return this.system === 'imperial' ? visible * CM3_PER_CUBIC_INCH : visible;
+    }
+
+    private heightMm() {
+      const visible = this.value('rhd-height');
+      return this.system === 'imperial' ? visible * MM_PER_INCH : visible;
+    }
+
+    private displayVolume(cm3: number) {
+      return this.system === 'imperial' ? cm3 / CM3_PER_CUBIC_INCH : cm3;
+    }
+
+    private displayLength(mm: number) {
+      return this.system === 'imperial' ? mm / MM_PER_INCH : mm;
+    }
+
+    private formatLength(mm: number) {
+      return this.system === 'imperial'
+        ? `${(mm / MM_PER_INCH).toFixed(3)} ${this.text('inchUnit')}`
+        : `${mm.toFixed(1)} ${this.text('mmUnit')}`;
+    }
+
+    private formatVolume(ml: number) {
+      return this.system === 'imperial'
+        ? `${(ml / 29.5735295625).toFixed(2)} fl oz`
+        : `${ml.toFixed(1)} ${this.text('mlUnit')}`;
+    }
+
+    private syncUnits() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-system]').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.system === this.system);
+      });
+      this.root.querySelectorAll<HTMLElement>('[data-volume-unit]').forEach((item) => {
+        item.textContent = this.system === 'imperial' ? this.text('cubicInUnit') : this.text('cm3Unit');
+      });
+      this.root.querySelectorAll<HTMLElement>('[data-length-unit]').forEach((item) => {
+        item.textContent = this.system === 'imperial' ? this.text('inchUnit') : this.text('mmUnit');
+      });
+    }
+
+    private calculate() {
+      const result = calculateHollowingDrainage({
+        volumeCm3: this.volumeCm3(),
+        heightMm: this.heightMm(),
+        complexity: this.select('rhd-complexity').value as HollowingComplexity,
+        resinType: this.select('rhd-resin').value as ResinType,
+      });
+
+      this.output('rhd-wall').textContent = this.formatLength(result.wallThicknessMm);
+      this.output('rhd-drain').textContent = this.formatLength(result.drainDiameterMm);
+      this.output('rhd-holes').textContent = String(result.minimumDrainHoles);
+      this.output('rhd-saving').textContent = this.formatVolume(result.adjustedResinSavingMl);
+      this.output('rhd-theoretical').textContent = this.formatVolume(result.theoreticalHollowVolumeCm3);
+      this.output('rhd-trap-factor').textContent = `${(result.trapFactor * 100).toFixed(0)}%`;
+      this.output('rhd-trapped').textContent = this.formatVolume(result.trappedResinAllowanceMl);
+    }
+
+    private text(key: string) {
+      return this.root.dataset[key] || '';
+    }
+  }
+
+  const initResinHollowingDrainage = () => {
+    document.querySelectorAll<HTMLElement>('[data-resin-hollowing-drainage]').forEach((root) => new ResinHollowingDrainageApp(root));
+  };
+
+  document.addEventListener('astro:page-load', initResinHollowingDrainage);
+  initResinHollowingDrainage();
+</script>

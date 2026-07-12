@@ -16,6 +16,7 @@ export { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEs
 export { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 export { printDurationEstimator } from './tool/printDurationEstimator/entry';
 export { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
+export { resinHollowingDrainageCalculator } from './tool/resinHollowingDrainageCalculator/entry';
 export { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
 export { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
 export { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
@@ -45,6 +46,7 @@ import { mechanicalAxisStrengthEstimator } from './tool/mechanicalAxisStrengthEs
 import { printTimeWorkflowOptimizer } from './tool/printTimeWorkflowOptimizer/entry';
 import { printDurationEstimator } from './tool/printDurationEstimator/entry';
 import { resinRealCostCalculator } from './tool/resinRealCostCalculator/entry';
+import { resinHollowingDrainageCalculator } from './tool/resinHollowingDrainageCalculator/entry';
 import { retractionStringingCalibrator } from './tool/retractionStringingCalibrator/entry';
 import { overhangSafeAngleSimulator } from './tool/overhangSafeAngleSimulator/entry';
 import { bedMeshAnalyzer } from './tool/bedMeshAnalyzer/entry';
@@ -74,6 +76,7 @@ export const ALL_ENTRIES = [
   printTimeWorkflowOptimizer,
   printDurationEstimator,
   resinRealCostCalculator,
+  resinHollowingDrainageCalculator,
   retractionStringingCalibrator,
   overhangSafeAngleSimulator,
   bedMeshAnalyzer,

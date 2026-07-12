@@ -18,6 +18,7 @@ import { MECHANICAL_AXIS_STRENGTH_ESTIMATOR_TOOL } from './tool/mechanicalAxisSt
 import { PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL } from './tool/printTimeWorkflowOptimizer';
 import { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator';
 import { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator';
+import { RESIN_HOLLOWING_DRAINAGE_CALCULATOR_TOOL } from './tool/resinHollowingDrainageCalculator';
 import { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator';
 import { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimulator';
 import { BED_MESH_ANALYZER_TOOL } from './tool/bedMeshAnalyzer';
@@ -47,6 +48,7 @@ export const ALL_TOOLS: ToolDefinition[] = [
   PRINT_TIME_WORKFLOW_OPTIMIZER_TOOL,
   PRINT_DURATION_ESTIMATOR_TOOL,
   RESIN_REAL_COST_CALCULATOR_TOOL,
+  RESIN_HOLLOWING_DRAINAGE_CALCULATOR_TOOL,
   RETRACTION_STRINGING_CALIBRATOR_TOOL,
   OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL,
   BED_MESH_ANALYZER_TOOL,

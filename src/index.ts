@@ -51,6 +51,8 @@ export { PRINT_DURATION_ESTIMATOR_TOOL } from './tool/printDurationEstimator/ind
 
 export { RESIN_REAL_COST_CALCULATOR_TOOL } from './tool/resinRealCostCalculator/index';
 
+export { RESIN_HOLLOWING_DRAINAGE_CALCULATOR_TOOL } from './tool/resinHollowingDrainageCalculator/index';
+
 export { RETRACTION_STRINGING_CALIBRATOR_TOOL } from './tool/retractionStringingCalibrator/index';
 
 export { OVERHANG_SAFE_ANGLE_SIMULATOR_TOOL } from './tool/overhangSafeAngleSimulator/index';

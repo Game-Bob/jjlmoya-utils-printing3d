@@ -17,6 +17,7 @@ import { mechanicalAxisStrengthEstimator } from '../tool/mechanicalAxisStrengthE
 import { printTimeWorkflowOptimizer } from '../tool/printTimeWorkflowOptimizer/entry';
 import { printDurationEstimator } from '../tool/printDurationEstimator/entry';
 import { resinRealCostCalculator } from '../tool/resinRealCostCalculator/entry';
+import { resinHollowingDrainageCalculator } from '../tool/resinHollowingDrainageCalculator/entry';
 import { retractionStringingCalibrator } from '../tool/retractionStringingCalibrator/entry';
 import { overhangSafeAngleSimulator } from '../tool/overhangSafeAngleSimulator/entry';
 import { bedMeshAnalyzer } from '../tool/bedMeshAnalyzer/entry';
@@ -48,6 +49,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     printTimeWorkflowOptimizer,
     printDurationEstimator,
     resinRealCostCalculator,
+    resinHollowingDrainageCalculator,
     retractionStringingCalibrator,
     overhangSafeAngleSimulator,
     bedMeshAnalyzer,

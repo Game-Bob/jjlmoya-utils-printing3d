@@ -1,0 +1,37 @@
+export interface ResinHollowingDrainageCalculatorUI {
+  unitSystemLabel: string;
+  metricLabel: string;
+  imperialLabel: string;
+  modelInputsLabel: string;
+  volumeLabel: string;
+  heightLabel: string;
+  complexityLabel: string;
+  resinTypeLabel: string;
+  simpleLabel: string;
+  moderateLabel: string;
+  highLabel: string;
+  standardLabel: string;
+  toughLabel: string;
+  engineeringLabel: string;
+  resultsLabel: string;
+  wallThicknessLabel: string;
+  drainDiameterLabel: string;
+  drainHoleCountLabel: string;
+  adjustedSavingLabel: string;
+  adjustedSavingNote: string;
+  trapFactorLabel: string;
+  trapFactorHelp: string;
+  theoreticalSavingLabel: string;
+  trappedAllowanceLabel: string;
+  drainPlacementNote: string;
+  mechanicalSafetyTitle: string;
+  vacuumWarning: string;
+  trappedResinWarning: string;
+  checklistTitle: string;
+  checklistItems: string[];
+  cm3Unit: string;
+  cubicInUnit: string;
+  mmUnit: string;
+  inchUnit: string;
+  mlUnit: string;
+}

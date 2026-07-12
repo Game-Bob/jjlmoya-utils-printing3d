@@ -1,0 +1,14 @@
+---
+import { FAQSection } from '@jjlmoya/utils-shared';
+import { resinHollowingDrainageCalculator } from './index';
+import type { KnownLocale } from '../../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await resinHollowingDrainageCalculator.i18n[locale]?.();
+---
+
+{content && <FAQSection items={content.faq} />}
