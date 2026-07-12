@@ -26,6 +26,7 @@ export { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 export { warpingRiskSimulator } from './tool/warpingRiskSimulator/entry';
 export { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/entry';
 export { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/entry';
+export { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -56,6 +57,7 @@ import { wallPerimeterOptimizer } from './tool/wallPerimeterOptimizer/entry';
 import { warpingRiskSimulator } from './tool/warpingRiskSimulator/entry';
 import { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/entry';
 import { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/entry';
+import { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -86,4 +88,5 @@ export const ALL_ENTRIES = [
   warpingRiskSimulator,
   kinematicRingingCalculator,
   eStepsCalibrationCalculator,
+  technicalResinUvCuringCalculator,
 ];

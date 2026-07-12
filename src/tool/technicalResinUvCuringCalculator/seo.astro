@@ -1,0 +1,14 @@
+---
+import { SEORenderer } from '@jjlmoya/utils-shared';
+import { technicalResinUvCuringCalculator } from './index';
+import type { KnownLocale } from '../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await technicalResinUvCuringCalculator.i18n[locale]?.();
+---
+
+{content?.seo && <SEORenderer content={{ locale, sections: content.seo }} />}

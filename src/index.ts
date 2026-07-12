@@ -70,3 +70,5 @@ export { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator/index';
 export { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator/index';
 
 export { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator/index';
+
+export { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator/index';

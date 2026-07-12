@@ -1,0 +1,236 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { TechnicalResinUvCuringUI } from './ui';
+import './technical-resin-uv-curing-calculator.css';
+
+interface Props {
+  ui: TechnicalResinUvCuringUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div class="trc-root" id="main-tool">
+  <section class="trc-shell" aria-label={ui.controlsAriaLabel}>
+    <form class="trc-controls" onsubmit="return false;">
+      <div class="trc-units" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" class="active" data-trc-units="metric">{ui.metricLabel}</button>
+        <button type="button" data-trc-units="imperial">{ui.imperialLabel}</button>
+      </div>
+
+      <fieldset>
+        <legend>{ui.resinGroupLabel}</legend>
+        <label>
+          <span>{ui.resinTypeLabel}</span>
+          <select id="trc-resin">
+            <option value="standard" selected>{ui.standardLabel}</option>
+            <option value="flexible">{ui.flexibleLabel}</option>
+            <option value="tough">{ui.toughLabel}</option>
+            <option value="castable">{ui.castableLabel}</option>
+            <option value="burnout">{ui.burnoutLabel}</option>
+          </select>
+        </label>
+        <label>
+          <span>{ui.wallThicknessLabel}<small title={ui.wallThicknessHelp}><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="trc-thickness" type="number" min="0.4" max="12" step="0.1" value="2.5" /><em id="trc-thickness-unit">{ui.mmUnit}</em></b>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{ui.stationGroupLabel}</legend>
+        <label>
+          <span>{ui.stationPowerLabel}<small title={ui.stationPowerHelp}><Icon name="mdi:help" size={12} /></small></span>
+          <b><input id="trc-power" type="number" min="6" max="120" step="1" value="40" /><em>{ui.wattUnit}</em></b>
+        </label>
+        <label>
+          <span>{ui.wavelengthLabel}</span>
+          <select id="trc-wavelength">
+            <option value="405" selected>{ui.wavelength405Label}</option>
+            <option value="385">{ui.wavelength385Label}</option>
+          </select>
+        </label>
+      </fieldset>
+    </form>
+
+    <div class="trc-results" aria-label={ui.resultsAriaLabel}>
+      <aside class="trc-preflight">
+        <span>{ui.preparationLabel}</span>
+        <strong>{ui.cleanDryReminder}</strong>
+        <p>{ui.degradationWarning}</p>
+        <ul>
+          <li><Icon name="mdi:checkbox-marked-outline" size={18} />{ui.dryCheckLabel}</li>
+          <li><Icon name="mdi:checkbox-marked-outline" size={18} />{ui.exposureCheckLabel}</li>
+          <li><Icon name="mdi:checkbox-marked-outline" size={18} />{ui.supportsCheckLabel}</li>
+        </ul>
+      </aside>
+
+      <div class="trc-main-panel">
+        <div class="trc-meter" aria-hidden="true">
+          <svg viewBox="0 0 220 140">
+            <path class="trc-arc-bg" d="M34 114A76 76 0 0 1 186 114" />
+            <path class="trc-arc" id="trc-arc" d="M34 114A76 76 0 0 1 186 114" />
+            <circle class="trc-lamp" cx="110" cy="42" r="17" />
+            <path class="trc-rays" d="M110 68L70 116M110 68L110 122M110 68L150 116" />
+          </svg>
+          <b id="trc-time">0.0</b>
+          <small>{ui.timerUnit}</small>
+        </div>
+
+        <div class="trc-output-grid">
+          <article>
+            <span>{ui.recommendedTimeLabel}</span>
+            <b><output id="trc-out-time">0.0</output><small>{ui.timerUnit}</small></b>
+          </article>
+          <article>
+            <span>{ui.temperatureLabel}</span>
+            <b><output id="trc-out-temp">-</output><small id="trc-temp-unit"></small></b>
+            <p id="trc-temp-note" hidden>{ui.ambientTemperatureNoteMetric}</p>
+          </article>
+          <article>
+            <span>{ui.distanceLabel}</span>
+            <b><output id="trc-out-distance">0</output><small id="trc-distance-unit">{ui.cmUnit}</small></b>
+          </article>
+          <article>
+            <span>{ui.maxSafeLabel}</span>
+            <b><output id="trc-out-max">0</output><small>{ui.timerUnit}</small></b>
+          </article>
+        </div>
+      </div>
+
+      <aside class="trc-safety" id="trc-safety">
+        <span>{ui.doseIndexLabel}</span>
+        <b id="trc-safety-label">{ui.safetySafeLabel}</b>
+        <progress id="trc-dose" value="0" max="100"></progress>
+        <p id="trc-safety-message">{ui.safeMessage}</p>
+      </aside>
+    </div>
+
+    <span id="trc-data" hidden data-mm={ui.mmUnit} data-inch={ui.inchUnit} data-cm={ui.cmUnit} data-in={ui.inUnit} data-c={ui.celsiusUnit} data-f={ui.fahrenheitUnit} data-no-temp={ui.noTemperatureLabel} data-ambient-metric={ui.ambientTemperatureNoteMetric} data-ambient-imperial={ui.ambientTemperatureNoteImperial}></span>
+    <span id="trc-labels" hidden data-safe={ui.safetySafeLabel} data-caution={ui.safetyCautionLabel} data-limit={ui.safetyLimitLabel} data-safe-message={ui.safeMessage} data-caution-message={ui.cautionMessage} data-limit-message={ui.limitMessage}></span>
+  </section>
+</div>
+
+<script>
+  import { calculateTechnicalResinUvCuring, type TechnicalResinType, type UvWavelength } from './logic';
+
+  type UnitSystem = 'metric' | 'imperial';
+
+  class TechnicalResinUvCuringTool {
+    private units: UnitSystem = 'metric';
+
+    constructor() {
+      this.bind();
+      this.update();
+    }
+
+    private input(id: string) { return document.getElementById(id) as HTMLInputElement; }
+    private select(id: string) { return document.getElementById(id) as HTMLSelectElement; }
+    private data() { return (document.getElementById('trc-data') as HTMLElement).dataset; }
+    private labels() { return (document.getElementById('trc-labels') as HTMLElement).dataset; }
+    private text(id: string, value: string) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
+
+    private bind() {
+      document.querySelectorAll<HTMLElement>('[data-trc-units]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnits(button.dataset.trcUnits === 'imperial' ? 'imperial' : 'metric'));
+      });
+      ['trc-resin', 'trc-thickness', 'trc-power', 'trc-wavelength'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('input', () => this.update());
+      });
+    }
+
+    private setUnits(units: UnitSystem) {
+      if (units === this.units) return;
+      const thicknessMm = this.thicknessMm();
+      this.units = units;
+      this.input('trc-thickness').value = this.formatLength(thicknessMm, units === 'metric' ? 1 : 3);
+      this.update();
+    }
+
+    private thicknessMm() {
+      const raw = parseFloat(this.input('trc-thickness').value) || 0;
+      return this.units === 'metric' ? raw : raw * 25.4;
+    }
+
+    private formatLength(mm: number, digits = 1) {
+      return this.units === 'metric' ? mm.toFixed(digits) : (mm / 25.4).toFixed(digits);
+    }
+
+    private formatDistance(cm: number) {
+      return this.units === 'metric' ? cm.toFixed(0) : (cm / 2.54).toFixed(1);
+    }
+
+    private hasTemperature(c: number | null) {
+      return typeof c === 'number';
+    }
+
+    private formatTemperature(c: number | null) {
+      if (c === null) return this.data().noTemp || '';
+      return this.units === 'metric' ? c.toFixed(0) : (c * 9 / 5 + 32).toFixed(0);
+    }
+
+    private getUnitText(metricKey: string, imperialKey: string) {
+      const isMetric = this.units === 'metric';
+      const d = this.data() as Record<string, string | undefined>;
+      return (isMetric ? d[metricKey] : d[imperialKey]) || '';
+    }
+
+    private syncUnits() {
+      this.text('trc-thickness-unit', this.getUnitText('mm', 'inch'));
+      this.text('trc-distance-unit', this.getUnitText('cm', 'in'));
+      this.text('trc-temp-unit', this.getUnitText('c', 'f'));
+      document.querySelectorAll('[data-trc-units]').forEach((button) => {
+        button.classList.toggle('active', (button as HTMLElement).dataset.trcUnits === this.units);
+      });
+    }
+
+    private update() {
+      this.syncUnits();
+      const result = calculateTechnicalResinUvCuring({
+        resinType: this.select('trc-resin').value as TechnicalResinType,
+        wallThicknessMm: this.thicknessMm(),
+        stationPowerW: parseFloat(this.input('trc-power').value) || 40,
+        wavelengthNm: this.select('trc-wavelength').value as UvWavelength,
+      });
+      this.text('trc-time', result.recommendedMinutes.toFixed(1));
+      this.text('trc-out-time', result.recommendedMinutes.toFixed(1));
+      this.text('trc-out-temp', this.formatTemperature(result.curingTemperatureC));
+      let tempUnit = '';
+      if (this.hasTemperature(result.curingTemperatureC)) {
+        tempUnit = this.getUnitText('c', 'f');
+      }
+      this.text('trc-temp-unit', tempUnit);
+      this.text('trc-temp-note', this.getUnitText('ambientMetric', 'ambientImperial'));
+      document.getElementById('trc-temp-note')?.toggleAttribute('hidden', this.hasTemperature(result.curingTemperatureC));
+      this.text('trc-out-distance', this.formatDistance(result.optimalDistanceCm));
+      this.text('trc-out-max', result.maxSafeMinutes.toFixed(0));
+      this.renderSafety(result.safetyLevel, result.doseIndex);
+    }
+
+    private renderSafety(level: string, doseIndex: number) {
+      document.querySelector('.trc-root')?.setAttribute('data-safety', level);
+      const labels = this.labels();
+      let label = labels.safe;
+      let message = labels.safeMessage;
+      if (level === 'limit') {
+        label = labels.limit;
+        message = labels.limitMessage;
+      } else if (level === 'caution') {
+        label = labels.caution;
+        message = labels.cautionMessage;
+      }
+      this.text('trc-safety-label', label || '');
+      this.text('trc-safety-message', message || '');
+      const progress = document.getElementById('trc-dose') as HTMLProgressElement;
+      if (progress) progress.value = Math.min(100, doseIndex);
+      const arc = document.getElementById('trc-arc');
+      if (arc) arc.style.strokeDashoffset = `${242 - 242 * Math.min(100, doseIndex) / 100}`;
+    }
+  }
+
+  const initTechnicalResinUvCuringTool = () => new TechnicalResinUvCuringTool();
+  document.addEventListener('astro:page-load', initTechnicalResinUvCuringTool);
+  initTechnicalResinUvCuringTool();
+</script>

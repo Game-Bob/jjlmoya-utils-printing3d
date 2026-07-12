@@ -28,6 +28,7 @@ import { WALL_PERIMETER_OPTIMIZER_TOOL } from './tool/wallPerimeterOptimizer';
 import { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator';
 import { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator';
 import { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator';
+import { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -58,4 +59,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   WARPING_RISK_SIMULATOR_TOOL,
   KINEMATIC_RINGING_CALCULATOR_TOOL,
   E_STEPS_CALIBRATION_CALCULATOR_TOOL,
+  TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL,
 ];
