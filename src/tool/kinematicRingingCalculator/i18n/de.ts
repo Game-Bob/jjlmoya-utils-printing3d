@@ -3,8 +3,8 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
-  title: '3D-Drucker-Beschleunigungs-, Ruck- und Eckengeschwindigkeits-Ringing-Rechner',
+  slug: '3d-drucker-beschleunigung-jerk-ringing-rechner',
+  title: '3D Drucker Beschleunigungs Ruck und Eckengeschwindigkeits Ringing Rechner',
   description: 'Schätzen Sie sichere X/Y-Beschleunigung und Ruck bzw. Klipper-Eckengeschwindigkeit anhand von Düsenkopfmasse, Bettmasse, Zielgeschwindigkeit, Druckerkinematik und Rahmensteifigkeit.',
   ui: {
     controlsAriaLabel: 'Eingaben für den kinematischen Ringing-Rechner',
@@ -67,7 +67,7 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
     { type: 'stats', columns: 3, items: [
       { value: '20-30 %', label: 'Sicherheitsabzug von der theoretischen Kraftgrenze' },
       { value: 'a = F / m', label: 'Kernbeziehung zwischen Masse und Beschleunigung' },
-      { value: '3–24 mm/s', label: 'Begrenzter Ruck- oder Eckengeschwindigkeits-Ausgabebereich' },
+      { value: '3-24 mm/s', label: 'Begrenzter Ruck- oder Eckengeschwindigkeits-Ausgabebereich' },
     ] },
     { type: 'diagnostic', variant: 'warning', title: 'Dies ist ein konservativer Ausgangspunkt, kein Ersatz für Input Shaping', html: 'Klipper Input Shaping, Beschleunigungsmessungen und druckbasierte Ringingtürme können höhere Beschleunigungen als eine reine Masseschätzung ermöglichen. Verwenden Sie diesen Rechner, um unvernünftige Startwerte zu vermeiden, und validieren Sie ihn dann mit realen Bewegungstests.' },
 
@@ -86,10 +86,10 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
     { type: 'paragraph', html: 'Der klassische Marlin-Ruck ist ein Richtungswechsel-Schwellenwert, der in Millimetern pro Sekunde ausgedrückt wird. Er steuert, wie viel sofortige Geschwindigkeitsänderung der Planer zulässt, bevor die Beschleunigungsbegrenzung angewendet wird. Klipper verwendet <code>square_corner_velocity</code>, oft als SCV abgekürzt, für ein ähnliches Eckengeschwindigkeitskonzept. Die Einheiten sind ebenfalls Millimeter pro Sekunde, aber das Planungsmodell unterscheidet sich. Deshalb ändert dieses Tool die Ausgabebezeichnung, wenn Klipper ausgewählt ist, anstatt den Wert als Ruck zu bezeichnen.' },
     { type: 'comparative', columns: 3, items: [
       { title: 'Beschleunigung', description: 'Hauptgeschwindigkeits-Kraft-Grenze. Sie bestimmt, wie stark der Drucker die Masse bei Geschwindigkeitsänderungen drückt.', highlight: true, points: ['mm/s2', 'Erhöht die Motorkraftanforderung', 'Starker Einfluss auf Ringing'] },
-      { title: 'Marlin-Ruck', description: 'Eckübergangsschwelle, die von Marlin-Planern verwendet wird, um eine Verlangsamung bei sehr kleinen Geschwindigkeitsänderungen zu vermeiden.', points: ['mm/s', 'Firmware-spezifisches Verhalten', 'Zu hoch kann Ecken unsauber machen'] },
+      { title: 'Marlin Ruck', description: 'Eckübergangsschwelle, die von Marlin-Planern verwendet wird, um eine Verlangsamung bei sehr kleinen Geschwindigkeitsänderungen zu vermeiden.', points: ['mm/s', 'Firmware-spezifisches Verhalten', 'Zu hoch kann Ecken unsauber machen'] },
       { title: 'Klipper SCV', description: 'Eckengeschwindigkeit, die von Klipper verwendet wird, um die Kurvengeschwindigkeit durch Richtungswechsel zu modellieren.', points: ['mm/s', 'In diesem Tool als SCV angezeigt', 'Wird normalerweise mit Input Shaping abgestimmt'] },
     ] },
-    { type: 'message', title: 'Firmware-Terminologie ist wichtig', html: 'Wenn Sie das Ergebnis in Klipper kopieren, verwenden Sie <code>square_corner_velocity</code>. Wenn Sie es in Marlin-Einstellungen kopieren, verwenden Sie Ruck-bezogene Felder wie X-Ruck und Y-Ruck. Der Rechner hält das numerische Ergebnis konservativ, kennzeichnet es jedoch entsprechend der ausgewählten Firmware.' },
+    { type: 'message', title: 'Firmware Terminologie ist wichtig', html: 'Wenn Sie das Ergebnis in Klipper kopieren, verwenden Sie <code>square_corner_velocity</code>. Wenn Sie es in Marlin-Einstellungen kopieren, verwenden Sie Ruck-bezogene Felder wie X-Ruck und Y-Ruck. Der Rechner hält das numerische Ergebnis konservativ, kennzeichnet es jedoch entsprechend der ausgewählten Firmware.' },
 
     { type: 'title', text: 'Wie die strukturelle Steifigkeit den Sicherheitskoeffizienten verändert', level: 2 },
     { type: 'paragraph', html: 'Zwei Drucker mit derselben Düsenkopfmasse können unterschiedliche Beschleunigungen erfordern, da Rahmen und Bewegungssystem unterschiedliche Energiemengen speichern. Ein leichtes Auslegerbett, lose V-Slot-Rollen, lange ungestützte Stangen, dünne gedruckte Motorhalterungen und flexible Düsenkopfplatten verringern die nutzbare Beschleunigung. Ein verstreifter Alurahmen mit Linearschienen, kurzen Riemenspannen, starren Umlenkrollenhalterungen und einem kompakten Düsenkopf kann mehr Beschleunigung verkraften, bevor dieselbe Masse sichtbares Ringing erzeugt.' },

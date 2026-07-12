@@ -69,7 +69,7 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
       { value: 'a = F / m', label: 'core mass and acceleration relationship' },
       { value: '3-24 mm/s', label: 'bounded jerk or square corner velocity output range' },
     ] },
-    { type: 'diagnostic', variant: 'warning', title: 'This is a conservative starting point, not an input-shaper replacement', html: 'Klipper input shaping, accelerometer measurements, and print-based ringing towers can permit higher acceleration than a mass-only estimate. Use this calculator to avoid unreasonable starting values, then validate with real motion tests.' },
+    { type: 'diagnostic', variant: 'warning', title: 'This is a conservative starting point, not an input shaper replacement', html: 'Klipper input shaping, accelerometer measurements, and print-based ringing towers can permit higher acceleration than a mass-only estimate. Use this calculator to avoid unreasonable starting values, then validate with real motion tests.' },
 
     { type: 'title', text: 'Which Mass Matters on Cartesian, CoreXY, and Delta Printers', level: 2 },
     { type: 'paragraph', html: 'A printer does not always accelerate the same parts on every axis. On a Cartesian bedslinger, the X axis usually moves the toolhead while the Y axis moves the bed, the heater, the magnetic sheet or glass plate, clips, printed parts, and sometimes the cable chain. Because Y-axis bed mass can dominate ringing, this calculator compares the toolhead against a bed-load factor and uses the heavier effective group as the limiting motion mass.' },

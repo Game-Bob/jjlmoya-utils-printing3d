@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
+  slug: 'kalkulator-przyspieszenia-jerk-i-ringing-drukarki-3d',
   title: 'Kalkulator przyspieszenia, jerk i prędkości narożnej dla drukarek 3D',
   description: 'Oszacuj bezpieczne przyspieszenie X/Y oraz jerk lub Klipper square corner velocity na podstawie masy głowicy, masy stołu, docelowej prędkości, kinematyki drukarki i sztywności ramy.',
   ui: {

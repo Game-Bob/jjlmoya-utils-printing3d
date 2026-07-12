@@ -3,8 +3,8 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
-  title: '3D-printer versnelling, jerk en vierkante-hoeksnelheid berekenaar',
+  slug: '3d-printer-versnelling-jerk-en-ringing-berekenaar',
+  title: '3D printer versnelling, jerk en vierkante hoeksnelheid berekenaar',
   description: 'Schat veilige X/Y-versnelling, jerk of Klipper vierkante-hoeksnelheid op basis van gereedschapskopmassa, bedmassa, doelsnelheid, printerkinematica en framestijfheid.',
   ui: {
     controlsAriaLabel: 'Invoer kinematische ringing-berekenaar',
@@ -86,10 +86,10 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
     { type: 'paragraph', html: 'Klassieke Marlin-jerk is een richtingsveranderingsdrempel uitgedrukt in millimeters per seconde. Het bepaalt hoeveel directe snelheidsverandering de planner toestaat voordat versnelling wordt beperkt. Klipper gebruikt <code>square_corner_velocity</code>, vaak afgekort tot SCV, voor een soortgelijk concept van hoeksnelheid. De eenheden zijn ook millimeters per seconde, maar het planningsmodel verschilt. Daarom verandert deze tool het uitvoerlabel wanneer Klipper is geselecteerd in plaats van de waarde jerk te noemen.' },
     { type: 'comparative', columns: 3, items: [
       { title: 'Versnelling', description: 'Belangrijkste snelheid-krachtlimiet. Bepaalt hoe hard de printer de massa duwt tijdens snelheidsveranderingen.', highlight: true, points: ['mm/s2', 'Verhoogt de krachtvraag van de motor', 'Sterk effect op ringing'] },
-      { title: 'Marlin-jerk', description: 'Hoekovergangsdrempel gebruikt door Marlin-achtige planners om te voorkomen dat wordt vertraagd voor zeer kleine snelheidsveranderingen.', points: ['mm/s', 'Firmware-specifiek gedrag', 'Te hoog kan hoeken hard maken'] },
+      { title: 'Marlin jerk', description: 'Hoekovergangsdrempel gebruikt door Marlin-achtige planners om te voorkomen dat wordt vertraagd voor zeer kleine snelheidsveranderingen.', points: ['mm/s', 'Firmware-specifiek gedrag', 'Te hoog kan hoeken hard maken'] },
       { title: 'Klipper SCV', description: 'Vierkante-hoeksnelheid gebruikt door Klipper om hoeksnelheid door richtingsveranderingen te modelleren.', points: ['mm/s', 'Getoond als SCV in deze tool', 'Gewoonlijk afgestemd met input shaping'] },
     ] },
-    { type: 'message', title: 'Firmware-terminologie is belangrijk', html: 'Als u het resultaat naar Klipper kopieert, gebruik dan <code>square_corner_velocity</code>. Als u het naar Marlin-instellingen kopieert, gebruik dan jerk-gerelateerde velden zoals X-jerk en Y-jerk. De berekenaar houdt het numerieke resultaat conservatief maar labelt het volgens de geselecteerde firmware.' },
+    { type: 'message', title: 'Firmware terminologie is belangrijk', html: 'Als u het resultaat naar Klipper kopieert, gebruik dan <code>square_corner_velocity</code>. Als u het naar Marlin-instellingen kopieert, gebruik dan jerk-gerelateerde velden zoals X-jerk en Y-jerk. De berekenaar houdt het numerieke resultaat conservatief maar labelt het volgens de geselecteerde firmware.' },
 
     { type: 'title', text: 'Hoe Structurele Stijfheid de Veiligheidscoëfficiënt Verandert', level: 2 },
     { type: 'paragraph', html: 'Twee printers met dezelfde gereedschapskopmassa kunnen verschillende versnelling vereisen omdat het frame en bewegingssysteem verschillende hoeveelheden energie opslaan. Een lichte cantileverbod, losse V-slot wielen, lange onondersteunde staven, dunne geprinte motorsteunen en flexibele gereedschapskopplaten verlagen de bruikbare versnelling. Een gebracede aluminium frame met lineaire rails, korte riemoverspanningen, stijve idler-stapels en een compacte gereedschapskop kunnen meer versnelling verdragen voordat dezelfde massa zichtbare ringing produceert.' },

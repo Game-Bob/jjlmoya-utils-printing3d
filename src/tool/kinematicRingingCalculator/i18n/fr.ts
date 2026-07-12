@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
+  slug: 'calculateur-de-resonance-accel-jerk-ringing',
   title: 'Calculateur de Résonance (Ringing) pour Accélération, Jerk et Vitesse d\'Angle d\'Imprimante 3D',
   description: 'Estimez l\'accélération X/Y sécurisée et le jerk ou la vitesse d\'angle Klipper à partir de la masse de la tête d\'impression, de la masse du lit, de la vitesse cible, de la cinématique de l\'imprimante et de la rigidité du châssis.',
   ui: {
@@ -45,10 +45,10 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
     noteLabel: 'Note sur la masse et l\'accélération',
     copyButton: 'Copier la configuration',
     copiedButton: 'Copié',
-    copyTemplate: 'Accélération recommandée : {accel} mm/s2\n{transitionName} : {transition} mm/s\nMasse en mouvement effective : {mass} g\n\n{config}',
+    copyTemplate: 'Accélération recommandée: {accel} mm/s2\n{transitionName}: {transition} mm/s\nMasse en mouvement effective: {mass} g\n\n{config}',
     invalidMassMessage: 'Utilisez des valeurs de masse et de vitesse positives. Une masse nulle n\'est pas physiquement valable.',
     toolheadMassHelp: 'Masse de la hotend, ventilateurs, sonde, chariot, extrudeuse, gaines et câblage de la tête qui se déplace en X/Y.',
-    bedMassHelp: 'Masse de l\'ensemble du lit mobile : plateau chauffant, chauffage, tôle d\'acier à ressort ou verre, clips et une pièce imprimée représentative sur les lits mobiles.',
+    bedMassHelp: 'Masse de l\'ensemble du lit mobile: plateau chauffant, chauffage, tôle d\'acier à ressort ou verre, clips et une pièce imprimée représentative sur les lits mobiles.',
     transitionHelp: 'Klipper appelle cela la vitesse d\'angle. Les utilisateurs de Marlin règlent généralement l\'équivalent comme une vitesse de changement de direction X/Y de type jerk.',
     effectiveMassHelp: 'Le calculateur convertit votre cinématique en la masse la plus susceptible d\'exciter la résonance X/Y.',
     safetyHelp: 'Multiplicateur appliqué en dessous de la limite de force moteur théorique. Des valeurs plus faibles réservent plus de marge de couple et de rigidité.',
@@ -63,11 +63,11 @@ export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
   seo: [
     { type: 'title', text: 'Comment ce calculateur de résonance d\'imprimante 3D estime l\'accélération', level: 2 },
     { type: 'paragraph', html: 'La résonance (ringing) et le fantôme (ghosting) sur une impression 3D sont des échos visibles de vibrations mécaniques. Ils apparaissent généralement sous forme d\'ondulations répétées après un angle vif, une lettre en relief, un trou ou un changement soudain de direction de remplissage. L\'imprimante atteint un angle, le système de mouvement change de direction, et l\'énergie stockée dans les courroies, les rails, les éléments du châssis, les supports moteur, les plaques de la tête d\'impression et les supports du lit continue d\'osciller après que la commande est déjà passée. Ce calculateur transforme la variable de premier ordre la plus importante, la masse en mouvement, en une recommandation d\'accélération prudente.' },
-    { type: 'paragraph', html: 'Le point de départ est la mécanique newtonienne : <strong>a = F / m</strong>. Un système de moteur pas à pas et de courroie ne peut créer qu\'une force horizontale limitée avant que le couple ne chute, que les courroies ne s\'étirent, que les poulies ne patinent ou que des pas ne soient sautés. Le calculateur utilise une hypothèse de force conservatrice de classe NEMA 17, convertit la masse en mouvement sélectionnée en kilogrammes, calcule un plafond d\'accélération théorique, puis applique un coefficient de sécurité structurel. Ce coefficient supprime intentionnellement 20 à 30 pour cent de la limite théorique car les vraies imprimantes ne sont pas des axes de laboratoire rigides.' },
+    { type: 'paragraph', html: 'Le point de départ est la mécanique newtonienne: <strong>a = F / m</strong>. Un système de moteur pas à pas et de courroie ne peut créer qu\'une force horizontale limitée avant que le couple ne chute, que les courroies ne s\'étirent, que les poulies ne patinent ou que des pas ne soient sautés. Le calculateur utilise une hypothèse de force conservatrice de classe NEMA 17, convertit la masse en mouvement sélectionnée en kilogrammes, calcule un plafond d\'accélération théorique, puis applique un coefficient de sécurité structurel. Ce coefficient supprime intentionnellement 20 à 30 pour cent de la limite théorique car les vraies imprimantes ne sont pas des axes de laboratoire rigides.' },
     { type: 'stats', columns: 3, items: [
-      { value: '20–30 %', label: 'réduction de sécurité par rapport à la limite de force théorique' },
+      { value: '20-30 %', label: 'réduction de sécurité par rapport à la limite de force théorique' },
       { value: 'a = F / m', label: 'relation fondamentale entre masse et accélération' },
-      { value: '3–24 mm/s', label: 'plage de sortie bornée du jerk ou de la vitesse d\'angle' },
+      { value: '3-24 mm/s', label: 'plage de sortie bornée du jerk ou de la vitesse d\'angle' },
     ] },
     { type: 'diagnostic', variant: 'warning', title: 'Ceci est un point de départ prudent, pas un remplacement de l\'input shaping', html: 'L\'input shaping Klipper, les mesures accélérométriques et les tours de test de résonance peuvent permettre une accélération plus élevée qu\'une simple estimation de masse. Utilisez ce calculateur pour éviter des valeurs de départ déraisonnables, puis validez avec des tests de mouvement réels.' },
 

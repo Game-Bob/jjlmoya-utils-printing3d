@@ -3,8 +3,8 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
-  title: 'Kalkylator för 3D-skrivaracceleration, jerk och fyrkantshörnshastighet',
+  slug: 'kalkylator-for-3d-skrivaracceleration-jerk-och-fyrkantshornshastighet',
+  title: 'Kalkylator för 3D skrivaracceleration, jerk och fyrkantshörnshastighet',
   description: 'Uppskatta säker X/Y-acceleration och jerk eller Klipper square corner velocity utifrån skrivarhuvudets massa, bäddens massa, målhastighet, skrivarkinematik och ramstyvhet.',
   ui: {
     controlsAriaLabel: 'Indata för kinematisk ringningskalkylator',

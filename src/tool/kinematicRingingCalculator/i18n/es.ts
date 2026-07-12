@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
+  slug: 'calculadora-de-aceleracion-jerk-y-ringing-de-impresora-3d',
   title: 'Calculadora de Aceleración, Jerk y Velocidad en Esquinas para Impresoras 3D',
   description: 'Estima la aceleración X/Y segura y el jerk o la velocidad en esquinas de Klipper a partir de la masa del cabezal, la masa de la cama, la velocidad objetivo, la cinemática de la impresora y la rigidez del bastidor.',
   ui: {

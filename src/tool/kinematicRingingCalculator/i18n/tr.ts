@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
+  slug: '3d-yazici-hizlanma-jerk-ve-ringing-hesaplayici',
   title: '3D Yazıcı Hızlanma, Jerk ve Kare Köşe Hızı Ringing Hesaplayıcı',
   description: 'Taşıyıcı kafa kütlesi, tabla kütlesi, hedef hız, yazıcı kinematiği ve çerçeve rijitliğinden güvenli X/Y hızlanma ve jerk veya Klipper kare köşe hızı tahmini.',
   ui: {

@@ -3,7 +3,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { KinematicRingingCalculatorUI } from '../ui';
 
 export const content: ToolLocaleContent<KinematicRingingCalculatorUI> = {
-  slug: '3d-printer-acceleration-jerk-ringing-calculator',
+  slug: 'kalkulator-akselerasi-jerk-dan-ringing-printer-3d',
   title: 'Kalkulator Ringing Akselerasi, Jerk, dan Kecepatan Sudut Persegi Printer 3D',
   description: 'Perkirakan akselerasi dan jerk X/Y yang aman atau kecepatan sudut persegi Klipper dari massa toolhead, massa bed, kecepatan target, kinematika printer, dan kekakuan rangka.',
   ui: {
