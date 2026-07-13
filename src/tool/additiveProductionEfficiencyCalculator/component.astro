@@ -1,0 +1,148 @@
+---
+import type { AdditiveProductionEfficiencyCalculatorUI } from './ui';
+import './additive-production-efficiency-calculator.css';
+
+interface Props {
+  ui: AdditiveProductionEfficiencyCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="apec-root"
+  data-apec-root
+  data-minutes-unit={ui.minutesUnit}
+  data-percent-unit={ui.percentUnit}
+  data-millimeter-unit={ui.millimeterUnit}
+  data-inch-unit={ui.inchUnit}
+  data-metric-speed-unit={ui.metricSpeedUnit}
+  data-imperial-speed-unit={ui.imperialSpeedUnit}
+  data-batch-wins-label={ui.batchWinsLabel}
+  data-sequential-wins-label={ui.sequentialWinsLabel}
+  data-risk-override-label={ui.riskOverrideLabel}
+  data-faster-label={ui.fasterLabel}
+  data-slower-label={ui.slowerLabel}
+  data-low-risk-label={ui.lowRiskLabel}
+  data-moderate-risk-label={ui.moderateRiskLabel}
+  data-critical-risk-status-label={ui.criticalRiskStatusLabel}
+>
+  <div class="apec-topbar">
+    <div class="apec-segment" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="is-active" data-apec-unit="metric">{ui.metricLabel}</button>
+      <button type="button" data-apec-unit="imperial">{ui.imperialLabel}</button>
+    </div>
+  </div>
+
+  <div class="apec-layout">
+    <section class="apec-inputs" aria-label={ui.inputsAriaLabel}>
+      <div class="apec-field-grid">
+        <label>
+          <span>{ui.piecesLabel}</span>
+          <input type="number" min="1" step="1" value="24" data-apec-input="pieces" />
+        </label>
+        <label>
+          <span>{ui.unitPrintTimeLabel}</span>
+          <input type="number" min="1" step="1" value="38" data-apec-input="unit-print-time" />
+        </label>
+        <label>
+          <span>{ui.preheatTimeLabel}</span>
+          <input type="number" min="0" step="1" value="12" data-apec-input="preheat-time" />
+        </label>
+        <label>
+          <span>{ui.purgeTimeLabel}</span>
+          <input type="number" min="0" step="0.5" value="2.5" data-apec-input="purge-time" />
+        </label>
+      </div>
+
+      <label class="apec-slider">
+        <span><em>{ui.transitionDistanceLabel}</em><strong><output>80</output> <b data-apec-distance-unit>{ui.millimeterUnit}</b></strong></span>
+        <input type="range" min="0" max="300" step="5" value="80" data-apec-input="transition-distance" />
+      </label>
+
+      <label class="apec-slider">
+        <span><em>{ui.travelSpeedLabel}</em><strong><output>180</output> <b data-apec-speed-unit>{ui.metricSpeedUnit}</b></strong></span>
+        <input type="range" min="20" max="350" step="5" value="180" data-apec-input="travel-speed" />
+      </label>
+
+      <label class="apec-slider">
+        <span><em>{ui.failureRateLabel}</em><strong><output>3</output>{ui.percentUnit}</strong></span>
+        <input type="range" min="0" max="25" step="0.1" value="3" data-apec-input="failure-rate" />
+      </label>
+
+      <label class="apec-slider">
+        <span><em>{ui.criticalRiskLabel}</em><strong><output>35</output>{ui.percentUnit}</strong></span>
+        <input type="range" min="5" max="80" step="1" value="35" data-apec-input="critical-risk" />
+      </label>
+    </section>
+
+    <section class="apec-results" aria-label={ui.resultsAriaLabel}>
+      <div class="apec-visualizer" aria-label={ui.visualizerAriaLabel}>
+        <figure class="apec-risk-glyph">
+          <svg viewBox="0 0 180 180" role="img" aria-label={ui.riskLabel}>
+            <defs>
+              <radialGradient id="apec-glyph-core" cx="50%" cy="45%" r="65%">
+                <stop offset="0%" stop-color="var(--apec-glyph-hot)" stop-opacity="0.9"></stop>
+                <stop offset="58%" stop-color="var(--apec-glyph-mid)" stop-opacity="0.68"></stop>
+                <stop offset="100%" stop-color="var(--apec-glyph-cool)" stop-opacity="0.18"></stop>
+              </radialGradient>
+              <filter id="apec-glyph-glow">
+                <feGaussianBlur stdDeviation="3.5" result="blur"></feGaussianBlur>
+                <feMerge>
+                  <feMergeNode in="blur"></feMergeNode>
+                  <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="apec-glyph-halo" data-apec-glyph-halo d=""></path>
+            <path class="apec-glyph-mesh" data-apec-glyph d=""></path>
+            <g class="apec-glyph-spokes" data-apec-glyph-spokes></g>
+            <circle class="apec-glyph-core" cx="90" cy="90" r="12"></circle>
+          </svg>
+          <figcaption><span>{ui.riskLabel}</span><strong data-apec-output="risk">-</strong></figcaption>
+        </figure>
+
+        <figure class="apec-bed-map">
+          <svg viewBox="0 0 320 220" role="img" aria-label={ui.layoutLabel}>
+            <rect class="apec-bed-plate" x="18" y="18" width="284" height="184" rx="12"></rect>
+            <path class="apec-bed-path" data-apec-bed-path d=""></path>
+            <g data-apec-bed-zones></g>
+            <g data-apec-bed-parts></g>
+          </svg>
+          <figcaption><span>{ui.layoutLabel}</span><strong data-apec-output="layout-mode">-</strong></figcaption>
+        </figure>
+      </div>
+
+      <article class="apec-recommendation" data-apec-output="recommendation-card">
+        <span>{ui.recommendationLabel}</span>
+        <strong data-apec-output="recommendation">-</strong>
+        <small data-apec-output="viability">-</small>
+      </article>
+
+      <div class="apec-time-pair">
+        <article>
+          <span>{ui.batchLabel}</span>
+          <strong data-apec-output="batch-time">-</strong>
+        </article>
+        <article>
+          <span>{ui.sequentialLabel}</span>
+          <strong data-apec-output="sequential-time">-</strong>
+        </article>
+      </div>
+
+      <div class="apec-metrics">
+        <article><span>{ui.savingsLabel}</span><strong data-apec-output="savings">-</strong></article>
+        <article><span>{ui.efficiencyLabel}</span><strong data-apec-output="efficiency">-</strong></article>
+        <article><span>{ui.transitionLabel}</span><strong data-apec-output="transition">-</strong></article>
+      </div>
+      <div class="apec-risk" aria-hidden="true"><i data-apec-output="risk-meter"></i></div>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { initAdditiveProductionEfficiencyCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initAdditiveProductionEfficiencyCalculator);
+  initAdditiveProductionEfficiencyCalculator();
+</script>

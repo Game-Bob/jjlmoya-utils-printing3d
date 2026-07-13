@@ -29,6 +29,7 @@ import { WARPING_RISK_SIMULATOR_TOOL } from './tool/warpingRiskSimulator';
 import { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalculator';
 import { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator';
 import { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator';
+import { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -60,4 +61,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   KINEMATIC_RINGING_CALCULATOR_TOOL,
   E_STEPS_CALIBRATION_CALCULATOR_TOOL,
   TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL,
+  ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL,
 ];

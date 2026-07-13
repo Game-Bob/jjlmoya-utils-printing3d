@@ -72,3 +72,5 @@ export { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalcul
 export { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator/index';
 
 export { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator/index';
+
+export { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator/index';
