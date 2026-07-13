@@ -30,6 +30,7 @@ import { eStepsCalibrationCalculator } from '../tool/eStepsCalibrationCalculator
 import { technicalResinUvCuringCalculator } from '../tool/technicalResinUvCuringCalculator/entry';
 import { additiveProductionEfficiencyCalculator } from '../tool/additiveProductionEfficiencyCalculator/entry';
 import { hotendFlowRateLimitCalculator } from '../tool/hotendFlowRateLimitCalculator/entry';
+import { machineHourlyRateCalculator } from '../tool/machineHourlyRateCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -65,6 +66,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     technicalResinUvCuringCalculator,
     additiveProductionEfficiencyCalculator,
     hotendFlowRateLimitCalculator,
+    machineHourlyRateCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

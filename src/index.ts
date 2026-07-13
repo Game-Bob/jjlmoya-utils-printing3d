@@ -76,3 +76,5 @@ export { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResin
 export { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator/index';
 
 export { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLimitCalculator/index';
+
+export { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCalculator/index';

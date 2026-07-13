@@ -31,6 +31,7 @@ import { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCal
 import { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator';
 import { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator';
 import { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLimitCalculator';
+import { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -64,4 +65,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL,
   ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL,
   HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL,
+  MACHINE_HOURLY_RATE_CALCULATOR_TOOL,
 ];

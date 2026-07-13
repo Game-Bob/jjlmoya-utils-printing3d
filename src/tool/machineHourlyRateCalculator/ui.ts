@@ -1,0 +1,40 @@
+export interface MachineHourlyRateCalculatorUI {
+  inputsAriaLabel: string;
+  resultsAriaLabel: string;
+  settingsLabel: string;
+  currencyLabel: string;
+  currencyOptions: {
+    code: string;
+    label: string;
+    symbol: string;
+  }[];
+  durationLabel: string;
+  powerLabel: string;
+  tariffLabel: string;
+  purchasePriceLabel: string;
+  usefulLifeLabel: string;
+  totalCostLabel: string;
+  hourlyRateLabel: string;
+  electricityLabel: string;
+  depreciationLabel: string;
+  electricityPerHourLabel: string;
+  depreciationPerHourLabel: string;
+  compositionLabel: string;
+  insightLabel: string;
+  utilizationLabel: string;
+  utilizationValueLabel: string;
+  utilizationHint: string;
+  batchLabel: string;
+  energyUsedLabel: string;
+  costDriverLabel: string;
+  energyDriverLabel: string;
+  assetDriverLabel: string;
+  balancedDriverLabel: string;
+  electricityDominant: string;
+  depreciationDominant: string;
+  balancedDominant: string;
+  hoursUnit: string;
+  wattsUnit: string;
+  kwhUnit: string;
+  currencySymbol: string;
+}

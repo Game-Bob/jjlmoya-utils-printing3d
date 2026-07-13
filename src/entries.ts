@@ -29,6 +29,7 @@ export { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/
 export { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 export { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
 export { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
+export { machineHourlyRateCalculator } from './tool/machineHourlyRateCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -62,6 +63,7 @@ import { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/
 import { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 import { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
 import { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
+import { machineHourlyRateCalculator } from './tool/machineHourlyRateCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -95,4 +97,5 @@ export const ALL_ENTRIES = [
   technicalResinUvCuringCalculator,
   additiveProductionEfficiencyCalculator,
   hotendFlowRateLimitCalculator,
+  machineHourlyRateCalculator,
 ];

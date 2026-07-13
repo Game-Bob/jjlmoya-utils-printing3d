@@ -1,0 +1,139 @@
+---
+import type { MachineHourlyRateCalculatorUI } from './ui';
+import './machine-hourly-rate-production-cost-calculator.css';
+
+interface Props {
+  ui: MachineHourlyRateCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="mhr-root"
+  data-mhr-root
+  data-currency={ui.currencySymbol}
+  data-hours-unit={ui.hoursUnit}
+  data-electricity-dominant={ui.electricityDominant}
+  data-depreciation-dominant={ui.depreciationDominant}
+  data-balanced-dominant={ui.balancedDominant}
+  data-energy-driver-label={ui.energyDriverLabel}
+  data-asset-driver-label={ui.assetDriverLabel}
+  data-balanced-driver-label={ui.balancedDriverLabel}
+>
+  <section class="mhr-console" aria-label={ui.resultsAriaLabel}>
+    <div class="mhr-ticker">
+      <span>{ui.batchLabel}</span>
+      <strong data-mhr-output="total">-</strong>
+      <small>{ui.hourlyRateLabel}: <b data-mhr-output="hourly">-</b></small>
+    </div>
+
+    <div class="mhr-kpis">
+      <article>
+        <span>{ui.energyUsedLabel}</span>
+        <strong><b data-mhr-output="energy-used">-</b> {ui.kwhUnit}</strong>
+      </article>
+      <article>
+        <span>{ui.utilizationValueLabel}</span>
+        <strong data-mhr-output="life-share">-</strong>
+      </article>
+      <article>
+        <span>{ui.costDriverLabel}</span>
+        <strong data-mhr-output="driver">-</strong>
+      </article>
+    </div>
+
+    <div class="mhr-composition" aria-label={ui.compositionLabel}>
+      <div class="mhr-stack" role="img" aria-label={ui.compositionLabel}>
+        <i data-mhr-bar="electricity"></i>
+        <b data-mhr-bar="depreciation"></b>
+      </div>
+      <div class="mhr-legend">
+        <span><i></i>{ui.electricityLabel} <b data-mhr-output="electricity-share">-</b></span>
+        <span><i></i>{ui.depreciationLabel} <b data-mhr-output="depreciation-share">-</b></span>
+      </div>
+    </div>
+
+    <div class="mhr-ledger">
+      <article>
+        <span>{ui.electricityLabel}</span>
+        <strong data-mhr-output="electricity">-</strong>
+        <small>{ui.electricityPerHourLabel}: <b data-mhr-output="electricity-hour">-</b></small>
+      </article>
+      <article>
+        <span>{ui.depreciationLabel}</span>
+        <strong data-mhr-output="depreciation">-</strong>
+        <small>{ui.depreciationPerHourLabel}: <b data-mhr-output="depreciation-hour">-</b></small>
+      </article>
+    </div>
+
+    <p class="mhr-insight"><span>{ui.insightLabel}</span><strong data-mhr-output="insight">-</strong></p>
+  </section>
+
+  <section class="mhr-inputs" aria-label={ui.inputsAriaLabel}>
+    <div class="mhr-settings">
+      <h3>{ui.settingsLabel}</h3>
+      <label class="mhr-select-label" for="mhr-currency">
+        <span>{ui.currencyLabel}</span>
+        <select id="mhr-currency" data-mhr-currency>
+          {
+            ui.currencyOptions.map((option) => (
+              <option value={option.code} data-symbol={option.symbol} selected={option.code === 'EUR'}>
+                {option.code} - {option.label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+    </div>
+
+    <label class="mhr-duration">
+      <span class="mhr-duration-head"><em>{ui.durationLabel}</em><strong><output>8</output><b>{ui.hoursUnit}</b></strong></span>
+      <input type="range" min="0.5" max="72" step="0.5" value="8" data-mhr-input="hours" />
+    </label>
+
+    <div class="mhr-grid">
+      <label>
+        <span>{ui.powerLabel}</span>
+        <span class="mhr-input-row">
+          <input type="number" min="0" step="5" value="180" data-mhr-input="watts" />
+          <small>{ui.wattsUnit}</small>
+        </span>
+      </label>
+      <label>
+        <span>{ui.tariffLabel}</span>
+        <span class="mhr-input-row">
+          <input type="number" min="0" step="0.01" value="0.25" data-mhr-input="tariff" />
+          <small><b data-mhr-symbol>{ui.currencySymbol}</b>/{ui.kwhUnit}</small>
+        </span>
+      </label>
+      <label>
+        <span>{ui.purchasePriceLabel}</span>
+        <span class="mhr-input-row">
+          <input type="number" min="0" step="10" value="900" data-mhr-input="purchase-price" />
+          <small data-mhr-symbol>{ui.currencySymbol}</small>
+        </span>
+      </label>
+      <label>
+        <span>{ui.usefulLifeLabel}</span>
+        <span class="mhr-input-row">
+          <input type="number" min="1" step="100" value="5000" placeholder="5000" data-mhr-input="useful-life" />
+          <small>{ui.hoursUnit}</small>
+        </span>
+      </label>
+    </div>
+
+    <div class="mhr-utilization">
+      <span>{ui.utilizationLabel}</span>
+      <strong data-mhr-output="life-share">-</strong>
+      <p>{ui.utilizationHint}</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initMachineHourlyRateCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initMachineHourlyRateCalculator);
+  initMachineHourlyRateCalculator();
+</script>
