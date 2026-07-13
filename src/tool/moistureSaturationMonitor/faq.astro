@@ -1,0 +1,14 @@
+---
+import { FAQ as SharedFAQ } from '@jjlmoya/utils-shared';
+import { moistureSaturationMonitor } from './index';
+import type { KnownLocale } from '../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await moistureSaturationMonitor.i18n[locale]?.();
+---
+
+{content && <SharedFAQ items={content.faq} />}

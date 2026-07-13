@@ -1,0 +1,167 @@
+---
+import type { MoistureSaturationMonitorUI } from './ui';
+import { HYGROSCOPIC_MATERIALS } from './logic';
+import './filament-dehydration-estimator.css';
+
+interface Props {
+  ui: MoistureSaturationMonitorUI;
+}
+
+const { ui } = Astro.props;
+
+const materialLabels: Record<string, string> = {
+  pla: ui.materialPlaLabel,
+  petg: ui.materialPetgLabel,
+  abs: ui.materialAbsLabel,
+  asa: ui.materialAsaLabel,
+  tpu: ui.materialTpuLabel,
+  pa: ui.materialPaLabel,
+  pc: ui.materialPcLabel,
+  pva: ui.materialPvaLabel,
+};
+---
+
+<div
+  class="msm-root"
+  data-percent-unit={ui.percentUnit}
+  data-grams-unit={ui.gramsUnit}
+  data-pounds-unit={ui.poundsUnit}
+  data-celsius-unit={ui.celsiusUnit}
+  data-fahrenheit-unit={ui.fahrenheitUnit}
+  data-hours-unit={ui.hoursUnit}
+  data-minutes-unit={ui.minutesUnit}
+  data-seconds-unit={ui.secondsUnit}
+  data-no-value-label={ui.noValueLabel}
+  data-stable-label={ui.stableLabel}
+  data-watch-label={ui.watchLabel}
+  data-critical-label={ui.criticalLabel}
+  data-ready-label={ui.chamberReadyLabel}
+  data-running-label={ui.chamberRunningLabel}
+  data-complete-label={ui.chamberCompleteLabel}
+  data-start-label={ui.calculateLabel}
+  data-pause-label={ui.pauseCycleLabel}
+  data-resume-label={ui.resumeCycleLabel}
+>
+  <section class="msm-console" aria-label={ui.kineticLabel}>
+    <div class="msm-toolbar">
+      <span>{ui.kineticLabel}</span>
+      <div class="msm-segment" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" data-unit-system="metric" aria-pressed="true">{ui.metricLabel}</button>
+        <button type="button" data-unit-system="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+      </div>
+    </div>
+
+    <div class="msm-controls">
+      <div class="msm-field msm-wide">
+        <span>{ui.materialLabel}</span>
+        <div class="msm-select" id="msm-material-select" data-value="pla">
+          <button type="button" id="msm-material-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span>{materialLabels.pla}</span>
+            <i aria-hidden="true"></i>
+          </button>
+          <div class="msm-options" role="listbox" aria-label={ui.materialLabel}>
+            {HYGROSCOPIC_MATERIALS.map((material) => (
+              <button
+                type="button"
+                role="option"
+                data-material-option={material.id}
+                aria-selected={material.id === 'pla' ? 'true' : 'false'}
+              >
+                {materialLabels[material.id]}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <label class="msm-field">
+        <span>{ui.humidityLabel}</span>
+        <div class="msm-input"><input id="msm-rh" type="number" min="0" max="100" step="1" value="62" /><b>{ui.percentUnit}</b></div>
+        <input id="msm-rh-slider" type="range" min="0" max="100" step="1" value="62" />
+      </label>
+      <label class="msm-field">
+        <span>{ui.exposureLabel}</span>
+        <div class="msm-input"><input id="msm-days" type="number" min="0" max="180" step="1" value="21" /><b>{ui.daysUnit}</b></div>
+        <input id="msm-days-slider" type="range" min="0" max="180" step="1" value="21" />
+      </label>
+      <label class="msm-field">
+        <span>{ui.dryTempLabel}</span>
+        <div class="msm-input"><input id="msm-temp" type="number" min="25" max="230" step="1" value="45" /><b data-temp-unit>{ui.celsiusUnit}</b></div>
+        <input id="msm-temp-slider" type="range" min="25" max="110" step="1" value="45" />
+      </label>
+      <label class="msm-field">
+        <span>{ui.spoolMassLabel}</span>
+        <div class="msm-input"><input id="msm-mass" type="number" min="1" max="5000" step="1" value="1000" /><b data-mass-unit>{ui.gramsUnit}</b></div>
+        <input id="msm-mass-slider" type="range" min="1" max="5000" step="1" value="1000" />
+      </label>
+    </div>
+
+    <div class="msm-cycle-actions">
+      <button class="msm-dry-button" id="msm-dry" type="button">{ui.calculateLabel}</button>
+      <button class="msm-reset-button" id="msm-reset-cycle" type="button">{ui.resetCycleLabel}</button>
+    </div>
+  </section>
+
+  <section class="msm-visual" data-risk="stable">
+    <div class="msm-cursor-hud" id="msm-cursor-hud" aria-hidden="true">
+      <span id="msm-hud-state">{ui.chamberReadyLabel}</span>
+      <b id="msm-hud-time">{ui.noValueLabel}</b>
+      <i><em id="msm-hud-fill"></em></i>
+    </div>
+    <div class="msm-ring-stage">
+      <svg class="msm-ring" viewBox="0 0 240 240" role="img" aria-label={ui.saturationLabel}>
+        <defs>
+          <filter id="msm-glow">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <circle class="msm-ring-track" cx="120" cy="120" r="92"></circle>
+        <circle class="msm-ring-humidity" id="msm-ring-humidity" cx="120" cy="120" r="92"></circle>
+        <g class="msm-spool">
+          <circle cx="120" cy="120" r="58"></circle>
+          <circle cx="120" cy="120" r="24"></circle>
+          <path d="M85 82c28 17 55 17 70 0M80 120c31 15 62 15 80 0M85 158c28-17 55-17 70 0"></path>
+        </g>
+        <g class="msm-cotas">
+          <path d="M120 18v22M120 200v22M18 120h22M200 120h22"></path>
+        </g>
+      </svg>
+      <div class="msm-core">
+        <span>{ui.saturationLabel}</span>
+        <strong id="msm-saturation">0.00</strong>
+        <em>{ui.percentUnit}</em>
+      </div>
+    </div>
+
+    <div class="msm-readouts">
+      <div><span>{ui.absorbedLabel}</span><b id="msm-absorbed">0 {ui.gramsUnit}</b></div>
+      <div><span>{ui.dryingTimeLabel}</span><b id="msm-hours">0 {ui.hoursUnit}</b></div>
+      <div><span>{ui.hydrolysisLabel}</span><b id="msm-risk">{ui.stableLabel}</b></div>
+    </div>
+
+    <div class="msm-chamber">
+      <div class="msm-chamber-glass"><i id="msm-chamber-fill"></i><span id="msm-chamber-label">{ui.chamberReadyLabel}</span></div>
+      <svg class="msm-curve" id="msm-curve" viewBox="0 0 320 86" aria-label={ui.curveLabel}>
+        <path class="msm-curve-grid" d="M0 72H320M0 46H320M0 20H320"></path>
+        <path class="msm-curve-line" id="msm-curve-line" d=""></path>
+      </svg>
+      <div class="msm-cycle-panel">
+        <div>
+          <span>{ui.remainingTimeLabel}</span>
+          <b id="msm-remaining">{ui.noValueLabel}</b>
+        </div>
+        <div>
+          <span>{ui.cycleProgressLabel}</span>
+          <b id="msm-progress">0%</b>
+        </div>
+        <div class="msm-progress-bar" aria-hidden="true"><i id="msm-progress-fill"></i></div>
+      </div>
+      <small>{ui.equilibriumLabel}</small>
+    </div>
+  </section>
+</div>
+
+<script src="./monitor.ts"></script>

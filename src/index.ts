@@ -84,3 +84,5 @@ export { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootC
 export { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter/index';
 
 export { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator/index';
+
+export { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor/index';

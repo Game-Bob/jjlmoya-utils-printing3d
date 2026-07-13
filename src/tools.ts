@@ -35,6 +35,7 @@ import { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCal
 import { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootCompensationCalculator';
 import { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter';
 import { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator';
+import { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -72,4 +73,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL,
   FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL,
   MULTI_MATERIAL_PURGE_CALCULATOR_TOOL,
+  MOISTURE_SATURATION_MONITOR_TOOL,
 ];
