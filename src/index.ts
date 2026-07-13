@@ -82,3 +82,5 @@ export { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCal
 export { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootCompensationCalculator/index';
 
 export { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter/index';
+
+export { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator/index';

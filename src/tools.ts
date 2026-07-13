@@ -34,6 +34,7 @@ import { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLim
 import { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCalculator';
 import { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootCompensationCalculator';
 import { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter';
+import { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -70,4 +71,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   MACHINE_HOURLY_RATE_CALCULATOR_TOOL,
   ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL,
   FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL,
+  MULTI_MATERIAL_PURGE_CALCULATOR_TOOL,
 ];

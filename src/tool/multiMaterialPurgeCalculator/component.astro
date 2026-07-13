@@ -1,0 +1,157 @@
+---
+import type { MultiMaterialPurgeCalculatorUI } from './ui';
+import { colorProfiles, transitionFactorMatrix } from './logic';
+import type { FilamentColorId } from './logic';
+import './multi-material-purge-calculator.css';
+
+interface Props {
+  ui: MultiMaterialPurgeCalculatorUI;
+}
+
+const { ui } = Astro.props;
+const colors = Object.values(colorProfiles);
+const seedRows: Array<{ from: FilamentColorId; to: FilamentColorId; count: number }> = [
+  { from: 'black', to: 'white', count: 14 },
+  { from: 'white', to: 'red', count: 8 },
+  { from: 'red', to: 'yellow', count: 6 },
+];
+---
+
+<div
+  class="mmpc-root"
+  data-alert-title={ui.alertTitle}
+  data-alert-text={ui.alertText}
+  data-efficient-text={ui.efficientText}
+  data-cm3-unit={ui.cm3Unit}
+  data-in3-unit={ui.in3Unit}
+  data-g-unit={ui.gUnit}
+  data-oz-unit={ui.ozUnit}
+  data-color-labels={JSON.stringify(ui.colorLabels)}
+>
+  <section class="mmpc-controls" aria-label={ui.modelInputsTitle}>
+    <div class="mmpc-panel mmpc-panel-inputs">
+      <div class="mmpc-panel-bar"><span>{ui.modelInputsTitle}</span></div>
+      <div class="mmpc-grid">
+        <label>
+          <span>{ui.objectVolumeLabel}</span>
+          <input id="mmpc-object-volume" type="number" min="1" step="1" value="120" />
+        </label>
+        <label>
+          <span>{ui.basePurgeLabel}</span>
+          <input id="mmpc-base-purge" type="number" min="1" step="0.5" value="18" />
+        </label>
+        <label>
+          <span>{ui.densityLabel}</span>
+          <input id="mmpc-density" type="number" min="0.1" step="0.01" value="1.24" />
+        </label>
+        <label>
+          <span>{ui.priceLabel}</span>
+          <input id="mmpc-price" type="number" min="0" step="0.01" value="24.00" />
+        </label>
+      </div>
+      <div class="mmpc-topline">
+        <div>
+          <span>{ui.unitSystemLabel}</span>
+          <div class="mmpc-segment" role="group" aria-label={ui.unitSystemLabel}>
+            <button type="button" data-unit-system="metric" aria-pressed="true">{ui.metricLabel}</button>
+            <button type="button" data-unit-system="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+          </div>
+        </div>
+        <label>
+          <span>{ui.currencyLabel}</span>
+          <select id="mmpc-currency">
+            {ui.currencyOptions.map((currency) => <option value={currency.code}>{currency.label}</option>)}
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="mmpc-panel mmpc-panel-transitions">
+      <div class="mmpc-panel-bar"><span>{ui.transitionsTitle}</span></div>
+      <div class="mmpc-transition-head">
+        <span>{ui.fromLabel}</span>
+        <span>{ui.toLabel}</span>
+        <span>{ui.countLabel}</span>
+      </div>
+      <div class="mmpc-transition-list">
+        {seedRows.map((row) => (
+          <div class="mmpc-transition" data-transition-row>
+            <div class="mmpc-color-picker" data-color-picker="from">
+              {colors.map((color) => (
+                <button
+                  type="button"
+                  class="mmpc-color"
+                  style={`--mmpc-color:${color.hex}`}
+                  aria-label={`${ui.fromLabel}: ${ui.colorLabels[color.id]}`}
+                  aria-pressed={row.from === color.id ? 'true' : 'false'}
+                  data-color={color.id}
+                  title={ui.colorLabels[color.id]}
+                />
+              ))}
+            </div>
+            <div class="mmpc-color-picker" data-color-picker="to">
+              {colors.map((color) => (
+                <button
+                  type="button"
+                  class="mmpc-color"
+                  style={`--mmpc-color:${color.hex}`}
+                  aria-label={`${ui.toLabel}: ${ui.colorLabels[color.id]}`}
+                  aria-pressed={row.to === color.id ? 'true' : 'false'}
+                  data-color={color.id}
+                  title={ui.colorLabels[color.id]}
+                />
+              ))}
+            </div>
+            <input type="number" min="0" step="1" value={row.count} data-transition-count aria-label={ui.countLabel} />
+            <output data-transition-factor>{transitionFactorMatrix[row.from][row.to].toFixed(2)}x</output>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mmpc-dashboard" data-severity="efficient">
+    <div class="mmpc-ratio">
+      <div class="mmpc-ratio-labels">
+        <b>{ui.objectLabel}</b>
+        <b>{ui.purgeTowerLabel}</b>
+      </div>
+      <div class="mmpc-loadbar" aria-label={ui.loadbarAriaLabel}>
+        <i id="mmpc-object-bar"></i>
+        <i id="mmpc-purge-bar"></i>
+      </div>
+      <div class="mmpc-ratio-values">
+        <span id="mmpc-object-volume-label">0</span>
+        <span id="mmpc-purge-volume-label">0</span>
+      </div>
+    </div>
+
+    <div class="mmpc-kpis">
+      <div><span>{ui.totalWasteLabel}</span><b id="mmpc-waste-volume">0</b></div>
+      <div><span>{ui.massLabel}</span><b id="mmpc-waste-mass">0</b></div>
+      <div><span>{ui.wasteCostLabel}</span><b id="mmpc-waste-cost">0</b></div>
+      <div><span>{ui.purgeRatioLabel}</span><b id="mmpc-purge-ratio">0%</b></div>
+    </div>
+
+    <div class="mmpc-alert" id="mmpc-alert">
+      <b id="mmpc-alert-title">{ui.efficientText}</b>
+      <p id="mmpc-alert-text">{ui.efficientText}</p>
+    </div>
+
+    <div class="mmpc-table-wrap">
+      <table>
+        <caption>{ui.factorGuideTitle}</caption>
+        <thead>
+          <tr>
+            <th>{ui.transitionLabel}</th>
+            <th>{ui.factorLabel}</th>
+            <th>{ui.volumeLabel}</th>
+          </tr>
+        </thead>
+        <tbody id="mmpc-transition-table"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script src="./converter.ts"></script>
