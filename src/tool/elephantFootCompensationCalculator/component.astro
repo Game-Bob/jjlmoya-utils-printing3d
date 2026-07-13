@@ -1,0 +1,122 @@
+---
+import type { ElephantFootCompensationCalculatorUI } from './ui';
+import './elephant-foot-compensation-calculator.css';
+
+interface Props {
+  ui: ElephantFootCompensationCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="efc"
+  id="main-tool"
+  data-optimal={ui.optimalVerdict}
+  data-watch={ui.watchVerdict}
+  data-severe={ui.severeVerdict}
+  data-copy={ui.copyButton}
+  data-copied={ui.copiedButton}
+  data-template={ui.copyTemplate}
+  data-slicer-template={ui.slicerCommandTemplate}
+  data-cad-template={ui.cadCommandTemplate}
+  data-canvas-correction-template={ui.correctionCanvasTemplate}
+  data-canvas-pressure-template={ui.pressureCanvasTemplate}
+  data-mm={ui.mmUnit}
+  data-inch={ui.inchUnit}
+  data-c={ui.celsiusUnit}
+  data-f={ui.fahrenheitUnit}
+>
+  <div class="efc-toolbar">
+    <div class="efc-segments" role="group" aria-label={ui.materialLabel}>
+      <button type="button" class="active" data-material="pla" data-bed="60" data-tolerance="0.05">{ui.plaLabel}</button>
+      <button type="button" data-material="petg" data-bed="75" data-tolerance="0.07">{ui.petgLabel}</button>
+      <button type="button" data-material="abs" data-bed="100" data-tolerance="0.08">{ui.absAsaLabel}</button>
+      <button type="button" data-material="custom" data-bed="60" data-tolerance="0.05">{ui.customMaterialLabel}</button>
+    </div>
+    <div class="efc-units" role="group" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="active" data-units="metric">{ui.metricLabel}</button>
+      <button type="button" data-units="imperial">{ui.imperialLabel}</button>
+    </div>
+  </div>
+
+  <div class="efc-grid">
+    <section class="efc-scope" aria-label={ui.canvasAriaLabel}>
+      <canvas id="efc-canvas" width="920" height="520"></canvas>
+      <div class="efc-legend" aria-hidden="true">
+        <span><i class="solid"></i>{ui.currentProfileLabel}</span>
+        <span><i class="dashed"></i>{ui.correctedProfileLabel}</span>
+      </div>
+    </section>
+
+    <section class="efc-panel" aria-label={ui.resultsAriaLabel}>
+      <div class="efc-verdict" data-state="watch">
+        <span>{ui.verdictLabel}</span>
+        <strong id="efc-verdict">-</strong>
+      </div>
+      <div class="efc-readouts">
+        <div>
+          <span>{ui.expansionLabel}</span>
+          <strong><span id="efc-expansion">0.00</span><small id="efc-expansion-unit">{ui.mmUnit}</small></strong>
+        </div>
+        <div>
+          <span>{ui.chamferLabel}</span>
+          <strong><span id="efc-chamfer">0.00</span><small id="efc-chamfer-unit">{ui.mmUnit}</small></strong>
+        </div>
+        <div>
+          <span>{ui.thermalFactorLabel}</span>
+          <strong><span id="efc-phi">1.00</span><small>{ui.multiplierUnit}</small></strong>
+        </div>
+      </div>
+      <div class="efc-command">
+        <span>{ui.slicerCommandLabel}</span>
+        <code id="efc-slicer">
+          {ui.slicerCommandTemplate.replace('{expansion}', '-0.00').replace('{unit}', ui.mmUnit)}
+        </code>
+      </div>
+      <div class="efc-command">
+        <span>{ui.cadCommandLabel}</span>
+        <code id="efc-cad">
+          {ui.cadCommandTemplate.replace('{chamfer}', '0.00').replace('{unit}', ui.mmUnit)}
+        </code>
+      </div>
+      <button type="button" id="efc-copy">{ui.copyButton}</button>
+    </section>
+
+    <section class="efc-controls" aria-label={ui.controlsAriaLabel}>
+      <label class="efc-control">
+        <span>{ui.measuredErrorLabel}</span>
+        <input id="efc-error-range" type="range" min="0" max="0.8" step="0.01" value="0.18" />
+        <output><input id="efc-error" type="number" min="0" step="0.01" value="0.18" /><b id="efc-error-unit">{ui.mmUnit}</b></output>
+      </label>
+      <label class="efc-control">
+        <span>{ui.layerHeightLabel}</span>
+        <input id="efc-layer-range" type="range" min="0.04" max="0.4" step="0.01" value="0.20" />
+        <output><input id="efc-layer" type="number" min="0.01" step="0.01" value="0.20" /><b id="efc-layer-unit">{ui.mmUnit}</b></output>
+      </label>
+      <label class="efc-control">
+        <span>{ui.zPressureLabel}</span>
+        <input id="efc-z-range" type="range" min="0.02" max="0.35" step="0.01" value="0.12" />
+        <output><input id="efc-z" type="number" min="0.01" step="0.01" value="0.12" /><b id="efc-z-unit">{ui.mmUnit}</b></output>
+      </label>
+      <div class="efc-duo">
+        <label>
+          <span>{ui.bedTemperatureLabel}</span>
+          <input id="efc-bed" type="number" min="20" step="1" value="60" />
+          <b id="efc-bed-unit">{ui.celsiusUnit}</b>
+        </label>
+        <label>
+          <span>{ui.targetToleranceLabel}</span>
+          <input id="efc-tolerance" type="number" min="0.005" step="0.01" value="0.05" />
+          <b id="efc-tolerance-unit">{ui.mmUnit}</b>
+        </label>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { initElephantFootLab } from './app';
+  document.addEventListener('astro:page-load', initElephantFootLab);
+  initElephantFootLab();
+</script>

@@ -78,3 +78,5 @@ export { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveP
 export { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLimitCalculator/index';
 
 export { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCalculator/index';
+
+export { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootCompensationCalculator/index';

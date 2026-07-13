@@ -30,6 +30,7 @@ export { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringC
 export { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
 export { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
 export { machineHourlyRateCalculator } from './tool/machineHourlyRateCalculator/entry';
+export { elephantFootCompensationCalculator } from './tool/elephantFootCompensationCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -64,6 +65,7 @@ import { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringC
 import { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
 import { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
 import { machineHourlyRateCalculator } from './tool/machineHourlyRateCalculator/entry';
+import { elephantFootCompensationCalculator } from './tool/elephantFootCompensationCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -98,4 +100,5 @@ export const ALL_ENTRIES = [
   additiveProductionEfficiencyCalculator,
   hotendFlowRateLimitCalculator,
   machineHourlyRateCalculator,
+  elephantFootCompensationCalculator,
 ];
