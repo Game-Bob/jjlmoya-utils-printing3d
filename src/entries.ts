@@ -28,6 +28,7 @@ export { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/en
 export { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/entry';
 export { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 export { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
+export { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -60,6 +61,7 @@ import { kinematicRingingCalculator } from './tool/kinematicRingingCalculator/en
 import { eStepsCalibrationCalculator } from './tool/eStepsCalibrationCalculator/entry';
 import { technicalResinUvCuringCalculator } from './tool/technicalResinUvCuringCalculator/entry';
 import { additiveProductionEfficiencyCalculator } from './tool/additiveProductionEfficiencyCalculator/entry';
+import { hotendFlowRateLimitCalculator } from './tool/hotendFlowRateLimitCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -92,4 +94,5 @@ export const ALL_ENTRIES = [
   eStepsCalibrationCalculator,
   technicalResinUvCuringCalculator,
   additiveProductionEfficiencyCalculator,
+  hotendFlowRateLimitCalculator,
 ];

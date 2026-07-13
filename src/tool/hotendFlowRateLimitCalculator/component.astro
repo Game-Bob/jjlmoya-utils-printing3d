@@ -1,0 +1,98 @@
+---
+import { HOTEND_PRESETS } from './logic';
+import type { HotendFlowRateLimitCalculatorUI } from './ui';
+import './volumetric-flow-rate-limit-calculator.css';
+
+interface Props {
+  ui: HotendFlowRateLimitCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="hfr-root"
+  data-hfr-root
+  data-flow-unit={ui.flowUnit}
+  data-millimeter-unit={ui.millimeterUnit}
+  data-inch-unit={ui.inchUnit}
+  data-metric-speed-unit={ui.metricSpeedUnit}
+  data-imperial-speed-unit={ui.imperialSpeedUnit}
+  data-ideal-state={ui.idealState}
+  data-limit-state={ui.limitState}
+  data-critical-state={ui.criticalState}
+  data-ideal-hint={ui.idealHint}
+  data-limit-hint={ui.limitHint}
+  data-critical-hint={ui.criticalHint}
+>
+  <div class="hfr-toolbar">
+    <div class="hfr-segment" aria-label={ui.unitSystemLabel}>
+      <button type="button" class="is-active" data-hfr-unit="metric">{ui.metricLabel}</button>
+      <button type="button" data-hfr-unit="imperial">{ui.imperialLabel}</button>
+    </div>
+    <label class="hfr-hotend">
+      <span>{ui.hotendLabel}</span>
+      <select data-hfr-input="hotend">
+        {HOTEND_PRESETS.map((preset) => <option value={preset.limitMm3S}>{preset.label} - {preset.limitMm3S} {ui.flowUnit}</option>)}
+      </select>
+    </label>
+  </div>
+
+  <section class="hfr-stage" aria-label={ui.resultsAriaLabel}>
+    <div class="hfr-gauge" data-hfr-gauge>
+      <svg viewBox="0 0 260 180" role="img" aria-label={ui.loadLabel}>
+        <path class="hfr-rail" d="M 35 145 A 95 95 0 0 1 225 145"></path>
+        <path class="hfr-arc" data-hfr-arc d="M 35 145 A 95 95 0 0 1 225 145"></path>
+        <g class="hfr-needle" data-hfr-needle>
+          <line x1="130" y1="145" x2="130" y2="66"></line>
+          <circle cx="130" cy="145" r="8"></circle>
+        </g>
+        <g class="hfr-ticks">
+          <line x1="35" y1="145" x2="45" y2="145"></line>
+          <line x1="83" y1="73" x2="89" y2="83"></line>
+          <line x1="177" y1="73" x2="171" y2="83"></line>
+          <line x1="225" y1="145" x2="215" y2="145"></line>
+        </g>
+      </svg>
+      <div class="hfr-primary">
+        <span>{ui.flowLabel}</span>
+        <strong data-hfr-output="flow">0.00</strong>
+        <small>{ui.flowUnit}</small>
+      </div>
+    </div>
+
+    <div class="hfr-status">
+      <span>{ui.stateLabel}</span>
+      <strong data-hfr-output="state">-</strong>
+      <p data-hfr-output="hint">-</p>
+    </div>
+  </section>
+
+  <section class="hfr-controls" aria-label={ui.inputsAriaLabel}>
+    <label class="hfr-slider">
+      <span><em>{ui.lineWidthLabel}</em><strong><output>0.42</output> <b data-hfr-length-unit>{ui.millimeterUnit}</b></strong></span>
+      <input type="range" min="0.2" max="1.2" step="0.01" value="0.42" data-hfr-input="line-width" />
+    </label>
+    <label class="hfr-slider">
+      <span><em>{ui.layerHeightLabel}</em><strong><output>0.20</output> <b data-hfr-length-unit>{ui.millimeterUnit}</b></strong></span>
+      <input type="range" min="0.06" max="0.5" step="0.01" value="0.20" data-hfr-input="layer-height" />
+    </label>
+    <label class="hfr-slider hfr-speed-slider">
+      <span><em>{ui.speedLabel}</em><strong><output>120</output> <b data-hfr-speed-unit>{ui.metricSpeedUnit}</b></strong></span>
+      <input type="range" min="10" max="420" step="1" value="120" data-hfr-input="speed" />
+    </label>
+  </section>
+
+  <section class="hfr-metrics">
+    <article><span>{ui.loadLabel}</span><strong data-hfr-output="load">0%</strong></article>
+    <article><span>{ui.maxSpeedLabel}</span><strong data-hfr-output="max-speed">0</strong></article>
+    <article><span>{ui.reserveLabel}</span><strong data-hfr-output="reserve">0</strong></article>
+  </section>
+</div>
+
+<script>
+  import { initHotendFlowRateLimitCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initHotendFlowRateLimitCalculator);
+  initHotendFlowRateLimitCalculator();
+</script>

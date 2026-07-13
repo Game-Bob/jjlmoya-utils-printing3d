@@ -1,9 +1,9 @@
 .apec-root {
   --apec-ink: #18212f;
   --apec-muted: #586577;
-  --apec-card: #ffffff;
+  --apec-card: #fff;
   --apec-panel: #f5f7fb;
-  --apec-control: #ffffff;
+  --apec-control: #fff;
   --apec-line: #d6dde7;
   --apec-blue: #345f8c;
   --apec-green: #2f6f5f;
@@ -186,7 +186,6 @@
   color: var(--apec-ink);
   font-size: clamp(1.15rem, 3vw, 1.8rem);
   line-height: 1.05;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-variant-numeric: tabular-nums;
   transition:
     filter 180ms ease,
@@ -210,15 +209,15 @@
   animation: apec-rebuild 260ms ease-out both;
 }
 
-.apec-recommendation {
+.apec-results article.apec-recommendation {
   min-height: 132px;
-  border-color: color-mix(in srgb, var(--apec-green) 45%, var(--apec-line)) !important;
-  background: color-mix(in srgb, var(--apec-green) 10%, var(--apec-control)) !important;
+  border-color: color-mix(in srgb, var(--apec-green) 45%, var(--apec-line));
+  background: color-mix(in srgb, var(--apec-green) 10%, var(--apec-control));
 }
 
-.apec-recommendation.is-risk-override {
-  border-color: color-mix(in srgb, var(--apec-amber) 58%, var(--apec-line)) !important;
-  background: color-mix(in srgb, var(--apec-amber) 12%, var(--apec-control)) !important;
+.apec-results article.apec-recommendation.is-risk-override {
+  border-color: color-mix(in srgb, var(--apec-amber) 58%, var(--apec-line));
+  background: color-mix(in srgb, var(--apec-amber) 12%, var(--apec-control));
 }
 
 .apec-recommendation strong {

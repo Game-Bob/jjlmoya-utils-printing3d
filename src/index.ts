@@ -74,3 +74,5 @@ export { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCal
 export { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator/index';
 
 export { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator/index';
+
+export { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLimitCalculator/index';

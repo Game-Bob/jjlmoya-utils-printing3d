@@ -30,6 +30,7 @@ import { KINEMATIC_RINGING_CALCULATOR_TOOL } from './tool/kinematicRingingCalcul
 import { E_STEPS_CALIBRATION_CALCULATOR_TOOL } from './tool/eStepsCalibrationCalculator';
 import { TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL } from './tool/technicalResinUvCuringCalculator';
 import { ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL } from './tool/additiveProductionEfficiencyCalculator';
+import { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLimitCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -62,4 +63,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   E_STEPS_CALIBRATION_CALCULATOR_TOOL,
   TECHNICAL_RESIN_UV_CURING_CALCULATOR_TOOL,
   ADDITIVE_PRODUCTION_EFFICIENCY_CALCULATOR_TOOL,
+  HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL,
 ];

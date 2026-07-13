@@ -28,27 +28,36 @@ const positive = (value: number, fallback: number) => {
   return value;
 };
 
+const computeViabilityLabel = (batchRiskPercent: number, criticalRiskPercent: number, absoluteSavingsMinutes: number): 'low' | 'moderate' | 'critical' => {
+  if (batchRiskPercent > criticalRiskPercent || absoluteSavingsMinutes < 0) return 'critical';
+  if (batchRiskPercent > criticalRiskPercent * 0.6) return 'moderate';
+  return 'low';
+};
+
+const n = (params: AdditiveProductionEfficiencyParams) => ({
+  pieces: Math.max(Math.round(positive(params.pieces, 1)), 1),
+  unitPrint: positive(params.unitPrintMinutes, 1),
+  preheat: Math.max(params.preheatMinutes, 0),
+  transitionDist: Math.max(params.transitionDistanceMm, 0),
+  travelSpeed: positive(params.travelSpeedMmS, 1),
+  failureRate: clamp(params.failureRatePercent, 0, 100) / 100,
+  purge: Math.max(params.purgeMinutes, 0),
+  criticalRisk: clamp(params.criticalRiskPercent, 0, 100),
+});
+
 export const calculateAdditiveProductionEfficiency = (
   params: AdditiveProductionEfficiencyParams,
 ): AdditiveProductionEfficiencyResult => {
-  const pieces = Math.max(Math.round(positive(params.pieces, 1)), 1);
-  const unitPrintMinutes = positive(params.unitPrintMinutes, 1);
-  const preheatMinutes = Math.max(params.preheatMinutes, 0);
-  const transitionDistanceMm = Math.max(params.transitionDistanceMm, 0);
-  const travelSpeedMmS = positive(params.travelSpeedMmS, 1);
-  const failureRate = clamp(params.failureRatePercent, 0, 100) / 100;
-  const purgeMinutes = Math.max(params.purgeMinutes, 0);
-  const criticalRiskPercent = clamp(params.criticalRiskPercent, 0, 100);
-
-  const transitionMinutes = (pieces * transitionDistanceMm) / (travelSpeedMmS * 60);
-  const batchMinutes = preheatMinutes + pieces * unitPrintMinutes + transitionMinutes;
-  const sequentialMinutes = pieces * (preheatMinutes + unitPrintMinutes + purgeMinutes);
+  const { pieces, unitPrint, preheat, transitionDist, travelSpeed, failureRate, purge, criticalRisk } = n(params);
+  const transitionMinutes = (pieces * transitionDist) / (travelSpeed * 60);
+  const batchMinutes = preheat + pieces * unitPrint + transitionMinutes;
+  const sequentialMinutes = pieces * (preheat + unitPrint + purge);
   const absoluteSavingsMinutes = sequentialMinutes - batchMinutes;
   const relativeEfficiencyPercent = sequentialMinutes > 0 ? (absoluteSavingsMinutes / sequentialMinutes) * 100 : 0;
   const batchRiskPercent = (1 - Math.pow(1 - failureRate, pieces)) * 100;
   const recommendedStrategy =
-    batchRiskPercent > criticalRiskPercent || absoluteSavingsMinutes < 0 ? 'sequential' : 'batch';
-  const viabilityLabel = batchRiskPercent > criticalRiskPercent ? 'critical' : batchRiskPercent > criticalRiskPercent * 0.6 ? 'moderate' : 'low';
+    batchRiskPercent > criticalRisk || absoluteSavingsMinutes < 0 ? 'sequential' : 'batch';
+  const viabilityLabel = computeViabilityLabel(batchRiskPercent, criticalRisk, absoluteSavingsMinutes);
 
   return {
     batchMinutes,
