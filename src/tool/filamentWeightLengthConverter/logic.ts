@@ -36,6 +36,20 @@ export const FILAMENT_MATERIALS: FilamentMaterial[] = [
   { id: 'metal', density: 2.30 },
 ];
 
+export const MATERIAL_COLORS: Record<string, string> = {
+  pla: '#28c7a7',
+  petg: '#29a8ff',
+  abs: '#f59e0b',
+  asa: '#ef6f6c',
+  tpu: '#9b7cff',
+  pa: '#4f9f72',
+  pc: '#7dd3fc',
+  wood: '#b98245',
+  carbon: '#475569',
+  metal: '#a8a29e',
+};
+
+
 const positive = (value: number, fallback: number) => (Number.isFinite(value) && value > 0 ? value : fallback);
 
 export const calculateFilamentWeightLength = (params: FilamentWeightLengthParams): FilamentWeightLengthResult => {
@@ -63,3 +77,39 @@ export const calculateFilamentWeightLength = (params: FilamentWeightLengthParams
     deltaMeters,
   };
 };
+
+export const toGrams = (value: number, unitSystem: UnitSystem) => {
+  return unitSystem === 'imperial' ? value * 28.349523125 : value;
+};
+
+export const fromGrams = (value: number, unitSystem: UnitSystem) => {
+  return unitSystem === 'imperial' ? value / 28.349523125 : value;
+};
+
+export const toMm = (value: number, unitSystem: UnitSystem) => {
+  return unitSystem === 'imperial' ? value * 25.4 : value;
+};
+
+export const fromMm = (value: number, unitSystem: UnitSystem) => {
+  return unitSystem === 'imperial' ? value / 25.4 : value;
+};
+
+export interface ConvertedValues {
+  length: number;
+  volume: number;
+  area: number;
+  deltaLength: number;
+  gramsPerLength: number;
+}
+
+export const getConvertedValues = (result: FilamentWeightLengthResult, unitSystem: UnitSystem): ConvertedValues => {
+  const isImperial = unitSystem === 'imperial';
+  return {
+    length: isImperial ? result.lengthMeters * 3.280839895 : result.lengthMeters,
+    volume: isImperial ? result.volumeCm3 * 0.0610237441 : result.volumeCm3,
+    area: isImperial ? result.sectionAreaMm2 / 645.16 : result.sectionAreaMm2,
+    deltaLength: isImperial ? result.deltaMeters * 3.280839895 : result.deltaMeters,
+    gramsPerLength: isImperial ? result.gramsPerMeter / 3.280839895 / 28.349523125 : result.gramsPerMeter,
+  };
+};
+
