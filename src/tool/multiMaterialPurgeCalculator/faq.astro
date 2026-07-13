@@ -1,5 +1,5 @@
 ---
-import { FAQ as SharedFAQ } from '@jjlmoya/utils-shared';
+import { FAQSection } from '@jjlmoya/utils-shared';
 import { multiMaterialPurgeCalculator } from './index';
 import type { KnownLocale } from '../../types';
 
@@ -11,4 +11,4 @@ const { locale = 'en' } = Astro.props;
 const content = await multiMaterialPurgeCalculator.i18n[locale]?.();
 ---
 
-{content?.faq?.length > 0 && <SharedFAQ items={content.faq} />}
+{content?.faq?.length > 0 && <FAQSection items={content.faq} />}
