@@ -32,6 +32,7 @@ import { additiveProductionEfficiencyCalculator } from '../tool/additiveProducti
 import { hotendFlowRateLimitCalculator } from '../tool/hotendFlowRateLimitCalculator/entry';
 import { machineHourlyRateCalculator } from '../tool/machineHourlyRateCalculator/entry';
 import { elephantFootCompensationCalculator } from '../tool/elephantFootCompensationCalculator/entry';
+import { filamentWeightLengthConverter } from '../tool/filamentWeightLengthConverter/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -69,6 +70,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     hotendFlowRateLimitCalculator,
     machineHourlyRateCalculator,
     elephantFootCompensationCalculator,
+    filamentWeightLengthConverter,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

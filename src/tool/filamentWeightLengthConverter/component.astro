@@ -1,0 +1,414 @@
+---
+import type { FilamentWeightLengthConverterUI } from './ui';
+import { FILAMENT_MATERIALS } from './logic';
+import './filament-weight-to-length-converter.css';
+
+interface Props {
+  ui: FilamentWeightLengthConverterUI;
+}
+
+const { ui } = Astro.props;
+
+const materialLabels: Record<string, string> = {
+  pla: ui.materialPlaLabel,
+  petg: ui.materialPetgLabel,
+  abs: ui.materialAbsLabel,
+  asa: ui.materialAsaLabel,
+  tpu: ui.materialTpuLabel,
+  pa: ui.materialPaLabel,
+  pc: ui.materialPcLabel,
+  wood: ui.materialWoodLabel,
+  carbon: ui.materialCarbonLabel,
+  metal: ui.materialMetalLabel,
+};
+---
+
+<div
+  class="fwlc-root"
+  data-grams-unit={ui.gramsUnit}
+  data-ounces-unit={ui.ouncesUnit}
+  data-meters-unit={ui.metersUnit}
+  data-feet-unit={ui.feetUnit}
+  data-cm3-unit={ui.cm3Unit}
+  data-in3-unit={ui.in3Unit}
+  data-in2-unit={ui.in2Unit}
+  data-mm2-unit={ui.mm2Unit}
+  data-mm-unit={ui.mmUnit}
+  data-inch-unit={ui.inchUnit}
+  data-density-unit={ui.densityUnit}
+  data-linear-mass-metric-unit={ui.linearMassMetricUnit}
+  data-linear-mass-imperial-unit={ui.linearMassImperialUnit}
+  data-enough-label={ui.enoughLabel}
+  data-short-label={ui.shortLabel}
+  data-no-stock-label={ui.noStockLabel}
+  data-surplus-label={ui.surplusLabel}
+  data-missing-label={ui.missingLabel}
+>
+  <section class="fwlc-panel">
+    <div class="fwlc-topbar">
+      <span>{ui.inputsTitle}</span>
+      <div class="fwlc-segment" role="group" aria-label={ui.unitSystemLabel}>
+        <button type="button" data-unit-system="metric" aria-pressed="true">{ui.metricLabel}</button>
+        <button type="button" data-unit-system="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+      </div>
+    </div>
+
+    <div class="fwlc-grid">
+      <label class="fwlc-field">
+        <span>{ui.materialLabel}</span>
+        <select id="fwlc-material">
+          {FILAMENT_MATERIALS.map((material) => <option value={material.id} data-density={material.density}>{materialLabels[material.id]}</option>)}
+        </select>
+      </label>
+      <label class="fwlc-field">
+        <span>{ui.densityLabel}</span>
+        <div class="fwlc-input"><input id="fwlc-density" type="number" value="1.24" min="0.1" step="0.01" /><b>{ui.densityUnit}</b></div>
+      </label>
+      <label class="fwlc-field">
+        <span>{ui.weightLabel}</span>
+        <div class="fwlc-input"><input id="fwlc-weight" type="number" value="250" min="0" step="1" /><b data-weight-unit>{ui.gramsUnit}</b></div>
+        <input class="fwlc-slider" id="fwlc-weight-slider" type="range" min="0" max="1000" step="1" value="250" aria-label={ui.weightSliderLabel} />
+      </label>
+      <label class="fwlc-field">
+        <span>{ui.diameterLabel}</span>
+        <div class="fwlc-input"><input id="fwlc-diameter" type="number" value="1.75" min="0.1" step="0.01" /><b data-diameter-unit>{ui.mmUnit}</b></div>
+      </label>
+      <label class="fwlc-field fwlc-wide">
+        <span>{ui.stockLabel}</span>
+        <div class="fwlc-input"><input id="fwlc-stock" type="number" min="0" step="1" placeholder={ui.stockPlaceholder} /><b data-weight-unit>{ui.gramsUnit}</b></div>
+      </label>
+    </div>
+  </section>
+
+  <section class="fwlc-readout" data-stock-state="none">
+    <div class="fwlc-stage">
+      <div class="fwlc-hero">
+        <span>{ui.resultLengthLabel}</span>
+        <strong id="fwlc-length">0.00</strong>
+        <em id="fwlc-length-unit">{ui.metersUnit}</em>
+      </div>
+      <div class="fwlc-spool-card">
+        <span>{ui.spoolStateLabel}</span>
+        <div class="fwlc-spool-wrap">
+          <svg class="fwlc-spool" id="fwlc-spool" viewBox="0 0 160 160" role="img" aria-label={ui.spoolStateLabel}>
+            <circle class="fwlc-spool-shell" cx="80" cy="80" r="66"></circle>
+            <circle class="fwlc-spool-empty" cx="80" cy="80" r="48"></circle>
+            <circle class="fwlc-spool-fill" id="fwlc-spool-fill" cx="80" cy="80" r="48"></circle>
+            <line class="fwlc-cut-line" id="fwlc-cut-line" x1="80" y1="25" x2="80" y2="54"></line>
+            <circle class="fwlc-spool-hub" cx="80" cy="80" r="22"></circle>
+            <circle class="fwlc-spool-core" cx="80" cy="80" r="9"></circle>
+          </svg>
+          <div class="fwlc-tooltip" id="fwlc-tooltip" role="tooltip"></div>
+        </div>
+        <div class="fwlc-ruler" aria-label={ui.spoolScaleLabel}>
+          <i id="fwlc-ruler-fill"></i>
+          <b></b><b></b><b></b><b></b><b></b>
+        </div>
+        <small id="fwlc-ruler-label">{ui.spoolScaleLabel}</small>
+        <small class="fwlc-cut-caption" id="fwlc-cut-caption">{ui.cutLineLabel}</small>
+      </div>
+    </div>
+    <div class="fwlc-stock">
+      <b id="fwlc-stock-label">{ui.noStockLabel}</b>
+      <span id="fwlc-stock-delta">-</span>
+    </div>
+    <div class="fwlc-kpis">
+      <div><span>{ui.resultVolumeLabel}</span><b id="fwlc-volume">0</b></div>
+      <div><span>{ui.resultAreaLabel}</span><b id="fwlc-area">0</b></div>
+      <div><span>{ui.resultGramsMeterLabel}</span><b id="fwlc-gpm">0</b></div>
+    </div>
+    <div class="fwlc-formula">
+      <span>{ui.formulaLabel}</span>
+      <code>{ui.formulaText}</code>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { calculateFilamentWeightLength, FILAMENT_MATERIALS } from './logic';
+  import type { UnitSystem } from './logic';
+
+  type StoredFilamentWeightLengthState = {
+    unitSystem: UnitSystem;
+    material: string;
+    density: string;
+    weight: string;
+    diameter: string;
+    stock: string;
+  };
+
+  class FilamentWeightLengthConverter {
+    private readonly storageKey = 'jjlmoya-printing3d-filament-weight-length-state-v1';
+    private root: HTMLElement;
+    private unitSystem: UnitSystem = 'metric';
+    private inputs: Record<string, HTMLInputElement | HTMLSelectElement> = {};
+    private outputs: Record<string, HTMLElement | SVGElement> = {};
+    private materialColors: Record<string, string> = {
+      pla: '#28c7a7',
+      petg: '#29a8ff',
+      abs: '#f59e0b',
+      asa: '#ef6f6c',
+      tpu: '#9b7cff',
+      pa: '#4f9f72',
+      pc: '#7dd3fc',
+      wood: '#b98245',
+      carbon: '#475569',
+      metal: '#a8a29e',
+    };
+    private lastSpoolTotalGrams = 1000;
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.bindElements();
+      this.restoreState();
+      this.bindEvents();
+      this.configureSliderForUnit();
+      this.syncUnitControls();
+      this.calculate();
+    }
+
+    private bindElements() {
+      ['material', 'density', 'weight', 'weight-slider', 'diameter', 'stock'].forEach((id) => {
+        this.inputs[id] = this.root.querySelector(`#fwlc-${id}`) as HTMLInputElement | HTMLSelectElement;
+      });
+      ['length', 'length-unit', 'stock-label', 'stock-delta', 'volume', 'area', 'gpm', 'spool', 'spool-fill', 'cut-line', 'ruler-fill', 'ruler-label', 'cut-caption', 'tooltip'].forEach((id) => {
+        this.outputs[id] = this.root.querySelector(`#fwlc-${id}`) as HTMLElement | SVGElement;
+      });
+    }
+
+    private bindEvents() {
+      this.input('weight-slider').addEventListener('input', () => {
+        this.input('weight').value = this.input('weight-slider').value;
+        this.calculate();
+      });
+      this.input('weight').addEventListener('input', () => this.syncWeightSlider());
+      ['material', 'density', 'weight', 'diameter', 'stock'].forEach((id) => {
+        this.input(id).addEventListener('input', () => this.calculate());
+      });
+      this.input('material').addEventListener('change', () => this.setMaterialDensity());
+      this.root.querySelectorAll<HTMLButtonElement>('[data-unit-system]').forEach((button) => {
+        button.addEventListener('click', () => this.setUnitSystem(button.dataset.unitSystem === 'imperial' ? 'imperial' : 'metric'));
+      });
+      const spool = this.output('spool');
+      spool?.addEventListener('mousemove', (event) => this.showSpoolTooltip(event as MouseEvent));
+      spool?.addEventListener('mouseleave', () => this.hideSpoolTooltip());
+    }
+
+    private input(id: string) {
+      return this.inputs[id] as HTMLInputElement;
+    }
+
+    private output(id: string) {
+      return this.outputs[id] as HTMLElement;
+    }
+
+    private label(key: string) {
+      return this.root.dataset[key] ?? '';
+    }
+
+    private numberValue(id: string, fallback: number) {
+      const value = parseFloat(this.input(id).value || '');
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    private toGrams(value: number) {
+      return this.unitSystem === 'imperial' ? value * 28.349523125 : value;
+    }
+
+    private fromGrams(value: number, system = this.unitSystem) {
+      return system === 'imperial' ? value / 28.349523125 : value;
+    }
+
+    private toMm(value: number) {
+      return this.unitSystem === 'imperial' ? value * 25.4 : value;
+    }
+
+    private fromMm(value: number, system = this.unitSystem) {
+      return system === 'imperial' ? value / 25.4 : value;
+    }
+
+    private setMaterialDensity() {
+      const material = FILAMENT_MATERIALS.find((item) => item.id === this.input('material').value);
+      if (material) this.input('density').value = String(material.density);
+      this.calculate();
+    }
+
+    private setUnitSystem(next: UnitSystem) {
+      if (next === this.unitSystem) return;
+      const weightGrams = this.toGrams(this.numberValue('weight', 0));
+      const stockValue = this.input('stock').value === '' ? '' : String(this.fromGrams(this.toGrams(this.numberValue('stock', 0)), next).toFixed(2).replace(/\.?0+$/, ''));
+      const diameterMm = this.toMm(this.numberValue('diameter', 1.75));
+      this.unitSystem = next;
+      this.input('weight').value = this.fromGrams(weightGrams, next).toFixed(2).replace(/\.?0+$/, '');
+      this.input('stock').value = stockValue;
+      this.input('diameter').value = this.fromMm(diameterMm, next).toFixed(next === 'imperial' ? 4 : 2).replace(/\.?0+$/, '');
+      this.syncUnitControls();
+      this.root.querySelectorAll<HTMLElement>('[data-weight-unit]').forEach((unit) => unit.textContent = next === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit'));
+      this.root.querySelectorAll<HTMLElement>('[data-diameter-unit]').forEach((unit) => unit.textContent = next === 'imperial' ? this.label('inchUnit') : this.label('mmUnit'));
+      this.configureSliderForUnit();
+      this.syncWeightSlider();
+      this.calculate();
+    }
+
+    private format(value: number, digits = 2) {
+      return new Intl.NumberFormat('en', { maximumFractionDigits: digits }).format(value);
+    }
+
+    private syncUnitControls() {
+      this.root.querySelectorAll<HTMLButtonElement>('[data-unit-system]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.unitSystem === this.unitSystem)));
+      this.root.querySelectorAll<HTMLElement>('[data-weight-unit]').forEach((unit) => unit.textContent = this.unitSystem === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit'));
+      this.root.querySelectorAll<HTMLElement>('[data-diameter-unit]').forEach((unit) => unit.textContent = this.unitSystem === 'imperial' ? this.label('inchUnit') : this.label('mmUnit'));
+    }
+
+    private configureSliderForUnit() {
+      this.input('weight-slider').max = this.unitSystem === 'imperial' ? '35.27' : '1000';
+      this.input('weight-slider').step = this.unitSystem === 'imperial' ? '0.1' : '1';
+    }
+
+    private syncWeightSlider() {
+      const slider = this.input('weight-slider');
+      const max = parseFloat(slider.max || '1000');
+      slider.value = String(Math.max(0, Math.min(max, this.numberValue('weight', 0))));
+    }
+
+    private currentMaterialColor(stockState: string) {
+      if (stockState === 'short') return '#ef4444';
+      return this.materialColors[this.input('material').value] ?? '#16c4b8';
+    }
+
+    private updateSpoolVisualization(result: ReturnType<typeof calculateFilamentWeightLength>, consumedGrams: number) {
+      const hasStock = result.hasStockCheck;
+      const totalGrams = hasStock ? Math.max(consumedGrams + result.deltaGrams, 1) : 1000;
+      const remainingAfterPrint = hasStock ? Math.max(0, result.deltaGrams) : Math.max(0, totalGrams - consumedGrams);
+      const consumedRatio = Math.max(0, Math.min(1, consumedGrams / totalGrams));
+      const fillRatio = Math.max(0, Math.min(1, remainingAfterPrint / totalGrams));
+      const stockState = !hasStock ? 'none' : result.isEnough ? 'enough' : 'short';
+      const circumference = 2 * Math.PI * 48;
+      const fill = this.output('spool-fill') as unknown as SVGCircleElement;
+      const cutLine = this.output('cut-line') as unknown as SVGLineElement;
+      const color = this.currentMaterialColor(stockState);
+
+      fill.style.stroke = color;
+      fill.style.strokeDasharray = `${circumference}`;
+      fill.style.strokeDashoffset = `${circumference * (1 - fillRatio)}`;
+      this.output('ruler-fill').style.width = `${consumedRatio * 100}%`;
+      this.output('ruler-label').textContent = `${this.format(this.fromGrams(Math.min(consumedGrams, totalGrams)), 1)} ${this.unitSystem === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit')} / ${this.format(this.fromGrams(totalGrams), 1)} ${this.unitSystem === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit')}`;
+      this.output('cut-caption').style.visibility = stockState === 'short' ? 'visible' : 'hidden';
+      cutLine.style.opacity = stockState === 'short' ? '1' : '0';
+      const stopRatio = stockState === 'short' ? Math.max(0, Math.min(1, totalGrams / Math.max(consumedGrams, 1))) : consumedRatio;
+      cutLine.style.transform = `rotate(${stopRatio * 360}deg)`;
+      cutLine.style.stroke = '#ef4444';
+      this.lastSpoolTotalGrams = totalGrams;
+      this.root.style.setProperty('--fwlc-material-color', color);
+    }
+
+    private showSpoolTooltip(event: MouseEvent) {
+      const tooltip = this.output('tooltip');
+      const x = event.offsetX - 80;
+      const y = event.offsetY - 80;
+      const angle = (Math.atan2(y, x) + Math.PI / 2 + Math.PI * 2) % (Math.PI * 2);
+      const ratio = angle / (Math.PI * 2);
+      const grams = this.lastSpoolTotalGrams * ratio;
+      tooltip.textContent = `${this.format(this.fromGrams(grams), 1)} ${this.unitSystem === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit')}`;
+      tooltip.style.left = `${event.offsetX + 10}px`;
+      tooltip.style.top = `${event.offsetY + 10}px`;
+      tooltip.dataset.visible = 'true';
+    }
+
+    private hideSpoolTooltip() {
+      this.output('tooltip').dataset.visible = 'false';
+    }
+
+    private currentState(): StoredFilamentWeightLengthState {
+      return {
+        unitSystem: this.unitSystem,
+        material: this.input('material').value,
+        density: this.input('density').value,
+        weight: this.input('weight').value,
+        diameter: this.input('diameter').value,
+        stock: this.input('stock').value,
+      };
+    }
+
+    private isValidState(state: Partial<StoredFilamentWeightLengthState>) {
+      const validUnit = state.unitSystem === 'metric' || state.unitSystem === 'imperial';
+      const validMaterial = typeof state.material === 'string' && FILAMENT_MATERIALS.some((item) => item.id === state.material);
+      const numericValues = [state.density, state.weight, state.diameter].map((value) => parseFloat(String(value ?? '')));
+      const stockIsValid = state.stock === '' || Number.isFinite(parseFloat(String(state.stock ?? '')));
+      return validUnit && validMaterial && numericValues.every(Number.isFinite) && stockIsValid;
+    }
+
+    private applyStoredState(state: StoredFilamentWeightLengthState) {
+      this.unitSystem = state.unitSystem;
+      this.input('material').value = state.material;
+      this.input('density').value = state.density;
+      this.input('weight').value = state.weight;
+      this.input('diameter').value = state.diameter;
+      this.input('stock').value = state.stock;
+    }
+
+    private restoreState() {
+      try {
+        const raw = window.localStorage?.getItem(this.storageKey);
+        if (!raw) return;
+        const state = JSON.parse(raw) as Partial<StoredFilamentWeightLengthState>;
+        if (this.isValidState(state)) this.applyStoredState(state as StoredFilamentWeightLengthState);
+      } catch {
+        window.localStorage?.removeItem(this.storageKey);
+      }
+    }
+
+    private saveState() {
+      try {
+        window.localStorage?.setItem(this.storageKey, JSON.stringify(this.currentState()));
+      } catch {
+      }
+    }
+
+    private calculate() {
+      const stockValue = this.input('stock').value.trim();
+      this.syncWeightSlider();
+      const consumedGrams = this.toGrams(this.numberValue('weight', 0));
+      const result = calculateFilamentWeightLength({
+        weightGrams: consumedGrams,
+        density: this.numberValue('density', 1.24),
+        diameterMm: this.toMm(this.numberValue('diameter', 1.75)),
+        remainingGrams: stockValue === '' ? undefined : this.toGrams(parseFloat(stockValue)),
+      });
+      const length = this.unitSystem === 'imperial' ? result.lengthMeters * 3.280839895 : result.lengthMeters;
+      const volume = this.unitSystem === 'imperial' ? result.volumeCm3 * 0.0610237441 : result.volumeCm3;
+      const area = this.unitSystem === 'imperial' ? result.sectionAreaMm2 / 645.16 : result.sectionAreaMm2;
+      const deltaLength = this.unitSystem === 'imperial' ? result.deltaMeters * 3.280839895 : result.deltaMeters;
+      const deltaWeight = this.fromGrams(result.deltaGrams);
+      const gramsPerLength = this.unitSystem === 'imperial' ? result.gramsPerMeter / 3.280839895 / 28.349523125 : result.gramsPerMeter;
+
+      this.output('length').textContent = this.format(length, length > 100 ? 1 : 2);
+      this.output('length-unit').textContent = this.unitSystem === 'imperial' ? this.label('feetUnit') : this.label('metersUnit');
+      this.output('volume').textContent = `${this.format(volume, 2)} ${this.unitSystem === 'imperial' ? this.label('in3Unit') : this.label('cm3Unit')}`;
+      this.output('area').textContent = `${this.format(area, this.unitSystem === 'imperial' ? 5 : 3)} ${this.unitSystem === 'imperial' ? this.label('in2Unit') : this.label('mm2Unit')}`;
+      this.output('gpm').textContent = `${this.format(gramsPerLength, 2)} ${this.unitSystem === 'imperial' ? this.label('linearMassImperialUnit') : this.label('linearMassMetricUnit')}`;
+
+      const readout = this.root.querySelector('.fwlc-readout') as HTMLElement;
+      this.updateSpoolVisualization(result, consumedGrams);
+      if (!result.hasStockCheck) {
+        readout.dataset.stockState = 'none';
+        this.output('stock-label').textContent = this.label('noStockLabel');
+        this.output('stock-delta').textContent = '-';
+        this.saveState();
+        return;
+      }
+      readout.dataset.stockState = result.isEnough ? 'enough' : 'short';
+      this.output('stock-label').textContent = result.isEnough ? this.label('enoughLabel') : this.label('shortLabel');
+      const prefix = result.isEnough ? this.label('surplusLabel') : this.label('missingLabel');
+      this.output('stock-delta').textContent = `${prefix}: ${this.format(Math.abs(deltaWeight), 1)} ${this.unitSystem === 'imperial' ? this.label('ouncesUnit') : this.label('gramsUnit')} / ${this.format(Math.abs(deltaLength), 2)} ${this.unitSystem === 'imperial' ? this.label('feetUnit') : this.label('metersUnit')}`;
+      this.saveState();
+    }
+  }
+
+  const initFilamentWeightLengthConverter = () => {
+    document.querySelectorAll<HTMLElement>('.fwlc-root').forEach((root) => new FilamentWeightLengthConverter(root));
+  };
+
+  document.addEventListener('astro:page-load', initFilamentWeightLengthConverter);
+  initFilamentWeightLengthConverter();
+</script>

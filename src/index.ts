@@ -80,3 +80,5 @@ export { HOTEND_FLOW_RATE_LIMIT_CALCULATOR_TOOL } from './tool/hotendFlowRateLim
 export { MACHINE_HOURLY_RATE_CALCULATOR_TOOL } from './tool/machineHourlyRateCalculator/index';
 
 export { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootCompensationCalculator/index';
+
+export { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter/index';
