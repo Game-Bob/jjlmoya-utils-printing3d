@@ -1,0 +1,35 @@
+export interface MetricThreadToleranceCalculatorUI {
+  controlsAriaLabel: string;
+  visualAriaLabel: string;
+  resultsAriaLabel: string;
+  threadSizeLabel: string;
+  customModeLabel: string;
+  diameterLabel: string;
+  pitchLabel: string;
+  technologyLabel: string;
+  resinLabel: string;
+  fdmStandardLabel: string;
+  fdmCalibratedLabel: string;
+  materialLabel: string;
+  plaLabel: string;
+  petgLabel: string;
+  absAsaLabel: string;
+  nylonLabel: string;
+  tpuLabel: string;
+  maleCadLabel: string;
+  femaleCadLabel: string;
+  correctionLabel: string;
+  clearanceLabel: string;
+  copyButton: string;
+  copiedButton: string;
+  copyTemplate: string;
+  initialCopyText: string;
+  tpuWarning: string;
+  toleranceZoneLabel: string;
+  externalThreadLabel: string;
+  internalThreadLabel: string;
+  quickReferenceTitle: string;
+  diameterHeader: string;
+  pitchHeader: string;
+  mmUnit: string;
+}

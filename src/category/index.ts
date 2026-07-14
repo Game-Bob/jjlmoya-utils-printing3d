@@ -36,6 +36,7 @@ import { filamentWeightLengthConverter } from '../tool/filamentWeightLengthConve
 import { multiMaterialPurgeCalculator } from '../tool/multiMaterialPurgeCalculator/entry';
 import { moistureSaturationMonitor } from '../tool/moistureSaturationMonitor/entry';
 import { precisionEngineeringSuite } from '../tool/precisionEngineeringSuite/entry';
+import { metricThreadToleranceCalculator } from '../tool/metricThreadToleranceCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -77,6 +78,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     multiMaterialPurgeCalculator,
     moistureSaturationMonitor,
     precisionEngineeringSuite,
+    metricThreadToleranceCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

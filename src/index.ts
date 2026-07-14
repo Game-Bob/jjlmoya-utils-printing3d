@@ -88,3 +88,5 @@ export { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeC
 export { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor/index';
 
 export { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite/index';
+
+export { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator/index';

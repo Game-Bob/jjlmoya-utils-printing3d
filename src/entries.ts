@@ -35,6 +35,7 @@ export { filamentWeightLengthConverter } from './tool/filamentWeightLengthConver
 export { multiMaterialPurgeCalculator } from './tool/multiMaterialPurgeCalculator/entry';
 export { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entry';
 export { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
+export { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -74,6 +75,7 @@ import { filamentWeightLengthConverter } from './tool/filamentWeightLengthConver
 import { multiMaterialPurgeCalculator } from './tool/multiMaterialPurgeCalculator/entry';
 import { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entry';
 import { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
+import { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -113,4 +115,5 @@ export const ALL_ENTRIES = [
   multiMaterialPurgeCalculator,
   moistureSaturationMonitor,
   precisionEngineeringSuite,
+  metricThreadToleranceCalculator,
 ];

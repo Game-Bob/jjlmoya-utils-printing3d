@@ -1,0 +1,125 @@
+---
+import type { MetricThreadToleranceCalculatorUI } from './ui';
+import { ISO_METRIC_THREADS } from './logic';
+import './metric-thread-tolerance-calculator.css';
+
+interface Props {
+  ui: MetricThreadToleranceCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="mtt"
+  id="main-tool"
+  data-copy-template={ui.copyTemplate}
+  data-copied={ui.copiedButton}
+  data-copy={ui.copyButton}
+  data-tpu-warning={ui.tpuWarning}
+>
+  <section class="mtt-panel mtt-controls" aria-label={ui.controlsAriaLabel}>
+    <div class="mtt-fieldset">
+      <span>{ui.threadSizeLabel}</span>
+      <div class="mtt-thread-buttons" role="group" aria-label={ui.threadSizeLabel}>
+        {ISO_METRIC_THREADS.slice(0, 6).map((thread) => (
+          <button type="button" class={thread.label === 'M5' ? 'active' : ''} data-thread={thread.label} data-diameter={thread.diameterMm} data-pitch={thread.pitchMm}>
+            {thread.label}
+          </button>
+        ))}
+        <button type="button" data-thread="custom">{ui.customModeLabel}</button>
+      </div>
+    </div>
+
+    <div class="mtt-numeric-grid">
+      <label>
+        <span>{ui.diameterLabel}</span>
+        <input id="mtt-diameter" type="number" min="1" step="0.1" value="5" />
+        <b>{ui.mmUnit}</b>
+      </label>
+      <label>
+        <span>{ui.pitchLabel}</span>
+        <input id="mtt-pitch" type="number" min="0.1" step="0.05" value="0.8" />
+        <b>{ui.mmUnit}</b>
+      </label>
+    </div>
+
+    <div class="mtt-fieldset">
+      <span>{ui.technologyLabel}</span>
+      <div class="mtt-segments" role="group" aria-label={ui.technologyLabel}>
+        <button type="button" data-tech="resin">{ui.resinLabel}</button>
+        <button type="button" class="active" data-tech="fdm-standard">{ui.fdmStandardLabel}</button>
+        <button type="button" data-tech="fdm-calibrated">{ui.fdmCalibratedLabel}</button>
+      </div>
+    </div>
+
+    <label class="mtt-material">
+      <span>{ui.materialLabel}</span>
+      <select id="mtt-material">
+        <option value="pla">{ui.plaLabel}</option>
+        <option value="petg">{ui.petgLabel}</option>
+        <option value="abs-asa">{ui.absAsaLabel}</option>
+        <option value="nylon">{ui.nylonLabel}</option>
+        <option value="tpu">{ui.tpuLabel}</option>
+      </select>
+    </label>
+    <p class="mtt-warning" id="mtt-warning" hidden>{ui.tpuWarning}</p>
+  </section>
+
+  <section class="mtt-panel mtt-visual" aria-label={ui.visualAriaLabel}>
+    <svg viewBox="0 0 720 330" role="img" aria-label={ui.visualAriaLabel}>
+      <defs>
+        <pattern id="mtt-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+          <path d="M 24 0 L 0 0 0 24" />
+        </pattern>
+      </defs>
+      <rect class="mtt-grid-bg" width="720" height="330" />
+      <path id="mtt-female" class="mtt-female" d="" />
+      <path id="mtt-male" class="mtt-male" d="" />
+      <path id="mtt-clearance" class="mtt-clearance" d="" />
+      <line class="mtt-axis" x1="42" y1="165" x2="678" y2="165" />
+    </svg>
+    <div class="mtt-legend">
+      <span><i class="female"></i>{ui.internalThreadLabel}</span>
+      <span><i class="male"></i>{ui.externalThreadLabel}</span>
+      <span><i class="clearance"></i>{ui.toleranceZoneLabel}</span>
+    </div>
+  </section>
+
+  <section class="mtt-panel mtt-results" aria-label={ui.resultsAriaLabel}>
+    <div class="mtt-result-main">
+      <div>
+        <span>{ui.maleCadLabel}</span>
+        <strong><span id="mtt-male-result">0.00</span><small>{ui.mmUnit}</small></strong>
+      </div>
+      <div>
+        <span>{ui.femaleCadLabel}</span>
+        <strong><span id="mtt-female-result">0.00</span><small>{ui.mmUnit}</small></strong>
+      </div>
+    </div>
+    <div class="mtt-result-sub">
+      <div><span>{ui.correctionLabel}</span><b id="mtt-correction">0.00</b></div>
+      <div><span>{ui.clearanceLabel}</span><b id="mtt-clearance-value">0.00</b></div>
+    </div>
+    <code id="mtt-cad-string">{ui.initialCopyText}</code>
+    <button type="button" id="mtt-copy">{ui.copyButton}</button>
+  </section>
+
+  <section class="mtt-reference" aria-label={ui.quickReferenceTitle}>
+    <h2>{ui.quickReferenceTitle}</h2>
+    <table>
+      <thead><tr><th>{ui.diameterHeader}</th><th>{ui.pitchHeader}</th></tr></thead>
+      <tbody>
+        {ISO_METRIC_THREADS.map((thread) => (
+          <tr><td>{thread.label}</td><td>{thread.pitchMm.toFixed(2)} {ui.mmUnit}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+  import { initMetricThreadToleranceCalculator } from './app';
+  document.addEventListener('astro:page-load', initMetricThreadToleranceCalculator);
+  initMetricThreadToleranceCalculator();
+</script>

@@ -37,6 +37,7 @@ import { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLeng
 import { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator';
 import { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor';
 import { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite';
+import { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -76,4 +77,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   MULTI_MATERIAL_PURGE_CALCULATOR_TOOL,
   MOISTURE_SATURATION_MONITOR_TOOL,
   PRECISION_ENGINEERING_SUITE_TOOL,
+  METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL,
 ];
