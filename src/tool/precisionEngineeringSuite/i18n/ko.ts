@@ -3,7 +3,7 @@ import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dt
 import type { ToolLocaleContent } from '../../../types';
 import type { PrecisionEngineeringSuiteUI } from '../ui';
 
-const slug = 'precision-engineering-suite';
+const slug = 'precision-engineering-suite-3d-printing';
 const title = 'FDM 3D 프린팅용 정밀 엔지니어링 스위트';
 const description = 'FDM 견적, 마진, 공임, ROI, ISO 스타일 CAD 공차, 필라멘트 건조, AMS/MMU 퍼지 폐기물을 위한 반응형 진단 스위트.';
 

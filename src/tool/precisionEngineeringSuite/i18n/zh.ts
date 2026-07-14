@@ -3,7 +3,7 @@ import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dt
 import type { ToolLocaleContent } from '../../../types';
 import type { PrecisionEngineeringSuiteUI } from '../ui';
 
-const slug = 'precision-engineering-suite';
+const slug = 'precision-engineering-suite-3d-printing';
 const title = 'FDM 3D 打印精密工程套件';
 const description = '用于 FDM 报价、毛利、人工、投资回报率 (ROI)、ISO 风格 CAD 公差、耗材烘干以及 AMS/MMU 冲刷废料的反应式诊断套件。';
 

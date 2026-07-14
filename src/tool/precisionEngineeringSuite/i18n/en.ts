@@ -3,7 +3,7 @@ import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dt
 import type { ToolLocaleContent } from '../../../types';
 import type { PrecisionEngineeringSuiteUI } from '../ui';
 
-const slug = 'precision-engineering-suite';
+const slug = 'precision-engineering-suite-3d-printing';
 const title = 'Precision Engineering Suite for FDM 3D Printing';
 const description = 'A reactive diagnostic suite for FDM quoting, margins, labor, ROI, ISO-style CAD tolerances, filament drying, and AMS/MMU purge waste.';
 

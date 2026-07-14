@@ -3,7 +3,7 @@ import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dt
 import type { ToolLocaleContent } from '../../../types';
 import type { PrecisionEngineeringSuiteUI } from '../ui';
 
-const slug = 'precision-engineering-suite';
+const slug = 'precision-engineering-suite-3d-printing';
 const title = 'FDM 3Dプリント用精密エンジニアリング・スイート';
 const description = 'FDM見積もり、マージン、労務、ROI、ISOスタイルCAD公差、フィラメント乾燥、AMS/MMUパージ廃棄物のためのリアクティブ診断スイート。';
 
