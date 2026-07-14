@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'precisie-engineering-suite-3d-printen';
+const title = 'Precisie engineering suite voor FDM 3D printen';
+const description = 'Een reactieve diagnostische suite voor FDM-offertes, marges, arbeid, ROI, ISO-stijl CAD-toleranties, filament drogen en AMS/MMU-spoelafval.';
+
+const faqData = [
+  {
+    question: 'Waarom gebruikt elk weergegeven resultaat exact twee decimalen?',
+    answer: 'De suite behoudt intern de volledige JavaScript floating point precisie en past de formattering met twee decimalen alleen toe wanneer waarden worden weergegeven of gekopieerd. Dit voorkomt dubbelzinnige output en komt overeen met de manier waarop veel CAD- en offerteworkflows afmetingen en geld documenteren.',
+  },
+  {
+    question: 'Is de ISO-draadmodule een vervanging voor een draadstandaardtabel?',
+    answer: 'Nee. Het is een CAD-planningshulp voor FDM-speling en spoedgestuurde geometrie. Definitieve productietekeningen moeten nog steeds verwijzen naar de relevante ISO-tolerantieklasse en gemeten printerkalibratiegegevens.',
+  },
+  {
+    question: 'Waarom wordt een spoelverhouding boven 30 procent als kritiek behandeld?',
+    answer: 'Boven de 30 procent is een groot deel van het geëxtrudeerde polymeer geen productvolume meer. Dat verandert meestal de offerte, batching, kleurvolgorde en of spoelen-naar-infill of modelopsplitsing moet worden gebruikt.',
+  },
+  {
+    question: 'Hoe moet de filamentdroogtijd worden geïnterpreteerd?',
+    answer: 'Droogtijd is een diagnostische schatting op basis van vochtbelasting, materiaalgevoeligheid, filamentmassa en drogertemperatuur. Het moet worden gevalideerd met echte printsymptomen zoals knetteren, glansvariatie, stringing en dimensionele drift.',
+  },
+];
+
+const howToData = [
+  { name: 'Selecteer de diagnostische module', text: 'Kies offerte, marge, arbeid, ROI, draad, passing, drogen of spoelen om de telemetrie-uitleg te wijzigen terwijl het gedeelde procesmodel live blijft.' },
+  { name: 'Bewerk procesinvoer', text: 'Wijzig machinetijd, materiaal, arbeid, toleranties, vochtigheid of spoelwaarden. Resultaten worden onmiddellijk bijgewerkt zonder op een berekenknop te drukken.' },
+  { name: 'Lees de digitale tweeling', text: 'Gebruik de SVG as- en gattweeling en het telemetrie-canvas om te zien of het proces nominaal, waarschuwingsniveau of kritiek is.' },
+  { name: 'Kopieer de engineering-samenvatting', text: 'Gebruik de klembordknop om de gestandaardiseerde parameterreeks tussen vierkante haken te exporteren voor offertes, tickets of CAD-notities.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'nl',
+  keywords: 'FDM offerte calculator, 3D print marge calculator, print farm ROI calculator, ISO draadtolerantie calculator, FDM mechanische passing calculator, filament droog calculator, AMS spoelafval calculator, MMU spoelkosten calculator',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF offerte generator' },
+      { id: 'margin', label: 'PVP en marge' },
+      { id: 'labor', label: 'Arbeid na-verwerking' },
+      { id: 'roi', label: 'Farm ROI' },
+      { id: 'threads', label: 'ISO schroefdraad CAD' },
+      { id: 'fits', label: 'Mechanische passingen' },
+      { id: 'drying', label: 'Filament drogen' },
+      { id: 'purge', label: 'AMS/MMU spoeling' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Materiaalkosten', unit: '€' },
+      { key: 'printHours', label: 'Printtijd', unit: 'h' },
+      { key: 'machineRate', label: 'Machinetarief', unit: '€/h' },
+      { key: 'energyPrice', label: 'Energieprijs', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Uitvalpercentage', unit: '%' },
+      { key: 'marginPercent', label: 'Doelmarge', unit: '%' },
+      { key: 'laborMinutes', label: 'Arbeidsuren', unit: 'min' },
+      { key: 'laborRate', label: 'Arbeidstarief', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Na-verwerking', unit: 'min' },
+      { key: 'postProcessRate', label: 'Na-verwerkingstarief', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Farm printers', unit: 'st' },
+      { key: 'printerCost', label: 'Printerkosten', unit: '€' },
+      { key: 'monthlyOrders', label: 'Maandelijkse orders', unit: 'st' },
+      { key: 'avgSalePrice', label: 'Gem. verkoopprijs', unit: '€' },
+      { key: 'threadNominalMm', label: 'Nominale draad', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Spoed', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Nominale as', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Gattolerantie', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Filamentmassa', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Vochtigheid', unit: '%RV' },
+      { key: 'dryingTemperatureC', label: 'Droogtemp.', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Objectvolume', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Spoelvolume', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Offerteprijs',
+      recommendedPvp: 'Aanbevolen PVP',
+      grossMargin: 'Brutomarge',
+      roi: 'ROI',
+      threadMinor: 'Draadbinnendiameter',
+      fitClearance: 'Passingsspeling',
+      dryingTime: 'Droogtijd',
+      purgeRatio: 'Spoelverhouding',
+    },
+    statusTexts: {
+      nominal: 'Telemetrie binnen het operationele bereik.',
+      watch: 'Waarschuwingsbereik: telemetrie is bruikbaar maar vereist procesevaluatie vóór productie.',
+      critical: 'Kritiek bereik: spoelverhouding boven 30%, hoog vochtrisico of negatieve passingsspeling gedetecteerd.',
+    },
+    physicsCopy: {
+      quote: 'Offerte-engineering combineert directe materiaalkosten, machine-afschrijving, arbeidskosten, energie en verwacht uitval. Het uitvalpercentage wordt gemodelleerd als een opbrengstcorrectie, zodat de verkoopprijs de kosten van afgekeurde onderdelen dekt.',
+      margin: 'Marge wordt berekend op basis van de verkoopprijs, niet als opslag op de kosten. De huidige brutomarge is {margin}, dus elke prijswijziging verschuift zowel de winst als de risicobuffer.',
+      labor: 'De kosten voor na-verwerking zijn de tijd vermenigvuldigd met het werkplaatstarief. De huidige belasting voor arbeid plus afwerking is {laborCost}.',
+      roi: 'ROI zet printerinvesteringen om in maanden van productieterugverdientijd. Negatieve maandelijkse winst wordt in de weergave afgekapt omdat de farm de hardwarekosten onder die aannames nooit terugverdient.',
+      threads: 'De geometrie van metrische ISO-schroefdraad wordt benaderd op basis van de spoeddiepte. De binnendiameter en spoedgevoelige speling helpen CAD-gebruikers om samengesmolten binnendraad na FDM-laagzwelling te voorkomen.',
+      fits: 'Mechanische passingsspeling vergelijkt het bereik van het geprinte gat met het bereik van de geprinte as. Negatieve speling voorspelt interferentie (klempassing); positieve speling voorspelt een schuif- of looppassing.',
+      drying: 'Droogtijd volgt een vereenvoudigde versnelling in Arrhenius-stijl: een hogere temperatuur verhoogt de diffusiesnelheid, terwijl vochtigheid en de polymeerfactor de vochtbelasting verhogen.',
+      purge: 'De AMS/MMU spoelverhouding is het spoelvolume gedeeld door het totale geëxtrudeerde volume. Boven de 30.00% wordt de taak gemarkeerd omdat afval een bepalende factor voor de productiekosten wordt.',
+    },
+    chartLabels: ['KOSTEN', 'PVP', 'MARGE', 'ROI', 'H2O', 'SPOELING'],
+    copyFields: {
+      quoteCost: 'Offerteprijs',
+      pvp: 'PVP',
+      currency: 'Valuta',
+      margin: 'Marge',
+      roi: 'ROI',
+      threadMinor: 'Draadbinnendiameter',
+      fitClearance: 'Passingsspeling',
+      drying: 'Drogen',
+      purgeRatio: 'Spoelverhouding',
+    },
+    displayUnits: {
+      months: 'ma',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'speling',
+    },
+    copyLabel: 'Telemetrie kopiëren',
+    copiedLabel: 'Gekopieerd',
+    unitSystemLabel: 'Eenheden',
+    metricLabel: 'Metrisch',
+    imperialLabel: 'Imperiaal',
+    currencyLabel: 'Valuta',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ US-dollar' },
+      { code: 'GBP', label: '£ Pond sterling' },
+      { code: 'CAD', label: 'C$ Canadese dollar' },
+      { code: 'AUD', label: 'A$ Australische dollar' },
+      { code: 'CHF', label: 'Fr Zwitserse frank' },
+      { code: 'MXN', label: '$ Mexicaanse peso' },
+      { code: 'BRL', label: 'R$ Braziliaanse real' },
+      { code: 'ARS', label: '$ Argentijnse peso' },
+      { code: 'CLP', label: '$ Chileense peso' },
+      { code: 'COP', label: '$ Colombiaanse peso' },
+      { code: 'PEN', label: 'S/ Peruaanse sol' },
+      { code: 'JPY', label: '¥ Japanse yen' },
+      { code: 'CNY', label: '¥ Chinese yuan' },
+      { code: 'KRW', label: '₩ Zuid-Koreaanse won' },
+      { code: 'INR', label: '₹ Indiase roepie' },
+      { code: 'PLN', label: 'zł Poolse zloty' },
+      { code: 'RUB', label: '₽ Russische roebel' },
+      { code: 'SEK', label: 'kr Zweedse kroon' },
+      { code: 'NOK', label: 'kr Noorse kroon' },
+      { code: 'DKK', label: 'kr Deense kroon' },
+      { code: 'TRY', label: '₺ Turkse lira' },
+    ],
+    criticalLabel: 'Kritiek',
+    watchLabel: 'Waarschuwing',
+    nominalLabel: 'Nominaal',
+    inputsTitle: 'Procesinvoer',
+    telemetryTitle: 'Visuele telemetrie',
+    outputTitle: 'Berekende uitvoer',
+    physicsTitle: 'Fysica en procesmodel',
+    modulesAriaLabel: 'Precisiesuite modules',
+    telemetryAriaLabel: 'Reactieve telemetriegrafiek',
+    twinAriaLabel: 'Mechanische digitale tweeling',
+  },
+  seo: [
+    { type: 'title', text: 'Waarom precisie FDM-printen een diagnostische suite nodig heeft in plaats van geïsoleerde calculators', level: 2 },
+    { type: 'paragraph', html: 'FDM-productiebeslissingen falen zelden omdat een formule onbekend is. Ze falen omdat kosten, tolerantie, drogen, spoelafval, arbeid en machinebenutting als afzonderlijke onderwerpen worden behandeld. Een offerte voor een klant kan winstgevend lijken totdat de minuten voor na-verwerking worden meegerekend. Schroefdraad in CAD kan correct lijken totdat er rekening wordt gehouden met bead-zwelling en speling. Een meerkleurenopdracht kan klein lijken totdat het spoelvolume wordt geprijsd als ingekocht filament. Deze suite brengt die relaties samen in één reactief model, zodat de gebruiker het volledige procesbereik ziet in plaats van een losstaand getal.' },
+    { type: 'paragraph', html: 'De interface gebruikt bewust een vaste uitvoer met twee decimalen, omdat offertes en CAD-beoordelingen eenduidige waarden vereisen. Intern blijven berekeningen floating point waarden totdat de weergavelaag ze formatteert. Dat verschil is belangrijk: te vroeg afronden kan een kleine passingspeling, margepercentage of spoeldrempel net genoeg verschuiven om een verkeerde beslissing te veroorzaken. De gekopieerde uitvoer volgt een gestandaardiseerd parameterformaat tussen vierkante haken, zodat waarden zonder duizendtal-scheidingstekens of lokale verrassingen in werkbonnen, tickets en CAD-wijzigingslogboeken kunnen worden geplakt.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Gekoppelde productiediagnostiek' },
+      { value: '2.00', label: 'Vaste decimalen op elke weergegeven uitvoer' },
+      { value: '30.00%', label: 'Kritieke drempel spoelverhouding' },
+      { value: '0', label: 'Berekenknoppen nodig' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'De suite is gebouwd voor procesevaluatie', badge: 'Engineering-workflow', html: 'Gebruik het vóór het slicen, offertes maken of vrijgeven van CAD. Het model is bewust diagnostisch: het geeft aan of een opdracht een nadere inspectie, fysieke kalibratie, prijsaanpassing voor de klant of een ontwerpwijziging verdient voordat er printertijd wordt verbruikt.' },
+
+    { type: 'title', text: 'Offertegeneratie en de verborgen kosten van uitval', level: 2 },
+    { type: 'paragraph', html: 'Een professionele 3D-printofferte mag niet alleen het zichtbare plastic prijzen. De directe kostenbasis omvat materiaal, printtijd, machine-uurtarief, energie, arbeid, na-verwerking en verwacht uitval. Het uitvalpercentage is vooral belangrijk omdat het de effectieve opbrengst verandert. Als een opdracht een uitvalverwachting van 8 procent heeft, moet het goedgekeurde onderdeel de kosten van de mislukte pogingen dragen. Het model deelt daarom de directe kosten door de bruikbare opbrengst, in plaats van een vage post voor onvoorziene kosten toe te voegen.' },
+    { type: 'paragraph', html: 'De offertemodule is handig voor zoekopdrachten zoals <strong>FDM offerte calculator met uitvalpercentage</strong>, <strong>3D print prijs calculator voor kleine bedrijven</strong> en <strong>kosten 3D print opdracht met arbeid berekenen</strong>. Die zoekopdrachten zijn meestal afkomstig van gebruikers die al prints verkopen of dit van plan zijn. Ze hebben behoefte aan een getal dat standhoudt in echte productie, niet aan een hobbyschatting die alleen gebaseerd is op grammen PLA.' },
+    { type: 'table', headers: ['Kostenpost', 'Waarom het uitmaakt', 'Veelgemaakte fout'], rows: [
+      ['Materiaal', 'Omvat polymeer verbruikt door object, supports, raft, brim, spoeling en teststukken.', 'Alleen de massa van het uiteindelijke model prijzen.'],
+      ['Machinetarief', 'Staat voor afschrijving, onderhoud, slijtage van de nozzle, bouwplaatoppervlakken en opportuniteitskosten.', 'Printertijd als gratis beschouwen omdat de operator niet aanwezig is.'],
+      ['Energie', 'Klein per opdracht, maar zichtbaar bij productie op farm-schaal.', 'Het negeren van de verwarmde kamer of materialen die een hoge bouwplaattemperatuur vereisen.'],
+      ['Arbeid', 'Omvat instellen, verwijderen, inspectie, verpakking en klantcommunicatie.', 'Alleen de printduur in rekening brengen.'],
+      ['Opbrengst', 'Afgekeurde onderdelen moeten worden terugverdiend door goedgekeurde verkopen.', 'Een willekeurige marge toevoegen in plaats van de kans op uitval te modelleren.'],
+    ] },
+    { type: 'tip', title: 'Offerteer op basis van gemeten werkplaatsgegevens', html: 'Vervang de standaardwaarden door uw eigen elektriciteitstarief, gemiddelde insteltijd, percentage mislukte opdrachten en minuten voor na-verwerking. Een kleine werkplaats met trage handmatige reiniging kan hogere reële kosten hebben dan een farm met snellere machines en repeteerbare mallen.' },
+
+    { type: 'title', text: 'PVP, marge en het verschil tussen winstopslag en winstmarge', level: 2 },
+    { type: 'paragraph', html: 'Marge wordt berekend als winst gedeeld door de verkoopprijs, niet als een eenvoudig percentage dat aan de kosten wordt toegevoegd. Dit verschil is cruciaal bij het prijzen van 3D-geprinte onderdelen voor klanten. Een opslag van 40 procent op de kosten levert geen marge van 40 procent op; het levert een lagere marge op omdat de verkoopprijs de noemer is. De suite gebruikt marge-gebaseerde prijsstelling, omdat veel werkplaatsen op die manier evalueren of een productlijn vervangingsonderdelen, verpakking, mislukte prints en administratieve tijd kan deken.' },
+    { type: 'paragraph', html: 'Voor een onderdeel met 10,00 EUR kosten en een doelmarge van 40,00%, is de vereiste verkoopprijs 16,67 EUR. Het verkopen voor 14,00 EUR omdat iemand een opslag van 40 procent heeft toegevoegd, laat slechts 28.57% marge over. Dat verschil lijkt klein op één item, maar wordt aanzienlijk over honderden bestellingen. Een farm met krappe marges kan het erg druk hebben en toch geld verliezen wanneer uitval, arbeid en spoeling worden genegeerd.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Opslag denken', description: 'Voegt een percentage toe aan de kosten. Snel voor ruwe schattingen, maar zwak voor rentabiliteitsplanning.', points: ['Makkelijk hoofdrekenen', 'Kan de vereiste PVP onderschatten', 'Drukt het winstaandeel niet direct uit'] },
+      { title: 'Marge denken', description: 'Stelt de verkoopprijs zo in dat de winst een doelpercentage van de omzet is. Beter voor repeteerbare productie.', points: ['Komt overeen met zakelijke rapportage', 'Beschermt de dekking van algemene kosten', 'Handig voor catalogusprijsstelling'] },
+    ] },
+    { type: 'proscons', title: 'Agressieve margedoelstellingen', items: [
+      { pro: 'Beschermt de werkplaats tegen herdrukken, klantondersteuning en trage reiniging.', con: 'Kan de prijs van eenvoudige standaardprints boven die van lokale concurrenten brengen.' },
+      { pro: 'Maakt handwerk in kleine volumes financieel levensvatbaar.', con: 'Vereist uitleg waarom ontwerp, passing en betrouwbaarheid waarde hebben.' },
+      { pro: 'Financiert betere mallen, drogers, nozzles en kwaliteitscontrole.', con: 'Kan de conversie verlagen voor puur decoratieve onderdelen met een laag risico.' },
+    ] },
+
+    { type: 'title', text: 'Arbeid en na-verwerking als engineering-variabelen', level: 2 },
+    { type: 'paragraph', html: 'Na-verwerking is geen vage afwerkingscategorie. Het is een tijdsproces met een eigen tarief, repeteerbaarheid en uitvalmodi. Het verwijderen van supports van PETG, het schuren van laaglijnen, de installatie van hitte-insteekmoeren, chemisch gladmaken, harsreiniging voor hybride werkplaatsen, verpakking en metingen vereisen deskundige aandacht. Als die minuten niet worden geprijsd, subsidieert de print farm de klant met onbetaalde arbeid.' },
+    { type: 'paragraph', html: 'De arbeidsmodule scheidt algemene handelingen van de afwerking, zodat een gebruiker twee verschillende tarieven kan modelleren. Een operator die de opdrachten start, heeft mogelijk niet dezelfde kosten als een technicus die gaten tapt, passingen controleert, draadbussen installeert of cosmetische afwerkingen uitvoert. Het dashboard maakt die minuten zichtbaar naast materiaal en machinetijd, zodat een offerte er niet gezond uitziet terwijl de handmatige werkzaamheden stilletjes de winst opeten.' },
+    { type: 'list', items: [
+      'Houd de insteltijd apart van de afwerkingstijd bij voor ten minste tien herhaalde opdrachten.',
+      'Neem inspectietijd op wanneer mechanische passingen of voor de klant kritische afmetingen in het geding zijn.',
+      'Verhoog het na-verwerkingstarief voor werk dat stofbeheersing, oplosmiddelen, warmtegereedschap of precisiemetingen vereist.',
+      'Gebruik mallen en batchbewerkingen wanneer de arbeidskosten hoger zijn dan de materiaalkosten.',
+      'Voeg arbeid toe aan offertetemplates, zelfs wanneer een klant een kant-en-klaar printbestand aanlevert.',
+    ] },
+    { type: 'card', title: 'Zoekintentie gedekt', html: 'Gebruikers die zoeken naar <strong>3D print arbeidskosten calculator</strong>, <strong>na-verwerkingskosten voor FDM prints</strong> en <strong>hoe 3D geprinte onderdelen te prijzen met arbeid</strong> proberen meestal te stoppen met het onderwaarderen van handmatig werk. De calculator toont arbeid als een primair getal, niet als een opmerking onder de materiaalschatting.' },
+
+    { type: 'title', text: 'Print farm ROI en capaciteitsherstel', level: 2 },
+    { type: 'paragraph', html: 'Return on investment voor een print farm hangt af van de maandelijkse bijdrage na variabele kosten, niet van de bruto omzet. Acht printers kunnen er indrukwekkend uitzien, maar als de gemiddelde orderprijs laag is en de offerteprijs hoog, loopt de terugverdientijd van de hardware op of wordt deze nooit bereikt. De ROI-module zet het aantal printers, de printerkosten, de maandelijkse orders, de gemiddelde verkoopprijs en het actieve offerteprijsmodel om in maanden om de hardware-investering terug te verdienen.' },
+    { type: 'paragraph', html: 'Het belangrijke detail is dat de ROI gekoppeld is aan het huidige procesmodel. Als het uitvalpercentage, de arbeid, het spoelen of de na-verwerking stijgt, stijgen de offertekosten en daalt de maandelijkse winst. Dat maakt ROI een diagnostisch resultaat in plaats van een statisch getal in een businessplan. Wanneer de maandelijkse winst negatief is, toont de tool oneindig omdat er onder de huidige aannames geen terugverdientijd is.' },
+    { type: 'table', headers: ['ROI symptoom', 'Vermoedelijke oorzaak', 'Operationele reactie'], rows: [
+      ['Terugverdientijd onder 6 maanden', 'Sterke prijsstelling of hoge bezettingsgraad met gecontroleerde arbeid.', 'Bescherm de repeteerbaarheid en vermijd het aannemen van ondergeprijsd maatwerk.'],
+      ['Terugverdientijd 6 tot 18 maanden', 'Normaal bereik voor kleine farms.', 'Verbeter batching, offertetemplates en het bijhouden van uitval.'],
+      ['Terugverdientijd boven 18 maanden', 'Hardware staat stil of opdrachten zijn ondergeprijsd.', 'Evalueer de productmix, de supportbelasting en het machine-uurtarief.'],
+      ['Oneindige terugverdientijd', 'Variabele kosten overstijgen de verkoopopbrengsten.', 'Stop met het uitbreiden van hardware totdat de prijzen of de proceseconomie veranderen.'],
+    ] },
+    { type: 'summary', title: 'ROI evaluatie checklist', items: [
+      'Gebruik geaccepteerde orders, geen aanvragen, als het maandelijkse aantal orders.',
+      'Neem vervangende nozzles, bouwplaten, extruders, drogers en reserveonderdelen op in de hardwarekosten indien mogelijk.',
+      'Controleer of korte opdrachten met een hoge marge beter scoren dan lange decoratieve opdrachten met een lage verkoopprijs.',
+      'Modelleer het werkelijke uitvalpercentage na fijnafstelling, niet een optimistische schatting van de eerste week.',
+    ] },
+
+    { type: 'title', text: 'ISO metrische schroefdraadplanning voor FDM CAD', level: 2 },
+    { type: 'paragraph', html: 'Metrische schroefdraadstandaarden definiëren geometrie en tolerantieklassen, maar FDM voegt bead-breedte, thermische krimp, druk op de eerste laag, slicercompensatie en materiaalkruip toe. Schroefdraad in CAD die wiskundig correct is, kan te strak geprint worden omdat het geëxtrudeerde filament geen oneindig scherp snijgereedschap is. De suite benadert de spoedgestuurde binnendiameter en een configureerbare spelingsfactor, zodat ontwerpers vóór het printen kunnen zien of binnendraad extra tolerantie nodig heeft.' },
+    { type: 'paragraph', html: 'Het model is geen vervanging voor ISO 965-tabellen. Het is een diagnostisch hulpmiddel vóór CAD voor gebruikers die zoeken naar <strong>3D geprinte ISO draadtolerantie calculator</strong>, <strong>M12 3D geprinte draadspeling</strong> of <strong>FDM binnendraad CAD tolerantie</strong>. Die gebruikers moeten beslissen of ze schroefdraad rechtstreeks modelleren, deze na-snijden met een tap, hitte-insteekmoeren gebruiken of een startgat printen voor latere bewerking.' },
+    { type: 'glossary', items: [
+      { term: 'Spoed', definition: 'Axiale afstand tussen de draadtoppen. Een grotere spoed verhoogt over het algemeen de draaddiepte en verandert de printbare binnendiameter.' },
+      { term: 'Binnendiameter', definition: 'De kleinste binnendiameter van een schroefdraadprofiel. Bij FDM is dit gevoelig voor bead-zwelling en de wandvolgorde van de slicer.' },
+      { term: 'Spelingsfactor', definition: 'Een praktische marge uitgedrukt als een fractie van de spoed om het gedrag van geprint plastic te compenseren.' },
+      { term: 'Tolerantieklasse', definition: 'Een gestandaardiseerde passingsaanduiding voor gefabriceerde schroefdraad. Geprint plastic heeft meestal empirische aanpassingen rond die klassen nodig.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Schroefdraden zijn meetuitdagingen', badge: 'CAD waarschuwing', html: 'Print één kalibratiestuk per materiaal, nozzle en laaghoogtegroep. Schroefdraad die werkt in droog PLA bij lagen van 0,20 mm kan vastlopen in PETG, nylon of nat filament omdat de oppervlaktetextuur en polymeereastciteit veranderen.' },
+
+    { type: 'title', text: 'As- en gatpassingen: speling zien voordat de print faalt', level: 2 },
+    { type: 'paragraph', html: 'Mechanische passingen in FDM worden gecontroleerd door zowel de CAD-afmeting als de procesfout. Gaten worden vaak kleiner geprint omdat de binnenomtrek een cirkel benadert met een eindige bead-breedte en omdat afkoelend plastic naar binnen kan krimpen. Assen kunnen groter worden geprint door extrusieflow, naadplaatsing of olifantenpoot-effect op de bouwplaat. De suite visualiseert de grenzen van het gat en de as, zodat negatieve speling duidelijk wordt voordat het onderdeel wordt geprint.' },
+    { type: 'paragraph', html: 'Voor functionele onderdelen is de vraag niet alleen of een as in een gat past. Het gaat erom of de passing past bij de toepassing: schuifpassing, looppassing, perspassing of vaste lagerzitting. FDM-anisotropie, laagrichels en dimensionele drift betekenen dat een wiskundig kleine positieve speling nog steeds strak kan aanvoelen. De digitale tweeling behandelt negatieve speling daarom als kritiek en kleine positieve speling als iets dat met een teststuk moet worden gevalideerd.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Schuifpassing', description: 'Onderdelen kunnen met de hand met minimale weerstand worden gemonteerd. Handig voor afneembare deksels, mallen en uitlijnpennen.', points: ['Vereist positieve speling', 'Gevoelig voor oppervlaktetextuur', 'Vaak het makkelijkst af te stellen'] },
+      { title: 'Looppassing', description: 'Onderdelen bewegen ten opzichte van elkaar na montage. Handig voor draaipunten en rollen.', points: ['Vereist meer speling', 'Smering kan helpen', 'Rondheid is belangrijk'] },
+      { title: 'Perspassing', description: 'Onderdelen klemmen bewust. Alleen nuttig wanneer materiaaleastciteit, wanddikte en belasting worden gecontroleerd.', points: ['Risico op scheuren', 'Printoriëntatie is belangrijk', 'Testen met proefstukken vereist'] },
+    ] },
+    { type: 'tip', title: 'Gebruik tolerantie, geen hoop', html: 'Als een geprint gat een gekochte pen, lager, schroef of insteekmoer moet opnemen, meet dan zowel het geprinte kenmerk als het gekochte component. Pas de CAD-tolerantie aan op basis van de gemeten fout in plaats van een universele offset toe te passen op elk materiaal.' },
+
+    { type: 'title', text: 'Filament drogen: diffusie, adsorptie en printsymptomen', level: 2 },
+    { type: 'paragraph', html: 'Hygroscopisch filament wordt niet alleen nat aan het oppervlak. Vocht adsorbeert op polymeeroppervlakken en kan na verloop van tijd in het filament diffunderen. Tijdens het extruderen kan dat water in stoom veranderen, wat leidt tot knetteren, bellen, inconsistente extrusie, zwakke laaghechting, matte of troebele plekken op het oppervlak, stringing en dimensionele ruis. Nylon, TPU, PVA, PC en sommige gevulde composieten kunnen bijzonder gevoelig zijn, terwijl PLA varieert per formulering en opslaggeschiedenis.' },
+    { type: 'paragraph', html: 'De droogmodule gebruikt vochtbelasting, filamentmassa, materiaalfactor en temperatuur als diagnostisch model. Een hogere temperatuur versnelt de vochtverwijdering, maar elk polymeer heeft een veilig droogbereik. Een te lage temperatuur verspilt tijd; een te hoge temperatuur kan spoelen vervormen, filament gloeien, polymeer verzachten of windingen aan elkaar smelten. Het doel van de berekening is niet om een laboratoriumvochtgehalte te garanderen, maar om in te schatten wanneer drogen waarschijnlijk nodig is vóór precisiewerk.' },
+    { type: 'table', headers: ['Materiaalgedrag', 'Printsymptoom', 'Procesreactie'], rows: [
+      ['Lichte vochtigheid', 'Lichte stringing of kleine veranderingen in glans.', 'Drogen vóór cosmetische opdrachten en het afstellen van de retractie.'],
+      ['Matige vochtigheid', 'Knetteren, ruwe wanden of inconsistente extrusiebreedte.', 'Spoel drogen en flowkalibratie herhalen.'],
+      ['Ernstige vochtigheid', 'Schuimvorming, zwakke lagen, bros resultaat of falende supports.', 'Langer drogen, verzegeld bewaren en beschadigde delen eventueel weggooien.'],
+      ['Te heet gedroogd', 'Ovaal filament of spoelvervorming.', 'Temperatuur verlagen en richtlijnen van fabrikant controleren.'],
+    ] },
+    { type: 'message', title: 'Vocht en tolerantie hebben interactie', html: 'Nat filament kan ervoor zorgen dat een mechanisch onderdeel eruitziet als een CAD- of flowprobleem omdat de extrusie inconsistent wordt. Drogen is daarom onderdeel van dimensionele controle, niet alleen van het behoud van de oppervlaktekwaliteit.' },
+
+    { type: 'title', text: 'AMS- en MMU-spoelverhouding als productiewaarschuwing', level: 2 },
+    { type: 'paragraph', html: 'Multi-materiaal printen verandert kleurwisselingen in materiaaleconomie. De spoeltoren, wipe block of spoelafvoer is niet gratis; het is ingekocht filament dat wordt omgezet in niet-bruikbaar volume. Een klein decoratief object met veel afwisselende lagen kan meer materiaal verspillen dan een grotere eenkleurige beugel. De suite berekent de spoelverhouding als spoelvolume gedeeld door het totale geëxtrudeerde volume, zodat het afvalaandeel direct zichtbaar is.' },
+    { type: 'paragraph', html: 'De drempel van 30.00% is bewust streng. Wanneer bijna een derde van het geëxtrudeerde polymeer spoelafval is, moet de opdracht worden beoordeeld op kleurvolgorde, spoelen-naar-infill, modelopsplitsing, batching of een hogere offerte. In termen van een print farm verbruikt spoelen ook machinetijd en verhoogt het de slijtage door filamentwissels. Een offerte die spoelen negeert, kan een visueel indrukwekkend meerkleurenonderdeel veranderen in een opdracht met een lage marge.' },
+    { type: 'list', items: [
+      'Groepeer vergelijkbare kleuren om overgangen met een hoge vervuiling te verminderen.',
+      'Vermijd herhaalde wisselingen van donker naar licht wanneer het ontwerp kan worden gereorganiseerd.',
+      'Gebruik spoelen-naar-infill alleen wanneer verborgen kleurvervuiling structureel acceptabel is.',
+      'Breng spoelmateriaal apart in rekening op klantoffertes voor decoratieve meerkleurenopdrachten.',
+      'Voer een slicerkalibratie uit voor elke materiaalfamilie voordat u de spoeling agressief vermindert.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Kritieke spoelconditie', badge: '30.00%+', html: 'Een spoelverhouding van meer dan 30.00% betekent dat de printer een groot deel van het materiaal besteedt aan reiniging. Beschouw dit als een trigger voor herontwerp, batching of prijsaanpassing voordat u de productie start.' },
+
+    { type: 'title', text: 'Hoe de klemborduitvoer te gebruiken in productienotities', level: 2 },
+    { type: 'paragraph', html: 'Elke calculator in de suite exporteert hetzelfde parameterformaat tussen vierkante haken: <code>[Parameter: Waarde | Parameter: Waarde]</code>. Dit is bewust platte tekst omdat dit zonder formatteringsafhankelijkheden bruikbaar is in e-mails, werkbonnen, spreadsheets, klantberichten en CAD-commentaren. Het voorkomt ook dat verborgen duizendtal-scheidingstekens of lokale decimalen in een offerte of tekeningnotitie terechtkomen.' },
+    { type: 'paragraph', html: 'Gebruik de gekopieerde regel als een momentopname van de beslissingstatus. Voeg deze bijvoorbeeld toe aan een offerterevisie wanneer de klant kleurwijzigingen toevoegt, of plak deze in een CAD-issue wanneer de speling van een as verschuift van positief naar negatief. Omdat elke zichtbare waarde is vastgezet op twee decimalen, is de notitie zonder herformatteren leesbaar voor machinisten, ontwerpers en operators.' },
+    { type: 'summary', title: 'Samenvatting van de productieworkflow', items: [
+      'Begin met offerte en marge om te controleren of de opdracht rendabel kan zijn.',
+      'Evalueer arbeid en na-verwerking voordat u de levertijd belooft.',
+      'Controleer de ROI bij de aanschaf van printers of het accepteren van herhaalcontracten.',
+      'Gebruik de schroefdraad- en passingsmodules voordat u het definitieve CAD-ontwerp vrijgeeft.',
+      'Droog hygroscopische materialen voordat u de schuld geeft aan slicerinstellingen.',
+      'Beschouw een hoge spoelverhouding als een ontwerp- en waarschuwingssignaal voor de prijs.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

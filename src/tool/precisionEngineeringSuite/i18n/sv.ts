@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'precisions-engineering-svit-3d-utskrift';
+const title = 'Precisions engineering svit för FDM 3D utskrift';
+const description = 'En reaktiv diagnostisk svit för FDM-kalkylering, marginaler, arbete, ROI, ISO-stil CAD-toleranser, filamenttorkning och AMS/MMU-spolavfall.';
+
+const faqData = [
+  {
+    question: 'Varför har varje visat resultat exakt två decimaler?',
+    answer: 'Sviten behåller full JavaScript-flyttalsprecision internt och tillämpar formatering med två decimaler endast när värden visas eller kopieras. Detta förhindrar tvetydiga utdata och matchar hur många CAD- och kalkylarbetsflöden dokumenterar dimensioner och pengar.',
+  },
+  {
+    question: 'Är ISO-gängmodulen en ersättning för en gängstandardtabell?',
+    answer: 'Nej. Det är ett CAD-planeringshjälpmedel för FDM-spelrum och stigningsdriven geometri. Slutliga produktionsritningar bör fortfarande referera till relevant ISO-toleransklass och uppmätta kalibreringsdata för skrivaren.',
+  },
+  {
+    question: 'Varför behandlas spolningsförhållandet som kritiskt över 30 procent?',
+    answer: 'Över 30 procent är en stor andel av den extruderade polymeren inte längre produktvolym. Det ändrar vanligtvis kalkylering, batchning, färgordning och om spolning-till-infill eller modelluppdelning bör användas.',
+  },
+  {
+    question: 'Hur ska filamenttorktid tolkas?',
+    answer: 'Torktiden är en diagnostisk uppskattning baserad på fuktbelastning, materialkänslighet, filamentmassa och torktemperatur. Den bör valideras med verkliga utskriftssymptom som sprakande, glansvariationer, stringing och dimensionell drift.',
+  },
+];
+
+const howToData = [
+  { name: 'Välj diagnostisk modul', text: 'Välj kalkylering, marginal, arbete, ROI, gänga, passning, torkning eller spolning för att ändra telemetriförklaringen medan den delade processmodellen förblir aktiv.' },
+  { name: 'Redigera processinmatningar', text: 'Ändra maskintid, material, arbete, toleranser, fuktighet eller spolningsvärden. Resultaten uppdateras omedelbart utan att trycka på en beräkningsknapp.' },
+  { name: 'Läs av den digitala tvillingen', text: 'Använd SVG-axel- och håltvillingen och telemetriytan för att se om processen är nominell, på varningsnivå eller kritisk.' },
+  { name: 'Kopiera den tekniska sammanfattningen', text: 'Använd urklippsknappen för att exportera den standardiserade parametersträngen inom hakparenteser för kalkyler, ärenden eller CAD-anteckningar.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'sv',
+  keywords: 'FDM kalkylator, 3D-utskrift marginal kalkylator, print farm ROI kalkylator, ISO gängtolerans kalkylator, FDM mekanisk passning kalkylator, filament tork kalkylator, AMS spolavfall kalkylator, MMU spolkostnad kalkylator',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF kalkylgenerator' },
+      { id: 'margin', label: 'PVP och marginal' },
+      { id: 'labor', label: 'Efterbehandlingsarbete' },
+      { id: 'roi', label: 'Farm ROI' },
+      { id: 'threads', label: 'ISO-gänga CAD' },
+      { id: 'fits', label: 'Mekaniska passningar' },
+      { id: 'drying', label: 'Filamenttorkning' },
+      { id: 'purge', label: 'AMS/MMU-spolning' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Materialkostnad', unit: '€' },
+      { key: 'printHours', label: 'Utskriftstid', unit: 'h' },
+      { key: 'machineRate', label: 'Maskintaxa', unit: '€/h' },
+      { key: 'energyPrice', label: 'Elpris', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Skrotandel', unit: '%' },
+      { key: 'marginPercent', label: 'Målmarginal', unit: '%' },
+      { key: 'laborMinutes', label: 'Arbetstid', unit: 'min' },
+      { key: 'laborRate', label: 'Arbetstaxa', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Efterbehandling', unit: 'min' },
+      { key: 'postProcessRate', label: 'Efterbehandlingstaxa', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Farm-skrivare', unit: 'st' },
+      { key: 'printerCost', label: 'Skrivarkostnad', unit: '€' },
+      { key: 'monthlyOrders', label: 'Månadsorder', unit: 'st' },
+      { key: 'avgSalePrice', label: 'Snittförsäljningspris', unit: '€' },
+      { key: 'threadNominalMm', label: 'Gänga nominell', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Stigning', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Axel nominell', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Håltolerans', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Filamentmassa', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Fuktighet', unit: '%RH' },
+      { key: 'dryingTemperatureC', label: 'Torktemp', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Objektvolym', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Spolvolym', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Kalkylkostnad',
+      recommendedPvp: 'Rekommenderat PVP',
+      grossMargin: 'Bruttomarginal',
+      roi: 'ROI',
+      threadMinor: 'Gängans innerdiameter',
+      fitClearance: 'Passningsspel',
+      dryingTime: 'Torktid',
+      purgeRatio: 'Spolningsförhållande',
+    },
+    statusTexts: {
+      nominal: 'Telemetri inom driftområdet.',
+      watch: 'Bevakningsområde: telemetrin är användbar men kräver processöversyn före produktion.',
+      critical: 'Kritiskt område: spolningsförhållande över 30%, hög fuktrisk eller negativt passningsspel detekterat.',
+    },
+    physicsCopy: {
+      quote: 'Kalkylering kombinerar direkt material, maskinavskrivning, arbetskostnad, energi och förväntat spill. Skrotandelen modelleras som en utbyteskorrigering så att försäljningspriset bär kostnaden för kasserade delar.',
+      margin: 'Marginal beräknas på försäljningspriset, inte som påslag på kostnaden. Den nuvarande bruttomarginalen är {margin}, så varje prisändring flyttar både vinst och riskbuffert.',
+      labor: 'Efterbehandlingskostnaden är tiden multiplicerad med verkstadstaxan. Den nuvarande belastningen för arbete och finish är {laborCost}.',
+      roi: 'ROI omvandlar maskininvestering till månader av återbetalningstid. Negativ månadsvinst mättas i displayen eftersom farmen aldrig återhämtar hårdvarukostnaden under dessa antaganden.',
+      threads: 'ISO-metrisk gänggeometri approximeras från stigningsdjupet. Innerdiameter och stigningsstyrt spelrum hjälper CAD-användare att undvika sammansmälta innergängor efter FDM-strängsvällning.',
+      fits: 'Mekaniskt passningsspel jämför det printade hålets toleransområde med den printade axelns toleransområde. Negativt spelrum förutsäger greppassning; positivt spelrum förutsäger skjut- eller löppassning.',
+      drying: 'Torktiden följer en förenklad acceleration av Arrhenius-typ: högre temperatur ökar diffusionshastigheten medan fukt och polymerfaktor ökar fuktbelastningen.',
+      purge: 'AMS/MMU-spolningsförhållandet är spolvolymen dividerat med total extruderad volym. Över 30,00% flaggas jobbet eftersom spillet blir en drivande faktor för produktionskostnaden.',
+    },
+    chartLabels: ['KOSTNAD', 'PVP', 'MARGINAL', 'ROI', 'H2O', 'SPOLNING'],
+    copyFields: {
+      quoteCost: 'Kalkylkostnad',
+      pvp: 'PVP',
+      currency: 'Valuta',
+      margin: 'Marginal',
+      roi: 'ROI',
+      threadMinor: 'Gängans innerdiameter',
+      fitClearance: 'Passningsspel',
+      drying: 'Torkning',
+      purgeRatio: 'Spolningsförhållande',
+    },
+    displayUnits: {
+      months: 'mån',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'spelrum',
+    },
+    copyLabel: 'Kopiera telemetri',
+    copiedLabel: 'Kopierad',
+    unitSystemLabel: 'Enheter',
+    metricLabel: 'Metrisk',
+    imperialLabel: 'Imperial',
+    currencyLabel: 'Valuta',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ US-dollar' },
+      { code: 'GBP', label: '£ Brittiskt pund' },
+      { code: 'CAD', label: 'C$ Kanadensisk dollar' },
+      { code: 'AUD', label: 'A$ Australisk dollar' },
+      { code: 'CHF', label: 'Fr Schweizisk franc' },
+      { code: 'MXN', label: '$ Mexikansk peso' },
+      { code: 'BRL', label: 'R$ Brasiliansk real' },
+      { code: 'ARS', label: '$ Argentinsk peso' },
+      { code: 'CLP', label: '$ Chilensk peso' },
+      { code: 'COP', label: '$ Colombiansk peso' },
+      { code: 'PEN', label: 'S/ Peruansk sol' },
+      { code: 'JPY', label: '¥ Japansk yen' },
+      { code: 'CNY', label: '¥ Kinesisk yuan' },
+      { code: 'KRW', label: '₩ Sydkoreansk won' },
+      { code: 'INR', label: '₹ Indisk rupie' },
+      { code: 'PLN', label: 'zł Polsk zloty' },
+      { code: 'RUB', label: '₽ Rysk rubel' },
+      { code: 'SEK', label: 'kr Svensk krona' },
+      { code: 'NOK', label: 'kr Norsk krone' },
+      { code: 'DKK', label: 'kr Dansk krone' },
+      { code: 'TRY', label: '₺ Turkisk lira' },
+    ],
+    criticalLabel: 'Kritisk',
+    watchLabel: 'Bevakning',
+    nominalLabel: 'Nominell',
+    inputsTitle: 'Processinmatningar',
+    telemetryTitle: 'Visuell telemetri',
+    outputTitle: 'Beräknade utdata',
+    physicsTitle: 'Fysik- och processmodell',
+    modulesAriaLabel: 'Precisionssvitens moduler',
+    telemetryAriaLabel: 'Reaktivt telemetridiagram',
+    twinAriaLabel: 'Mekanisk digital tvilling',
+  },
+  seo: [
+    { type: 'title', text: 'Varför precisions-FDM behöver en diagnostisk svit istället för isolerade kalkylatorer', level: 2 },
+    { type: 'paragraph', html: 'FDM-produktionsbeslut misslyckas sällan för att en formel är okänd. De misslyckas för att kostnad, tolerans, torkning, spolavfall, arbete och maskinutnyttjande behandlas som separata frågor. En kundkalkyl kan se lönsam ut tills efterbehandlingstimmarna räknas in. En CAD-gänga kan se korrekt ut tills strängsvällning och spelrum beaktas. Ett flerfärgsjobb kan se litet ut tills spolningsvolymen prissätts som inköpt filament. Denna svit sammanför dessa relationer i en reaktiv modell så att användaren ser hela processområdet snarare än en enskild frånkopplad siffra.' },
+    { type: 'paragraph', html: 'Gränssnittet använder avsiktligt fasta utdata med två decimaler eftersom kalkylering och CAD-granskning kräver entydiga värden. Internt förblir beräkningarna flyttalsvärden tills visningsskiktet formaterar dem. Den skillnaden är viktig: att runda av för tidigt kan flytta ett litet passningsspel, en marginalprocent eller en spolningströskel tillräckligt mycket för att orsaka ett felaktigt beslut. Kopierade utdata följer ett standardiserat parameterformat inom hakparenteser så att värden kan klistras in i arbetsorder, ärenden och CAD-ändringsloggar utan tusentalsavgränsare eller lokala överraskningar.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Länkade produktionsdiagnoser' },
+      { value: '2.00', label: 'Fasta decimaler på varje visat värde' },
+      { value: '30.00%', label: 'Kritisk tröskel för spolningsförhållande' },
+      { value: '0', label: 'Beräkningsknappar som krävs' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'Sviten är byggd för processgranskning', badge: 'Ingenjörsarbetsflöde', html: 'Använd den före beredning (slicing), kalkylering eller frisläppning av CAD. Modellen är avsiktligt diagnostisk: den belyser om ett jobb förtjänar en djupare inspektion, fysisk kalibrering, omprissättning till kund eller en konstruktionsändring innan skrivartid förbrukas.' },
+
+    { type: 'title', text: 'Kalkylering och den dolda kostnaden för skrot', level: 2 },
+    { type: 'paragraph', html: 'En professionell kalkyl för 3D-utskrift bör inte bara prissätta den synliga plasten. Den direkta kostnadsbasen inkluderar material, utskriftstid, maskintimtaxa, el, arbete, efterbehandling och förväntat skrot. Skrotandelen är särskilt viktig eftersom den förändrar utbytet. Om ett jobb har en förväntad skrotandel på 8 procent, måste den godkända delen bära kostnaden för de misslyckade försöken. Modellen dividerar därför den direkta kostnaden med det användbara utbytet i stället för att lägga till en vag post för oförutsedda utgifter.' },
+    { type: 'paragraph', html: 'Kalkylmodulen är användbar för sökningar som <strong>FDM kalkylator med skrotandel</strong>, <strong>3D-utskrift priskalkylator för småföretag</strong> och <strong>beräkna kostnad för 3D-utskrift med arbete</strong>. Dessa sökningar kommer vanligtvis från användare som redan säljer utskrifter eller planerar att göra det. De behöver en siffra som håller i verklig produktion, inte en hobbyuppskattning baserad enbart på gram PLA.' },
+    { type: 'table', headers: ['Kostnadsdrivare', 'Varför det spelar roll', 'Typiskt misstag'], rows: [
+      ['Material', 'Fångar upp polymer som förbrukas av objektet, stöder, raft, brim, spolning och testbitar.', 'Prissätta endast den slutliga modellens massa.'],
+      ['Maskintaxa', 'Representerar avskrivning, underhåll, munstycksslitage, byggplattans ytor och alternativkostnad.', 'Betrakta skrivartid som gratis eftersom operatören inte är närvarande.'],
+      ['Energi', 'Liten per jobb men märkbar vid produktion i farmskala.', 'Ignorera uppvärmd kammare eller material med hög temperatur på byggplattan.'],
+      ['Arbete', 'Inkluderar förberedelse, borttagning, inspektion, packning och kundkommunikation.', 'Ta endast betalt för utskriftens varaktighet.'],
+      ['Utbyte', 'Kasserade delar måste återhämtas genom godkända försäljningar.', 'Lägga till ett slumpmässigt påslag istället för att modellera skrotprobabiliteten.'],
+    ] },
+    { type: 'tip', title: 'Kalkylera utifrån uppmätta verkstadsdata', html: 'Ersätt standardvärden med din egen eltaxa, genomsnittliga ställtid, andel misslyckade jobb och efterbehandlingsminuter. En liten verkstad med långsam manuell rengöring kan ha en högre verklig kostnad än en farm med snabbare maskiner och repeterbara fixturer.' },
+
+    { type: 'title', text: 'PVP, marginal och skillnaden mellan påslag och vinst', level: 2 },
+    { type: 'paragraph', html: 'Marginal beräknas som vinst dividerat med försäljningspris, inte som ett enkelt procentpåslag på kostnaden. Denna skillnad är kritisk vid prissättning av kundspecifika 3D-printade delar. Ett påslag på 40 procent på kostnaden ger inte en marginal på 40 procent; det ger en lägre marginal eftersom nämnaren är det slutliga försäljningspriset. Sviten använder marginalbaserad prissättning eftersom det är så många verkstäder utvärderar om en produktlinje kan betala för reservdelar, förpackning, misslyckade utskrifter och administrativ tid.' },
+    { type: 'paragraph', html: 'För en del med en kostnad på 10,00 EUR och en målmarginal på 40,00% är det nödvändiga priset 16,67 EUR. Att sälja den för 14,00 EUR för att någon lade till 40 procents påslag ger endast 28.57% marginal. Den skillnaden ser liten ut på en enskild artikel men blir betydande över hundratals beställningar. En farm med tunna marginaler kan ha mycket att göra men ändå förlora pengar när skrot, arbete och spolning ignoreras.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Påslagstänkande', description: 'Lägger till en procentandel på kostnaden. Snabbt för grova uppskattningar men svagt för lönsamhetsplanering.', points: ['Enkel huvudräkning', 'Kan underskatta det PVP som krävs', 'Uttrycker inte vinsten direkt'] },
+      { title: 'Marginaltänkande', description: 'Sätter försäljningspriset så att vinsten är en målandel av intäkterna. Bättre för repeterbar produktion.', points: ['Matchar ekonomisk rapportering', 'Skyddar täckningen av fasta kostnader', 'Användbart för katalogprissättning'] },
+    ] },
+    { type: 'proscons', title: 'Aggressiva marginalmål', items: [
+      { pro: 'Skyddar verkstaden mot omutskrifter, kundsupport och långsam rengöring.', con: 'Kan prissätta enkla standardutskrifter högre än lokala konkurrenter.' },
+      { pro: 'Gör kundanpassade arbeten i låga volymer ekonomiskt gångbara.', con: 'Kräver förklaring av varför design, passning och tillförlitlighet har ett värde.' },
+      { pro: 'Finansierar bättre fixturer, torkar, munstycken och kvalitetskontroll.', con: 'Kan minska konverteringen för rent dekorativa lågriskdelar.' },
+    ] },
+
+    { type: 'title', text: 'Arbete och efterbehandling som ingenjörsvariabler', level: 2 },
+    { type: 'paragraph', html: 'Efterbehandling är inte en vag slutförandekategori. Det är en tidsprocess med en egen taxa, repeterbarhet och feltyper. Att ta bort stöd från PETG, slipa lagerlinjer, installera gänginsatser med värme, kemisk utjämning, hartsrengöring för hybridverkstäder, förpackning och mätning kräver kvalificerad tid. Om dessa minuter inte prissätts, subventionerar print farmen kunden med obetalt arbete.' },
+    { type: 'paragraph', html: 'Arbetsmodulen separerar allmän hantering från efterbehandling så att användaren kan modellera två olika verkstadstaxor. En maskinoperatör som startar jobb har kanske inte samma kostnad som en tekniker som gängar hål, kontrollerar passningar, installerar gänginsatser eller utför kosmetisk efterbehandling. Kontrollpanelen gör dessa minuter synliga bredvid material och maskintid så att en kalkyl inte ser sund ut medan manuellt arbete tyst äter upp vinsten.' },
+    { type: 'list', items: [
+      'Registrera ställtid separat från efterbehandlingstid för minst tio upprepade jobb.',
+      'Inkludera inspektionstid när mekaniska passningar eller kundkritiska dimensioner är involverade.',
+      'Höj efterbehandlingstaxan för arbeten som kräver dammkontroll, lösningsmedel, värmeverktyg eller precisionsmätning.',
+      'Använd fixturer och batchoperationer när arbetskostnaden är högre än materialkostnaden.',
+      'Lägg till arbete i kalkylmallar även när en kund tillhandahåller en fil som är klar att skriva ut.',
+    ] },
+    { type: 'card', title: 'Sökintentioner som täcks', html: 'Användare som letar efter <strong>arbetskostnadskalkylator för 3D-utskrift</strong>, <strong>efterbehandlingskostnad för FDM-utskrifter</strong> och <strong>hur man prissätter 3D-printade delar med arbete</strong> försöker vanligtvis sluta ta för lite betalt för manuellt arbete. Kalkylatorn lyfter fram arbete som en primär siffra, inte en notering under materialberäkningen.' },
+
+    { type: 'title', text: 'Print farm ROI och kapacitetsåtervinning', level: 2 },
+    { type: 'paragraph', html: 'Return on investment för en print farm beror på det månatliga bidraget efter rörliga kostnader, inte på bruttoomsättningen. Åtta skrivare kan se imponerande ut, men om det genomsnittliga orderpriset är lågt och kalkylkostnaden är hög, drar maskinernas återbetalningstid ut på tiden eller uteblir helt. ROI-modulen omvandlar antal skrivare, skrivarkostnad, månadsorder, genomsnittligt försäljningspris och den aktiva kalkylkostnadsmodellen till månader för att återvinna hårdvarukapitalet.' },
+    { type: 'paragraph', html: 'Den viktiga detaljen är att ROI är kopplat till den aktuella processmodellen. Om skrotandel, arbete, spolning eller efterbehandling stiger, stiger kalkylkostnaden och månadsvingsten sjunker. Det gör ROI till ett diagnostiskt resultat snarare än en statisk cell i en affärsplan. När månadsvinsten är negativ visar verktyget oändligheten eftersom det inte finns någon återbetalning under de nuvarande antagandena.' },
+    { type: 'table', headers: ['ROI-symptom', 'Trolig orsak', 'Operativ åtgärd'], rows: [
+      ['Återbetalning under 6 månader', 'Stark prissättning eller högt utnyttjande med kontrollerat arbete.', 'Skydda repeterbarheten och undvik att ta underprissatta specialarbeten.'],
+      ['Återbetalning 6 till 18 månader', 'Normalt återhämtningsintervall för små farmer.', 'Förbättra batchning, kalkylmallar och skrotspårning.'],
+      ['Återbetalning över 18 månader', 'Hårdvaran står oanvänd eller jobben är underprissatta.', 'Se över produktmixen, stödbelastningen och maskintimtaxan.'],
+      ['Oändlig återbetalningstid', 'Rörliga kostnader överstiger försäljningsintäkterna.', 'Stoppa maskinskalningen tills prissättningen eller processekonomin förändras.'],
+    ] },
+    { type: 'summary', title: 'ROI granskningslista', items: [
+      'Använd godkända beställningar, inte förfrågningar, som månatligt orderantal.',
+      'Inkludera utbytesmunstycken, byggplattor, matare, torkar och reservdelar i hårdvarukostnaden när det är möjligt.',
+      'Kontrollera om korta jobb med hög marginal slår långa dekorativa jobb med lågt försäljningspris.',
+      'Modellera den verkliga skrotandelen efter intrimning, inte en optimistisk uppskattning från första veckan.',
+    ] },
+
+    { type: 'title', text: 'ISO metrisk gängplanering för FDM CAD', level: 2 },
+    { type: 'paragraph', html: 'Metriska gängstandarder definierar geometri och toleransklasser, men FDM tillför strängbredd, termisk krympning, tryck på första lagret, slicerkompensation och materialkrypning. En CAD-gänga som är matematiskt korrekt kan skrivas ut för trångt eftersom det extruderade filamentet inte är ett oändligt skarpt skärverktyg. Sviten approximerar stigningsdriven innerdiameter och en konfigurerbar spelrumsfaktor så att konstruktörer kan se om en innergänga förtjänar extra tolerans före utskrift.' },
+    { type: 'paragraph', html: 'Modellen ersätter inte ISO 965-tabeller. Det är en pre-CAD-diagnos för användare som söker <strong>toleranskalkylator för 3D-printad ISO-gänga</strong>, <strong>spelrum för M12 3D-printad gänga</strong> eller <strong>CAD-tolerans för FDM-innergänga</strong>. Dessa användare måste bestämma om de ska modellera gängor direkt, rensa dem med en gängtapp, använda gänginsatser eller printa ett pilothål för efterbearbetning.' },
+    { type: 'glossary', items: [
+      { term: 'Stigning', definition: 'Axiellt avstånd mellan gängtoppar. Större stigning ökar i allmänhet gängdjupet och ändrar den utskrivbara innerdiametern.' },
+      { term: 'Innerdiameter', definition: 'Den minsta innerdiametern för en gängprofil. I FDM är den känslig för strängsvällning och slicerns ordning av väggarna.' },
+      { term: 'Spelrumsfaktor', definition: 'En praktisk tolerans uttryckt som en bråkdel av stigningen för att kompensera för printat plastbeteende.' },
+      { term: 'Toleransklass', definition: 'En standardiserad passningsbeteckning för tillverkade gängor. Utskriven plast behöver vanligtvis empirisk justering runt dessa klasser.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Gängor är mätproblem', badge: 'CAD-varning', html: 'Skriv ut en kalibreringsbit per material, munstycke och lagerhöjdsfamilj. En gänga som fungerar i torr PLA vid 0,20 mm lagerhöjd kan nypa i PETG, nylon eller vått filament eftersom ytstruktur och polymerelasticitet förändras.' },
+
+    { type: 'title', text: 'Passningar för axel och hål: se spelrummet innan utskriften misslyckas', level: 2 },
+    { type: 'paragraph', html: 'Mekaniska passningar i FDM styrs av både CAD-dimensionen och processavvikelsen. Hål tenderar att bli underdimensionerade eftersom de inre konturerna närmar sig en cirkel med en ändlig strängbredd och för att krympande plast kan dra inåt. Axlar kan bli överdimensionerade på grund av extrusionsflöde, sömplacering eller elefantfotseffekt mot byggplattan. Sviten visualiserar hål- och axelgränserna så att negativt spelrum blir uppenbart innan delen skrivs ut.' },
+    { type: 'paragraph', html: 'För funktionella delar är frågan inte bara om en axel passar i ett hål. Det handlar om huruvida passningen matchar användningsfallet: skjutpassning, löppassning, greppassning eller presspassning. FDM-anisotropi, lagerytor och dimensionell drift gör att ett matematiskt litet positivt spelrum ändå kan kännas trångt. Den digitala tvillingen behandlar därför negativt spelrum som kritiskt och litet positivt spelrum som något som bör valideras med en testbit.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Skjutpassning', description: 'Delar monteras för hand med minimalt motstånd. Användbart för avtagbara lock, jiggar och inriktningsstift.', points: ['Kräver positivt spelrum', 'Känsligt för ytstruktur', 'Oftast lättast att justera'] },
+      { title: 'Löppassning', description: 'Delar rör sig i förhållande till varandra efter montering. Användbart för leder och rullar.', points: ['Kräver mer spelrum', 'Smörjning kan hjälpa', 'Rundhet är viktigt'] },
+      { title: 'Greppassning', description: 'Delarna har avsiktlig överlappning. Användbart endast när materialelasticitet, väggtjocklek och belastning är kontrollerade.', points: ['Risk för sprickbildning', 'Utskriftsriktning är avgörande', 'Provutskrift krävs'] },
+    ] },
+    { type: 'tip', title: 'Använd tolerans, inte hopp', html: 'Om ett printat hål ska ta emot ett köpt stift, kullager, skruv eller gänginsats, mät både den printade detaljen och den köpta komponenten. Justera CAD-toleransen utifrån uppmätt avvikelse istället för att tillämpa en universell offset på alla material.' },
+
+    { type: 'title', text: 'Filamenttorkning: diffusion, adsorption och utskriftssymptom', level: 2 },
+    { type: 'paragraph', html: 'Hygroskopiskt filament blir inte bara vått på ytan. Fukt adsorberas på polymerytorna och kan diffundera in i filamentet över tid. Under extrusionen kan det vattnet förgasas till ånga, vilket skapar sprakande, bubblor, inkonsekvent extrusion, svag lagerbindning, matta eller grumliga fläckar på ytan, trådbildning (stringing) och dimensionella avvikelser. Nylon, TPU, PVA, PC och vissa fyllda kompositer kan vara särskilt känsliga, medan PLA varierar beroende på sammansättning och förvaringshistorik.' },
+    { type: 'paragraph', html: 'Torkmodulen använder fuktbelastning, filamentmassa, materialfaktor och temperatur som diagnostisk modell. Högre temperatur påskyndar fuktborttagningen, men varje polymer har ett säkert torkområde. För låg temperatur slösar tid; för hög temperatur kan deformera spolar, glödga filamentet, mjuka upp polymeren eller smälta samman lindningarna. Syftet med beräkningen är inte att uppnå laboratorietorrhet, utan att uppskatta när torkning sannolikt är nödvändig inför precisionsarbete.' },
+    { type: 'table', headers: ['Materialbeteende', 'Utskriftssymptom', 'Processåtgärd'], rows: [
+      ['Mild fukt', 'Lätt stringing eller små glansförändringar.', 'Torka före kosmetiska jobb och finjustering av retriktion.'],
+      ['Måttlig fukt', 'Sprakande, råa väggar eller inkonsekvent extrusionsbredd.', 'Torka spolen och gör om flödeskalibreringen.'],
+      ['Allvarlig fukt', 'Skumbildning, svaga lager, spröda delar eller kollapsande stöd.', 'Torka längre, förvara förseglat och kassera skadade delar vid behov.'],
+      ['Överhettad torkning', 'Oval form på filamentet eller spoldeformation.', 'Sänk temperaturen och kontrollera tillverkarens anvisningar.'],
+    ] },
+    { type: 'message', title: 'Fukt och tolerans samverkar', html: 'Fuktigt filament kan få en mekanisk del att se ut som ett CAD- eller flödesproblem eftersom extrusionen blir inkonsekvent. Torkning är därför en del av dimensionskontrollen, inte bara ytbehandlingen.' },
+
+    { type: 'title', text: 'AMS- och MMU-spolningsförhållande som en produktionsvarning', level: 2 },
+    { type: 'paragraph', html: 'Flerfärgskrifter gör färgbyten till en materialekonomi. Spoltornet, wipe-blocket eller spilltratten är inte gratis; det är inköpt filament som omvandlas till avfall. Ett litet dekorativt objekt med många alternerande lager kan slösa mer material än ett större enfärgat fäste. Sviten beräknar spolningsförhållandet som spolvolymen dividerat med den totala extruderade volymen så att spillet blir synligt direkt.' },
+    { type: 'paragraph', html: 'Gränsen på 30.00% är avsiktligt strikt. När nästan en tredjedel av den extruderade polymeren är spill, bör jobbet granskas för färgordning, spolning-till-infill, modelluppdelning, batchning eller en högre kalkyl. I print-farm-termer förbrukar spolning också maskintid och ökar slitaget vid färgbyten. En kalkyl som ignorerar spolning kan förvandla en visuellt imponerande flerfärgsdel till ett jobb med låg marginal.' },
+    { type: 'list', items: [
+      'Gruppera liknande färger för att minska högkontaminerande övergångar.',
+      'Undvik upprepade byten från mörkt till ljust när designen kan arrangeras om.',
+      'Använd spolning-till-infill endast när dold färgkontamination är strukturellt acceptabel.',
+      'Ta betalt för spolmaterial separat på kundkalkyler för dekorativa flerfärgsjobb.',
+      'Kör slicerkalibrering för varje materialfamilj innan du minskar spolningen aggressivt.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Kritiskt spolningsförhållande', badge: '30.00%+', html: 'Ett spolningsförhållande över 30.00% innebär att skrivaren lägger en stor del av materialet på rengöring. Behandla detta som ett tecken på att du behöver göra en omkonstruktion, batchning eller priskorrigering innan du startar produktionen.' },
+
+    { type: 'title', text: 'Hur man använder urklippsdata i produktionsanteckningar', level: 2 },
+    { type: 'paragraph', html: 'Varje kalkylator i sviten exporterar samma parameterformat inom hakparenteser: <code>[Parameter: Värde | Parameter: Värde]</code>. Detta är avsiktligt ren text eftersom den fungerar i e-post, verkstadsföljesedlar, kalkylblad, kundmeddelanden och CAD-kommentarer utan formateringsberoenden. Det förhindrar också att dolda tusentalsavgränsare eller lokala decimalsymboler hamnar i en kalkyl eller ritningsnotering.' },
+    { type: 'paragraph', html: 'Använd den kopierade raden som en ögonblicksbild av beslutstillståndet. Bifoga den till exempel till en kalkylrevision när kunden lägger till färgändringar, eller klistra in den i ett CAD-ärende när ett axelspelrum går från positivt till negativt. Eftersom varje visat värde är fast till två decimaler kan anteckningen läsas av maskinoperatörer, konstruktörer och verkstadspersonal utan omformatering.' },
+    { type: 'summary', title: 'Sammanfattning av produktionsarbetsflöde', items: [
+      'Börja med kalkyl och marginal för att verifiera att jobbet bär sina egna kostnader.',
+      'Granska arbete och efterbehandling innan du lovar leveranstid.',
+      'Kontrollera ROI när du köper skrivare eller accepterar ramavtal.',
+      'Använd gäng- och passningsmodulerna innan du frisläpper funktionell CAD.',
+      'Torka hygroskopiska material innan du skyller på slicerinställningar.',
+      'Behandla högt spolningsförhållande som en konstruktions- och prisvarning.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'suite-ingegneria-precisione-stampa-3d';
+const title = 'Suite di ingegneria di precisione per la stampa 3D FDM';
+const description = 'Una suite di diagnostica reattiva per preventivi FDM, margini, manodopera, ROI, tolleranze CAD in stile ISO, essiccazione del filamento e scarti di spurgo AMS/MMU.';
+
+const faqData = [
+  {
+    question: 'Perché ogni risultato visualizzato utilizza esattamente due decimali?',
+    answer: 'La suite mantiene internamente la piena precisione a virgola mobile di JavaScript e applica la formattazione a due decimali solo quando i valori vengono visualizzati o copiati. Questo previene output ambigui e corrisponde al modo in cui molti flussi di lavoro CAD e di preventivazione documentano dimensioni e denaro.',
+  },
+  {
+    question: 'Il modulo per filettature ISO sostituisce una tabella degli standard delle filettature?',
+    answer: 'No. Si tratta di un ausilio per la pianificazione CAD per il gioco FDM e la geometria guidata dal passo. I disegni di produzione finali dovrebbero comunque fare riferimento alla relativa classe di tolleranza ISO e ai dati di calibrazione misurati della stampante.',
+  },
+  {
+    question: 'Perché il rapporto di spurgo è considerato critico al di sopra del 30%?',
+    answer: 'Al di sopra del 30%, una grande parte del polimero estruso non è più volume di prodotto. Questo di solito modifica la preventivazione, i lotti, l\'ordine dei colori e la scelta di utilizzare lo spurgo nel riempimento (purge-to-infill) o la suddivisione del modello.',
+  },
+  {
+    question: 'Come deve essere interpretato il tempo di essiccazione del filamento?',
+    answer: 'Il tempo di essiccazione è una stima diagnostica basata sul carico di umidità, sulla sensibilità del materiale, sulla massa del filamento e sulla temperatura dell\'essiccatore. Dovrebbe essere convalidato con sintomi di stampa reali come scoppiettii, variazioni di lucentezza, stringing (fili) e deriva dimensionale.',
+  },
+];
+
+const howToData = [
+  { name: 'Seleziona il modulo di diagnostica', text: 'Scegli preventivo, margine, manodopera, ROI, filettatura, accoppiamento, essiccazione o spurgo per modificare la spiegazione della telemetria mantenendo attivo il modello di processo condiviso.' },
+  { name: 'Modifica gli input di processo', text: 'Modifica tempo macchina, materiale, manodopera, tolleranze, umidità o valori di spurgo. I risultati si aggiornano immediatamente senza premere alcun pulsante di calcolo.' },
+  { name: 'Leggi il gemello digitale', text: 'Usa il gemello SVG di albero e foro e la tela di telemetria per vedere se il processo è nominale, a livello di attenzione o critico.' },
+  { name: 'Copia il riepilogo tecnico', text: 'Usa il pulsante degli appunti per esportare la stringa di parametri standardizzata tra parentesi quadre per preventivi, ticket o note CAD.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'it',
+  keywords: 'calcolatore preventivo FDM, calcolatore margine stampa 3D, calcolatore ROI farm stampa 3D, calcolatore tolleranza filettatura ISO, calcolatore accoppiamento meccanico FDM, calcolatore essiccazione filamento, calcolatore spurgo AMS, calcolatore costo spurgo MMU',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'Generatore preventivi PDF' },
+      { id: 'margin', label: 'PVP e margine' },
+      { id: 'labor', label: 'Manodopera post-processing' },
+      { id: 'roi', label: 'ROI farm' },
+      { id: 'threads', label: 'Filettatura ISO CAD' },
+      { id: 'fits', label: 'Accoppiamenti meccanici' },
+      { id: 'drying', label: 'Essiccazione filamento' },
+      { id: 'purge', label: 'Spurgo AMS/MMU' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Costo materiale', unit: '€' },
+      { key: 'printHours', label: 'Tempo stampa', unit: 'h' },
+      { key: 'machineRate', label: 'Tariffa macchina', unit: '€/h' },
+      { key: 'energyPrice', label: 'Prezzo energia', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Tasso di scarto', unit: '%' },
+      { key: 'marginPercent', label: 'Margine obiettivo', unit: '%' },
+      { key: 'laborMinutes', label: 'Manodopera', unit: 'min' },
+      { key: 'laborRate', label: 'Tariffa manodopera', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Post-processing', unit: 'min' },
+      { key: 'postProcessRate', label: 'Tariffa post-processing', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Stampanti farm', unit: 'pz' },
+      { key: 'printerCost', label: 'Costo stampante', unit: '€' },
+      { key: 'monthlyOrders', label: 'Ordini mensili', unit: 'pz' },
+      { key: 'avgSalePrice', label: 'Prezzo medio vendita', unit: '€' },
+      { key: 'threadNominalMm', label: 'Filettatura nominale', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Passo', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Albero nominale', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Tolleranza foro', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Massa filamento', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Umidità', unit: '%UR' },
+      { key: 'dryingTemperatureC', label: 'Temp essiccazione', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Volume oggetto', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Volume spurgo', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Costo stimato',
+      recommendedPvp: 'PVP raccomandato',
+      grossMargin: 'Margine lordo',
+      roi: 'ROI',
+      threadMinor: 'Diametro minore',
+      fitClearance: 'Gioco accoppiamento',
+      dryingTime: 'Tempo essiccazione',
+      purgeRatio: 'Rapporto spurgo',
+    },
+    statusTexts: {
+      nominal: 'Telemetria all\'interno dell\'inviluppo operativo.',
+      watch: 'Inviluppo di attenzione: la telemetria è utilizzabile ma richiede una revisione del processo prima della produzione.',
+      critical: 'Inviluppo critico: rapporto di spurgo superiore al 30%, rischio di umidità elevato o gioco di accoppiamento negativo rilevato.',
+    },
+    physicsCopy: {
+      quote: 'L\'ingegneria dei preventivi combina materiale diretto, ammortamento macchina, esposizione della manodopera, energia e scarti previsti. Il tasso di scarto è modellato come una correzione della resa in modo che il prezzo di vendita sostenga il costo delle parti rifiutate.',
+      margin: 'Il margine è calcolato sul prezzo di vendita, non sul ricarico del costo. Il margine lordo attuale è {margin}, quindi ogni variazione di prezzo sposta sia il profitto che il buffer di rischio.',
+      labor: 'Il costo del post-processing è dato dal tempo moltiplicato per la tariffa dell\'officina. Il carico di lavoro attuale più la finitura è pari a {laborCost}.',
+      roi: 'Il ROI converte il capex della stampante in mesi di recupero della produzione. Il profitto mensile negativo è saturato nella visualizzazione perché la farm non recupera mai il costo dell\'hardware con tali presupposti.',
+      threads: 'La geometria della filettatura metrica ISO è approssimata dalla profondità del passo. Il diametro minore e il gioco guidato dal passo aiutano gli utenti CAD a evitare filettature interne fuse dopo il rigonfiamento del filamento FDM.',
+      fits: 'Il gioco dell\'accoppiamento meccanico confronta l\'inviluppo del foro stampato con quello dell\'albero stampato. Un gioco negativo prevede interferenza; un gioco positivo prevede un accoppiamento libero o scorrevole.',
+      drying: 'Il tempo di essiccazione segue un\'accelerazione semplificata in stile Arrhenius: una temperatura più elevata aumenta il tasso di diffusione, mentre l\'umidità e il fattore polimero aumentano il carico di umidità.',
+      purge: 'Il rapporto di spurgo AMS/MMU è il volume di spurgo diviso per il volume totale estruso. Al di sopra del 30,00% il lavoro viene segnalato perché lo scarto sta diventando un fattore determinante per i costi di produzione.',
+    },
+    chartLabels: ['COSTO', 'PVP', 'MARGINE', 'ROI', 'H2O', 'SPURGO'],
+    copyFields: {
+      quoteCost: 'Costo stimato',
+      pvp: 'PVP',
+      currency: 'Valuta',
+      margin: 'Margine',
+      roi: 'ROI',
+      threadMinor: 'Diametro minore',
+      fitClearance: 'Gioco accoppiamento',
+      drying: 'Essiccazione',
+      purgeRatio: 'Rapporto spurgo',
+    },
+    displayUnits: {
+      months: 'mesi',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'gioco',
+    },
+    copyLabel: 'Copia telemetria',
+    copiedLabel: 'Copiato',
+    unitSystemLabel: 'Unità',
+    metricLabel: 'Metrico',
+    imperialLabel: 'Imperiale',
+    currencyLabel: 'Valuta',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ Dollaro USA' },
+      { code: 'GBP', label: '£ Sterlina britannica' },
+      { code: 'CAD', label: 'C$ Dollaro canadese' },
+      { code: 'AUD', label: 'A$ Dollaro australiano' },
+      { code: 'CHF', label: 'Fr Franco svizzero' },
+      { code: 'MXN', label: '$ Peso messicano' },
+      { code: 'BRL', label: 'R$ Real brasiliano' },
+      { code: 'ARS', label: '$ Peso argentino' },
+      { code: 'CLP', label: '$ Peso cileno' },
+      { code: 'COP', label: '$ Peso colombiano' },
+      { code: 'PEN', label: 'S/ Sol peruviano' },
+      { code: 'JPY', label: '¥ Yen giapponese' },
+      { code: 'CNY', label: '¥ Yuan cinese' },
+      { code: 'KRW', label: '₩ Won sudcoreano' },
+      { code: 'INR', label: '₹ Rupia indiana' },
+      { code: 'PLN', label: 'zł Zloty polacco' },
+      { code: 'RUB', label: '₽ Rublo russo' },
+      { code: 'SEK', label: 'kr Corona svedese' },
+      { code: 'NOK', label: 'kr Corona norvegese' },
+      { code: 'DKK', label: 'kr Corona danese' },
+      { code: 'TRY', label: '₺ Lira turca' },
+    ],
+    criticalLabel: 'Critico',
+    watchLabel: 'Attenzione',
+    nominalLabel: 'Nominale',
+    inputsTitle: 'Input di processo',
+    telemetryTitle: 'Telemetria visiva',
+    outputTitle: 'Risultati calcolati',
+    physicsTitle: 'Fisica e modello di processo',
+    modulesAriaLabel: 'Moduli suite di precisione',
+    telemetryAriaLabel: 'Grafico telemetrico reattivo',
+    twinAriaLabel: 'Gemello digitale meccanico',
+  },
+  seo: [
+    { type: 'title', text: 'Perché la stampa FDM di precisione richiede una suite diagnostica anziché calcolatori isolati', level: 2 },
+    { type: 'paragraph', html: 'Le decisioni di produzione FDM raramente falliscono perché una formula è sconosciuta. Falliscono perché il costo, le tolleranze, l\'essiccazione, lo spurgo, la manodopera e l\'utilizzo della macchina vengono trattati come argomenti separati. Un preventivo per un cliente può sembrare redditizio finché non si includono i minuti di post-processing. Una filettatura CAD può sembrare corretta finché non si considerano il rigonfiamento del filamento e il gioco. Un lavoro multicolore può sembrare piccolo finché il volume di spurgo non viene tariffato come filamento acquistato. Questa suite unisce queste relazioni in un unico modello reattivo in modo che l\'utente veda l\'inviluppo del processo piuttosto che un singolo numero scollegato.' },
+    { type: 'paragraph', html: 'L\'interfaccia utilizza deliberatamente un formato fisso a due decimali perché la preventivazione e la revisione CAD richiedono valori non ambigui. Internamente, i calcoli rimangono valori a virgola mobile fino a quando il livello di visualizzazione non li formatta. Questa distinzione è importante: arrotondare troppo presto può spostare un gioco ridotto, una percentuale di margine o una soglia di spurgo abbastanza da indurre a una decisione errata. L\'output copiato segue un formato di parametri standardizzato tra parentesi quadre in modo che i valori possano essere incollati in ordini di lavoro, ticket e registri delle modifiche CAD senza separatori delle migliaia o sorprese di localizzazione locale.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Diagnostiche di produzione collegate' },
+      { value: '2.00', label: 'Decimali fissi su ogni output visualizzato' },
+      { value: '30.00%', label: 'Soglia critica rapporto spurgo' },
+      { value: '0', label: 'Pulsanti di calcolo richiesti' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'La suite è concepita per la revisione del processo', badge: 'Flusso di lavoro ingegneristico', html: 'Usala prima di effettuare lo slicing, preventivare o rilasciare il CAD. Il modello è intenzionalmente diagnostico: evidenzia se un lavoro merita un\'ispezione più approfondita, una calibrazione fisica, una nuova tariffazione al cliente o una modifica del design prima che venga consumato tempo stampante.' },
+
+    { type: 'title', text: 'Generazione preventivi e costo nascosto degli scarti', level: 2 },
+    { type: 'paragraph', html: 'Un preventivo professionale per la stampa 3D non dovrebbe tariffare solo la plastica visibile. La base dei costi diretti comprende materiale, tempo di stampa, tariffa oraria macchina, energia, manodopera, post-processing e scarti previsti. Il tasso di scarto è particolarmente importante perché modifica la resa. Se un lavoro ha un\'aspettativa di scarto dell\'8%, la parte accettata deve sostenere il costo dei tentativi rifiutati. Il modello divide quindi il costo diretto per la resa utilizzabile piuttosto che aggiungere una generica voce per imprevisti.' },
+    { type: 'paragraph', html: 'Il modulo dei preventivi è utile per ricerche quali <strong>calcolatore preventivi FDM con tasso di scarto</strong>, <strong>calcolatore prezzi stampa 3D per piccole imprese</strong> e <strong>calcolare costo lavoro stampa 3D con manodopera</strong>. Tali ricerche provengono solitamente da utenti che vendono già stampe o pianificano di farlo. Hanno bisogno di un numero che rispecchi la produzione reale, non di una stima hobbistica basata solo sui grammi di PLA.' },
+    { type: 'table', headers: ['Fattore di costo', 'Perché è importante', 'Errore tipico'], rows: [
+      ['Materiale', 'Cattura il polimero consumato da oggetto, supporti, raft, brim, spurgo e pezzi di prova.', 'Tariffare solo la massa del modello finale.'],
+      ['Tariffa macchina', 'Rappresenta ammortamento, manutenzione, usura ugello, superfici del piano e costo opportunità.', 'Trattare il tempo stampante come gratuito perché l\'operatore non è presente.'],
+      ['Energia', 'Piccolo per singolo lavoro ma visibile su produzione farm su larga scala.', 'Ignorare la camera riscaldata o materiali ad alta temperatura del piano.'],
+      ['Manodopera', 'Include preparazione, rimozione, ispezione, imballaggio e comunicazione con il cliente.', 'Addebitare solo la durata della stampa.'],
+      ['Resa', 'Le parti rifiutate devono essere recuperate dalle vendite accettate.', 'Aggiungere un ricarico casuale invece di modellare la probabilità di scarto.'],
+    ] },
+    { type: 'tip', title: 'Preventiva in base a dati misurati dell\'officina', html: 'Sostituisci i valori predefiniti con la tua tariffa elettrica, il tempo medio di intervento, la percentuale di lavori falliti e i minuti di post-processing. Una piccola officina con pulizia manuale lenta può avere un costo reale maggiore rispetto a una farm con macchine più veloci e attrezzature ripetibili.' },
+
+    { type: 'title', text: 'PVP, margine e differenza tra ricarico e profitto', level: 2 },
+    { type: 'paragraph', html: 'Il margine si calcola come profitto diviso per il prezzo di vendita, non come semplice percentuale aggiunta al costo. Questa differenza è critica quando si preventivano parti stampate in 3D destinate al cliente. Un ricarico del 40% sul costo non crea un margine del 40%; crea un margine inferiore perché il denominatore è il prezzo finale di vendita. La suite utilizza la preventivazione basata sul margine perché è così che molte officine valutano se una linea di prodotti può pagare parti di ricambio, imballaggio, stampe fallite e tempo amministrativo.' },
+    { type: 'paragraph', html: 'Per una parte con un costo di 10,00 EUR e un margine obiettivo del 40,00%, il prezzo richiesto è di 16,67 EUR. Venderla a 14,00 EUR perché qualcuno ha aggiunto il 40% di ricarico lascia solo il 28.57% di margine. Questa differenza sembra piccola su un singolo articolo ma diventa significativa su centinaia di ordini. Una farm con margini ridotti può essere molto attiva e comunque perdere denaro quando si ignorano scarti, manodopera e spurgo.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Mentalità di ricarico', description: 'Aggiunge una percentuale al costo. Rapida per stime approssimative ma debole per la pianificazione della redditività.', points: ['Calcolo mentale semplice', 'Può sottostimare il PVP richiesto', 'Non esprime direttamente la quota di profitto'] },
+      { title: 'Mentalità di margine', description: 'Imposta il prezzo di vendita in modo che il profitto sia una quota obiettivo dei ricavi. Migliore per produzioni ripetibili.', points: ['Corrisponde alla reportistica aziendale', 'Protegge il recupero dei costi fissi', 'Utile per i prezzi da catalogo'] },
+    ] },
+    { type: 'proscons', title: 'Target di margine aggressivi', items: [
+      { pro: 'Protegge l\'officina da ristampe, assistenza clienti e pulizie lente.', con: 'Può posizionare il prezzo di stampe semplici al di sopra dei concorrenti locali.' },
+      { pro: 'Rende economicamente sostenibile il lavoro personalizzato a bassi volumi.', con: 'Richiede di spiegare perché design, accoppiamento e affidabilità hanno valore.' },
+      { pro: 'Finanzia attrezzature migliori, essiccatori, ugelli e controllo qualità.', con: 'Può ridurre la conversione per parti puramente decorative a basso rischio.' },
+    ] },
+
+    { type: 'title', text: 'Manodopera e post-processing come variabili ingegneristiche', level: 2 },
+    { type: 'paragraph', html: 'Il post-processing non è una generica categoria di finitura. È un processo a tempo con una propria tariffa, ripetibilità e modi di guasto. La rimozione dei supporti dal PETG, la levigatura delle linee di livello, l\'installazione di inserti filettati a caldo, la levigatura a vapore, la pulizia della resina per officine ibride, l\'imballaggio e la misurazione consumano attenzione specializzata. Se quei minuti non vengono tariffati, la stampante farm sovvenziona il cliente con manodopera non pagata.' },
+    { type: 'paragraph', html: 'Il modulo manodopera separa la gestione generale dalla finitura, in modo che l\'utente possa modellare due diverse tariffe d\'officina. Un operatore macchina che avvia i lavori potrebbe non avere lo stesso costo di un tecnico che filetta fori, controlla accoppiamenti, installa inserti filettati o esegue finiture estetiche. La dashboard rende visibili questi minuti accanto al materiale e al tempo macchina per evitare che un preventivo sembri sano mentre il lavoro al banco consuma silenziosamente il profitto.' },
+    { type: 'list', items: [
+      'Traccia il tempo di preparazione separatamente dal tempo di finitura per almeno dieci lavori ripetuti.',
+      'Includi il tempo di ispezione quando sono coinvolti accoppiamenti meccanici o dimensioni critiche per il cliente.',
+      'Aumenta la tariffa di post-processing per lavori che richiedono controllo polveri, solventi, strumenti a caldo o misurazioni di precisione.',
+      'Usa maschere e operazioni in lotti quando il costo della manodopera è superiore al costo del materiale.',
+      'Aggiungi la manodopera ai modelli di preventivo anche quando il cliente fornisce un file pronto per la stampa.',
+    ] },
+    { type: 'card', title: 'Intenti di ricerca coperti', html: 'Gli utenti che cercano <strong>calcolatore costo manodopera stampa 3D</strong>, <strong>costo post processing per stampe FDM</strong> e <strong>come tariffare parti stampate in 3D con manodopera</strong> stanno solitamente cercando di smettere di sottostimare il lavoro manuale. Il calcolatore evidenzia la manodopera come numero principale, non come nota sotto la stima del materiale.' },
+
+    { type: 'title', text: 'ROI della print farm e recupero della capacità', level: 2 },
+    { type: 'paragraph', html: 'Il ritorno sull\'investimento per una print farm dipende dal contributo mensile dopo i costi variabili, non dai ricavi lordi. Otto stampanti possono sembrare impressionanti, ma se il prezzo medio degli ordini è basso e il costo del preventivo è alto, il periodo di recupero dell\'hardware si allunga o non arriva mai. Il modulo ROI converte il numero di stampanti, il loro costo, gli ordini mensili, il prezzo medio di vendita e il modello di costo del preventivo attivo nei mesi necessari per recuperare il capitale dell\'hardware.' },
+    { type: 'paragraph', html: 'Il dettaglio importante è che il ROI è accoppiato al modello di processo attuale. Se il tasso di scarto, la manodopera, lo spurgo o il post-processing aumentano, il costo del preventivo sale e il profitto mensile scende. Ciò rende il ROI un risultato diagnostico piuttosto che una cella statica del piano aziendale. Quando il profitto mensile è negativo, lo strumento visualizza l\'infinito perché non vi è alcun recupero con quelle ipotesi.' },
+    { type: 'table', headers: ['Sintomo ROI', 'Causa probabile', 'Risposta operativa'], rows: [
+      ['Ammortamento inferiore a 6 mesi', 'Prezzi solidi o elevato utilizzo con manodopera controllata.', 'Proteggi la ripetibilità ed evita di accettare lavori personalizzati sottostimati.'],
+      ['Ammortamento da 6 a 18 mesi', 'Normale intervallo di recupero per piccole farm.', 'Migliora la gestione a lotti, i modelli di preventivo e il monitoraggio degli scarti.'],
+      ['Ammortamento superiore a 18 mesi', 'L\'hardware è inattivo o i lavori sono sottostimati.', 'Rivedi il mix di prodotti, il carico dei supporti e la tariffa oraria della macchina.'],
+      ['Ammortamento infinito', 'Il costo variabile supera i ricavi di vendita.', 'Interrompi la scalabilità dell\'hardware finché non cambiano i prezzi o l\'economia di processo.'],
+    ] },
+    { type: 'summary', title: 'Lista di controllo per la revisione del ROI', items: [
+      'Usa gli ordini accettati, non le richieste, come conteggio mensile degli ordini.',
+      'Includi ugelli di ricambio, piani, estrusori, essiccatori e ricambi nel costo dell\'hardware, quando possibile.',
+      'Verifica se i lavori brevi ad alto margine superano i lavori decorativi lunghi con un basso prezzo di vendita.',
+      'Modella il tasso di scarto reale dopo la messa a punto, non una stima ottimistica della prima settimana.',
+    ] },
+
+    { type: 'title', text: 'Pianificazione di filettature metriche ISO per CAD FDM', level: 2 },
+    { type: 'paragraph', html: 'Gli standard delle filettature metriche definiscono la geometria e le classi di tolleranza, ma la stampa FDM aggiunge larghezza del cordone, contrazione termica, pressione del primo strato, compensazione dello slicer e scorrimento del materiale. Una filettatura CAD matematicamente corretta può risultare troppo stretta se stampata, perché il filamento estruso non è uno strumento da taglio infinitamente affilato. La suite approssima il diametro minore guidato dal passo e un fattore di gioco configurabile in modo che i progettisti possano vedere se una filettatura interna meriti tolleranze extra prima di stampare.' },
+    { type: 'paragraph', html: 'Il modello non sostituisce le tabelle ISO 965. È una diagnostica pre-CAD per gli utenti che cercano <strong>calcolatore tolleranze filettature ISO stampate 3D</strong>, <strong>gioco filettatura M12 stampa 3D</strong> o <strong>tolleranza CAD filettatura interna FDM</strong>. Tali utenti devono decidere se modellare direttamente le filettature, ripassarle con un maschio, utilizzare inserti filettati a caldo o stampare un foro pilota per la successiva lavorazione meccanica.' },
+    { type: 'glossary', items: [
+      { term: 'Passo', definition: 'Distanza assiale tra le creste della filettatura. Un passo maggiore aumenta generalmente la profondità della filettatura e modifica il diametro minore stampabile.' },
+      { term: 'Diametro minore', definition: 'Il diametro interno più piccolo di un profilo di filettatura. Nel FDM, è sensibile al rigonfiamento del cordone e all\'ordine delle pareti nello slicer.' },
+      { term: 'Fattore di gioco', definition: 'Un margine pratico espresso come frazione del passo per compensare il comportamento della plastica stampata.' },
+      { term: 'Classe di tolleranza', definition: 'Una designazione di accoppiamento standardizzata per le filettature prodotte. La plastica stampata necessita solitamente di regolazioni empiriche attorno a tali classi.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Le filettature sono problemi di misurazione', badge: 'Attenzione in CAD', html: 'Stampa una probetta di calibrazione per materiale, ugello e famiglia di altezza dello strato. Una filettatura che funziona in PLA asciutto con strati da 0,20 mm può bloccarsi in PETG, nylon o filamento umido perché la texture superficiale e l\'elasticità del polimero cambiano.' },
+
+    { type: 'title', text: 'Accoppiamenti albero-foro: vedere il gioco prima che la stampa fallisca', level: 2 },
+    { type: 'paragraph', html: 'Gli accoppiamenti meccanici nel FDM sono controllati sia dalle dimensioni CAD che dall\'errore di processo. I fori tendono a essere stampati sottodimensionati perché i perimetri interni approssimano un cerchio con una larghezza del cordone finita e perché la plastica che si raffredda può contrarsi verso l\'interno. Gli alberi possono risultare sovradimensionati a causa del flusso di estrusione, del posizionamento della cucitura o dell\'effetto zampa d\'elefante sul piano. La suite visualizza gli inviluppi di foro e albero in modo che il gioco negativo diventi evidente prima di stampare la parte.' },
+    { type: 'paragraph', html: 'Per le parti funzionali, la questione non è solo se un albero si inserisce in un foro. È se l\'accoppiamento corrisponde al caso d\'uso: accoppiamento libero, accoppiamento scorrevole, accoppiamento a spinta, accoppiamento forzato o sede per cuscinetto bloccata. L\'anisotropia del FDM, le creste dei livelli e la deriva dimensionale fanno sì che un gioco positivo matematicamente piccolo possa comunque risultare stretto. Il gemello digitale tratta quindi il gioco negativo come critico e il piccolo gioco positivo come un punto da convalidare con una probetta.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Accoppiamento libero', description: 'Le parti si assemblano a mano con una resistenza minima. Utile per coperchi rimovibili, dime e perni di allineamento.', points: ['Richiede gioco positivo', 'Sensibile alla texture superficiale', 'Spesso il più facile da regolare'] },
+      { title: 'Accoppiamento scorrevole', description: 'Le parti si muovono l\'una rispetto all\'altra dopo l\'assemblaggio. Utile per perni e rulli.', points: ['Richiede più gioco', 'La lubrificazione può aiutare', 'La rotondità è importante'] },
+      { title: 'Accoppiamento forzato', description: 'Le parti interferiscono intenzionalmente. Utile solo quando l\'elasticità del materiale, lo spessore della parete e il carico sono controllati.', points: ['Rischio di crepe', 'L\'orientamento di stampa è cruciale', 'Richiede test con probetta'] },
+    ] },
+    { type: 'tip', title: 'Usa la tolleranza, non la speranza', html: 'Se un foro stampato deve ricevere una spina, un cuscinetto, una vite o un inserto acquistato, misura sia la caratteristica stampata che il componente acquistato. Regola la tolleranza CAD in base all\'errore misurato piuttosto che applicare un offset universale a ogni materiale.' },
+
+    { type: 'title', text: 'Essiccazione del filamento: diffusione, adsorbimento e sintomi di stampa', level: 2 },
+    { type: 'paragraph', html: 'Il filamento igroscopico non si bagna semplicemente in superficie. L\'umidità si adsorbe sulle superfici del polimero e può diffondersi all\'interno del filamento nel tempo. Durante l\'estrusione, quell\'acqua può trasformarsi istantaneamente in vapore, creando scoppiettii, bolle, estrusione inconsistente, scarsa adesione tra gli strati, zone opache o velate sulla superficie, stringing e rumore dimensionale. Nylon, TPU, PVA, PC e alcuni compositi caricati possono essere particolarmente sensibili, mentre il PLA varia a seconda della formulazione e della storia di conservazione.' },
+    { type: 'paragraph', html: 'Il modulo di essiccazione utilizza il carico di umidità, la massa del filamento, il fattore materiale e la temperatura come modello diagnostico. Una temperatura più elevata accelera la rimozione dell\'umidità, ma ogni polimero ha un intervallo di essiccazione sicuro. Una temperatura troppo bassa fa perdere tempo; una temperatura troppo alta può deformare le bobine, ricuocere il filamento, rammollire il polimero o fondere le spire. Lo scopo del calcolo non è determinare un contenuto di umidità da laboratorio, ma stimare quando l\'essiccazione è probabilmente necessaria prima di un lavoro di precision.' },
+    { type: 'table', headers: ['Comportamento del materiale', 'Sintomo di stampa', 'Risposta di processo'], rows: [
+      ['Umidità lieve', 'Leggero stringing o piccole variazioni di lucentezza.', 'Essiccare prima di lavori estetici e calibrazione della retrattività.'],
+      ['Umidità moderata', 'Scoppiettii, pareti ruvide o larghezza di estrusione inconsistente.', 'Essiccare la bobina e ripetere la calibrazione del flusso.'],
+      ['Umidità grave', 'Schiuma, strati deboli, parti fragili o cedimento dei supporti.', 'Essiccare più a lungo, conservare sigillato e scartare le sezioni danneggiate se necessario.'],
+      ['Essiccazione eccessiva', 'Filamento ovale o deformazione della bobina.', 'Abbassare la temperatura e verificare le linee guida del produttore.'],
+    ] },
+    { type: 'message', title: 'Umidità e tolleranze interagiscono', html: 'Il filamento umido può far apparire una parte meccanica come un problema di CAD o di flusso perché l\'estrusione diventa inconsistente. L\'essiccazione fa quindi parte del controllo dimensionale, non solo del mantenimento della qualità superficial.' },
+
+    { type: 'title', text: 'Il rapporto di spurgo in AMS e MMU come avviso di produzione', level: 2 },
+    { type: 'paragraph', html: 'La stampa multi-materiale trasforma i cambi di colore in economia dei materiali. La torre di spurgo, il blocco di pulizia o lo scarico dello scivolo non sono gratuiti; si tratta di filamento acquistato convertito in scarto. Un piccolo oggetto decorativo con molti strati alternati può sprecare più materiale di una staffa monocolore più grande. La suite calcola il rapporto di spurgo come volume di spurgo diviso per il volume totale estruso, rendendo immediatamente visibile la quota di scarto.' },
+    { type: 'paragraph', html: 'La soglia del 30,00% è volutamente severa. Quando quasi un terzo del polimero estruso è spurgo, il lavoro dovrebbe essere esaminato per verificare l\'ordine dei colori, lo spurgo nel riempimento, la suddivisione del modello, i lotti o un preventivo più alto. In termini di farm, lo spurgo consuma anche tempo macchina e aumenta l\'usura per il cambio filamento. Un preventivo che ignora lo spurgo può trasformare una parte multicolore visivamente impressionante in un lavoro a basso margine.' },
+    { type: 'list', items: [
+      'Raggruppa colori simili per ridurre le transizioni ad alta contaminazione.',
+      'Evita ripetuti scambi da scuro a chiaro quando il design può essere riordinato.',
+      'Usa lo spurgo nel riempimento solo quando la contaminazione nascosta è strutturalmente accettabile.',
+      'Addebita il materiale di spurgo separatamente sui preventivi per i clienti per lavori multicolore decorativi.',
+      'Esegui la calibrazione dello slicer per ogni famiglia di materiali prima di ridurre lo spurgo in modo aggressivo.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Condizione di spurgo critica', badge: '30.00%+', html: 'Un rapporto di spurgo superiore al 30,00% significa che la stampante sta spendendo una grande parte del materiale per la pulizia. Tratta questo aspetto come un segnale per riprogettare, raggruppare in lotti o rivedere i prezzi prima di accettare la produzione.' },
+
+    { type: 'title', text: 'Come utilizzare l\'output degli appunti nelle note di produzione', level: 2 },
+    { type: 'paragraph', html: 'Ogni calcolatore della suite esporta lo stesso formato di parametri tra parentesi quadre: <code>[Parametro: Valore | Parametro: Valore]</code>. Si tratta intenzionalmente di testo normale perché può sopravvivere a e-mail, ticket di officina, fogli di calcolo, messaggi dei clienti e commenti CAD senza dipendenze di formattazione. Inoltre, impedisce che separatori delle migliaia nascosti o formattazioni decimali specifiche della lingua locale entrino in un preventivo o in una nota di disegno.' },
+    { type: 'paragraph', html: 'Usa la riga copiata come un\'istantanea dello stato decisionale. Ad esempio, allegala a una revisione del preventivo quando il cliente aggiunge modifiche di colore, o incollala in una segnalazione CAD quando il gioco di un albero passa da positivo a negativo. Poiché ogni valore visibile è impostato su due decimali, la nota è leggibile da operatori, progettisti e tecnici senza dover essere riformattata.' },
+    { type: 'summary', title: 'Riepilogo del flusso di lavoro di produzione', items: [
+      'Inizia con preventivo e margine per verificare che il lavoro sia sostenibile.',
+      'Rivedi manodopera e post-processing prima di promettere i tempi di consegna.',
+      'Verifica il ROI quando acquisti stampanti o accetti contratti ripetitivi.',
+      'Usa i moduli per filettature e accoppiamenti prima di rilasciare il CAD definitivo.',
+      'Essicca i materiali igroscopici prima di incolpare le impostazioni dello slicer.',
+      'Tratta un rapporto di spurgo elevato come un avviso di progettazione e prezzo.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

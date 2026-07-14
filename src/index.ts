@@ -86,3 +86,5 @@ export { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLeng
 export { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator/index';
 
 export { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor/index';
+
+export { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite/index';

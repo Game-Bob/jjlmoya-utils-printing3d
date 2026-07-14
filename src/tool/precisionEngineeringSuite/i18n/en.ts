@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'precision-engineering-suite';
+const title = 'Precision Engineering Suite for FDM 3D Printing';
+const description = 'A reactive diagnostic suite for FDM quoting, margins, labor, ROI, ISO-style CAD tolerances, filament drying, and AMS/MMU purge waste.';
+
+const faqData = [
+  {
+    question: 'Why does every displayed result use exactly two decimals?',
+    answer: 'The suite keeps full JavaScript floating point precision internally and applies two-decimal formatting only when values are displayed or copied. This prevents ambiguous output and matches the way many CAD and quoting workflows document dimensions and money.',
+  },
+  {
+    question: 'Is the ISO thread module a replacement for a thread standard table?',
+    answer: 'No. It is a CAD planning aid for FDM clearance and pitch-driven geometry. Final production drawings should still reference the relevant ISO tolerance class and measured printer calibration data.',
+  },
+  {
+    question: 'Why is purge ratio treated as critical above 30 percent?',
+    answer: 'Above 30 percent, a large share of extruded polymer is no longer product volume. That usually changes quoting, batching, color order, and whether purge-to-infill or model splitting should be used.',
+  },
+  {
+    question: 'How should filament drying time be interpreted?',
+    answer: 'Drying time is a diagnostic estimate based on humidity load, material sensitivity, filament mass, and dryer temperature. It should be validated with real print symptoms such as popping, gloss variation, stringing, and dimensional drift.',
+  },
+];
+
+const howToData = [
+  { name: 'Select the diagnostic module', text: 'Choose quoting, margin, labor, ROI, thread, fit, drying, or purge to change the telemetry explanation while keeping the shared process model live.' },
+  { name: 'Edit process inputs', text: 'Change machine time, material, labor, tolerances, humidity, or purge values. Results update immediately without pressing a calculate button.' },
+  { name: 'Read the digital twin', text: 'Use the SVG shaft and hole twin and the telemetry canvas to see whether the process is nominal, watch-level, or critical.' },
+  { name: 'Copy the engineering summary', text: 'Use the clipboard button to export the standardized bracketed parameter string for quotes, tickets, or CAD notes.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'en',
+  keywords: 'FDM quote calculator, 3D printing margin calculator, print farm ROI calculator, ISO thread tolerance calculator, FDM mechanical fit calculator, filament drying calculator, AMS purge waste calculator, MMU purge cost calculator',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF quote generator' },
+      { id: 'margin', label: 'PVP and margin' },
+      { id: 'labor', label: 'Post-processing labor' },
+      { id: 'roi', label: 'Farm ROI' },
+      { id: 'threads', label: 'ISO thread CAD' },
+      { id: 'fits', label: 'Mechanical fits' },
+      { id: 'drying', label: 'Filament drying' },
+      { id: 'purge', label: 'AMS/MMU purge' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Material cost', unit: '€' },
+      { key: 'printHours', label: 'Print time', unit: 'h' },
+      { key: 'machineRate', label: 'Machine rate', unit: '€/h' },
+      { key: 'energyPrice', label: 'Energy price', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Failure rate', unit: '%' },
+      { key: 'marginPercent', label: 'Target margin', unit: '%' },
+      { key: 'laborMinutes', label: 'Labor', unit: 'min' },
+      { key: 'laborRate', label: 'Labor rate', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Post-process', unit: 'min' },
+      { key: 'postProcessRate', label: 'Post-process rate', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Farm printers', unit: 'pcs' },
+      { key: 'printerCost', label: 'Printer cost', unit: '€' },
+      { key: 'monthlyOrders', label: 'Monthly orders', unit: 'pcs' },
+      { key: 'avgSalePrice', label: 'Avg sale price', unit: '€' },
+      { key: 'threadNominalMm', label: 'Thread nominal', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Pitch', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Shaft nominal', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Hole allowance', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Filament mass', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Humidity', unit: '%RH' },
+      { key: 'dryingTemperatureC', label: 'Dry temp', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Object volume', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Purge volume', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Quote cost',
+      recommendedPvp: 'Recommended PVP',
+      grossMargin: 'Gross margin',
+      roi: 'ROI',
+      threadMinor: 'Thread minor',
+      fitClearance: 'Fit clearance',
+      dryingTime: 'Drying time',
+      purgeRatio: 'Purge ratio',
+    },
+    statusTexts: {
+      nominal: 'Telemetry inside operating envelope.',
+      watch: 'Watch envelope: telemetry is usable but deserves process review before production.',
+      critical: 'Critical envelope: purge ratio above 30%, moisture risk high, or negative fit clearance detected.',
+    },
+    physicsCopy: {
+      quote: 'Quote engineering combines direct material, machine amortization, labor exposure, energy, and expected scrap. Failure rate is modeled as a yield correction so the sale price carries the cost of rejected parts.',
+      margin: 'Margin is calculated from sale price, not markup on cost. The current gross margin is {margin}, so each price change moves both profit and risk buffer.',
+      labor: 'Post-processing cost is time multiplied by shop rate. The current labor plus finishing load is {laborCost}.',
+      roi: 'ROI converts printer capex into months of production recovery. Negative monthly profit is saturated in the display because the farm never recovers hardware cost under those assumptions.',
+      threads: 'ISO metric thread geometry is approximated from pitch depth. Minor diameter and pitch-driven clearance help CAD users avoid fused internal threads after FDM bead swelling.',
+      fits: 'Mechanical fit clearance compares the printed hole envelope with the printed shaft envelope. Negative clearance predicts interference; positive clearance predicts slip or running fit.',
+      drying: 'Drying time follows a simplified Arrhenius-style acceleration: higher temperature increases diffusion rate while humidity and polymer factor increase the moisture load.',
+      purge: 'AMS/MMU purge ratio is purge volume divided by total extruded volume. Above 30.00% the job is flagged because waste is becoming a production-cost driver.',
+    },
+    chartLabels: ['COST', 'PVP', 'MARGIN', 'ROI', 'H2O', 'PURGE'],
+    copyFields: {
+      quoteCost: 'Quote cost',
+      pvp: 'PVP',
+      currency: 'Currency',
+      margin: 'Margin',
+      roi: 'ROI',
+      threadMinor: 'Thread minor',
+      fitClearance: 'Fit clearance',
+      drying: 'Drying',
+      purgeRatio: 'Purge ratio',
+    },
+    displayUnits: {
+      months: 'mo',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'clearance',
+    },
+    copyLabel: 'Copy telemetry',
+    copiedLabel: 'Copied',
+    unitSystemLabel: 'Units',
+    metricLabel: 'Metric',
+    imperialLabel: 'Imperial',
+    currencyLabel: 'Currency',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ US dollar' },
+      { code: 'GBP', label: '£ Pound sterling' },
+      { code: 'CAD', label: 'C$ Canadian dollar' },
+      { code: 'AUD', label: 'A$ Australian dollar' },
+      { code: 'CHF', label: 'Fr Swiss franc' },
+      { code: 'MXN', label: '$ Mexican peso' },
+      { code: 'BRL', label: 'R$ Brazilian real' },
+      { code: 'ARS', label: '$ Argentine peso' },
+      { code: 'CLP', label: '$ Chilean peso' },
+      { code: 'COP', label: '$ Colombian peso' },
+      { code: 'PEN', label: 'S/ Peruvian sol' },
+      { code: 'JPY', label: '¥ Japanese yen' },
+      { code: 'CNY', label: '¥ Chinese yuan' },
+      { code: 'KRW', label: '₩ South Korean won' },
+      { code: 'INR', label: '₹ Indian rupee' },
+      { code: 'PLN', label: 'zł Polish zloty' },
+      { code: 'RUB', label: '₽ Russian ruble' },
+      { code: 'SEK', label: 'kr Swedish krona' },
+      { code: 'NOK', label: 'kr Norwegian krone' },
+      { code: 'DKK', label: 'kr Danish krone' },
+      { code: 'TRY', label: '₺ Turkish lira' },
+    ],
+    criticalLabel: 'Critical',
+    watchLabel: 'Watch',
+    nominalLabel: 'Nominal',
+    inputsTitle: 'Process Inputs',
+    telemetryTitle: 'Visual Telemetry',
+    outputTitle: 'Calculated Outputs',
+    physicsTitle: 'Physics and Process Model',
+    modulesAriaLabel: 'Precision suite modules',
+    telemetryAriaLabel: 'Reactive telemetry chart',
+    twinAriaLabel: 'Mechanical digital twin',
+  },
+  seo: [
+    { type: 'title', text: 'Why precision FDM needs a diagnostic suite instead of isolated calculators', level: 2 },
+    { type: 'paragraph', html: 'FDM production decisions rarely fail because one formula is unknown. They fail because cost, tolerance, drying, purge waste, labor, and machine utilization are treated as separate conversations. A customer quote can look profitable until post-processing minutes are included. A CAD thread can look correct until bead swelling and clearance are considered. A multicolor job can look small until purge volume is priced as purchased filament. This suite brings those relationships into one reactive model so the user sees the process envelope rather than a single disconnected number.' },
+    { type: 'paragraph', html: 'The interface deliberately uses fixed two-decimal output because quoting and CAD review require unambiguous values. Internally, calculations remain floating point values until the display layer formats them. That distinction matters: rounding early can move a small fit clearance, margin percentage, or purge threshold enough to create a wrong decision. The copy output follows a bracketed engineering format so values can be pasted into job tickets, customer notes, and CAD change logs without thousands separators or locale surprises.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Linked production diagnostics' },
+      { value: '2.00', label: 'Fixed decimals on every displayed output' },
+      { value: '30.00%', label: 'Critical purge ratio threshold' },
+      { value: '0', label: 'Calculate buttons required' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'The suite is built for process review', badge: 'Engineering workflow', html: 'Use it before slicing, quoting, or releasing CAD. The model is intentionally diagnostic: it highlights whether a job deserves deeper inspection, physical calibration, customer repricing, or a design change before printer time is consumed.' },
+
+    { type: 'title', text: 'Quote generation and the hidden cost of yield', level: 2 },
+    { type: 'paragraph', html: 'A professional 3D printing quote should not price only the visible plastic. The direct cost basis includes material, print time, machine hourly rate, energy, labor, post-processing, and expected scrap. Failure rate is especially important because it changes yield. If a job has an 8 percent failure expectation, the accepted part must carry the cost of the rejected attempts. The model therefore divides direct cost by usable yield rather than adding a vague contingency line.' },
+    { type: 'paragraph', html: 'The quote module is useful for searches such as <strong>FDM quote calculator with failure rate</strong>, <strong>3D printing price calculator for small business</strong>, and <strong>calculate 3D printing job cost with labor</strong>. Those searches usually come from users who already sell prints or plan to sell them. They need a number that survives real production, not a hobby estimate based only on grams of PLA.' },
+    { type: 'table', headers: ['Cost driver', 'Why it matters', 'Typical mistake'], rows: [
+      ['Material', 'Captures polymer consumed by object, supports, raft, brim, purge, and test pieces.', 'Pricing only the final model mass.'],
+      ['Machine rate', 'Represents depreciation, maintenance, nozzle wear, bed surfaces, and opportunity cost.', 'Treating printer time as free because the operator is not present.'],
+      ['Energy', 'Small per job but visible across farm-scale production.', 'Ignoring heated chamber or high-bed-temperature materials.'],
+      ['Labor', 'Includes setup, removal, inspection, packing, and customer communication.', 'Charging only for print duration.'],
+      ['Yield', 'Rejected parts must be recovered by accepted sales.', 'Adding a random markup instead of modeling scrap probability.'],
+    ] },
+    { type: 'tip', title: 'Quote from measured shop data', html: 'Replace defaults with your own electricity rate, average intervention time, failed-job percentage, and post-processing minutes. A small workshop with slow manual cleanup can have a higher real cost than a farm with faster machines and repeatable fixtures.' },
+
+    { type: 'title', text: 'PVP, margin, and the difference between markup and profit', level: 2 },
+    { type: 'paragraph', html: 'Margin is calculated as profit divided by sale price, not as a simple percentage added to cost. This difference is critical when quoting customer-facing 3D printed parts. A 40 percent markup on cost does not create a 40 percent margin; it creates a lower margin because the denominator is the final selling price. The suite uses margin-based pricing because that is how many shops evaluate whether a product line can pay for replacement parts, packaging, failed prints, and administrative time.' },
+    { type: 'paragraph', html: 'For a part with a 10.00 EUR cost and a 40.00% target margin, the required price is 16.67 EUR. Selling it for 14.00 EUR because someone added 40 percent markup leaves only 28.57% margin. That difference looks small on one item but becomes significant across hundreds of orders. A farm with thin margins can be busy and still lose money when failure, labor, and purge are ignored.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Markup thinking', description: 'Adds a percentage to cost. Fast for rough estimates but weak for profitability planning.', points: ['Easy mental math', 'Can understate required PVP', 'Does not directly express profit share'] },
+      { title: 'Margin thinking', description: 'Sets sale price so profit is a target share of revenue. Better for repeatable production.', points: ['Matches business reporting', 'Protects overhead recovery', 'Useful for catalog pricing'] },
+    ] },
+    { type: 'proscons', title: 'Aggressive margin targets', items: [
+      { pro: 'Protects the shop from reprints, customer support, and slow cleanup.', con: 'Can price simple commodity prints above local competitors.' },
+      { pro: 'Makes low-volume custom work financially viable.', con: 'Requires explaining why design, fit, and reliability carry value.' },
+      { pro: 'Funds better fixtures, dryers, nozzles, and quality control.', con: 'May reduce conversion for purely decorative low-risk parts.' },
+    ] },
+
+    { type: 'title', text: 'Labor and post-processing as engineering variables', level: 2 },
+    { type: 'paragraph', html: 'Post-processing is not a vague finishing category. It is a time process with its own rate, repeatability, and failure modes. Removing supports from PETG, sanding layer lines, heat-set insert installation, vapor smoothing, resin cleanup for hybrid shops, packaging, and measurement all consume skilled attention. If those minutes are not priced, the print farm subsidizes the customer with unpaid labor.' },
+    { type: 'paragraph', html: 'The labor module separates general handling from finishing so a user can model two different shop rates. A machine operator who starts jobs may not have the same cost as a technician who taps holes, checks fits, installs threaded inserts, or performs cosmetic finishing. The dashboard makes those minutes visible beside material and machine time so a quote does not look healthy while the bench work quietly consumes profit.' },
+    { type: 'list', items: [
+      'Track setup time separately from finishing time for at least ten repeat jobs.',
+      'Include inspection time when mechanical fit or customer-critical dimensions are involved.',
+      'Raise post-processing rate for work requiring dust control, solvents, heat tools, or precision measurement.',
+      'Use fixtures and batch operations when labor cost is higher than material cost.',
+      'Add labor to quote templates even when a customer supplies a ready-to-print file.',
+    ] },
+    { type: 'card', title: 'Search intent covered', html: 'Users looking for <strong>3D print labor cost calculator</strong>, <strong>post processing cost for FDM prints</strong>, and <strong>how to price 3D printed parts with labor</strong> are usually trying to stop undercharging manual work. The calculator surfaces labor as a first-class number, not a note below the material estimate.' },
+
+    { type: 'title', text: 'Print farm ROI and capacity recovery', level: 2 },
+    { type: 'paragraph', html: 'Return on investment for a print farm depends on monthly contribution after variable cost, not on gross revenue. Eight printers can look impressive, but if average order price is low and quote cost is high, the hardware recovery period stretches or never arrives. The ROI module converts printer count, printer cost, monthly orders, average sale price, and the live quote-cost model into months to recover hardware capital.' },
+    { type: 'paragraph', html: 'The important detail is that ROI is coupled to the current process model. If failure rate, labor, purge, or post-processing rises, the quote cost rises and monthly profit falls. That makes ROI a diagnostic result rather than a static business-plan cell. When monthly profit is negative, the tool displays infinity because there is no payback under the current assumptions.' },
+    { type: 'table', headers: ['ROI symptom', 'Likely cause', 'Operational response'], rows: [
+      ['Payback under 6 months', 'Strong pricing or high utilization with controlled labor.', 'Protect repeatability and avoid taking underpriced custom work.'],
+      ['Payback 6 to 18 months', 'Normal small-farm recovery range.', 'Improve batching, quote templates, and failure tracking.'],
+      ['Payback above 18 months', 'Hardware is idle or jobs are underpriced.', 'Review product mix, support burden, and machine-hour rate.'],
+      ['Infinite payback', 'Variable cost exceeds sales revenue.', 'Stop scaling hardware until pricing or process economics change.'],
+    ] },
+    { type: 'summary', title: 'ROI review checklist', items: [
+      'Use accepted orders, not inquiries, as the monthly order count.',
+      'Include replacement nozzles, beds, extruders, dryers, and spares in hardware cost when possible.',
+      'Check whether high-margin short jobs beat long decorative jobs with low sale price.',
+      'Model real failure rate after tuning, not an optimistic first-week estimate.',
+    ] },
+
+    { type: 'title', text: 'ISO metric thread planning for FDM CAD', level: 2 },
+    { type: 'paragraph', html: 'Metric thread standards define geometry and tolerance classes, but FDM adds bead width, thermal contraction, first-layer pressure, slicer compensation, and material creep. A CAD thread that is mathematically correct can print too tight because the extruded filament is not an infinitely sharp cutting tool. The suite approximates pitch-driven minor diameter and a configurable clearance factor so designers can see whether an internal thread deserves extra allowance before printing.' },
+    { type: 'paragraph', html: 'The model is not a substitute for ISO 965 tables. It is a pre-CAD diagnostic for users searching <strong>3D printed ISO thread tolerance calculator</strong>, <strong>M12 3D printed thread clearance</strong>, or <strong>FDM internal thread CAD allowance</strong>. Those users need to decide whether to model threads directly, chase them with a tap, use heat-set inserts, or print a pilot hole for post-machining.' },
+    { type: 'glossary', items: [
+      { term: 'Pitch', definition: 'Axial distance between thread crests. Larger pitch generally increases thread depth and changes printable minor diameter.' },
+      { term: 'Minor diameter', definition: 'The smaller internal diameter of a thread profile. In FDM, it is sensitive to bead swelling and slicer wall ordering.' },
+      { term: 'Clearance factor', definition: 'A practical allowance expressed as a fraction of pitch to compensate for printed plastic behavior.' },
+      { term: 'Tolerance class', definition: 'A standardized fit designation for manufactured threads. Printed plastic usually needs empirical adjustment around those classes.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Threads are measurement problems', badge: 'CAD caution', html: 'Print one calibration coupon per material, nozzle, and layer-height family. A thread that works in dry PLA at 0.20 mm layers may bind in PETG, nylon, or wet filament because surface texture and polymer elasticity change.' },
+
+    { type: 'title', text: 'Shaft and hole fits: seeing clearance before the print fails', level: 2 },
+    { type: 'paragraph', html: 'Mechanical fits in FDM are controlled by both CAD size and process error. Holes tend to print undersized because inner perimeters approximate a circle with finite bead width and because cooling plastic can pull inward. Shafts can print oversized from extrusion flow, seam placement, or elephant-foot pressure at the bed. The suite visualizes hole and shaft envelopes so negative clearance becomes obvious before the part is printed.' },
+    { type: 'paragraph', html: 'For functional parts, the question is not only whether a shaft fits in a hole. It is whether the fit matches the use case: slip fit, running fit, push fit, press fit, or retained bearing seat. FDM anisotropy, layer ridges, and dimensional drift mean that a mathematically small positive clearance can still feel tight. The digital twin therefore treats negative clearance as critical and small positive clearance as something to validate with a coupon.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Slip fit', description: 'Parts assemble by hand with minimal resistance. Useful for removable covers, jigs, and alignment pins.', points: ['Needs positive clearance', 'Sensitive to surface texture', 'Often easiest to tune'] },
+      { title: 'Running fit', description: 'Parts move relative to each other after assembly. Useful for pivots and rollers.', points: ['Requires more clearance', 'Lubrication may help', 'Roundness matters'] },
+      { title: 'Press fit', description: 'Parts intentionally interfere. Useful only when material elasticity, wall thickness, and load are controlled.', points: ['Risk of cracking', 'Print orientation matters', 'Coupon testing required'] },
+    ] },
+    { type: 'tip', title: 'Use allowance, not hope', html: 'If a printed hole must receive a purchased dowel, bearing, screw, or insert, measure both the printed feature and the purchased component. Adjust CAD allowance from measured error rather than applying a universal offset to every material.' },
+
+    { type: 'title', text: 'Filament drying: diffusion, adsorption, and print symptoms', level: 2 },
+    { type: 'paragraph', html: 'Hygroscopic filament does not simply become wet on the surface. Moisture adsorbs onto polymer surfaces and can diffuse into the filament over time. During extrusion, that water can flash into steam, creating popping, bubbles, inconsistent extrusion, weak layer bonding, matte or cloudy surface patches, stringing, and dimensional noise. Nylon, TPU, PVA, PC, and some filled composites can be especially sensitive, while PLA varies by formulation and storage history.' },
+    { type: 'paragraph', html: 'The drying module uses humidity load, filament mass, material factor, and temperature as a diagnostic model. Higher temperature accelerates moisture removal, but each polymer has a safe drying range. Too low a temperature wastes time; too high a temperature can deform spools, anneal filament, soften polymer, or fuse windings. The point of the calculation is not to claim laboratory moisture content, but to estimate when drying is likely to be necessary before precision work.' },
+    { type: 'table', headers: ['Material behavior', 'Print symptom', 'Process response'], rows: [
+      ['Mild moisture', 'Light stringing or small gloss changes.', 'Dry before cosmetic jobs and retraction tuning.'],
+      ['Moderate moisture', 'Popping, rough walls, or inconsistent extrusion width.', 'Dry spool and repeat flow calibration.'],
+      ['Severe moisture', 'Foaming, weak layers, brittle output, or failed supports.', 'Dry longer, store sealed, and discard damaged sections if needed.'],
+      ['Overheated drying', 'Oval filament or spool deformation.', 'Lower temperature and verify manufacturer guidance.'],
+    ] },
+    { type: 'message', title: 'Moisture and tolerance interact', html: 'Wet filament can make a mechanical part look like a CAD or flow problem because extrusion becomes inconsistent. Drying is therefore part of dimensional control, not only surface-quality maintenance.' },
+
+    { type: 'title', text: 'AMS and MMU purge ratio as a production warning', level: 2 },
+    { type: 'paragraph', html: 'Multi-material printing turns color changes into material economics. The purge tower, wipe block, or chute extrusion is not free; it is purchased filament converted into non-product volume. A small decorative object with many alternating layers can waste more material than a larger single-color bracket. The suite calculates purge ratio as purge volume divided by total extruded volume so the waste share is visible immediately.' },
+    { type: 'paragraph', html: 'The 30.00% threshold is intentionally strict. When nearly a third of extruded polymer is purge, the job should be reviewed for color ordering, purge-to-infill, model splitting, batching, or a higher quote. In print-farm terms, purge also consumes machine time and increases filament-change wear. A quote that ignores purge can turn a visually impressive multicolor part into a low-margin job.' },
+    { type: 'list', items: [
+      'Group similar colors to reduce high-contamination transitions.',
+      'Avoid repeated dark-to-light swaps when the design can be reordered.',
+      'Use purge-to-infill only when hidden contamination is structurally acceptable.',
+      'Charge purge material separately on customer quotes for decorative multicolor jobs.',
+      'Run slicer calibration for each material family before reducing purge aggressively.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Critical purge condition', badge: '30.00%+', html: 'A purge ratio above 30.00% means the printer is spending a large share of material on cleanup. Treat this as a redesign, batching, or pricing trigger before accepting the production run.' },
+
+    { type: 'title', text: 'How to use the clipboard output in production notes', level: 2 },
+    { type: 'paragraph', html: 'Every calculator in the suite exports the same bracketed parameter format: <code>[Parameter: Value | Parameter: Value]</code>. This is intentionally plain text because it can survive email, shop tickets, spreadsheets, customer messages, and CAD comments without formatting dependencies. It also prevents hidden thousands separators or locale-specific decimal grouping from entering a quote or drawing note.' },
+    { type: 'paragraph', html: 'Use the copied line as a snapshot of the decision state. For example, attach it to a quote revision when the customer adds color changes, or paste it into a CAD issue when a shaft clearance moves from positive to negative. Because every visible value is fixed to two decimals, the note is readable by machinists, designers, and shop operators without reformatting.' },
+    { type: 'summary', title: 'Production workflow summary', items: [
+      'Start with quote and margin to verify that the job can pay for itself.',
+      'Review labor and post-processing before promising delivery time.',
+      'Check ROI when buying printers or accepting repeat contracts.',
+      'Use thread and fit modules before releasing functional CAD.',
+      'Dry hygroscopic materials before blaming slicer settings.',
+      'Treat high purge ratio as a design and pricing warning.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

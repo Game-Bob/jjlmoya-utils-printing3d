@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'hassas-muhendislik-paketi-3d-baski';
+const title = 'FDM 3D Yazıcılar için Hassas Mühendislik Paketi';
+const description = 'FDM fiyatlandırma, marjlar, işçilik, ROI, ISO tipi CAD toleransları, filament kurutma ve AMS/MMU temizleme atığı için reaktif bir teşhis paketi.';
+
+const faqData = [
+  {
+    question: 'Görüntülenen her sonuç neden tam olarak iki ondalık basamak kullanıyor?',
+    answer: 'Paket, dahili olarak tam JavaScript kayan nokta hassasiyetini korur ve iki ondalık biçimlendirmeyi yalnızca değerler görüntülendiğinde veya kopyalandığında uygular. Bu durum, belirsiz çıktıları önler ve birçok CAD ve fiyatlandırma iş akışının boyutları ve parayı belgeleme şekliyle eşleşir.',
+  },
+  {
+    question: 'ISO diş modülü, diş standardı tablosunun yerini alır mı?',
+    answer: 'Hayır. Bu modül, FDM boşluğu ve hatveye dayalı geometri için bir CAD planlama yardımcısıdır. Nihai üretim çizimleri yine de ilgili ISO tolerans sınıfına ve ölçülen yazıcı kalibrasyon verilerine atıfta bulunmalıdır.',
+  },
+  {
+    question: 'Temizleme oranı neden yüzde 30\'un üzerinde kritik kabul ediliyor?',
+    answer: 'Yüzde 30\'un üzerinde, ekstrüde edilen polimerin büyük bir kısmı artık ürün hacmi değildir. Bu durum genellikle fiyatlandırmayı, gruplandırmayı, renk sırasını ve dolguya temizleme veya model bölme yöntemlerinin kullanılıp kullanılmayacağını değiştirir.',
+  },
+  {
+    question: 'Filament kurutma süresi nasıl yorumlanmalıdır?',
+    answer: 'Kurutma süresi; nem yükü, malzeme hassasiyeti, filament kütlesi ve kurutucu sıcaklığına dayalı teşhis amaçlı bir tahmindir. Çıtırdama, parlaklık değişimi, ipliklenme ve boyutsal sapma gibi gerçek baskı belirtileriyle doğrulanmalıdır.',
+  },
+];
+
+const howToData = [
+  { name: 'Teşhis modülünü seçin', text: 'Paylaşılan süreç modelini canlı tutarken telemetri açıklamasını değiştirmek için fiyatlandırma, marj, işçilik, ROI, diş, geçme, kurutma veya temizleme modülünü seçin.' },
+  { name: 'Süreç girdilerini düzenleyin', text: 'Makine süresi, malzeme, işçilik, toleranslar, nem veya temizleme değerlerini değiştirin. Sonuçlar, bir hesapla düğmesine basmaya gerek kalmadan hemen güncellenir.' },
+  { name: 'Dijital ikizi okuyun', text: 'Sürecin nominal, izleme düzeyinde veya kritik olup olmadığını görmek için SVG mil ve delik ikizini ve telemetri tuvalini kullanın.' },
+  { name: 'Mühendislik özetini kopyalayın', text: 'Teklifler, biletler veya CAD notları için standartlaştırılmış köşeli parantezli parametre dizesini dışa aktarmak için pano düğmesini kullanın.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'tr',
+  keywords: 'FDM teklif hesaplayıcı, 3D yazıcı marj hesaplayıcı, baskı çiftliği ROI hesaplayıcı, ISO diş toleransı hesaplayıcı, FDM mekanik geçme hesaplayıcı, filament kurutma hesaplayıcı, AMS temizleme atığı hesaplayıcı, MMU temizleme maliyeti hesaplayıcı',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF teklif oluşturucu' },
+      { id: 'margin', label: 'PVP ve marj' },
+      { id: 'labor', label: 'Post-proses işçilik' },
+      { id: 'roi', label: 'Çiftlik ROI' },
+      { id: 'threads', label: 'ISO diş CAD' },
+      { id: 'fits', label: 'Mekanik geçmeler' },
+      { id: 'drying', label: 'Filament kurutma' },
+      { id: 'purge', label: 'AMS/MMU temizleme' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Malzeme maliyeti', unit: '€' },
+      { key: 'printHours', label: 'Baskı süresi', unit: 'h' },
+      { key: 'machineRate', label: 'Makine oranı', unit: '€/h' },
+      { key: 'energyPrice', label: 'Enerji fiyatı', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Fire oranı', unit: '%' },
+      { key: 'marginPercent', label: 'Hedef marj', unit: '%' },
+      { key: 'laborMinutes', label: 'İşçilik', unit: 'min' },
+      { key: 'laborRate', label: 'İşçilik oranı', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Post-proses', unit: 'min' },
+      { key: 'postProcessRate', label: 'Post-proses oranı', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Çiftlik yazıcıları', unit: 'ad' },
+      { key: 'printerCost', label: 'Yazıcı maliyeti', unit: '€' },
+      { key: 'monthlyOrders', label: 'Aylık siparişler', unit: 'ad' },
+      { key: 'avgSalePrice', label: 'Ort. satış fiyatı', unit: '€' },
+      { key: 'threadNominalMm', label: 'Nominal diş', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Hatve', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Nominal mil', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Delik toleransı', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Filament kütlesi', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Nem', unit: '%RH' },
+      { key: 'dryingTemperatureC', label: 'Kurutma sıcaklığı', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Nesne hacmi', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Temizleme hacmi', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Teklif maliyeti',
+      recommendedPvp: 'Önerilen PVP',
+      grossMargin: 'Brüt marj',
+      roi: 'ROI',
+      threadMinor: 'Diş dibi çapı',
+      fitClearance: 'Geçme boşluğu',
+      dryingTime: 'Kurutma süresi',
+      purgeRatio: 'Temizleme oranı',
+    },
+    statusTexts: {
+      nominal: 'Telemetri çalışma sınırları dahilinde.',
+      watch: 'İzleme sınırı: telemetri kullanılabilir ancak üretimden önce süreç incelemesi gerektirir.',
+      critical: 'Kritik sınır: temizleme oranı %30\'un üzerinde, nem riski yüksek veya negatif geçme boşluğu tespit edildi.',
+    },
+    physicsCopy: {
+      quote: 'Teklif mühendisliği; doğrudan malzeme, makine amortismanı, işçilik maruziyeti, enerji ve beklenen hurdayı birleştirir. Fire oranı bir verim düzeltmesi olarak modellenir, böylece satış fiyatı reddedilen parçaların maliyetini karşılar.',
+      margin: 'Marj, maliyet üzerine eklenen kâr marjı olarak değil, satış fiyatı üzerinden hesaplanır. Mevcut brüt marj {margin}\'dir, bu nedenle her fiyat değişikliği hem kârı hem de risk tamponunu hareket ettirir.',
+      labor: 'Post-proses maliyeti, sürenin atölye oranıyla çarpılmasıdır. Mevcut işçilik artı bitirme yükü {laborCost}\'dir.',
+      roi: 'ROI, yazıcı sermaye harcamasını (capex) üretim geri kazanım aylarına dönüştürür. Negatif aylık kâr ekranda doymuş olarak gösterilir çünkü çiftlik bu varsayımlar altında donanım maliyetini asla geri kazanamaz.',
+      threads: 'ISO metrik diş geometrisi hatve derinliğinden tahmin edilir. Diş dibi çapı ve hatveye dayalı boşluk, CAD kullanıcılarının FDM yığma şişmesinden sonra kaynaşmış iç dişlerden kaçınmasına yardımcı olur.',
+      fits: 'Mekanik geçme boşluğu, basılan delik sınırı ile basılan mil sınırını karşılaştırır. Negatif boşluk sıkı geçmeyi; pozitif boşluk ise boşluklu veya döner geçmeyi öngörür.',
+      drying: 'Kurutma süresi basitleştirilmiş bir Arrhenius tarzı hızlandırmayı takip eder: daha yüksek sıcaklık difüzyon oranını artırırken, nem ve polimer faktörü nem yükünü artırır.',
+      purge: 'AMS/MMU temizleme oranı, temizleme hacminin toplam ekstrüde hacme bölünmesidir. Atık, üretim maliyetini artıran ana faktör haline geldiği için %30.00\'un üzerinde iş işaretlenir.',
+    },
+    chartLabels: ['MALİYET', 'PVP', 'MARJ', 'ROI', 'H2O', 'TEMİZLEME'],
+    copyFields: {
+      quoteCost: 'Teklif maliyeti',
+      pvp: 'PVP',
+      currency: 'Para birimi',
+      margin: 'Marj',
+      roi: 'ROI',
+      threadMinor: 'Diş dibi çapı',
+      fitClearance: 'Geçme boşluğu',
+      drying: 'Kurutma',
+      purgeRatio: 'Temizleme oranı',
+    },
+    displayUnits: {
+      months: 'ay',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'boşluk',
+    },
+    copyLabel: 'Telemetriyi kopyala',
+    copiedLabel: 'Kopyalandı',
+    unitSystemLabel: 'Birimler',
+    metricLabel: 'Metrik',
+    imperialLabel: 'İmparatorluk',
+    currencyLabel: 'Para birimi',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ ABD Doları' },
+      { code: 'GBP', label: '£ İngiliz Sterlini' },
+      { code: 'CAD', label: 'C$ Kanada Doları' },
+      { code: 'AUD', label: 'A$ Avustralya Doları' },
+      { code: 'CHF', label: 'Fr İsviçre Frangı' },
+      { code: 'MXN', label: '$ Meksika Pesosu' },
+      { code: 'BRL', label: 'R$ Brezilya Reali' },
+      { code: 'ARS', label: '$ Arjantin Pesosu' },
+      { code: 'CLP', label: '$ Şili Pesosu' },
+      { code: 'COP', label: '$ Kolombiya Pesosu' },
+      { code: 'PEN', label: 'S/ Peru Solü' },
+      { code: 'JPY', label: '¥ Japon Yeni' },
+      { code: 'CNY', label: '¥ Çin Yuanı' },
+      { code: 'KRW', label: '₩ Güney Kore Wonu' },
+      { code: 'INR', label: '₹ Hindistan Rupisi' },
+      { code: 'PLN', label: 'zł Polonya Zlotisi' },
+      { code: 'RUB', label: '₽ Rus Rublesi' },
+      { code: 'SEK', label: 'kr İsveç Kronu' },
+      { code: 'NOK', label: 'kr Norveç Kronu' },
+      { code: 'DKK', label: 'kr Danimarka Kronu' },
+      { code: 'TRY', label: '₺ Türk Lirası' },
+    ],
+    criticalLabel: 'Kritik',
+    watchLabel: 'İzleme',
+    nominalLabel: 'Nominal',
+    inputsTitle: 'Süreç Girdileri',
+    telemetryTitle: 'Görsel Telemetri',
+    outputTitle: 'Hesaplanan Çıktılar',
+    physicsTitle: 'Fizik ve Süreç Modeli',
+    modulesAriaLabel: 'Hassas paket modülleri',
+    telemetryAriaLabel: 'Reaktif telemetri grafiği',
+    twinAriaLabel: 'Mekanik dijital ikiz',
+  },
+  seo: [
+    { type: 'title', text: 'Hassas FDM baskısı neden yalıtılmış hesaplayıcılar yerine teşhis paketine ihtiyaç duyar?', level: 2 },
+    { type: 'paragraph', html: 'FDM üretim kararları nadiren bir formül bilinmediği için başarısız olur. Maliyet, tolerans, kurutma, temizleme atığı, işçilik ve makine kullanımı ayrı konular olarak ele alındığı için başarısız olurlar. Bir müşteri teklifi, post-proses dakikaları dahil edilene kadar kârlı görünebilir. Bir CAD dişi, yığma şişmesi ve boşluk dikkate alınana kadar doğru görünebilir. Çok renkli bir iş, temizleme hacmi satın alınan filament olarak fiyatlandırılana kadar küçük görünebilir. Bu paket, bu ilişkileri tek bir reaktif modelde bir araya getirerek kullanıcının tek bir bağlantısız sayı yerine süreç sınırını görmesini sağlar.' },
+    { type: 'paragraph', html: 'Arayüz, tekliflendirme ve CAD incelemesi net değerler gerektirdiğinden kasıtlı olarak sabit iki ondalık çıktı kullanır. Dahili olarak, hesaplamalar görüntüleme katmanı onları biçimlendirene kadar kayan nokta değerleri olarak kalır. Bu ayrım önemlidir: çok erken yuvarlama, küçük bir geçme boşluğunu, marj yüzdesini veya temizleme eşiğini yanlış bir karara neden olacak kadar kaydırabilir. Kopyalanan çıktı, standartlaştırılmış bir köşeli parantezli parametre biçimini takip eder, böylece değerler binlik ayırıcılar veya yerel ayar sürprizleri olmadan iş biletlerine, müşteri notlarına ve CAD değişiklik günlüklerine yapıştırılabilir.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Bağlantılı üretim teşhisleri' },
+      { value: '2.00', label: 'Görüntülenen her çıktıda sabit ondalık basamak' },
+      { value: '30.00%', label: 'Kritik temizleme oranı eşiği' },
+      { value: '0', label: 'Gerekli hesaplama düğmeleri' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'Paket süreç incelemesi için oluşturulmuştur', badge: 'Mühendislik iş akışı', html: 'Dilimlemeden, fiyatlandırmadan veya CAD\'i serbest bırakmadan önce kullanın. Model kasıtlı olarak teşhis amaçlıdır: yazıcı zamanı tüketilmeden önce bir işin daha derinlemesine inceleme, fiziksel kalibrasyon, müşteri fiyatlandırması veya tasarım değişikliği hak edip etmediğini vurgular.' },
+
+    { type: 'title', text: 'Teklif oluşturma ve fire oranının gizli maliyeti', level: 2 },
+    { type: 'paragraph', html: 'Profesyonel bir 3D baskı teklifi yalnızca görünen plastiği fiyatlandırmamalıdır. Doğrudan maliyet tabanı; malzeme, baskı süresi, makine saatlik oranı, enerji, işçilik, post-proses ve beklenen hurdayı içerir. Fire oranı özellikle önemlidir çünkü verimi değiştirir. Bir işin %8 başarısızlık beklentisi varsa, kabul edilen parça reddedilen girişimlerin maliyetini taşımalıdır. Bu nedenle model, belirsiz bir acil durum satırı eklemek yerine doğrudan maliyeti kullanılabilir verime böler.' },
+    { type: 'paragraph', html: 'Teklif modülü, <strong>fire oranlı FDM teklif hesaplayıcı</strong>, <strong>küçük işletmeler için 3D baskı fiyat hesaplayıcı</strong> ve <strong>işçilikle 3D baskı iş maliyeti hesaplama</strong> gibi aramalar için kullanışlıdır. Bu aramalar genellikle zaten baskı satan veya satmayı planlayan kullanıcılardan gelir. Yalnızca PLA gramajına dayalı bir hobi tahminine değil, gerçek üretime dayanan bir sayıya ihtiyaçları vardır.' },
+    { type: 'table', headers: ['Maliyet etkeni', 'Neden önemli', 'Tipik hata'], rows: [
+      ['Malzeme', 'Nesne, destekler, raft, brim, temizleme ve test parçaları tarafından tüketilen polimeri yakalar.', 'Yalnızca nihai model kütlesini fiyatlandırmak.'],
+      ['Makine oranı', 'Amortisman, bakım, nozül aşınması, yatak yüzeyleri ve fırsat maliyetini temsil eder.', 'Operatör mevcut olmadığı için yazıcı süresini ücretsiz olarak ele almak.'],
+      ['Enerji', 'İş başına küçüktür ancak çiftlik ölçeğinde üretimde görünür.', 'Isıtmalı kabini veya yüksek yatak sıcaklığı gerektiren malzemeleri göz ardı etmek.'],
+      ['İşçilik', 'Kurulum, sökme, inceleme, paketleme ve müşteri iletişimini içerir.', 'Yalnızca baskı süresi için ücret almak.'],
+      ['Verim', 'Reddedilen parçalar kabul edilen satışlarla telafi edilmelidir.', 'Hurda olasılığını modellemek yerine rastgele bir marj eklemek.'],
+    ] },
+    { type: 'tip', title: 'Ölçülen atölye verilerinden teklif verin', html: 'Varsayılanları kendi elektrik oranınız, ortalama müdahale süreniz, başarısız iş yüzdeniz ve post-proses dakikalarınızla değiştirin. Yavaş manuel temizleme yapan küçük bir atölye, daha hızlı makinelere ve tekrarlanabilir fikstürlere sahip bir çiftlikten daha yüksek bir gerçek maliyete sahip olabilir.' },
+
+    { type: 'title', text: 'PVP, marj ve markup ile kâr arasındaki fark', level: 2 },
+    { type: 'paragraph', html: 'Marj, maliyet üzerine eklenen basit bir yüzde olarak değil, kârın satış fiyatına bölünmesiyle hesaplanır. Bu fark, müşteriye yönelik 3D baskılı parçaları fiyatlandırırken kritiktir. Maliyet üzerinden %40\'lık bir markup %40 marj oluşturmaz; payda nihai satış fiyatı olduğu için daha düşük bir marj oluşturur. Paket marj bazlı fiyatlandırma kullanır çünkü birçok atölye bir ürün serisinin yedek parçaları, paketlemeyi, başarısız baskıları ve idari süreyi karşılayıp karşılayamayacağını bu şekilde değerlendirir.' },
+    { type: 'paragraph', html: '10.00 EUR maliyeti ve %40.00 hedef marjı olan bir parça için gereken fiyat 16.67 EUR\'dur. Birisi %40 markup eklediği için bunu 14.00 EUR\'ya satmak yalnızca %28.57 marj bırakır. Bu fark tek bir üründe küçük görünür ancak yüzlerce siparişte önemli hale gelir. Fire, işçilik ve temizleme göz ardı edildiğinde, düşük marjlı bir çiftlik yoğun olabilir ve yine de para kaybedebilir.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Markup düşüncesi', description: 'Maliyete bir yüzde ekler. Kaba tahminler için hızlıdır ancak kârlılık planlaması için zayıftır.', points: ['Kolay zihinsel matematik', 'Gereken PVP\'yi eksik tahmin edebilir', 'Kâr payını doğrudan ifade etmez'] },
+      { title: 'Marj düşüncesi', description: 'Satış fiyatını, kâr gelirin hedef payı olacak şekilde ayarlar. Tekrarlanabilir üretim için daha iyidir.', points: ['İş raporlaması ile eşleşir', 'Genel gider geri kazanımını korur', 'Katalog fiyatlandırması için kullanışlıdır'] },
+    ] },
+    { type: 'proscons', title: 'Agresif marj hedefleri', items: [
+      { pro: 'Atölyeyi yeniden baskılardan, müşteri desteğinden ve yavaş temizlemeden korur.', con: 'Basit emtia baskılarının fiyatını yerel rakiplerin üzerine çıkarabilir.' },
+      { pro: 'Düşük hacimli özel işleri finansal olarak uygulanabilir kılar.', con: 'Tasarım, geçme ve güvenilirliğin neden değer taşıdığını açıklamayı gerektirir.' },
+      { pro: 'Daha iyi fikstürleri, kurutucuları, nozülleri ve kalite kontrolünü finanse eder.', con: 'Tamamen dekoratif düşük riskli parçalar için dönüşümü azaltabilir.' },
+    ] },
+
+    { type: 'title', text: 'Mühendislik değişkenleri olarak işçilik ve post-proses', level: 2 },
+    { type: 'paragraph', html: 'Post-proses belirsiz bir bitirme kategorisi değildir. Kendi oranına, tekrarlanabilirliğine ve fire modlarına sahip bir zaman sürecidir. PETG\'den desteklerin sökülmesi, katman çizgilerinin zımparalanması, ısı kaynaklı dişli ek parça kurulumu, buharla pürüzsüzleştirme, hibrit atölyeler için reçine temizliği, paketleme ve ölçümün tümü yetkin dikkat gerektirir. Bu dakikalar fiyatlandırılmazsa, baskı çiftliği müşteriyi ücretsiz işçilikle sübvanse eder.' },
+    { type: 'paragraph', html: 'İşçilik modülü genel kullanım ile bitirmeyi ayırır, böylece kullanıcı iki farklı atölye oranını modelleyebilir. İşleri başlatan bir makine operatörü, delik açan, geçmeleri kontrol eden, dişli ek parçalar kuran veya kozmetik bitirme gerçekleştiren bir teknisyenle aynı maliyete sahip olmayabilir. Gösterge paneli, malzeme ve makine süresinin yanında bu dakikaları görünür kılar, böylece masa başı çalışması sessizce kârı tüketirken teklif sağlıklı görünmez.' },
+    { type: 'list', items: [
+      'En az on tekrar işi için kurulum süresini bitirme süresinden ayrı olarak takip edin.',
+      'Mekanik geçme veya müşteri açısından kritik boyutlar söz konusu olduğunda inceleme süresini dahil edin.',
+      'Toz kontrolü, çözücüler, ısı araçları veya hassas ölçüm gerektiren işler için post-proses oranını artırın.',
+      'İşçilik maliyeti malzeme maliyetinden yüksek olduğunda fikstürleri ve toplu işlemleri kullanın.',
+      'Müşteri baskıya hazır bir dosya sağlasa bile teklif şablonlarına işçilik ekleyin.',
+    ] },
+    { type: 'card', title: 'Kapsanan arama amacı', html: '<strong>3D baskı işçilik maliyeti hesaplayıcı</strong>, <strong>FDM baskılar için post proses maliyeti</strong> ve <strong>işçilikle 3D baskılı parçaların fiyatı nasıl belirlenir</strong> araması yapan kullanıcılar genellikle manuel işi eksik ücretlendirmeyi durdurmaya çalışmaktadır. Hesaplayıcı, işçiliği malzeme tahmininin altındaki bir not olarak değil, birinci sınıf bir sayı olarak ortaya çıkarır.' },
+
+    { type: 'title', text: 'Baskı çiftliği ROI ve kapasite geri kazanımı', level: 2 },
+    { type: 'paragraph', html: 'Bir baskı çiftliği için yatırım getirisi, brüt gelire değil, değişken maliyetten sonraki aylık katkı kârına bağlıdır. Sekiz yazıcı etkileyici görünebilir, ancak ortalama sipariş fiyatı düşük ve teklif maliyeti yüksekse, donanım geri kazanım süresi uzar veya asla gelmez. ROI modülü; yazıcı sayısını, yazıcı maliyetini, aylık siparişleri, ortalama satış fiyatını ve canlı teklif maliyeti modelini donanım sermayesini geri kazanmak için gereken aylara dönüştürür.' },
+    { type: 'paragraph', html: 'Önemli ayrıntı, ROI\'nin mevcut süreç modeline bağlı olmasıdır. Fire oranı, işçilik, temizleme veya post-proses artarsa, teklif maliyeti yükselir ve aylık kâr düşer. Bu, ROI\'yi statik bir iş planı hücresi yerine teşhis amaçlı bir sonuç haline getirir. Aylık kâr negatif olduğunda, araç sonsuz görüntüler çünkü mevcut varsayımlar altında donanım geri ödemesi yoktur.' },
+    { type: 'table', headers: ['ROI belirtisi', 'Olası neden', 'Operasyonel yanıt'], rows: [
+      ['6 aydan kısa sürede geri ödeme', 'Kontrollü işçilikle güçlü fiyatlandırma veya yüksek kullanım.', 'Tekrarlanabilirliği koruyun ve düşük fiyatlı özel işleri almaktan kaçının.'],
+      ['6 ila 18 ay geri ödeme', 'Normal küçük çiftlik geri kazanım aralığı.', 'Gruplandırmayı, teklif şablonlarını ve fire takibini iyileştirin.'],
+      ['18 ayın üzerinde geri ödeme', 'Donanım boşta veya işler düşük fiyatlandırılmış.', 'Ürün karmasını, destek yükünü ve makine saat oranını gözden geçirin.'],
+      ['Sonsuz geri ödeme', 'Değişken maliyet satış gelirini aşıyor.', 'Fiyatlandırma veya süreç ekonomisi değişene kadar donanım ölçeklendirmesini durdurun.'],
+    ] },
+    { type: 'summary', title: 'ROI inceleme kontrol listesi', items: [
+      'Aylık sipariş sayısı olarak sorguları değil, kabul edilen siparişleri kullanın.',
+      'Mümkün olduğunda donanım maliyetine yedek nozülleri, yatakları, ekstrüderleri, kurutucuları ve yedek parçaları dahil edin.',
+      'Yüksek marjlı kısa işlerin, düşük satış fiyatlı uzun dekoratif işleri geçip geçmediğini kontrol edin.',
+      'İlk haftalık iyimser tahmini değil, ayarlamadan sonraki gerçek fire oranını modelleyin.',
+    ] },
+
+    { type: 'title', text: 'FDM CAD için ISO metrik diş planlaması', level: 2 },
+    { type: 'paragraph', html: 'Metrik diş standartları geometriyi ve tolerans sınıflarını tanımlar, ancak FDM; yığma genişliği, termal büzülme, ilk katman basıncı, dilimleyici kompenzasyonu ve malzeme sürünmesini ekler. Matematiksel olarak doğru olan bir CAD dişi, ekstrüde edilen filament sonsuz keskin bir kesme aleti olmadığı için çok sıkı basılabilir. Paket, hatveye dayalı diş dibi çapını ve yapılandırılabilir bir boşluk faktörünü tahmin eder, böylece tasarımcılar baskıdan önce bir iç dişin ekstra toleransı hak edip etmediğini görebilirler.' },
+    { type: 'paragraph', html: 'Model, ISO 965 tablolarının yerini almaz. <strong>3D baskılı ISO diş toleransı hesaplayıcı</strong>, <strong>M12 3D baskılı diş boşluğu</strong> veya <strong>FDM iç diş CAD toleransı</strong> arayan kullanıcılar için CAD öncesi bir teşhistir. Bu kullanıcıların dişleri doğrudan modellemeye, bir kılavuzla temizlemeye, ısı kaynaklı ek parçalar kullanmaya veya post-makine işlemi için bir kılavuz delik basmaya karar vermeleri gerekir.' },
+    { type: 'glossary', items: [
+      { term: 'Hatve', definition: 'Diş tepeleri arasındaki eksenel mesafe. Daha büyük hatve genellikle diş derinliğini artırır ve basılabilir diş dibi çapını değiştirir.' },
+      { term: 'Diş dibi çapı', definition: 'Bir diş profilinin daha küçük iç çapı. FDM\'de yığma şişmesine ve dilimleyici duvar sırasına duyarlıdır.' },
+      { term: 'Boşluk faktörü', definition: 'Basılan plastik davranışını telafi etmek için hatvenin bir kesri olarak ifade edilen pratik bir tolerans.' },
+      { term: 'Tolerans sınıfı', definition: 'Üretilen dişler için standartlaştırılmış bir geçme tanımı. Basılan plastik genellikle bu sınıflar etrafında ampirik ayarlama gerektirir.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Dişler ölçüm problemleridir', badge: 'CAD uyarısı', html: 'Malzeme, nozül ve katman yüksekliği ailesi başına bir kalibrasyon kuponu basın. 0.20 mm katmanlarda kuru PLA\'da çalışan bir diş, yüzey dokusu ve polimer elastikiyeti değiştiğinden PETG, naylon veya ıslak filamentte sıkışabilir.' },
+
+    { type: 'title', text: 'Mil ve delik geçmeleri: baskı başarısız olmadan önce boşluğu görmek', level: 2 },
+    { type: 'paragraph', html: 'FDM\'deki mekanik geçmeler hem CAD boyutu hem de süreç hatası tarafından kontrol edilir. Delikler, iç çevreler sonlu yığma genişliğine sahip bir daireye yaklaştığı ve soğuyan plastik içeri doğru çekebildiği için küçük basılma eğilimindedir. Miller, ekstrüzyon akışı, dikiş yerleşimi veya yataktaki fil ayağı basıncı nedeniyle büyük basılabilir. Paket, delik ve mil sınırlarını görselleştirir, böylece parça basılmadan önce negatif boşluk belirgin hale gelir.' },
+    { type: 'paragraph', html: 'Fonksiyonel parçalar için soru sadece bir milin bir deliğe sığıp sığmadığı değildir. Geçmenin kullanım durumuyla eşleşip eşleşmediğidir: kayıcı geçme, döner geçme, geçme, sıkı geçme veya tutulan rulman yatağı. FDM anizotropisi, katman sırtları ve boyutsal sapma, matematiksel olarak küçük pozitif bir boşluğun bile sıkı hissedebileceği anlamına gelir. Bu nedenle dijital ikiz, negatif boşluğu kritik olarak ele alır ve küçük pozitif boşluğu bir kuponla doğrulanması gereken bir şey olarak kabul eder.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Kayıcı geçme', description: 'Parçalar minimum dirençle elle monte edilir. Çıkarılabilir kapaklar, fikstürler ve hizalama pimleri için kullanışlıdır.', points: ['Pozitif boşluğa ihtiyaç duyar', 'Yüzey dokusuna duyarlıdır', 'Genellikle ayarlanması en kolay olanıdır'] },
+      { title: 'Döner geçme', description: 'Parçalar montajdan sonra birbirine göre hareket eder. Pivotlar ve rulolar için kullanışlıdır.', points: ['Daha fazla boşluk gerektirir', 'Yağlama yardımcı olabilir', 'Yuvarlaklık önemlidir'] },
+      { title: 'Sıkı geçme', description: 'Parçalar kasıtlı olarak birbirine müdahale eder. Yalnızca malzeme elastikiyeti, duvar kalınlığı ve yük kontrol edildiğinde kullanışlıdır.', points: ['Çatlama riski', 'Baskı yönü önemlidir', 'Kupon testi gereklidir'] },
+    ] },
+    { type: 'tip', title: 'Umut değil, tolerans kullanın', html: 'Basılan bir deliğe satın alınan bir pim, rulman, vida veya ek parça takılacaksa, hem basılan özelliği hem de satın alınan bileşeni ölçün. Her malzemeye evrensel bir ofset uygulamak yerine CAD toleransını ölçülen hatadan ayarlayın.' },
+
+    { type: 'title', text: 'Filament kurutma: difüzyon, adsorpsiyon ve baskı belirtileri', level: 2 },
+    { type: 'paragraph', html: 'Higroskopik filament sadece yüzeyde ıslanmaz. Nem polimer yüzeylerine adsorbe olur ve zamanla filamentin içine yayılabilir. Ekstrüzyon sırasında bu su buharlaşarak çıtırdama, kabarcıklar, tutarsız ekstrüzyon, zayıf katman yapışması, mat veya bulutlu yüzey yamaları, ipliklenme ve boyutsal gürültü oluşturabilir. Naylon, TPU, PVA, PC ve bazı dolgulu kompozitler özellikle hassas olabilirken, PLA formülasyona ve saklama geçmişine göre değişir.' },
+    { type: 'paragraph', html: 'Kurutma modülü; nem yükünü, filament kütlesini, malzeme faktörünü ve sıcaklığı teşhis modeli olarak kullanır. Daha yüksek sıcaklık nem giderimini hızlandırır, ancak her polimerin güvenli bir kurutma aralığı vardır. Çok düşük bir sıcaklık zaman kaybettirir; çok yüksek bir sıcaklık makaraları deforme edebilir, filamenti tavlayabilir, polimeri yumuşatabilir veya sargıları eritebilir. Hesaplamanın amacı laboratuvar nem içeriğini iddia etmek değil, hassas çalışmalardan önce kurutmanın ne zaman gerekli olacağını tahmin etmektir.' },
+    { type: 'table', headers: ['Malzeme davranışı', 'Baskı belirtisi', 'Süreç yanıtı'], rows: [
+      ['Hafif nem', 'Hafif ipliklenme veya parlaklıkta küçük değişiklikler.', 'Kozmetik işlerden ve geri çekme ayarından önce kurutun.'],
+      ['Orta nem', 'Çıtırdama, pürüzlü duvarlar veya tutarsız ekstrüzyon genişliği.', 'Makarayı kurutun ve akış kalibrasyonunu tekrarlayın.'],
+      ['Şiddetli nem', 'Köpürme, zayıf katmanlar, kırılgan çıktı veya başarısız destekler.', 'Daha uzun süre kurutun, kapalı olarak saklayın ve gerekirse hasarlı bölümleri atın.'],
+      ['Aşırı ısınmış kurutma', 'Oval filament veya makara deformasyonu.', 'Sıcaklığı düşürün ve üretici kılavuzunu doğrulayın.'],
+    ] },
+    { type: 'message', title: 'Nem ve tolerans etkileşime girer', html: 'Islak filament, ekstrüzyon tutarsız hale geldiği için mekanik bir parçanın CAD veya akış sorunu gibi görünmesine neden olabilir. Bu nedenle kurutma, yalnızca yüzey kalitesi bakımının değil, boyutsal kontrolün de bir parçasıdır.' },
+
+    { type: 'title', text: 'Üretim uyarısı olarak AMS ve MMU temizleme oranı', level: 2 },
+    { type: 'paragraph', html: 'Çok malzemeli baskı, renk değişikliklerini malzeme ekonomisine dönüştürür. Temizleme kulesi, silme bloğu veya oluk ekstrüzyonu ücretsiz değildir; ürün dışı hacme dönüştürülen satın alınmış filamenttir. Birçok alternatif katmana sahip küçük bir dekoratif nesne, daha büyük tek renkli bir braketten daha fazla malzeme israf edebilir. Suite, temizleme oranını temizleme hacminin toplam ekstrüde hacme bölünmesi olarak hesaplar, böylece atık payı hemen görünür.' },
+    { type: 'paragraph', html: '%30.00 eşiği kasıtlı olarak katıdır. Ekstrüde edilen polimerin neredeyse üçte biri temizleme olduğunda, iş renk sırası, dolguya temizleme, model bölme, gruplandırma veya daha yüksek bir teklif için gözden geçirilmelidir. Baskı çiftliği açısından, temizleme aynı zamanda makine süresini tüketir ve filament değişimi aşınmasını artırır. Temizlemeyi görmezden gelen bir teklif, görsel olarak etkileyici çok renkli bir parçayı düşük marjlı bir işe dönüştürebilir.' },
+    { type: 'list', items: [
+      'Yüksek kontaminasyon geçişlerini azaltmak için benzer renkleri gruplayın.',
+      'Tasarım yeniden düzenlenebildiğinde tekrarlanan koyudan açığa geçişlerden kaçının.',
+      'Dolguya temizlemeyi yalnızca gizli kontaminasyon yapısal olarak kabul edilebilir olduğunda kullanin.',
+      'Dekoratif çok renkli işler için müşteri tekliflerinde temizleme malzemesini ayrı olarak ücretlendirin.',
+      'Temizlemeyi agresif bir şekilde azaltmadan önce her malzeme ailesi için dilimleyici kalibrasyonunu çalıştırın.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Kritik temizleme koşulu', badge: '30.00%+', html: '%30.00\'un üzerindeki bir temizleme oranı, yazıcının malzemenin büyük bir kısmını temizliğe harcadığı anlamına gelir. Üretim çalışmasını kabul etmeden önce bunu bir yeniden tasarım, gruplandırma veya fiyatlandırma tetikleyicisi olarak ele alın.' },
+
+    { type: 'title', text: 'Üretim notlarında pano çıktısı nasıl kullanılır?', level: 2 },
+    { type: 'paragraph', html: 'Paketteki her hesaplayıcı aynı köşeli parantezli parametre biçimini dışa aktarır: <code>[Parametre: Değer | Parametre: Değer]</code>. Biçimlendirme bağımlılıkları olmadan e-postalarda, atölye biletlerinde, e tablolarda, müşteri mesajlarında ve CAD yorumlarında kalabildiği için bu kasıtlı olarak düz metindir. Ayrıca gizli binlik ayırıcıların veya yerel ayara özgü ondalık gruplandırmanın bir teklife veya çizim notuna girmesini önler.' },
+    { type: 'paragraph', html: 'Kopyalanan satırı karar durumunun bir anlık görüntüsü olarak kullanın. Örneğin, müşteri renk değişiklikleri eklediğinde bunu bir teklif revizyonuna ekleyin veya bir mil boşluğu pozitiften negatife geçtiğinde bir CAD sorununa yapıştırın. Görünür her değer iki ondalık basamağa sabitlendiğinden, not makineciler, tasarımcılar ve atölye operatörleri tarafından yeniden biçimlendirilmeden okunabilir.' },
+    { type: 'summary', title: 'Üretim iş akışı özeti', items: [
+      'İşin kendi kendini karşılayıp karşılayamayacağını doğrulamak için teklif ve marjla başlayın.',
+      'Teslimat süresi sözü vermeden önce işçilik ve post-prosesi gözden geçirin.',
+      'Yazıcı satın alırken veya yinelenen sözleşmeleri kabul ederken ROI\'yi kontrol edin.',
+      'İşlevsel CAD\'i serbest bırakmadan önce diş ve geçme modüllerini kullanın.',
+      'Dilimleyici ayarlarını suçlamadan önce higroskopik malzemeleri kurutun.',
+      'Yüksek temizleme oranını bir tasarım ve fiyatlandırma uyarısı olarak ele alın.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

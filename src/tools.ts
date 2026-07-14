@@ -36,6 +36,7 @@ import { ELEPHANT_FOOT_COMPENSATION_CALCULATOR_TOOL } from './tool/elephantFootC
 import { FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL } from './tool/filamentWeightLengthConverter';
 import { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeCalculator';
 import { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor';
+import { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -74,4 +75,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   FILAMENT_WEIGHT_LENGTH_CONVERTER_TOOL,
   MULTI_MATERIAL_PURGE_CALCULATOR_TOOL,
   MOISTURE_SATURATION_MONITOR_TOOL,
+  PRECISION_ENGINEERING_SUITE_TOOL,
 ];

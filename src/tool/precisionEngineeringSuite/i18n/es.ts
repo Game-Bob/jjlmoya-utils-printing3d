@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'suite-de-ingenieria-de-precision-impresion-3d';
+const title = 'Suite de ingeniería de precisión para impresión 3D FDM';
+const description = 'Una suite de diagnóstico reactivo para presupuestos FDM, márgenes, mano de obra, ROI, tolerancias CAD estilo ISO, secado de filamento y desperdicio de purga AMS/MMU.';
+
+const faqData = [
+  {
+    question: '¿Por qué cada resultado mostrado utiliza exactamente dos decimales?',
+    answer: 'La suite mantiene la precisión completa de coma flotante de JavaScript internamente y aplica el formato de dos decimales solo cuando los valores se muestran o se copian. Esto evita salidas ambiguas y coincide con la forma en que muchos flujos de trabajo de CAD y presupuestos documentan dimensiones y dinero.',
+  },
+  {
+    question: '¿Es el módulo de rosca ISO un reemplazo para una tabla de normas de roscas?',
+    answer: 'No. Es una ayuda de planificación de CAD para la holgura de FDM y la geometría basada en el paso. Los planos de producción finales deben seguir haciendo referencia a la clase de tolerancia ISO correspondiente y a los datos medidos de calibración de la impresora.',
+  },
+  {
+    question: '¿Por qué se trata la proporción de purga como crítica por encima del 30 por ciento?',
+    answer: 'Por encima del 30 por ciento, una gran parte del polímero extruido ya no es volumen del producto. Eso suele cambiar la presupuestación, el loteado, el orden de los colores y si se debe utilizar purga en el relleno o división del modelo.',
+  },
+  {
+    question: '¿Cómo se debe interpretar el tiempo de secado del filamento?',
+    answer: 'El tiempo de secado es una estimación de diagnóstico basada en la carga de humedad, la sensibilidad del material, la masa del filamento y la temperatura del secador. Debe validarse con síntomas de impresión reales como chasquidos, variaciones de brillo, hilachas (stringing) y deriva dimensional.',
+  },
+];
+
+const howToData = [
+  { name: 'Seleccionar el módulo de diagnóstico', text: 'Elija presupuesto, margen, mano de obra, ROI, rosca, ajuste, secado o purga para cambiar la explicación de la telemetría mientras mantiene activo el modelo de proceso compartido.' },
+  { name: 'Editar entradas de proceso', text: 'Cambie el tiempo de máquina, material, mano de obra, tolerancias, humedad o valores de purga. Los resultados se actualizan inmediatamente sin presionar un botón de calcular.' },
+  { name: 'Leer el gemelo digital', text: 'Utilice el gemelo SVG de eje y agujero y el lienzo de telemetría para ver si el proceso es nominal, nivel de advertencia o crítico.' },
+  { name: 'Copiar el resumen de ingeniería', text: 'Utilice el botón del portapapeles para exportar la cadena de parámetros estandarizada entre corchetes para presupuestos, tickets o notas de CAD.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'es',
+  keywords: 'calculadora de presupuestos FDM, calculadora de margen de impresión 3D, calculadora de ROI de granja de impresión, calculadora de tolerancia de rosca ISO, calculadora de ajuste mecánico FDM, calculadora de secado de filamento, calculadora de purga AMS, calculadora de costo de purga MMU',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'Generador de presupuestos PDF' },
+      { id: 'margin', label: 'PVP y margen' },
+      { id: 'labor', label: 'Mano de obra postprocesado' },
+      { id: 'roi', label: 'ROI de granja' },
+      { id: 'threads', label: 'Rosca ISO CAD' },
+      { id: 'fits', label: 'Ajustes mecánicos' },
+      { id: 'drying', label: 'Secado de filamento' },
+      { id: 'purge', label: 'Purga AMS/MMU' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Costo de material', unit: '€' },
+      { key: 'printHours', label: 'Tiempo de impresión', unit: 'h' },
+      { key: 'machineRate', label: 'Tarifa de máquina', unit: '€/h' },
+      { key: 'energyPrice', label: 'Precio de energía', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Tasa de fallos', unit: '%' },
+      { key: 'marginPercent', label: 'Margen objetivo', unit: '%' },
+      { key: 'laborMinutes', label: 'Mano de obra', unit: 'min' },
+      { key: 'laborRate', label: 'Tarifa de mano de obra', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Postprocesado', unit: 'min' },
+      { key: 'postProcessRate', label: 'Tarifa de postprocesado', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Impresoras de granja', unit: 'uds' },
+      { key: 'printerCost', label: 'Costo de impresora', unit: '€' },
+      { key: 'monthlyOrders', label: 'Pedidos mensuales', unit: 'uds' },
+      { key: 'avgSalePrice', label: 'Precio venta promedio', unit: '€' },
+      { key: 'threadNominalMm', label: 'Rosca nominal', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Paso', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Eje nominal', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Tolerancia de agujero', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Masa de filamento', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Humedad', unit: '%HR' },
+      { key: 'dryingTemperatureC', label: 'Temp secado', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Volumen del objeto', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Volumen de purga', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Costo presupuestado',
+      recommendedPvp: 'PVP recomendado',
+      grossMargin: 'Margen bruto',
+      roi: 'ROI',
+      threadMinor: 'Diámetro menor rosca',
+      fitClearance: 'Holgura de ajuste',
+      dryingTime: 'Tiempo de secado',
+      purgeRatio: 'Proporción de purga',
+    },
+    statusTexts: {
+      nominal: 'Telemetría dentro del rango operativo.',
+      watch: 'Rango de advertencia: la telemetría es utilizable pero merece revisión del proceso antes de la producción.',
+      critical: 'Rango crítico: proporción de purga superior al 30%, riesgo de humedad alto o holgura de ajuste negativa detectada.',
+    },
+    physicsCopy: {
+      quote: 'La ingeniería de presupuestos combina material directo, amortización de máquina, exposición de mano de obra, energía y desperdicio esperado. La tasa de fallos se modela como una corrección de rendimiento para que el precio de venta cargue con el costo de las piezas rechazadas.',
+      margin: 'El margen se calcula a partir del precio de venta, no como un recargo sobre el costo. El margen bruto actual es {margin}, por lo que cada cambio de precio mueve tanto las ganancias como el colchón de riesgo.',
+      labor: 'El costo de postprocesado es el tiempo multiplicado por la tarifa del taller. La carga actual de mano de obra más acabado es {laborCost}.',
+      roi: 'El ROI convierte el capex de la impresora en meses de recuperación de producción. Las ganancias mensuales negativas se saturan en la pantalla porque la granja nunca recupera el costo del hardware bajo esos supuestos.',
+      threads: 'La geometría de rosca métrica ISO se aproxima a partir de la profundidad del paso. El diámetro menor y la holgura impulsada por el paso ayudan a los usuarios de CAD a evitar roscas internas fusionadas tras la dilatación de la capa de FDM.',
+      fits: 'La holgura de ajuste mecánico compara el rango del agujero impreso con el rango del eje impreso. Una holgura negativa predice interferencia; una holgura positiva predice un ajuste deslizante o giratorio.',
+      drying: 'El tiempo de secado sigue una aceleración simplificada estilo Arrhenius: una temperatura más alta aumenta la tasa de difusión mientras que la humedad y el factor del polímero aumentan la carga de humedad.',
+      purge: 'La proporción de purga AMS/MMU es el volumen de purga dividido por el volumen total extruido. Por encima del 30.00%, el trabajo se marca porque el desperdicio se está convirtiendo en un factor determinante del costo de producción.',
+    },
+    chartLabels: ['COSTO', 'PVP', 'MARGEN', 'ROI', 'H2O', 'PURGA'],
+    copyFields: {
+      quoteCost: 'Costo presupuestado',
+      pvp: 'PVP',
+      currency: 'Moneda',
+      margin: 'Margen',
+      roi: 'ROI',
+      threadMinor: 'Diámetro menor rosca',
+      fitClearance: 'Holgura de ajuste',
+      drying: 'Secado',
+      purgeRatio: 'Proporción de purga',
+    },
+    displayUnits: {
+      months: 'mes',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'holgura',
+    },
+    copyLabel: 'Copiar telemetría',
+    copiedLabel: 'Copiado',
+    unitSystemLabel: 'Unidades',
+    metricLabel: 'Métrico',
+    imperialLabel: 'Imperial',
+    currencyLabel: 'Moneda',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ Dólar estadounidense' },
+      { code: 'GBP', label: '£ Libra esterlina' },
+      { code: 'CAD', label: 'C$ Dólar canadiense' },
+      { code: 'AUD', label: 'A$ Dólar australiano' },
+      { code: 'CHF', label: 'Fr Franco suizo' },
+      { code: 'MXN', label: '$ Peso mexicano' },
+      { code: 'BRL', label: 'R$ Real brasileño' },
+      { code: 'ARS', label: '$ Peso argentino' },
+      { code: 'CLP', label: '$ Peso chileno' },
+      { code: 'COP', label: '$ Peso colombiano' },
+      { code: 'PEN', label: 'S/ Sol peruano' },
+      { code: 'JPY', label: '¥ Yen japonés' },
+      { code: 'CNY', label: '¥ Yuan chino' },
+      { code: 'KRW', label: '₩ Won surcoreano' },
+      { code: 'INR', label: '₹ Rupia india' },
+      { code: 'PLN', label: 'zł Zloty polaco' },
+      { code: 'RUB', label: '₽ Rublo ruso' },
+      { code: 'SEK', label: 'kr Corona sueca' },
+      { code: 'NOK', label: 'kr Corona noruega' },
+      { code: 'DKK', label: 'kr Corona danesa' },
+      { code: 'TRY', label: '₺ Lira turca' },
+    ],
+    criticalLabel: 'Crítico',
+    watchLabel: 'Advertencia',
+    nominalLabel: 'Nominal',
+    inputsTitle: 'Entradas de proceso',
+    telemetryTitle: 'Telemetría visual',
+    outputTitle: 'Resultados calculados',
+    physicsTitle: 'Física y modelo de proceso',
+    modulesAriaLabel: 'Módulos de la suite de precisión',
+    telemetryAriaLabel: 'Gráfico de telemetría reactivo',
+    twinAriaLabel: 'Gemelo digital mecánico',
+  },
+  seo: [
+    { type: 'title', text: 'Por qué la impresión FDM de precisión necesita una suite de diagnóstico en lugar de calculadoras aisladas', level: 2 },
+    { type: 'paragraph', html: 'Las decisiones de producción de FDM rara vez fallan porque se desconozca una fórmula. Fallan porque el costo, la tolerancia, el secado, el desperdicio de purga, la mano de obra y la utilización de la máquina se tratan como conversaciones separadas. Un presupuesto de cliente puede parecer rentable hasta que se incluyen los minutos de postprocesado. Una rosca CAD puede parecer correcta hasta que se consideran la dilatación de la capa y la holgura. Un trabajo a color puede parecer pequeño hasta que el volumen de purga se cotiza como filamento comprado. Esta suite reúne esas relaciones en un solo modelo reactivo para que el usuario vea el rango del proceso en lugar de un único número desconectado.' },
+    { type: 'paragraph', html: 'La interfaz utiliza deliberadamente un formato fijo de dos decimales porque los presupuestos y la revisión de CAD requieren valores inequívocos. Internamente, los cálculos siguen siendo de coma flotante hasta que la capa de visualización les da formato. Esa distinción importa: redondear antes de tiempo puede mover una pequeña holgura de ajuste, un porcentaje de margen o un umbral de purga lo suficiente como para inducir a una decisión errónea. La salida copiada sigue un formato estandarizado de parámetros entre corchetes para que los valores puedan pegarse en órdenes de trabajo, tickets e historiales de cambios de CAD sin separadores de miles ni sorpresas de configuración local.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Diagnósticos de producción vinculados' },
+      { value: '2.00', label: 'Decimales fijos en cada resultado visualizado' },
+      { value: '30.00%', label: 'Umbral crítico de proporción de purga' },
+      { value: '0', label: 'Botones de calcular requeridos' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'La suite está construida para la revisión del proceso', badge: 'Flujo de trabajo de ingeniería', html: 'Úsela antes de laminar, presupuestar o liberar el CAD. El modelo es intencionadamente de diagnóstico: resalta si un trabajo merece una inspección más detallada, una calibración física, una actualización de precios al cliente o un cambio de diseño antes de consumir tiempo de impresora.' },
+
+    { type: 'title', text: 'Generación de presupuestos y el costo oculto de la tasa de fallos', level: 2 },
+    { type: 'paragraph', html: 'Un presupuesto profesional de impresión 3D no debe valorar solo el plástico visible. La base de costos directos incluye material, tiempo de impresión, tarifa por hora de la máquina, energía, mano de obra, postprocesado y desperdicio esperado. La tasa de fallos es especialmente importante porque cambia el rendimiento. Si un trabajo tiene una expectativa de fallo del 8 por ciento, la pieza buena debe cargar con el costo de los intentos rechazados. Por lo tanto, el modelo divide el costo directo por el rendimiento utilizable en lugar de agregar una línea de imprevistos vaga.' },
+    { type: 'paragraph', html: 'El módulo de presupuestos es útil para búsquedas como <strong>calculadora de presupuesto FDM con tasa de fallos</strong>, <strong>calculadora de precios de impresión 3D para pequeñas empresas</strong> y <strong>calcular costo de trabajo de impresión 3D con mano de obra</strong>. Esas búsquedas suelen provenir de usuarios que ya venden impresiones o planean hacerlo. Necesitan un número que sobreviva a la producción real, no una estimación de aficionado basada solo en gramos de PLA.' },
+    { type: 'table', headers: ['Factor de costo', 'Por qué importa', 'Error típico'], rows: [
+      ['Material', 'Captura el polímero consumido por el objeto, soportes, balsa (raft), borde (brim), purga y piezas de prueba.', 'Valorar solo la masa del modelo final.'],
+      ['Tarifa de máquina', 'Representa amortización, mantenimiento, desgaste de boquilla, superficies de la cama y costo de oportunidad.', 'Tratar el tiempo de impresora como gratuito porque el operador no está presente.'],
+      ['Energía', 'Pequeña por trabajo pero visible en la producción a escala de granja.', 'Ignorar la cámara calefactada o materiales de alta temperatura de cama.'],
+      ['Mano de obra', 'Incluye preparación, retirada, inspección, empaquetado y comunicación con el cliente.', 'Cobrar solo por la duración de la impresión.'],
+      ['Rendimiento', 'Las piezas rechazadas deben ser recuperadas por las ventas aceptadas.', 'Agregar un margen aleatorio en lugar de modelar la probabilidad de desecho.'],
+    ] },
+    { type: 'tip', title: 'Presupueste a partir de datos reales del taller', html: 'Reemplace los valores predeterminados con su propia tarifa eléctrica, tiempo promedio de intervención, porcentaje de trabajos fallidos y minutos de postprocesado. Un taller pequeño con limpieza manual lenta puede tener un costo real mayor que una granja con máquinas más rápidas y utillaje repetible.' },
+
+    { type: 'title', text: 'PVP, margen y la diferencia entre margen de recargo y beneficio', level: 2 },
+    { type: 'paragraph', html: 'El margen se calcula como el beneficio dividido por el precio de venta, no como un simple porcentaje añadido al costo. Esta diferencia es crítica al presupuestar piezas impresas en 3D para clientes. Un recargo del 40 por ciento sobre el costo no crea un margen del 40 por ciento; crea un margen menor porque el denominador es el precio de venta final. La suite utiliza precios basados en el margen porque así es como muchos talleres evalúan si una línea de productos puede pagar repuestos, embalaje, impresiones fallidas y tiempo administrativo.' },
+    { type: 'paragraph', html: 'Para una pieza con un costo de 10.00 EUR y un margen objetivo del 40.00%, el precio requerido es 16.67 EUR. Venderla por 14.00 EUR porque alguien añadió un 40 por ciento de recargo deja solo un 28.57% de margen. Esa diferencia parece pequeña en un artículo pero se vuelve significativa a lo largo de cientos de pedidos. Una granja con márgenes delgados puede estar ocupada y seguir perdiendo dinero cuando se ignoran los fallos, la mano de obra y la purga.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Pensamiento de recargo', description: 'Añade un porcentaje al costo. Rápido para estimaciones aproximadas pero débil para la planificación de la rentabilidad.', points: ['Cálculo mental sencillo', 'Puede subestimar el PVP requerido', 'No expresa directamente la participación en los beneficios'] },
+      { title: 'Pensamiento de margen', description: 'Establece el precio de venta para que el beneficio sea una parte objetivo de los ingresos. Mejor para producción repetible.', points: ['Coincide con los informes financieros de la empresa', 'Protege la recuperación de gastos generales', 'Útil para precios de catálogo'] },
+    ] },
+    { type: 'proscons', title: 'Objetivos de margen agresivos', items: [
+      { pro: 'Protege al taller de reimpresiones, soporte técnico y limpieza lenta.', con: 'Puede situar el precio de impresiones básicas por encima de competidores locales.' },
+      { pro: 'Hace que el trabajo personalizado de bajo volumen sea financieramente viable.', con: 'Requiere explicar por qué el diseño, el ajuste y la fiabilidad tienen valor.' },
+      { pro: 'Financia mejores utillajes, secadores, boquillas y control de calidad.', con: 'Puede reducir la conversión para piezas puramente decorativas de bajo riesgo.' },
+    ] },
+
+    { type: 'title', text: 'Mano de obra y postprocesado como variables de ingeniería', level: 2 },
+    { type: 'paragraph', html: 'El postprocesado no es una categoría de acabado imprecisa. Es un proceso de tiempo con su propia tarifa, repetibilidad y modos de fallo. Retirar soportes de PETG, lijar líneas de capa, instalar insertos roscados por calor, alisado químico por vapor, limpieza de resina en talleres híbridos, empaquetado y medición consumen atención cualificada. Si esos minutos no se cobran, la granja de impresión subvenciona al cliente con mano de obra no pagada.' },
+    { type: 'paragraph', html: 'El módulo de mano de obra separa el manejo general del acabado para que el usuario pueda modelar dos tarifas de taller diferentes. Un operador de máquina que inicia trabajos puede no tener el mismo costo que un técnico que repasa roscas, comprueba ajustes, instala insertos o realiza acabados cosméticos. El panel hace visibles esos minutos junto con el material y el tiempo de máquina para que un presupuesto no parezca saneado mientras el trabajo de banco consume silenciosamente las ganancias.' },
+    { type: 'list', items: [
+      'Registre el tiempo de preparación separado del tiempo de acabado para al menos diez trabajos repetidos.',
+      'Incluya el tiempo de inspección cuando se trate de un ajuste mecánico o de dimensiones críticas para el cliente.',
+      'Aumente la tarifa de postprocesado para trabajos que requieran control de polvo, disolventes, herramientas térmicas o medición de precisión.',
+      'Utilice utillajes y operaciones por lotes cuando el costo de mano de obra sea superior al costo de material.',
+      'Añada mano de obra a las plantillas de presupuesto incluso cuando un cliente suministre un archivo listo para imprimir.',
+    ] },
+    { type: 'card', title: 'Intención de búsqueda cubierta', html: 'Los usuarios que buscan <strong>calculadora de costo de mano de obra de impresión 3D</strong>, <strong>costo de postprocesado para impresiones FDM</strong> y <strong>cómo poner precio a piezas impresas en 3D con mano de obra</strong> suelen intentar dejar de cobrar de menos el trabajo manual. La calculadora muestra la mano de obra como un número principal, no como una nota debajo de la estimación de material.' },
+
+    { type: 'title', text: 'ROI de la granja de impresión y recuperación de capacidad', level: 2 },
+    { type: 'paragraph', html: 'El retorno de la inversión de una granja de impresión depende de la contribución mensual después de los costos variables, no de los ingresos brutos. Ocho impresoras pueden parecer impresionantes, pero si el precio promedio de los pedidos es bajo y el costo presupuestado es alto, el período de recuperación del hardware se alarga o nunca llega. El módulo de ROI convierte el número de impresoras, su costo, los pedidos mensuales, el precio de venta promedio y el modelo de costo presupuestado activo en los meses necesarios para recuperar el capital del hardware.' },
+    { type: 'paragraph', html: 'El detalle importante es que el ROI está acoplado al modelo de proceso actual. Si la tasa de fallos, la mano de obra, la purga o el postprocesado aumentan, el costo presupuestado sube y el beneficio mensual baja. Eso hace que el ROI sea un resultado de diagnóstico en lugar de una celda estática del plan de negocios. Cuando el beneficio mensual es negativo, la herramienta muestra el símbolo de infinito porque no hay amortización posible bajo los supuestos actuales.' },
+    { type: 'table', headers: ['Síntoma de ROI', 'Causa probable', 'Respuesta operativa'], rows: [
+      ['Amortización menor a 6 meses', 'Precios sólidos o alta utilización con mano de obra controlada.', 'Proteja la repetibilidad y evite aceptar trabajos personalizados mal cobrados.'],
+      ['Amortización de 6 a 18 meses', 'Rango normal de recuperación para granjas pequeñas.', 'Mejore el loteado, las plantillas de presupuesto y el seguimiento de fallos.'],
+      ['Amortización superior a 18 meses', 'El hardware está inactivo o los trabajos se cobran de menos.', 'Revise la gama de productos, la carga de soportes y la tarifa de horas de máquina.'],
+      ['Amortización infinita', 'El costo variable supera los ingresos por ventas.', 'Detenga la inversión en hardware hasta que cambien los precios o la economía del proceso.'],
+    ] },
+    { type: 'summary', title: 'Lista de verificación de revisión de ROI', items: [
+      'Utilice pedidos aceptados, no consultas, como el recuento mensual de pedidos.',
+      'Incluya boquillas de repuesto, camas, extrusores, secadores y repuestos en el costo del hardware cuando sea posible.',
+      'Compruebe si los trabajos cortos de alto margen superan a los trabajos decorativos largos con precios de venta bajos.',
+      'Modele la tasa de fallos real después del calibrado, no una estimación optimista de la primera semana.',
+    ] },
+
+    { type: 'title', text: 'Planificación de roscas métricas ISO para CAD de FDM', level: 2 },
+    { type: 'paragraph', html: 'Las normas de roscas métricas definen la geometría y las clases de tolerancia, pero FDM añade el ancho de capa, la contracción térmica, la presión de la primera capa, la compensación del laminador y la fluencia del material. Una rosca CAD que es matemáticamente correcta puede imprimirse demasiado apretada porque el filamento extruido no es una herramienta de corte infinitamente afilada. La suite aproxima el diámetro menor basado en el paso y un factor de holgura configurable para que los diseñadores puedan ver si una rosca interna merece una tolerancia adicional antes de imprimir.' },
+    { type: 'paragraph', html: 'El modelo no es un sustituto de las tablas ISO 965. Es un diagnóstico previo al CAD para usuarios que buscan <strong>calculadora de tolerancia de roscas ISO impresas en 3D</strong>, <strong>holgura de rosca M12 impresa en 3D</strong> o <strong>tolerancia de rosca interna FDM en CAD</strong>. Esos usuarios necesitan decidir si modelan las roscas directamente, las repasan con un macho de roscar, utilizan insertos roscados por calor o imprimen un agujero guía para mecanizado posterior.' },
+    { type: 'glossary', items: [
+      { term: 'Paso', definition: 'Distancia axial entre crestas de rosca. Un paso mayor generalmente aumenta la profundidad de la rosca y cambia el diámetro menor imprimible.' },
+      { term: 'Diámetro menor', definition: 'El diámetro interno más pequeño de un perfil de rosca. En FDM, es sensible al ensanchamiento del filamento y al orden de las paredes del laminador.' },
+      { term: 'Factor de holgura', definition: 'Un margen práctico expresado como una fracción del paso para compensar el comportamiento del plástico impreso.' },
+      { term: 'Clase de tolerancia', definition: 'Designación de ajuste estandarizada para roscas fabricadas. El plástico impreso suele necesitar un ajuste empírico en torno a esas clases.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Las roscas son problemas de medición', badge: 'Precaución en CAD', html: 'Imprima una probeta de calibración por material, boquilla y familia de altura de capa. Una rosca que funciona en PLA seco a capas de 0.20 mm puede atascarse en PETG, nailon o filamento húmedo porque la textura superficial y la elasticidad del polímero cambian.' },
+
+    { type: 'title', text: 'Ajustes de eje y agujero: ver la holgura antes de que falle la impresión', level: 2 },
+    { type: 'paragraph', html: 'Los ajustes mecánicos en FDM están controlados tanto por el tamaño de CAD como por el error del proceso. Los agujeros tienden a imprimirse más pequeños porque los perímetros interiores aproximan un círculo con un ancho de cordón finito y porque el plástico al enfriarse puede contraerse hacia dentro. Los ejes pueden imprimirse más grandes por el flujo de extrusión, la posición de la costura o la presión de pata de elefante en la cama. La suite visualiza los límites de agujero y eje para que la holgura negativa sea evidente antes de imprimir la pieza.' },
+    { type: 'paragraph', html: 'Para piezas funcionales, la cuestión no es solo si un eje encaja en un agujero. Es si el ajuste coincide con el caso de uso: ajuste deslizante, ajuste giratorio, ajuste a presión, ajuste forzado o asiento de cojinete retenido. La anisotropía de FDM, las estrías de las capas y la deriva dimensional significan que una holgura positiva matemáticamente pequeña puede seguir sintiéndose apretada. Por lo tanto, el gemelo digital trata la holgura negativa como crítica y la holgura positiva pequeña como algo que debe validarse con una probeta.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Ajuste deslizante', description: 'Las piezas se ensamblan a mano con una resistencia mínima. Útil para cubiertas desmontables, plantillas y pasadores de alineación.', points: ['Necesita holgura positiva', 'Sensible a la textura superficial', 'Suele ser el más fácil de ajustar'] },
+      { title: 'Ajuste giratorio', description: 'Las piezas se mueven entre sí después del montaje. Útil para pivotes y rodillos.', points: ['Requiere más holgura', 'La lubricación puede ayudar', 'La redondez importa'] },
+      { title: 'Ajuste forzado', description: 'Las piezas interfieren intencionadamente. Útil solo cuando la elasticidad del material, el grosor de la pared y la carga están controlados.', points: ['Riesgo de agrietamiento', 'La orientación de la impresión importa', 'Requiere pruebas con probetas'] },
+    ] },
+    { type: 'tip', title: 'Use tolerancia, no esperanza', html: 'Si un agujero impreso debe recibir un pasador, rodamiento, tornillo o inserto comprado, mida tanto la característica impresa como el componente comprado. Ajuste la tolerancia de CAD a partir del error medido en lugar de aplicar un desplazamiento universal a todos los materiales.' },
+
+    { type: 'title', text: 'Secado de filamento: difusión, adsorción y síntomas de impresión', level: 2 },
+    { type: 'paragraph', html: 'El filamento higroscópico no se limita a mojarse en la superficie. La humedad se adsorbe en la superficie del polímero y puede difundirse en el interior del filamento con el tiempo. Durante la extrusión, ese agua puede convertirse instantáneamente en vapor, creando chasquidos, burbujas, extrusión inconsistente, adherencia débil entre capas, zonas de superficie mate o turbia, hilachas (stringing) y ruido dimensional. El nailon, TPU, PVA, policarbonato (PC) y algunos compuestos reforzados pueden ser especialmente sensibles, mientras que el PLA varía según la formulación y el historial de almacenamiento.' },
+    { type: 'paragraph', html: 'El módulo de secado utiliza la carga de humedad, la masa del filamento, el factor de material y la temperatura como modelo de diagnóstico. Una temperatura más alta acelera la eliminación de la humedad, pero cada polímero tiene un rango de secado seguro. Una temperatura demasiado baja hace perder tiempo; una temperatura demasiado alta puede deformar las bobinas, recocer el filamento, ablandar el polímero o fusionar las espiras. El objetivo del cálculo no es determinar un contenido de humedad de laboratorio, sino estimar cuándo es probable que sea necesario el secado antes de un trabajo de precisión.' },
+    { type: 'table', headers: ['Comportamiento del material', 'Síntoma de impresión', 'Respuesta del proceso'], rows: [
+      ['Humedad leve', 'Ligeras hilachas o pequeños cambios en el brillo.', 'Secar antes de trabajos cosméticos y calibración de retracción.'],
+      ['Humedad moderada', 'Chasquidos, paredes rugosas o ancho de extrusión inconsistente.', 'Secar la bobina y repetir la calibración de flujo.'],
+      ['Humedad severa', 'Espuma, capas débiles, piezas quebradizas o fallos en soportes.', 'Secar durante más tiempo, almacenar sellado y desechar las secciones dañadas si es necesario.'],
+      ['Secado excesivo', 'Filamento ovalado o deformación de la bobina.', 'Reducir la temperatura y verificar las directrices del fabricante.'],
+    ] },
+    { type: 'message', title: 'La humedad y la tolerancia interactúan', html: 'El filamento húmedo puede hacer que una pieza mecánica parezca un problema de CAD o de flujo porque la extrusión se vuelve inconsistente. El secado es, por tanto, parte del control dimensional, no solo del mantenimiento de la calidad superficial.' },
+
+    { type: 'title', text: 'La proporción de purga en AMS y MMU como advertencia de producción', level: 2 },
+    { type: 'paragraph', html: 'La impresión multimaterial convierte los cambios de color en economía de materiales. La torre de purga, el bloque de limpieza o la purga por conducto no son gratuitos; es filamento comprado que se convierte en desperdicio. Un objeto decorativo pequeño con muchas capas alternas puede desperdiciar más material que un soporte más grande de un solo color. La suite calcula la proporción de purga como el volumen de purga dividido por el volumen total extruido para que el desperdicio sea visible inmediatamente.' },
+    { type: 'paragraph', html: 'El umbral del 30.00% es intencionadamente estricto. Cuando casi un tercio del polímero extruido es purga, el trabajo debe revisarse en cuanto a orden de colores, purga en el relleno, división del modelo, loteado o un presupuesto más elevado. En términos de granja de impresión, la purga también consume tiempo de máquina y aumenta el desgaste por cambio de filamento. Un presupuesto que ignore la purga puede convertir una pieza multicolor visualmente impresionante en un trabajo de bajo margen.' },
+    { type: 'list', items: [
+      'Agrupe colores similares para reducir las transiciones de alta contaminación.',
+      'Evite los intercambios repetidos de oscuro a claro cuando el diseño se pueda reordenar.',
+      'Use la purga en el relleno solo cuando la contaminación oculta sea estructuralmente aceptable.',
+      'Cobre el material de purga por separado en los presupuestos a clientes para trabajos decorativos multicolor.',
+      'Realice la calibración del laminador para cada familia de materiales antes de reducir la purga de forma agresiva.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Condición de purga crítica', badge: '30.00%+', html: 'Una proporción de purga superior al 30.00% significa que la impresora pasa una gran parte del material limpiando la boquilla. Trate esto como un aviso para rediseñar, lotear o ajustar el precio antes de aceptar la serie de producción.' },
+
+    { type: 'title', text: 'Cómo utilizar la salida del portapapeles en las notas de producción', level: 2 },
+    { type: 'paragraph', html: 'Cada calculadora de la suite exporta el mismo formato de parámetros entre corchetes: <code>[Parámetro: Valor | Parámetro: Valor]</code>. Esto es intencionadamente texto plano porque puede sobrevivir a correos electrónicos, tickets de taller, hojas de cálculo, mensajes de clientes y comentarios de CAD sin dependencias de formato. También evita que los separadores de miles o el formato decimal local entren en un presupuesto o nota de dibujo.' },
+    { type: 'paragraph', html: 'Utilice la línea copiada como una instantánea del estado de decisión. Por ejemplo, adjúntela a una revisión de presupuesto cuando el cliente añada cambios de color, o péguela en un hilo de CAD cuando la holgura de un eje pase de positiva a negativa. Dado que cada valor visible está fijado a dos decimales, la nota es legible por maquinistas, diseñadores y operadores de taller sin necesidad de reformatearla.' },
+    { type: 'summary', title: 'Resumen del flujo de trabajo de producción', items: [
+      'Comience con el presupuesto y el margen para verificar que el trabajo sea viable.',
+      'Revise la mano de obra y el postprocesado antes de comprometer el tiempo de entrega.',
+      'Compruebe el ROI cuando compre impresoras o acepte contratos repetitivos.',
+      'Use los módulos de roscas y ajustes antes de liberar el CAD funcional.',
+      'Seque los materiales higroscópicos antes de culpar a los ajustes del laminador.',
+      'Trate una proporción de purga elevada como una advertencia de diseño y precio.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'precyzyjny-pakiet-inzynieryjny-druk-3d';
+const title = 'Precyzyjny pakiet inżynieryjny do druku 3D FDM';
+const description = 'Reaktywny pakiet diagnostyczny do wycen FDM, marż, robocizny, ROI, tolerancji CAD typu ISO, suszenia filamentu oraz odpadów czyszczenia AMS/MMU.';
+
+const faqData = [
+  {
+    question: 'Dlaczego każdy wyświetlany wynik ma dokładnie dwa miejsca po przecinku?',
+    answer: 'Pakiet wewnętrznie zachowuje pełną precyzję zmiennoprzecinkową JavaScript i stosuje formatowanie z dwoma miejscami po przecinku tylko przy wyświetlaniu lub kopiowaniu wartości. Zapobiega to niejednoznacznym wynikom i odpowiada sposobowi, w jaki wiele przepływów pracy CAD i wycen dokumentuje wymiary oraz pieniądze.',
+  },
+  {
+    question: 'Czy gwinty ISO zastępują tabelę norm gwintów?',
+    answer: 'Nie. Jest to pomoc do planowania CAD w zakresie luzu FDM i geometrii zależnej od skoku. Końcowe rysunki produkcyjne powinny nadal odwoływać się do odpowiedniej klasy tolerancji ISO oraz zmierzonych danych kalibracyjnych drukarki.',
+  },
+  {
+    question: 'Dlaczego współczynnik czyszczenia powyżej 30 procent jest traktowany jako krytyczny?',
+    answer: 'Powyżej 30 procent duża część wytłaczanego polimeru nie stanowi już objętości produktu. Zwykle zmienia to wycenę, tworzenie partii, kolejność kolorów oraz decyzję o tym, czy należy zastosować czyszczenie w wypełnieniu, czy podział modelu.',
+  },
+  {
+    question: 'Jak należy interpretować czas suszenia filamentu?',
+    answer: 'Czas suszenia to szacunek diagnostyczny oparty na zawartości wilgoci, wrażliwości materiału, masie filamentu i temperaturze suszarki. Powinien być zweryfikowany na podstawie rzeczywistych objawów druku, takich jak trzaski, różnice w połysku, nitkowanie i dryft wymiarowy.',
+  },
+];
+
+const howToData = [
+  { name: 'Wybierz moduł diagnostyczny', text: 'Wybierz wycenę, marżę, robociznę, ROI, gwint, dopasowanie, suszenie lub czyszczenie, aby zmienić objaśnienie telemetrii przy jednoczesnym zachowaniu aktywnego wspólnego modelu procesu.' },
+  { name: 'Edytuj dane wejściowe procesu', text: 'Zmień czas pracy maszyny, materiał, robociznę, tolerancje, wilgotność lub wartości czyszczenia. Wyniki aktualizują się natychmiast, bez konieczności naciskania przycisku obliczania.' },
+  { name: 'Odczytaj cyfrowego bliźniaka', text: 'Użyj cyfrowego bliźniaka wałka i otworu SVG oraz panelu telemetrii, aby sprawdzić, czy proces przebiega nominalnie, na poziomie ostrzegawczym czy krytycznym.' },
+  { name: 'Skopiuj podsumowanie inżynieryjne', text: 'Użyj przycisku schowka, aby wyeksportować standaryzowany ciąg parametrów w nawiasach kwadratowych do wycen, ticketów lub notatek CAD.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'pl',
+  keywords: 'kalkulator wycen FDM, kalkulator marży druku 3D, kalkulator ROI farmy drukarek, kalkulator tolerancji gwintów ISO, kalkulator pasowania mechanicznego FDM, kalkulator suszenia filamentu, kalkulator czyszczenia AMS, kalkulator kosztów czyszczenia MMU',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'Generator wycen PDF' },
+      { id: 'margin', label: 'PVP i marża' },
+      { id: 'labor', label: 'Koszt pracy (postprocessing)' },
+      { id: 'roi', label: 'ROI farmy' },
+      { id: 'threads', label: 'Gwinty ISO CAD' },
+      { id: 'fits', label: 'Pasowania mechaniczne' },
+      { id: 'drying', label: 'Suszenie filamentu' },
+      { id: 'purge', label: 'Czyszczenie AMS/MMU' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Koszt materiału', unit: '€' },
+      { key: 'printHours', label: 'Czas druku', unit: 'h' },
+      { key: 'machineRate', label: 'Stawka maszyny', unit: '€/h' },
+      { key: 'energyPrice', label: 'Cena energii', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Współczynnik błędów', unit: '%' },
+      { key: 'marginPercent', label: 'Marża docelowa', unit: '%' },
+      { key: 'laborMinutes', label: 'Praca ręczna', unit: 'min' },
+      { key: 'laborRate', label: 'Stawka pracy', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Obróbka wykańczająca', unit: 'min' },
+      { key: 'postProcessRate', label: 'Stawka obróbki', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Drukarki w farmie', unit: 'szt' },
+      { key: 'printerCost', label: 'Koszt drukarki', unit: '€' },
+      { key: 'monthlyOrders', label: 'Zamówienia miesięczne', unit: 'szt' },
+      { key: 'avgSalePrice', label: 'Średnia cena sprzedaży', unit: '€' },
+      { key: 'threadNominalMm', label: 'Gwint nominalny', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Skok gwintu', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Wałek nominalny', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Tolerancja otworu', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Masa filamentu', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Wilgotność', unit: '%RH' },
+      { key: 'dryingTemperatureC', label: 'Temp. suszenia', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Objętość obiektu', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Objętość czyszczenia', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Szacowany koszt',
+      recommendedPvp: 'Zalecana PVP',
+      grossMargin: 'Marża brutto',
+      roi: 'ROI',
+      threadMinor: 'Średnica rdzenia',
+      fitClearance: 'Luz pasowania',
+      dryingTime: 'Czas suszenia',
+      purgeRatio: 'Współczynnik czyszczenia',
+    },
+    statusTexts: {
+      nominal: 'Telemetria wewnątrz zakresu operacyjnego.',
+      watch: 'Zakres ostrzegawczy: dane są użyteczne, ale proces wymaga weryfikacji przed produkcją.',
+      critical: 'Zakres krytyczny: współczynnik czyszczenia powyżej 30%, wysokie ryzyko wilgoci lub wykryto ujemny luz pasowania.',
+    },
+    physicsCopy: {
+      quote: 'Inżynieria wyceny łączy bezpośredni koszt materiału, amortyzację maszyn, robociznę, energię i oczekiwany odpad. Współczynnik błędów jest modelowany jako korekta wydajności, dzięki czemu cena sprzedaży pokrywa koszty odrzuconych części.',
+      margin: 'Marża jest obliczana od ceny sprzedaży, a nie jako narzut na koszt. Aktualna marża brutto wynosi {margin}, więc każda zmiana ceny wpływa zarówno na zysk, jak i bufor ryzyka.',
+      labor: 'Koszt obróbki wykańczającej to czas pomnożony przez stawkę warsztatową. Aktualne obciążenie pracą i wykończeniem wynosi {laborCost}.',
+      roi: 'ROI przelicza nakłady inwestycyjne na drukarkę (capex) na miesiące potrzebne na zwrot z produkcji. Ujemny miesięczny zysk jest blokowany na wyświetlaczu, ponieważ przy takich założeniach farma nigdy nie zwróci kosztów sprzętu.',
+      threads: 'Geometria gwintu metrycznego ISO jest przybliżana na podstawie głębokości skoku. Średnica rdzenia i luz zależny od skoku pomagają projektantom CAD unikać zrastania się gwintów wewnętrznych wskutek pęcznienia ścieżki FDM.',
+      fits: 'Luz pasowania mechanicznego porównuje tolerancje wydrukowanego otworu i wydrukowanego wałka. Ujemny luz oznacza wcisk; dodatni luz oznacza pasowanie luźne lub obrotowe.',
+      drying: 'Czas suszenia opiera się na uproszczonym modelu przyspieszenia typu Arrheniusa: wyższa temperatura zwiększa szybkość dyfuzji, podczas gdy wilgotność i współczynnik polimeru zwiększają wilgoć początkową.',
+      purge: 'Współczynnik czyszczenia AMS/MMU to objętość odpadu podzielona przez całkowitą objętość wytłoczoną. Powyżej 30,00% zlecenie jest oznaczane flagą ostrzegawczą, ponieważ odpad staje się kluczowym czynnikiem kosztów produkcji.',
+    },
+    chartLabels: ['KOSZT', 'PVP', 'MARŻA', 'ROI', 'H2O', 'ODPAD'],
+    copyFields: {
+      quoteCost: 'Szacowany koszt',
+      pvp: 'PVP',
+      currency: 'Waluta',
+      margin: 'Marża',
+      roi: 'ROI',
+      threadMinor: 'Średnica rdzenia',
+      fitClearance: 'Luz pasowania',
+      drying: 'Suszenie',
+      purgeRatio: 'Współczynnik czyszczenia',
+    },
+    displayUnits: {
+      months: 'mies',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'luz',
+    },
+    copyLabel: 'Skopiuj telemetrię',
+    copiedLabel: 'Skopiowano',
+    unitSystemLabel: 'Jednostki',
+    metricLabel: 'Metryczne',
+    imperialLabel: 'Imperialne',
+    currencyLabel: 'Waluta',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ Dolar amerykański' },
+      { code: 'GBP', label: '£ Funt szterling' },
+      { code: 'CAD', label: 'C$ Dolar kanadyjski' },
+      { code: 'AUD', label: 'A$ Dolar australijski' },
+      { code: 'CHF', label: 'Fr Frank szwajcarski' },
+      { code: 'MXN', label: '$ Peso meksykańskie' },
+      { code: 'BRL', label: 'R$ Real brazylijski' },
+      { code: 'ARS', label: '$ Peso argentyńskie' },
+      { code: 'CLP', label: '$ Peso chilijskie' },
+      { code: 'COP', label: '$ Peso kolumbijskie' },
+      { code: 'PEN', label: 'S/ Sol peruwiański' },
+      { code: 'JPY', label: '¥ Jen japoński' },
+      { code: 'CNY', label: '¥ Yuan chiński' },
+      { code: 'KRW', label: '₩ Won południowokoreański' },
+      { code: 'INR', label: '₹ Rupia indyjska' },
+      { code: 'PLN', label: 'zł Polski złoty' },
+      { code: 'RUB', label: '₽ Rubel rosyjski' },
+      { code: 'SEK', label: 'kr Korona szwedzka' },
+      { code: 'NOK', label: 'kr Korona norweska' },
+      { code: 'DKK', label: 'kr Korona duńska' },
+      { code: 'TRY', label: '₺ Lira turecka' },
+    ],
+    criticalLabel: 'Krytyczny',
+    watchLabel: 'Ostrzeżenie',
+    nominalLabel: 'Nominalny',
+    inputsTitle: 'Dane wejściowe procesu',
+    telemetryTitle: 'Telemetria wizualna',
+    outputTitle: 'Obliczone wyniki',
+    physicsTitle: 'Fizyka i model procesu',
+    modulesAriaLabel: 'Moduły pakietu precyzyjnego',
+    telemetryAriaLabel: 'Reaktywny wykres telemetrii',
+    twinAriaLabel: 'Cyfrowy bliźniak mechaniczny',
+  },
+  seo: [
+    { type: 'title', text: 'Dlaczego precyzyjny druk FDM wymaga pakietu diagnostycznego, a nie odizolowanych kalkulatorów', level: 2 },
+    { type: 'paragraph', html: 'Decyzje produkcyjne w technologii FDM rzadko kończą się niepowodzeniem ze względu na brak znajomości wzorów. Zawodzą, ponieważ koszt, tolerancja, suszenie, odpady z czyszczenia, robocizna i wykorzystanie maszyn są traktowane jako osobne tematy. Oferta dla klienta może wyglądać na zyskowną, dopóki nie zostaną uwzględnione minuty poświęcone na postprocessing. Gwint CAD może wydawać się poprawny, dopóki nie weźmie się pod uwagę pęcznienia ścieżki i luzu. Druk wielokolorowy może wydawać się tani, dopóki objętość odpadu z czyszczenia nie zostanie wyceniona jako zakupiony filament. Ten pakiet łączy te relacje w jeden reaktywny model, dzięki czemu użytkownik widzi cały zakres procesu, a nie pojedynczą, oderwaną od kontekstu liczbę.' },
+    { type: 'paragraph', html: 'Interfejs celowo używa stałych wyjść z dwoma miejscami po przecinku, ponieważ wyceny i analizy CAD wymagają jednoznacznych wartości. Wewnętrznie obliczenia pozostają wartościami zmiennoprzecinkowymi, dopóki warstwa wyświetlania ich nie sformatuje. Ta różnica ma znaczenie: zbyt wczesne zaokrąglanie może przesunąć niewielki luz dopasowania, marżę procentową lub próg czyszczenia na tyle, by doprowadzić do błędnej decyzji. Skopiowane dane wyjściowe są zgodne ze standaryzowanym formatem parametrów w nawiasach kwadratowych, dzięki czemu wartości można wklejać do zleceń roboczych, ticketów i dzienników zmian CAD bez separatorów tysięcy i niespodzianek związanych z ustawieniami lokalnymi.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Powiązane analizy diagnostyczne' },
+      { value: '2.00', label: 'Stała liczba miejsc po przecinku w wynikach' },
+      { value: '30.00%', label: 'Krytyczny próg odpadu czyszczenia' },
+      { value: '0', label: 'Wymagane przyciski obliczania' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'Pakiet został stworzony do weryfikacji procesu', badge: 'Przepływ pracy inżyniera', html: 'Używaj go przed cięciem na warstwy (slicingiem), wyceną lub zatwierdzeniem projektu CAD. Model ma charakter diagnostyczny: wskazuje, czy zlecenie wymaga dokładniejszej kontroli, kalibracji fizycznej, zmiany ceny dla klienta czy modyfikacji konstrukcji, zanim maszyna zacznie drukować.' },
+
+    { type: 'title', text: 'Generowanie wycen i ukryte koszty odrzutu', level: 2 },
+    { type: 'paragraph', html: 'Profesjonalna wycena druku 3D nie powinna uwzględniać wyłącznie widocznego tworzywa sztucznego. Podstawa kosztów bezpośrednich obejmuje materiał, czas druku, stawkę godzinową maszyny, energię, robociznę, postprocessing i oczekiwany odrzut. Współczynnik błędów jest szczególnie ważny, ponieważ zmienia wydajność. Jeśli prawdopodobieństwo błędu w danym zadaniu wynosi 8 procent, zaakceptowana część musi pokryć koszty nieudanych prób. Model dzieli zatem koszt bezpośredni przez użyteczną wydajność, zamiast dodawać niejasną pozycję rezerwy na nieprzewidziane wydatki.' },
+    { type: 'paragraph', html: 'Moduł wyceny jest przydatny w przypadku zapytań takich jak <strong>kalkulator wycen FDM ze współczynnikiem błędów</strong>, <strong>kalkulator cen druku 3D dla małych firm</strong> oraz <strong>obliczanie kosztów druku 3D z robocizną</strong>. Takie wyszukiwania pochodzą zazwyczaj od użytkowników, którzy już sprzedają wydruki lub planują to robić. Potrzebują oni liczby, która sprawdzi się w prawdziwej produkcji, a nie szacunków amatorskich opartych wyłącznie na gramach PLA.' },
+    { type: 'table', headers: ['Czynnik kosztowy', 'Dlaczego ma znaczenie', 'Typowy błąd'], rows: [
+      ['Materiał', 'Obejmuje polimer zużyty na obiekt, podpory, tratwę (raft), margines (brim), czyszczenie dyszy i próbki testowe.', 'Wycenianie wyłącznie masy gotowego modelu.'],
+      ['Stawka maszyny', 'Reprezentuje amortyzację, konserwację, zużycie dyszy, powierzchni stołu oraz koszt alternatywny.', 'Traktowanie czasu drukarki jako darmowego, ponieważ operator nie musi przy niej stać.'],
+      ['Energia', 'Niski koszt na zadanie, ale zauważalny w skali produkcji na farmie.', 'Ignorowanie podgrzewanej komory lub materiałów wymagających wysokiej temperatury stołu.'],
+      ['Robocizna', 'Obejmuje przygotowanie, usuwanie wydruków, kontrolę, pakowanie i komunikację z klientem.', 'Pobieranie opłat wyłącznie za czas samego drukowania.'],
+      ['Wydajność', 'Odrzucone części muszą zostać zrekompensowane przez zaakceptowane sprzedaże.', 'Dodawanie losowej marży zamiast modelowania prawdopodobieństwa odrzutu.'],
+    ] },
+    { type: 'tip', title: 'Wyceniaj na podstawie rzeczywistych danych', html: 'Zastąp domyślne wartości własną stawką za energię elektryczną, średnim czasem konfiguracji, procentem nieudanych zadań i minutami obróbki wykańczającej. Mały warsztat wykonujący powolne, ręczne czyszczenie może mieć wyższy rzeczywisty koszt niż zautomatyzowana farma z szybszymi maszynami.' },
+
+    { type: 'title', text: 'PVP, marża a różnica między narzutem a zyskiem', level: 2 },
+    { type: 'paragraph', html: 'Marża jest obliczana jako zysk podzielony przez cenę sprzedaży, a nie jako zwykły procent dodany do kosztów. Różnica ta ma kluczowe znaczenie przy wycenie części drukowanych w 3D dla klientów. Narzut w wysokości 40 procent na koszt nie generuje 40-procentowej marży; tworzy marżę niższą, ponieważ mianownikiem jest ostateczna cena sprzedaży. Pakiet opiera się na wycenach marżowych, ponieważ w ten sposób większość warsztatów ocenia, czy linia produktów pozwala na opłacenie części zamiennych, opakowań, nieudanych wydruków i czasu administracyjnego.' },
+    { type: 'paragraph', html: 'W przypadku części o koszcie 10,00 EUR i docelowej marży 40,00%, wymagana cena wynosi 16,67 EUR. Sprzedaż za 14,00 EUR (ponieważ dodano 40% narzutu) pozostawia tylko 28.57% marży. Różnica ta wydaje się niewielka w przypadku jednego artykułu, ale staje się znacząca przy setkach zamówień. Farma o niskich marżach może mieć dużo pracy, a mimo to przynosić straty, jeśli pominie się odrzuty, robociznę i czyszczenie dyszy.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Myślenie narzutem', description: 'Dodaje procent do kosztów. Szybkie do szacunków, ale słabe do planowania rentowności.', points: ['Proste obliczenia w pamięci', 'Może zaniżać wymaganą PVP', 'Nie wyraża bezpośrednio udziału w zysku'] },
+      { title: 'Myślenie marżą', description: 'Ustala cenę sprzedaży tak, aby zysk stanowił określony udział w przychodach. Lepsze do powtarzalnej produkcji.', points: ['Zgodne ze sprawozdawczością finansową firmy', 'Zabezpiecza pokrycie kosztów ogólnych', 'Przydatne do cenników katalogowych'] },
+    ] },
+    { type: 'proscons', title: 'Agresywne cele marżowe', items: [
+      { pro: 'Chroni warsztat przed ponownym drukowaniem, obsługą klienta i czasochłonnym czyszczeniem.', con: 'Może podnieść ceny prostych, standardowych wydruków powyżej lokalnej konkurencji.' },
+      { pro: 'Sprawia, że niskonakładowe prace na zamówienie są opłacalne.', con: 'Wymaga wyjaśnienia, dlaczego projekt, dopasowanie i niezawodność mają swoją wartość.' },
+      { pro: 'Finansuje lepszy sprzęt, suszarki, dysze i kontrolę jakości.', con: 'Może obniżyć konwersję w przypadku czysto dekoracyjnych części o niskim ryzyku.' },
+    ] },
+
+    { type: 'title', text: 'Robocizna i obróbka wykańczająca jako zmienne inżynieryjne', level: 2 },
+    { type: 'paragraph', html: 'Obróbka wykańczająca to nie jest nieprecyzyjna kategoria estetyczna. Jest to proces czasowy o określonej stawce, powtarzalności i trybach awarii. Usuwanie podpór z PETG, szlifowanie linii warstw, instalowanie wkładów gwintowanych na gorąco, wygładzanie chemiczne, czyszczenie żywicy, pakowanie i pomiary wymagają fachowej uwagi. Jeśli te minuty nie zostaną wycenione, farma dotuje klienta darmową pracą ręczną.' },
+    { type: 'paragraph', html: 'Moduł pracy ręcznej oddziela ogólne czynności przygotowawcze od wykańczania, umożliwiając modelowanie dwóch stawek warsztatowych. Operator uruchamiający maszyny generuje inne koszty niż technik, który gwintuje otwory, sprawdza pasowania, montuje wkłady roztłaczane lub wygładza powierzchnię. Panel kontrolny wyświetla te minuty obok materiału i czasu pracy maszyny, dzięki czemu wycena nie wygląda optymistycznie w czasie, gdy praca ręczna po cichu pochłania zyski.' },
+    { type: 'list', items: [
+      'Rejestruj czas konfiguracji oddzielnie od czasu wykańczania dla co najmniej dziesięciu powtarzalnych zadań.',
+      'Uwzględnij czas kontroli, gdy w grę wchodzą pasowania mechaniczne lub krytyczne wymiary klienta.',
+      'Zwiększ stawkę za obróbkę wykańczającą w przypadku prac wymagających kontroli zapylenia, rozpuszczalników, narzędzi termicznych lub precyzyjnych pomiarów.',
+      'Używaj przyrządów pozycjonujących i operacji seryjnych, gdy koszty pracy ręcznej są wyższe niż koszty materiału.',
+      'Dodawaj robociznę do szablonów wycen nawet wtedy, gdy klient dostarcza plik gotowy do druku.',
+    ] },
+    { type: 'card', title: 'Cel wyszukiwania objęty kalkulatorem', html: 'Użytkownicy szukający <strong>kalkulatora kosztów pracy w druku 3D</strong>, <strong>kosztów postprocessingu dla wydruków FDM</strong> oraz <strong>jak wyceniać wydruki 3D z robocizną</strong> zazwyczaj próbują przestać zaniżać wyceny pracy ręcznej. Kalkulator traktuje te minuty jako kluczowy koszt, a nie jako drobną uwagę na dole wyceny.' },
+
+    { type: 'title', text: 'ROI farmy drukarek i odzyskiwanie przepustowości', level: 2 },
+    { type: 'paragraph', html: 'Zwrot z inwestycji (ROI) w przypadku farmy drukarek zależy od miesięcznego zysku operacyjnego po odliczeniu kosztów zmiennych, a nie od przychodu brutto. Osiem drukarek może robić wrażenie, ale jeśli średnia cena zamówienia jest niska, a koszt wyceny wysoki, okres zwrotu nakładów wydłuża się lub nie następuje nigdy. Moduł ROI przelicza liczbę maszyn, ich koszt, zamówienia miesięczne, średnią cenę sprzedaży i aktywny model kosztów na liczbę miesięcy niezbędnych do zwrotu kapitału.' },
+    { type: 'paragraph', html: 'Ważnym szczegółem jest to, że ROI jest powiązany z bieżącym modelem procesu. Jeśli rośnie współczynnik błędów, robocizna, odpad czyszczenia lub postprocessing, koszt wyceny rośnie, a miesięczny zysk spada. To sprawia, że ROI staje się wynikiem diagnostycznym, a nie statyczną komórką w biznesplanie. Gdy miesięczny zysk jest ujemny, narzędzie wyświetla nieskończoność, ponieważ przy obecnych założeniach inwestycja nigdy się nie zwróci.' },
+    { type: 'table', headers: ['Symptom ROI', 'Prawdopodobna przyczyna', 'Reakcja operacyjna'], rows: [
+      ['Zwrot poniżej 6 miesięcy', 'Silna polityka cenowa lub wysokie wykorzystanie przy kontrolowanych kosztach pracy.', 'Chroń powtarzalność i unikaj przyjmowania zaniżonych zleceń niestandardowych.'],
+      ['Zwrot od 6 do 18 miesięcy', 'Typowy zakres zwrotu dla małej farmy.', 'Usprawnij seryjność produkcji, szablony wycen i śledzenie błędów.'],
+      ['Zwrot powyżej 18 miesięcy', 'Sprzęt stoi bezczynnie lub zlecenia są wyceniane zbyt tanio.', 'Przejrzyj strukturę produktów, obciążenie podporami i stawkę godzinową maszyny.'],
+      ['Nieskończony zwrot', 'Koszty zmienne przewyższają przychody ze sprzedaży.', 'Wstrzymaj rozbudowę parku maszynowego do czasu poprawy cen lub ekonomiki procesu.'],
+    ] },
+    { type: 'summary', title: 'Lista kontrolna przeglądu ROI', items: [
+      'Jako miesięczną liczbę zamówień wpisuj zamówienia przyjęte, a nie zapytania ofertowe.',
+      'W miarę możliwości uwzględniaj w kosztach sprzętu zapasowe dysze, płyty stołu, ekstrudery, suszarki i części zamienne.',
+      'Sprawdź, czy krótkie zlecenia o wysokiej marży nie przynoszą lepszych efektów niż długie wydruki dekoracyjne o niskiej cenie sprzedaży.',
+      'Modeluj rzeczywisty współczynnik błędów po kalibracji, a nie optymistyczne szacunki z pierwszego tygodnia.',
+    ] },
+
+    { type: 'title', text: 'Projektowanie gwintów metrycznych ISO pod kątem druku FDM', level: 2 },
+    { type: 'paragraph', html: 'Standardy gwintów metrycznych definiują geometrię i klasy tolerancji, ale FDM wprowadza dodatkowe czynniki: szerokość ścieżki, skurcz termiczny, docisk pierwszej warstwy, kompensację slicera i pełzanie tworzywa. Gwint CAD, który jest poprawny matematycznie, może po wydrukowaniu okazać się zbyt ciasny, ponieważ wytłaczany filament nie działa jak nieskończenie ostre narzędzie skrawające. Nasz pakiet przybliża średnicę rdzenia zależną od skoku oraz konfigurowalny współczynnik luzu, dzięki czemu projektanci widzą, czy gwint wewnętrzny wymaga dodatkowej tolerancji przed rozpoczęciem drukowania.' },
+    { type: 'paragraph', html: 'Model ten nie zastępuje tabel ISO 965. Jest to diagnostyka przed etapem CAD dla użytkowników szukających <strong>kalkulatora tolerancji gwintów 3D ISO</strong>, <strong>luzu gwintu M12 w druku 3D</strong> lub <strong>tolerancji gwintu wewnętrznego FDM w CAD</strong>. Użytkownicy ci muszą zdecydować, czy modelować gwinty bezpośrednio, gwintować otwory ręcznie po druku, używać wkładek gwintowanych na gorąco, czy drukować otwór pilotujący do dalszej obróbki.' },
+    { type: 'glossary', items: [
+      { term: 'Skok gwintu', definition: 'Osiowa odległość między wierzchołkami gwintu. Większy skok zazwyczaj zwiększa głębokość gwintu i zmienia możliwą do wydrukowania średnicę rdzenia.' },
+      { term: 'Średnica rdzenia gwintu', definition: 'Najmniejsza wewnętrzna średnica profilu gwintu. W technologii FDM jest wrażliwa na pęcznienie ścieżki i kolejność drukowania ścian w slicerze.' },
+      { term: 'Współczynnik luzu', definition: 'Praktyczny naddatek wyrażony jako ułamek skoku gwintu, kompensujący zachowanie wydrukowanego tworzywa.' },
+      { term: 'Klasa tolerancji', definition: 'Znormalizowane oznaczenie dopasowania gwintów. Wydrukowane tworzywo sztuczne zazwyczaj wymaga empirycznej korekty w odniesieniu do tych klas.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Gwinty wymagają prób i pomiarów', badge: 'Ostrzeżenie CAD', html: 'Wydrukuj jeden próbny element kalibracyjny dla każdego materiału, dyszy i wysokości warstwy. Gwint, który pasuje w suchym PLA przy warstwie 0,20 mm, może się zaciskać w PETG, nylonie lub wilgotnym filamencie z powodu zmian tekstury powierzchni i elastyczności polimeru.' },
+
+    { type: 'title', text: 'Pasowania wałka i otworu: kontrolowanie luzu przed nieudanym drukiem', level: 2 },
+    { type: 'paragraph', html: 'Pasowania mechaniczne w druku FDM zależą zarówno od wymiarów CAD, jak i błędów procesu. Otwory mają tendencję do zmniejszania swoich wymiarów, ponieważ obrysy wewnętrzne przybliżają koło za pomocą ścieżek o skończonej szerokości, a stygnące tworzywo kurczy się do wewnątrz. Wałki mogą drukować się zbyt duże z powodu naddatku ekstruzji, umiejscowienia szwu lub efektu stopy słonia na stole. Pakiet wizualizuje zakresy otworu i wałka, dzięki czemu ujemny luz staje się widoczny przed uruchomieniem druku.' },
+    { type: 'paragraph', html: 'W przypadku części funkcjonalnych pytanie brzmi nie tylko, czy wałek wejdzie w otwór. Chodzi o to, czy pasowanie odpowiada zastosowaniu: luźne, obrotowe, przesuwne, wciskowe czy pod gniazdo łożyska. Anizotropia FDM, prążki warstw i dryft wymiarowy powodują, że nawet matematycznie mały dodatni luz może w rzeczywistości dawać ciasne pasowanie. Cyfrowy bliźniak traktuje zatem ujemny luz jako stan krytyczny, a mały dodatni luz jako wymóg do walidacji na próbce testowej.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Pasowanie przesuwne', description: 'Części łączą się ręcznie przy minimalnym oporze. Przydatne do zdejmowanych pokryw, szablonów i kołków ustalających.', points: ['Wymaga dodatniego luzu', 'Wrażliwe na teksturę powierzchni', 'Zazwyczaj najłatwiejsze do dostrojenia'] },
+      { title: 'Pasowanie obrotowe', description: 'Części poruszają się względem siebie po montażu. Przydatne do osi obrotu i rolek.', points: ['Wymaga większego luzu', 'Smarowanie może pomóc', 'Ważna jest okrągłość otworu'] },
+      { title: 'Pasowanie wciskowe', description: 'Części celowo nakładają się na siebie. Stosowane tylko wtedy, gdy elastyczność materiału, grubość ścianki i obciążenie są kontrolowane.', points: ['Ryzyko pękania', 'Kierunek druku ma kluczowe znaczenie', 'Wymaga wydruków próbnych'] },
+    ] },
+    { type: 'tip', title: 'Opieraj projekty na tolerancji, nie na nadziei', html: 'Jeśli wydrukowany otwór ma pasować do zakupionego wałka, łożyska, śruby czy kołka, zmierz zarówno wydrukowany element, jak i zakupiony komponent. Dostosuj tolerancję CAD na podstawie zmierzonego błędu, zamiast stosować ten sam offset dla wszystkich materiałów.' },
+
+    { type: 'title', text: 'Suszenie filamentu: dyfuzja, adsorpcja i objawy w druku', level: 2 },
+    { type: 'paragraph', html: 'Filament higroskopijny nie wilgotnieje wyłącznie na powierzchni. Wilgoć adsorbuje na powierzchni polimeru i z czasem dyfunduje do wnętrza filamentu. Podczas wytłaczania woda gwałtownie zamienia się w parę wodną, powodując trzaski, pęcherzyki, nierównomierną ekstruzję, słabe wiązanie warstw, matowe plamy na powierzchni, nitkowanie i błędy wymiarowe. Nylon, TPU, PVA, PC i niektóre kompozyty z wypełniaczami są szczególnie wrażliwe, podczas gdy PLA reaguje różnie w zależności od składu i historii przechowywania.' },
+    { type: 'paragraph', html: 'Moduł suszenia wykorzystuje zawartość wilgoci, masę filamentu, współczynnik materiałowy i temperaturę jako model diagnostyczny. Wyższa temperatura przyspiesza usuwanie wilgoci, ale każdy polimer ma swój bezpieczny zakres temperatur. Zbyt niska temperatura to strata czasu; zbyt wysoka może zdeformować szpulę, wyżarzyć filament, zmiękczyć tworzywo lub stopić zwoje. Celem obliczeń nie jest laboratoryjne określenie wilgotności, ale oszacowanie, kiedy suszenie staje się niezbędne przed precyzyjną pracą.' },
+    { type: 'table', headers: ['Zachowanie materiału', 'Objaw w druku', 'Reakcja procesu'], rows: [
+      ['Lekka wilgoć', 'Delikatne nitkowanie lub drobne zmiany połysku.', 'Suszyć przed wydrukami estetycznymi i dostrajaniem retrakcji.'],
+      ['Umiarkowana wilgoć', 'Trzaski, szorstkie ścianki lub zmienna szerokość ekstruzji.', 'Wysuszyć szpulę i powtórzyć kalibrację przepływu (flow).'],
+      ['Silna wilgoć', 'Pienienie, słabe warstwy, kruchy wydruk lub rozpadające się podpory.', 'Suszyć dłużej, przechowywać w szczelnym pojemniku i w razie potrzeby odciąć zniszczone zwoje.'],
+      ['Przegrzanie przy suszeniu', 'Spłaszczenie filamentu lub deformacja szpuli.', 'Obniżyć temperaturę i sprawdzić zalecenia producenta.'],
+    ] },
+    { type: 'message', title: 'Wilgoć wpływa na tolerancje wymiarowe', html: 'Wilgotny filament może sprawić, że problem z pasowaniem części mechanicznej będzie wyglądał jak błąd projektowy CAD lub zły przepływ, ponieważ ekstruzja staje się niespójna. Suszenie jest więc elementem kontroli wymiarowej, a nie tylko dbałości o estetykę.' },
+
+    { type: 'title', text: 'Współczynnik czyszczenia dyszy AMS i MMU jako ostrzeżenie', level: 2 },
+    { type: 'paragraph', html: 'Druk wielomateriałowy przekłada zmiany kolorów na ekonomikę produkcji. Odpady ze zrzutu dyszy (poop), wieży czyszczącej czy czyszczenia w obiekcie pomocniczym nie są darmowe; to zakupiony filament zamieniony w odpad. Mały obiekt dekoracyjny z wieloma naprzemiennymi warstwami kolorów może wygenerować więcej odpadu niż większy, jednobarwny detal konstrukcyjny. Pakiet oblicza współczynnik czyszczenia jako objętość odpadu podzieloną przez całkowitą wytłoczoną objętość, dzięki czemu udział odpadu w kosztach jest widoczny natychmiast.' },
+    { type: 'paragraph', html: 'Próg 30,00% jest celowo rygorystyczny. Gdy prawie jedna trzecia wytłaczanego polimeru to odpad, zlecenie powinno zostać zweryfikowane pod kątem kolejności kolorów, czyszczenia w wypełnieniu, podziału modelu na części, seryjności lub wyższej wyceny. W realiach farmy czyszczenie dyszy zużywa również czas maszynowy i przyspiesza zużycie mechanizmów wymiany filamentu. Wycena ignorująca te straty może zmienić efektowny wydruk wielokolorowy w nieopłacalne zlecenie.' },
+    { type: 'list', items: [
+      'Grupuj podobne kolory, aby ograniczyć przejścia o wysokim ryzyku zanieczyszczenia barwy.',
+      'Unikaj powtarzających się zmian z ciemnego na jasny, jeśli projekt pozwala na zmianę kolejności druku.',
+      'Używaj czyszczenia w wypełnieniu tylko wtedy, gdy wewnętrzne przebarwienia są dopuszczalne konstrukcyjnie.',
+      'Wyceniaj materiał na odpady czyszczące jako osobną pozycję w ofertach dla klientów na dekoracyjny druk wielokolorowy.',
+      'Wykonaj kalibrację czyszczenia w slicerze dla każdej rodziny materiałów przed agresywnym zmniejszeniem objętości zrzutu.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Krytyczny odpad czyszczenia dyszy', badge: '30.00%+', html: 'Współczynnik czyszczenia powyżej 30,00% oznacza, że drukarka zużywa znaczną część materiału na odpady. Potraktuj to jako sygnał do przeprojektowania, grupowania zleceń lub zmiany wyceny przed zatwierdzeniem serii produkcyjnej.' },
+
+    { type: 'title', text: 'Jak wykorzystać wyjściowy ciąg parametrów w notatkach produkcyjnych', level: 2 },
+    { type: 'paragraph', html: 'Każdy kalkulator w pakiecie eksportuje ten sam format parametrów w nawiasach kwadratowych: <code>[Parametr: Wartość | Parametr: Wartość]</code>. Jest to celowo zwykły tekst, ponieważ można go wklejać do e-maili, kart zleceń, arkuszy kalkulacyjnych, wiadomości do klientów i komentarzy CAD bez problemów z formatowaniem. Zapobiega to również przedostawaniu się ukrytych separatorów tysięcy lub specyficznych dla lokalnych języków kropkowań dziesiętnych do wyceny lub rysunku.' },
+    { type: 'paragraph', html: 'Użyj skopiowanej linii jako zapisu stanu decyzji projektowej. Możesz na przykład dołączyć go do rewizji wyceny, gdy klient zażąda zmian kolorów, lub wkleić do zgłoszenia CAD, gdy luz wałka zmieni się z dodatniego na ujemny. Ponieważ każda wyświetlana wartość jest zablokowana na dwóch miejscach po przecinku, notatka jest czytelna dla tokarzy, projektantów i operatorów bez ponownego formatowania.' },
+    { type: 'summary', title: 'Podsumowanie przepływu pracy produkcyjnej', items: [
+      'Zacznij od wyceny i marży, aby upewnić się, że zlecenie pokryje własne koszty.',
+      'Przeanalizuj koszty pracy ręcznej i postprocessingu przed obietnicą terminu dostawy.',
+      'Sprawdź ROI przy zakupie nowych drukarek lub podpisywaniu umów ramowych.',
+      'Użyj modułów gwintów i pasowań przed zatwierdzeniem funkcjonalnego CAD.',
+      'Wysusz materiały higroskopijne przed szukaniem błędów w ustawieniach slicera.',
+      'Traktuj wysoki współczynnik odpadów czyszczenia jako ostrzeżenie projektowe i cenowe.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'suite-ingenierie-de-precision-impression-3d';
+const title = 'Suite d\'ingénierie de précision pour impression 3D FDM';
+const description = 'Une suite de diagnostic réactive pour le devis FDM, les marges, la main-d\'œuvre, le ROI, les tolérances CAD style ISO, le séchage du filament et le gaspillage de purge AMS/MMU.';
+
+const faqData = [
+  {
+    question: 'Pourquoi chaque résultat affiché utilise-t-il exactement deux décimales ?',
+    answer: 'La suite conserve en interne la précision complète des nombres à virgule flottante JavaScript et n\'applique le format à deux décimales que lorsque les valeurs sont affichées ou copiées. Cela évite les sorties ambiguës et correspond à la manière dont de nombreux flux de travail de CAO et de devis documentent les dimensions et l\'argent.',
+  },
+  {
+    question: 'Le module de filetage ISO remplace-t-il une table de normes de filetage ?',
+    answer: 'Non. Il s\'agit d\'une aide à la planification CAO pour le jeu FDM et la géométrie basée sur le pas. Les dessins de production finaux doivent toujours faire référence à la classe de tolérance ISO correspondante et aux données de calibrage mesurées de l\'imprimante.',
+  },
+  {
+    question: 'Pourquoi le ratio de purge est-il considéré comme critique au-dessus de 30 % ?',
+    answer: 'Au-dessus de 30 %, une grande partie du polymère extrudé n\'est plus du volume de produit. Cela modifie généralement le devis, les lots, l\'ordre des couleurs et la décision d\'utiliser la purge dans le remplissage ou le fractionnement du modèle.',
+  },
+  {
+    question: 'Comment interpréter le temps de séchage du filament ?',
+    answer: 'Le temps de séchage est une estimation diagnostique basée sur la charge d\'humidité, la sensibilité du matériau, la masse du filament et la température du sécheur. Il doit être validé avec des symptômes d\'impression réels tels que des crépitements, des variations de brillance, du stringing et une dérive dimensionnelle.',
+  },
+];
+
+const howToData = [
+  { name: 'Sélectionner le module de diagnostic', text: 'Choisissez le devis, la marge, la main-d\'œuvre, le ROI, le filetage, l\'ajustement, le séchage ou la purge pour modifier l\'explication de la télémétrie tout en maintenant le modèle de processus partagé actif.' },
+  { name: 'Modifier les entrées du processus', text: 'Modifiez le temps machine, le matériau, la main-d\'œuvre, les tolérances, l\'humidité ou les valeurs de purge. Les résultats se mettent à jour immédiatement sans appuyer sur un bouton de calcul.' },
+  { name: 'Lire le jumeau numérique', text: 'Utilisez le jumeau SVG d\'arbre et d\'alésage et le canevas de télémétrie pour voir si le processus est nominal, au niveau de surveillance ou critique.' },
+  { name: 'Copier le résumé d\'ingénierie', text: 'Utilisez le bouton presse-papiers pour exporter la chaîne de paramètres standardisée entre crochets pour les devis, les tickets ou les notes de CAO.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'fr',
+  keywords: 'calculateur de devis FDM, calculateur de marge d\'impression 3D, calculateur de ROI de ferme d\'impression, calculateur de tolérance de filetage ISO, calculateur d\'ajustement mécanique FDM, calculateur de séchage de filament, calculateur de purge AMS, calculateur de coût de purge MMU',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'Générateur de devis PDF' },
+      { id: 'margin', label: 'PVP et marge' },
+      { id: 'labor', label: 'Main-d\'œuvre post-traitement' },
+      { id: 'roi', label: 'ROI de ferme' },
+      { id: 'threads', label: 'Filetage ISO CAO' },
+      { id: 'fits', label: 'Ajustements mécaniques' },
+      { id: 'drying', label: 'Séchage de filament' },
+      { id: 'purge', label: 'Purge AMS/MMU' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Coût du matériel', unit: '€' },
+      { key: 'printHours', label: 'Temps d\'impression', unit: 'h' },
+      { key: 'machineRate', label: 'Tarif machine', unit: '€/h' },
+      { key: 'energyPrice', label: 'Prix de l\'énergie', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Taux d\'échec', unit: '%' },
+      { key: 'marginPercent', label: 'Marge cible', unit: '%' },
+      { key: 'laborMinutes', label: 'Main-d\'œuvre', unit: 'min' },
+      { key: 'laborRate', label: 'Tarif main-d\'œuvre', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Post-traitement', unit: 'min' },
+      { key: 'postProcessRate', label: 'Tarif post-traitement', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Imprimantes de ferme', unit: 'pcs' },
+      { key: 'printerCost', label: 'Coût imprimante', unit: '€' },
+      { key: 'monthlyOrders', label: 'Commandes mensuelles', unit: 'pcs' },
+      { key: 'avgSalePrice', label: 'Prix de vente moyen', unit: '€' },
+      { key: 'threadNominalMm', label: 'Filetage nominal', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Pas', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Arbre nominal', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Tolérance alésage', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Masse du filament', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Humidité', unit: '%HR' },
+      { key: 'dryingTemperatureC', label: 'Temp séchage', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Volume de l\'objet', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Volume de purge', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Coût estimé',
+      recommendedPvp: 'PVP recommandé',
+      grossMargin: 'Marge brute',
+      roi: 'ROI',
+      threadMinor: 'Diamètre mineur',
+      fitClearance: 'Jeu d\'ajustement',
+      dryingTime: 'Temps de séchage',
+      purgeRatio: 'Ratio de purge',
+    },
+    statusTexts: {
+      nominal: 'Télémétrie dans la plage de fonctionnement.',
+      watch: 'Plage de surveillance: la télémétrie est utilisable mais mérite un examen du processus avant la production.',
+      critical: 'Plage critique: ratio de purge supérieur à 30 %, risque d\'humidité élevé ou jeu d\'ajustement négatif détecté.',
+    },
+    physicsCopy: {
+      quote: 'L\'ingénierie des devis combine le coût direct des matériaux, l\'amortissement de la machine, le coût de la main-d\'œuvre, l\'énergie et le rebut attendu. Le taux d\'échec est modélisé comme une correction de rendement afin que le prix de vente supporte le coût des pièces rejetées.',
+      margin: 'La marge est calculée à partir du prix de vente, et non comme une majoration sur le coût. La marge brute actuelle est de {margin}, de sorte que chaque changement de prix modifie à la fois le profit et le tampon de sécurité.',
+      labor: 'Le coût du post-traitement correspond au temps multiplié par le tarif de l\'atelier. La charge actuelle de main-d\'œuvre et de finition est de {laborCost}.',
+      roi: 'Le ROI convertit le capex de l\'imprimante en mois de récupération de la production. Les bénéfices mensuels négatifs sont saturés à l\'affichage car la ferme ne récupère jamais le coût du matériel sous ces hypothèses.',
+      threads: 'La géométrie du filetage métrique ISO est approximée à partir de la profondeur du pas. Le diamètre mineur et le jeu basé sur le pas aident les utilisateurs de CAO à éviter les filetages internes soudés après le gonflement du cordon FDM.',
+      fits: 'Le jeu d\'ajustement mécanique compare la plage de l\'alésage imprimé à celle de l\'arbre imprimé. Un jeu négatif indique une interférence ; un jeu positif indique un ajustement glissant ou tournant.',
+      drying: 'Le temps de séchage suit une accélération simplifiée de type Arrhenius: une température plus élevée augmente le taux de diffusion tandis que l\'humidité et le facteur polymère augmentent la charge d\'humidité.',
+      purge: 'Le ratio de purge AMS/MMU est le volume de purge divisé par le volume extrudé total. Au-dessus de 30,00 %, le travail est signalé car le gaspillage devient un facteur déterminant du coût de production.',
+    },
+    chartLabels: ['COÛT', 'PVP', 'MARGE', 'ROI', 'H2O', 'PURGE'],
+    copyFields: {
+      quoteCost: 'Coût estimé',
+      pvp: 'PVP',
+      currency: 'Devise',
+      margin: 'Marge',
+      roi: 'ROI',
+      threadMinor: 'Diamètre mineur',
+      fitClearance: 'Jeu d\'ajustement',
+      drying: 'Séchage',
+      purgeRatio: 'Ratio de purge',
+    },
+    displayUnits: {
+      months: 'mois',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'jeu',
+    },
+    copyLabel: 'Copier la télémétrie',
+    copiedLabel: 'Copié',
+    unitSystemLabel: 'Unités',
+    metricLabel: 'Métrique',
+    imperialLabel: 'Impérial',
+    currencyLabel: 'Devise',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ Dollar américain' },
+      { code: 'GBP', label: '£ Livre sterling' },
+      { code: 'CAD', label: 'C$ Dollar canadien' },
+      { code: 'AUD', label: 'A$ Dollar australien' },
+      { code: 'CHF', label: 'Fr Franc suisse' },
+      { code: 'MXN', label: '$ Peso mexicain' },
+      { code: 'BRL', label: 'R$ Réal brésilien' },
+      { code: 'ARS', label: '$ Peso argentin' },
+      { code: 'CLP', label: '$ Peso chilien' },
+      { code: 'COP', label: '$ Peso colombien' },
+      { code: 'PEN', label: 'S/ Sol péruvien' },
+      { code: 'JPY', label: '¥ Yen japonais' },
+      { code: 'CNY', label: '¥ Yuan chinois' },
+      { code: 'KRW', label: '₩ Won sud-coréen' },
+      { code: 'INR', label: '₹ Roupie indienne' },
+      { code: 'PLN', label: 'zł Zloty polonais' },
+      { code: 'RUB', label: '₽ Rouble russe' },
+      { code: 'SEK', label: 'kr Couronne suédoise' },
+      { code: 'NOK', label: 'kr Couronne norvégienne' },
+      { code: 'DKK', label: 'kr Couronne danoise' },
+      { code: 'TRY', label: '₺ Livre turque' },
+    ],
+    criticalLabel: 'Critique',
+    watchLabel: 'Surveillance',
+    nominalLabel: 'Nominal',
+    inputsTitle: 'Entrées de processus',
+    telemetryTitle: 'Télémétrie visuelle',
+    outputTitle: 'Résultats calculés',
+    physicsTitle: 'Physique et modèle de processus',
+    modulesAriaLabel: 'Modules de la suite de précision',
+    telemetryAriaLabel: 'Graphique de télémétrie réactif',
+    twinAriaLabel: 'Jumeau numérique mécanique',
+  },
+  seo: [
+    { type: 'title', text: 'Pourquoi l\'impression FDM de précision nécessite une suite de diagnostic plutôt que des calculateurs isolés', level: 2 },
+    { type: 'paragraph', html: 'Les décisions de production FDM échouent rarement parce qu\'une formule est inconnue. Elles échouent parce que le coût, la tolérance, le séchage, le gaspillage de purge, la main-d\'œuvre et l\'utilisation de la machine sont traités comme des conversations distinctes. Le devis d\'un client peut sembler rentable jusqu\'à ce que les minutes de post-traitement soient incluses. Un filetage CAO peut sembler correct jusqu\'à ce que le gonflement du cordon et le jeu soient pris en compte. Un travail multicolore peut sembler petit jusqu\'à ce que le volume de purge soit tarifé en tant que filament acheté. Cette suite rassemble ces relations dans un seul modèle réactif afin que l\'utilisateur voie la plage du processus plutôt qu\'un seul chiffre déconnecté.' },
+    { type: 'paragraph', html: 'L\'interface utilise délibérément un format fixe à deux décimales car les devis et les révisions CAO nécessitent des valeurs sans ambiguïté. En interne, les calculs restent des valeurs à virgule flottante jusqu\'à ce que la couche d\'affichage les formate. Cette distinction est importante: un arrondi précoce peut déplacer un petit jeu d\'ajustement, un pourcentage de marge ou un seuil de purge au point d\'induire une mauvaise décision. La sortie copiée suit un format de paramètres entre crochets standardisé afin que les valeurs puissent être collées dans les ordres de travail, les tickets et les historiques de modifications CAO sans séparateurs de milliers ni surprises de configuration locale.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Diagnostics de production liés' },
+      { value: '2.00', label: 'Décimales fixes sur chaque résultat affiché' },
+      { value: '30.00%', label: 'Seuil critique du ratio de purge' },
+      { value: '0', label: 'Boutons de calcul requis' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'La suite est conçue pour la revue des processus', badge: 'Flux d\'ingénierie', html: 'Utilisez-la avant de laminer, de deviser ou de libérer la CAO. Le modèle est intentionnellement diagnostique: il indique si un travail mérite une inspection plus approfondie, un calibrage physique, un nouveau calcul de prix pour le client ou une modification de conception avant que le temps de l\'imprimante ne soit consommé.' },
+
+    { type: 'title', text: 'Génération de devis et coût caché du taux d\'échec', level: 2 },
+    { type: 'paragraph', html: 'Un devis d\'impression 3D professionnel ne doit pas seulement chiffrer le plastique visible. La base des coûts directs comprend le matériau, le temps d\'impression, le tarif horaire de la machine, l\'énergie, la main-d\'œuvre, le post-traitement et le rebut attendu. Le taux d\'échec est particulièrement important car il modifie le rendement. Si un travail présente une probabilité d\'échec de 8 %, la pièce acceptée doit supporter le coût des tentatives rejetées. Le modèle divise donc le coût direct par le rendement utile plutôt que d\'ajouter une ligne de contingence vague.' },
+    { type: 'paragraph', html: 'Le module de devis est utile pour les recherches telles que <strong>calculateur de devis FDM avec taux d\'échec</strong>, <strong>calculateur de prix d\'impression 3D pour petites entreprises</strong> et <strong>calculer le coût d\'un travail d\'impression 3D avec main-d\'œuvre</strong>. Ces recherches proviennent généralement d\'utilisateurs qui vendent déjà des impressions ou prévoient de le faire. Ils ont besoin d\'un chiffre qui survive à la production réelle, et non d\'une estimation d\'amateur basée uniquement sur les grammes de PLA.' },
+    { type: 'table', headers: ['Facteur de coût', 'Pourquoi c\'est important', 'Erreur typique'], rows: [
+      ['Matériau', 'Englobe le polymère consommé par l\'objet, les supports, le radeau (raft), la bordure (brim), la purge et les pièces d\'essai.', 'Facturer uniquement la masse du modèle final.'],
+      ['Tarif machine', 'Représente l\'amortissement, la maintenance, l\'usure de la buse, les surfaces du plateau et le coût d\'opportunité.', 'Considérer le temps de l\'imprimante comme gratuit car l\'opérateur n\'est pas présent.'],
+      ['Énergie', 'Faible par travail mais visible à l\'échelle d\'une ferme de production.', 'Ignorer la chambre chauffée ou les matériaux à température de plateau élevée.'],
+      ['Main-d\'œuvre', 'Comprend la préparation, le retrait, l\'inspection, l\'emballage et la communication avec le client.', 'Ne facturer que la durée de l\'impression.'],
+      ['Rendement', 'Les pièces rejetées doivent être récupérées par les ventes acceptées.', 'Ajouter une marge aléatoire au lieu de modéliser la probabilité de rebut.'],
+    ] },
+    { type: 'tip', title: 'Faites vos devis à partir de données réelles de l\'atelier', html: 'Remplacez les valeurs par défaut par votre propre tarif d\'électricité, votre temps moyen d\'intervention, le pourcentage de travaux échoués et les minutes de post-traitement. Un petit atelier avec un nettoyage manuel lent peut avoir un coût réel plus élevé qu\'une ferme équipée de machines plus rapides et d\'outillages répétables.' },
+
+    { type: 'title', text: 'PVP, marge et différence entre taux de marque et taux de marge', level: 2 },
+    { type: 'paragraph', html: 'La marge est calculée comme le bénéfice divisé par le prix de vente, et non comme un simple pourcentage ajouté au coût. Cette différence est critique lors du chiffrage des pièces imprimées en 3D pour les clients. Un taux de marque de 40 % sur le coût ne crée pas une marge de 40 % ; il crée une marge inférieure car le dénominateur est le prix de vente final. La suite utilise une tarification basée sur la marge car c\'est ainsi que de nombreux ateliers évaluent si une gamme de produits peut financer les pièces de rechange, l\'emballage, les impressions échouées et le temps administratif.' },
+    { type: 'paragraph', html: 'Pour une pièce ayant un coût de 10,00 EUR et une marge cible de 40,00 %, le prix requis est de 16,67 EUR. La vendre à 14,00 EUR parce que quelqu\'un a ajouté une majoration de 40 % ne laisse que 28.57% de marge. Cette différence semble faible sur un seul article mais devient significative sur des centaines de commandes. Une ferme avec des marges réduites peut être très active et continuer à perdre de l\'argent lorsque les échecs, la main-d\'œuvre et la purge sont ignorés.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Logique de majoration', description: 'Ajoute un pourcentage au coût. Rapide pour des estimations brutes mais faible pour la planification de la rentabilité.', points: ['Calcul mental facile', 'Peut sous-estimer le PVP requis', 'N\'exprime pas directement la part de profit'] },
+      { title: 'Logique de marge', description: 'Fixe le prix de vente afin que le profit soit une part cible du chiffre d\'affaires. Préférable pour une production répétable.', points: ['Correspond aux rapports financiers de l\'entreprise', 'Protège la récupération des frais généraux', 'Utile pour la tarification sur catalogue'] },
+    ] },
+    { type: 'proscons', title: 'Objectifs de marge agressifs', items: [
+      { pro: 'Protège l\'atelier contre les réimpressions, le support client et les nettoyages lents.', con: 'Peut positionner le prix des impressions de commodité simples au-dessus des concurrents locaux.' },
+      { pro: 'Rend le travail personnalisé à faible volume financièrement viable.', con: 'Nécessite d\'expliquer pourquoi la conception, l\'ajustement et la fiabilité ont de la valeur.' },
+      { pro: 'Finance de meilleurs outillages, sécheurs, buses et contrôles qualité.', con: 'Peut réduire la conversion pour les pièces purement décoratives à faible risque.' },
+    ] },
+
+    { type: 'title', text: 'La main-d\'œuvre et le post-traitement comme variables d\'ingénierie', level: 2 },
+    { type: 'paragraph', html: 'Le post-traitement n\'est pas une catégorie de finition vague. C\'est un processus temporel ayant son propre tarif, sa répétabilité et ses modes de défaillance. Le retrait des supports en PETG, le ponçage des lignes de couche, l\'installation d\'inserts filetés à chaud, le lissage chimique, le nettoyage des résines dans les ateliers hybrides, l\'emballage et la mesure consomment une attention qualifiée. Si ces minutes ne sont pas facturées, la ferme d\'impression subventionne le client avec de la main-d\'œuvre gratuite.' },
+    { type: 'paragraph', html: 'Le module de main-d\'œuvre sépare la manipulation générale de la finition afin que l\'utilisateur puisse modéliser deux tarifs d\'atelier différents. Un opérateur machine qui lance les travaux n\'a pas forcément le même coût qu\'un technicien qui taraude des trous, vérifie des ajustements, installe des inserts filetés ou réalise des finitions esthétiques. Le tableau de bord rend ces minutes visibles aux côtés des matières premières et du temps machine pour qu\'un devis ne semble pas sain alors que le travail sur établi consomme discrètement le bénéfice.' },
+    { type: 'list', items: [
+      'Suivez le temps de préparation séparément du temps de finition pour au moins dix travaux répétés.',
+      'Incluez le temps d\'inspection lorsque des ajustements mécaniques ou des dimensions critiques pour le client sont impliqués.',
+      'Augmentez le tarif du post-traitement pour les travaux nécessitant un contrôle de la poussière, des solvants, des outils thermiques ou des mesures de précision.',
+      'Utilisez des montages et des opérations par lots lorsque le coût de la main-d\'œuvre est supérieur au coût des matériaux.',
+      'Ajoutez la main-d\'œuvre aux modèles de devis même lorsqu\'un client fournit un fichier prêt à imprimer.',
+    ] },
+    { type: 'card', title: 'Intentions de recherche couvertes', html: 'Les utilisateurs qui recherchent <strong>calculateur de coût de main-d\'œuvre d\'impression 3D</strong>, <strong>coût de post-traitement pour impressions FDM</strong> et <strong>comment tarifer des pièces imprimées en 3D avec main-d\'œuvre</strong> essaient généralement d\'arrêter de sous-facturer le travail manuel. Le calculateur présente la main-d\'œuvre comme un chiffre clé, et non comme une note sous l\'estimation des matériaux.' },
+
+    { type: 'title', text: 'ROI de la ferme d\'impression et récupération de capacité', level: 2 },
+    { type: 'paragraph', html: 'Le retour sur investissement d\'une ferme d\'impression dépend de la contribution mensuelle après coûts variables, et non du chiffre d\'affaires brut. Huit imprimantes peuvent sembler impressionnantes, mais si le prix moyen des commandes est bas et le coût du devis élevé, la période de récupération du matériel s\'allonge ou n\'arrive jamais. Le module de ROI convertit le nombre d\'imprimantes, leur coût, les commandes mensuelles, le prix de vente moyen et le modèle de coût de devis actif en mois nécessaires pour récupérer le capital du matériel.' },
+    { type: 'paragraph', html: 'Le détail important est que le ROI est couplé au modèle de processus actuel. Si le taux d\'échec, la main-d\'œuvre, la purge ou le post-traitement augmentent, le coût du devis grimpe et le bénéfice mensuel baisse. Cela fait du ROI un résultat diagnostique plutôt qu\'une cellule statique de plan d\'affaires. Lorsque le bénéfice mensuel est négatif, l\'outil affiche l\'infini car il n\'y a aucun retour sur investissement sous ces hypothèses.' },
+    { type: 'table', headers: ['Symptôme de ROI', 'Cause probable', 'Réponse opérationnelle'], rows: [
+      ['Amortissement inférieur à 6 mois', 'Tarification solide ou utilisation élevée avec main-d\'œuvre maîtrisée.', 'Protégez la répétabilité et évitez d\'accepter des travaux sur mesure sous-évalués.'],
+      ['Amortissement de 6 à 18 mois', 'Plage de récupération normale pour une petite ferme.', 'Améliorez les lots, les modèles de devis et le suivi des échecs.'],
+      ['Amortissement supérieur à 18 mois', 'Le matériel est inactif ou les travaux sont sous-évalués.', 'Examinez la gamme de produits, la charge de supports et le tarif horaire des machines.'],
+      ['Amortissement infini', 'Le coût variable dépasse le chiffre d\'affaires.', 'Arrêtez d\'investir dans le matériel tant que les prix ou l\'économie du processus ne changent pas.'],
+    ] },
+    { type: 'summary', title: 'Liste de contrôle pour la revue du ROI', items: [
+      'Utilisez les commandes acceptées, et non les demandes d\'information, comme nombre mensuel de commandes.',
+      'Incluez les buses de rechange, les plateaux, les extrudeurs, les sécheurs et les pièces de rechange dans le coût du matériel lorsque c\'est possible.',
+      'Vérifiez si les travaux courts à forte marge surpassent les travaux décoratifs longs à bas prix de vente.',
+      'Modelez le taux d\'échec réel après réglage, et non une estimation optimiste de la première semaine.',
+    ] },
+
+    { type: 'title', text: 'Planification des filetages métriques ISO pour la CAO FDM', level: 2 },
+    { type: 'paragraph', html: 'Les normes de filetage métrique définissent la géométrie et les classes de tolérance, mais le FDM ajoute la largeur de cordon, la contraction thermique, la pression de la première couche, la compensation du laminateur et le fluage du matériau. Un filetage CAO mathématiquement correct peut s\'imprimer trop serré parce que le filament extrudé n\'est pas un outil de coupe infiniment tranchant. La suite approxime le diamètre mineur basé sur le pas et un facteur de jeu configurable afin que les concepteurs puissent voir si un filetage interne nécessite une tolérance supplémentaire avant d\'imprimer.' },
+    { type: 'paragraph', html: 'Le modèle ne remplace pas les tables ISO 965. Il s\'agit d\'un diagnostic pré-CAO pour les utilisateurs recherchant <strong>calculateur de tolérance de filetage ISO imprimé en 3D</strong>, <strong>jeu de filetage M12 imprimé en 3D</strong> ou <strong>tolérance de filetage interne FDM en CAO</strong>. Ces utilisateurs doivent décider s\'ils modélisent directement les filetages, s\'ils les repassent au taraud, s\'ils utilisent des inserts filetés à chaud ou s\'ils impriment un trou pilote pour un usinage ultérieur.' },
+    { type: 'glossary', items: [
+      { term: 'Pas', definition: 'Distance axiale entre les crêtes de filetage. Un pas plus grand augmente généralement la profondeur du filetage et modifie le diamètre mineur imprimable.' },
+      { term: 'Diamètre mineur', definition: 'Le plus petit diamètre interne d\'un profil de filetage. En FDM, il est sensible au gonflement du cordon et à l\'ordre des parois du laminateur.' },
+      { term: 'Facteur de jeu', definition: 'Un jeu pratique exprimé en fraction du pas pour compenser le comportement du plastique imprimé.' },
+      { term: 'Classe de tolérance', definition: 'Désignation d\'ajustement standardisée pour les filetages fabriqués. Le plastique imprimé nécessite généralement des ajustements empiriques autour de ces classes.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Les filetages sont des problèmes de mesure', badge: 'Attention en CAO', html: 'Imprimez une éprouvette d\'étalonnage par matériau, buse et hauteur de couche. Un filetage qui fonctionne en PLA sec avec des couches de 0,20 mm peut se gripper en PETG, en nylon ou avec un filament humide car la texture de surface et l\'élasticité du polymère changent.' },
+
+    { type: 'title', text: 'Ajustements arbre et alésage: voir le jeu avant que l\'impression n\'échoue', level: 2 },
+    { type: 'paragraph', html: 'Les ajustements mécaniques en FDM sont contrôlés à la fois par la dimension CAO et par l\'erreur du processus. Les alésages ont tendance à s\'imprimer sous-dimensionnés car les périmètres intérieurs approximent un cercle avec une largeur de cordon finie et parce que le plastique en refroidissant peut se rétracter vers l\'intérieur. Les arbres peuvent s\'imprimer surdimensionnés en raison du flux d\'extrusion, du placement de la couture ou de l\'effet patte d\'éléphant sur le plateau. La suite visualise les limites de l\'alésage et de l\'arbre afin qu\'un jeu négatif devienne évident avant d\'imprimer la pièce.' },
+    { type: 'paragraph', html: 'Pour les pièces fonctionnelles, la question n\'est pas seulement de savoir si un arbre s\'ajuste dans un alésage. Il s\'agit de savoir si l\'ajustement correspond au cas d\'utilisation: ajustement glissant, ajustement libre, ajustement serré, ajustement forcé ou logement de roulement retenu. L\'anisotropie du FDM, les stries de couches et la dérive dimensionnelle font qu\'un jeu positif mathématiquement petit peut toujours sembler serré. Le jumeau numérique traite donc le jeu négatif comme critique et le faible jeu positif comme un point à valider avec une éprouvette.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Ajustement glissant', description: 'Les pièces s\'assemblent à la main avec une résistance minimale. Utile pour les couvercles amovibles, les gabarits et les goupilles d\'alignement.', points: ['Nécessite un jeu positif', 'Sensible à la texture de surface', 'Souvent le plus facile à régler'] },
+      { title: 'Ajustement libre', description: 'Les pièces se déplacent l\'une par rapport à l\'autre après l\'assemblage. Utile pour les pivots et les galets.', points: ['Nécessite plus de jeu', 'La lubrification peut aider', 'La rondeur importe'] },
+      { title: 'Ajustement serré', description: 'Les pièces interfèrent intentionnellement. Utile uniquement lorsque l\'élasticité du matériau, l\'épaisseur de la paroi et la charge sont maîtrisées.', points: ['Risque de fissuration', 'L\'orientation de l\'impression importe', 'Essais sur éprouvette requis'] },
+    ] },
+    { type: 'tip', title: 'Utilisez le jeu, pas l\'espoir', html: 'Si un alésage imprimé doit recevoir une goupille, un roulement, une vis ou un insert du commerce, mesurez à la fois la caractéristique imprimée et le composant acheté. Ajustez le jeu CAO à partir de l\'erreur mesurée plutôt que d\'appliquer un décalage universel à tous les matériaux.' },
+
+    { type: 'title', text: 'Séchage du filament: diffusion, adsorption et symptômes d\'impression', level: 2 },
+    { type: 'paragraph', html: 'Le fil hygroscopique ne se mouille pas seulement en surface. L\'humidité s\'adsorbe sur les surfaces du polymère et peut diffuser à l\'intérieur du filament avec le temps. Lors de l\'extrusion, cette eau peut se transformer instantanément en vapeur, créant des crépitements, des bulles, une extrusion inconsistante, une faible liaison entre couches, des zones de surface mates ou troubles, du stringing et du bruit dimensionnel. Le nylon, le TPU, le PVA, le PC et certains composites renforcés peuvent y être particulièrement sensibles, tandis que le PLA varie selon sa formulation et son historique de stockage.' },
+    { type: 'paragraph', html: 'Le module de séchage utilise la charge d\'humidité, la masse du filament, le facteur du matériau et la température comme modèle diagnostique. Une température plus élevée accélère l\'élimination de l\'humidité, mais chaque polymère a une plage de séchage sûre. Une température trop basse fait perdre du temps ; une température trop élevée peut déformer les bobines, recuire le filament, ramollir le polymère ou fusionner les spires. Le but du calcul n\'est pas d\'établir une teneur en humidité de laboratoire, mais d\'estimer quand le séchage est susceptible d\'être nécessaire avant un travail de précision.' },
+    { type: 'table', headers: ['Comportement du matériau', 'Symptôme d\'impression', 'Réponse du processus'], rows: [
+      ['Humidité légère', 'Léger stringing ou petites modifications de brillance.', 'Sécher avant les travaux esthétiques et le réglage de la rétraction.'],
+      ['Humidité modérée', 'Crépitements, parois rugueuses ou largeur d\'extrusion inconsistante.', 'Sécher la bobine et répéter le calibrage du débit.'],
+      ['Humidité sévère', 'Moussage, couches faibles, pièce cassante ou échec des supports.', 'Sécher plus longtemps, stocker scellé et jeter les sections endommagées si nécessaire.'],
+      ['Séchage surchauffé', 'Filament ovale ou déformation de la bobine.', 'Baisser la température et vérifier les consignes du fabricant.'],
+    ] },
+    { type: 'message', title: 'L\'humidité et la tolérance interagissent', html: 'Un filament humide peut faire ressembler une pièce mécanique à un problème de CAO ou de débit car l\'extrusion devient inconsistante. Le séchage fait donc partie du contrôle dimensionnel, et pas seulement de l\'état de surface.' },
+
+    { type: 'title', text: 'Le ratio de purge AMS et MMU comme avertissement de production', level: 2 },
+    { type: 'paragraph', html: 'L\'impression multi-matériaux transforme les changements de couleur en économie de matériaux. La tour de purge, le bloc d\'essuyage ou la purge par goulotte ne sont pas gratuits ; c\'est du filament acheté converti en volume non utilisable. Un petit objet décoratif avec de nombreuses couches alternées peut gaspiller plus de matériau qu\'un support plus grand d\'une seule couleur. La suite calcule le ratio de purge comme le volume de purge divisé par le volume extrudé total afin que la part de gaspillage soit visible immédiatement.' },
+    { type: 'paragraph', html: 'Le seuil de 30,00 % est volontairement strict. Lorsque près d\'un tiers du polymère extrudé est de la purge, le travail doit être examiné pour l\'ordre des couleurs, la purge dans le remplissage, le fractionnement du modèle, les lots ou un devis plus élevé. En termes de ferme d\'impression, la purge consomme également du temps machine et augmente l\'usure liée aux changements de filament. Un devis qui ignore la purge peut transformer une pièce multicolore visuellement impressionnante en un travail à faible marge.' },
+    { type: 'list', items: [
+      'Groupez les couleurs similaires pour réduire les transitions à forte contamination.',
+      'Évitez les échanges répétés de sombre à clair lorsque le design peut être réorganisé.',
+      'N\'utilisez la purge dans le remplissage que si la contamination cachée est structurellement acceptable.',
+      'Facturez le matériau de purge séparément sur les devis des clients pour les travaux de décoration multicolores.',
+      'Exécutez le calibrage du laminateur pour chaque famille de matériaux avant de réduire la purge de manière agressive.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Condition de purge critique', badge: '30.00%+', html: 'Un ratio de purge supérieur à 30,00 % signifie que l\'imprimante consacre une grande partie du matériau au nettoyage. Traitez cela comme un déclencheur de conception, de lot ou de tarification avant d\'accepter la série de production.' },
+
+    { type: 'title', text: 'Comment utiliser la sortie du presse-papiers dans les notes de production', level: 2 },
+    { type: 'paragraph', html: 'Chaque calculateur de la suite exporte le même format de paramètres entre crochets: <code>[Paramètre: Valeur | Paramètre: Valeur]</code>. Il s\'agit volontairement de texte brut car il peut survivre aux e-mails, aux tickets d\'atelier, aux feuilles de calcul, aux messages des clients et aux commentaires CAO sans dépendances de formatage. Il empêche également les séparateurs de milliers cachés ou le formatage décimal spécifique aux paramètres locaux d\'entrer dans un devis ou une note de dessin.' },
+    { type: 'paragraph', html: 'Utilisez la ligne copiée comme un aperçu de l\'état de la décision. Par exemple, joignez-la à une révision de devis lorsque le client ajoute des changements de couleur, ou collez-la dans une demande de CAO lorsque le jeu d\'un arbre passe de positif à négatif. Parce que chaque valeur visible est fixée à deux décimales, la note est lisible par les machinistes, les concepteurs et les opérateurs d\'atelier sans reformatage.' },
+    { type: 'summary', title: 'Résumé du flux de travail de production', items: [
+      'Commencez par le devis et la marge pour vérifier que le travail est viable.',
+      'Examinez la main-d\'œuvre et le post-traitement avant de promettre un délai de livraison.',
+      'Vérifiez le ROI lors de l\'achat d\'imprimantes ou de l\'acceptation de contrats récurrents.',
+      'Utilisez les modules de filetage et d\'ajustement avant de valider la CAO fonctionnelle.',
+      'Séchez les matériaux hygroscopiques avant d\'incriminer les réglages du laminateur.',
+      'Traitez un ratio de purge élevé comme un avertissement de conception et de tarification.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

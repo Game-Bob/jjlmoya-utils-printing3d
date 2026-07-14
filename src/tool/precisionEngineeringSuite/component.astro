@@ -1,0 +1,109 @@
+---
+import type { PrecisionEngineeringSuiteUI } from './ui';
+import { suiteDefaults } from './logic';
+import './precision-engineering-suite.css';
+
+interface Props {
+  ui: PrecisionEngineeringSuiteUI;
+}
+
+const { ui } = Astro.props;
+const moneyInputKeys = new Set(['materialCost', 'machineRate', 'energyPrice', 'laborRate', 'postProcessRate', 'printerCost', 'avgSalePrice']);
+---
+
+<div
+  class="pes-root"
+  data-copy-label={ui.copyLabel}
+  data-copied-label={ui.copiedLabel}
+  data-critical-label={ui.criticalLabel}
+  data-watch-label={ui.watchLabel}
+  data-nominal-label={ui.nominalLabel}
+  data-status-texts={JSON.stringify(ui.statusTexts)}
+  data-physics-copy={JSON.stringify(ui.physicsCopy)}
+  data-chart-labels={JSON.stringify(ui.chartLabels)}
+  data-copy-fields={JSON.stringify(ui.copyFields)}
+  data-display-units={JSON.stringify(ui.displayUnits)}
+>
+  <div class="pes-toolbar">
+    <div class="pes-settings">
+      <div class="pes-unit" role="group" aria-label={ui.unitSystemLabel}>
+        <span>{ui.unitSystemLabel}</span>
+        <button type="button" data-unit-system="metric" aria-pressed="true">{ui.metricLabel}</button>
+        <button type="button" data-unit-system="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+      </div>
+      <label class="pes-currency">
+        <span>{ui.currencyLabel}</span>
+        <select id="pes-currency">
+          {ui.currencyOptions.map((currency) => (
+            <option value={currency.code}>{currency.label}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+    <div class="pes-tabs" role="tablist" aria-label={ui.modulesAriaLabel}>
+      {ui.modules.map((module, index) => (
+        <button type="button" data-module={module.id} aria-pressed={index === 0 ? 'true' : 'false'}>{module.label}</button>
+      ))}
+    </div>
+  </div>
+
+  <section class="pes-workbench">
+    <div class="pes-panel pes-inputs">
+      <div class="pes-panel-title">{ui.inputsTitle}</div>
+      <div class="pes-input-grid">
+        {ui.inputs.map(({ key, label, unit }) => (
+          <label>
+            <span>{label}</span>
+            <input data-input={key} type="number" step="0.01" value={suiteDefaults[key as keyof typeof suiteDefaults]} />
+            <em data-unit-for={key} data-money-unit={moneyInputKeys.has(key)}>{unit}</em>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <div class="pes-panel pes-telemetry" data-severity="nominal">
+      <div class="pes-panel-title">{ui.telemetryTitle}</div>
+      <canvas id="pes-telemetry-canvas" width="900" height="360" aria-label={ui.telemetryAriaLabel}></canvas>
+      <svg class="pes-twin" viewBox="0 0 720 220" role="img" aria-label={ui.twinAriaLabel}>
+        <defs>
+          <linearGradient id="pes-metal" x1="0" x2="1">
+            <stop offset="0" stop-color="#94a3b8" />
+            <stop offset="0.5" stop-color="#e2e8f0" />
+            <stop offset="1" stop-color="#64748b" />
+          </linearGradient>
+        </defs>
+        <rect x="42" y="76" width="636" height="68" rx="6" fill="url(#pes-metal)" />
+        <rect id="pes-hole" x="248" y="54" width="224" height="112" rx="56" fill="#071018" stroke="#38f2c2" stroke-width="4" />
+        <rect id="pes-shaft" x="286" y="88" width="148" height="44" rx="22" fill="#ffb020" />
+        <path id="pes-thread" d="M90 110 L120 78 L150 142 L180 78 L210 142 L240 78 L270 142 L300 78 L330 142 L360 78 L390 142 L420 78 L450 142 L480 78 L510 142 L540 78 L570 142 L600 78 L630 110" fill="none" stroke="#f97316" stroke-width="5" stroke-linejoin="round" />
+        <text id="pes-twin-label" x="360" y="204" text-anchor="middle">0.00</text>
+      </svg>
+    </div>
+
+    <div class="pes-panel pes-output">
+      <div class="pes-panel-title">{ui.outputTitle}</div>
+      <div class="pes-status">
+        <b id="pes-status-label">{ui.nominalLabel}</b>
+        <span id="pes-status-text">{ui.statusTexts.nominal}</span>
+      </div>
+      <div class="pes-kpis">
+        <div><span>{ui.kpis.quoteCost}</span><b id="pes-quote-cost">0.00</b></div>
+        <div><span>{ui.kpis.recommendedPvp}</span><b id="pes-price">0.00</b></div>
+        <div><span>{ui.kpis.grossMargin}</span><b id="pes-margin">0.00%</b></div>
+        <div><span>{ui.kpis.roi}</span><b id="pes-roi">0.00</b></div>
+        <div><span>{ui.kpis.threadMinor}</span><b id="pes-thread-minor">0.00</b></div>
+        <div><span>{ui.kpis.fitClearance}</span><b id="pes-fit">0.00</b></div>
+        <div><span>{ui.kpis.dryingTime}</span><b id="pes-dry">0.00</b></div>
+        <div><span>{ui.kpis.purgeRatio}</span><b id="pes-purge">0.00%</b></div>
+      </div>
+      <button class="pes-copy" type="button" id="pes-copy">{ui.copyLabel}</button>
+    </div>
+  </section>
+
+  <section class="pes-physics">
+    <div class="pes-panel-title">{ui.physicsTitle}</div>
+    <p id="pes-physics-copy">{ui.physicsCopy.quote}</p>
+  </section>
+</div>
+
+<script src="./converter.ts"></script>

@@ -34,6 +34,7 @@ export { elephantFootCompensationCalculator } from './tool/elephantFootCompensat
 export { filamentWeightLengthConverter } from './tool/filamentWeightLengthConverter/entry';
 export { multiMaterialPurgeCalculator } from './tool/multiMaterialPurgeCalculator/entry';
 export { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entry';
+export { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -72,6 +73,7 @@ import { elephantFootCompensationCalculator } from './tool/elephantFootCompensat
 import { filamentWeightLengthConverter } from './tool/filamentWeightLengthConverter/entry';
 import { multiMaterialPurgeCalculator } from './tool/multiMaterialPurgeCalculator/entry';
 import { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entry';
+import { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -110,4 +112,5 @@ export const ALL_ENTRIES = [
   filamentWeightLengthConverter,
   multiMaterialPurgeCalculator,
   moistureSaturationMonitor,
+  precisionEngineeringSuite,
 ];

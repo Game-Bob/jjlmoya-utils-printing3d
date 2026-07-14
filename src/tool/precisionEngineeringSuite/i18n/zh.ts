@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'precision-engineering-suite';
+const title = 'FDM 3D 打印精密工程套件';
+const description = '用于 FDM 报价、毛利、人工、投资回报率 (ROI)、ISO 风格 CAD 公差、耗材烘干以及 AMS/MMU 冲刷废料的反应式诊断套件。';
+
+const faqData = [
+  {
+    question: '为什么每个显示的结果都精确到两位小数？',
+    answer: '该套件在内部保留了完整的 JavaScript 浮点数精度，仅在显示 or 复制值时才应用两位小数的格式化。这可以防止输出结果产生歧义，并符合许多 CAD 和报价工作流记录尺寸和资金的方式。',
+  },
+  {
+    question: 'ISO 螺纹模块可以替代螺纹标准表吗？',
+    answer: '不能。它只是用于 FDM 间隙和螺距驱动几何形状的 CAD 规划辅助工具。最终的生产图纸仍应参考相关的 ISO 公差等级和测得的打印机校准数据。',
+  },
+  {
+    question: '为什么冲刷比例超过 30% 会被视为临界状态？',
+    answer: '超过 30% 时，挤出的聚合物中有很大一部分不再是产品体积。这通常会改变报价、批量生产、颜色顺序，以及是否应使用冲刷至填充或模型拆分。',
+  },
+  {
+    question: '如何理解耗材烘干时间？',
+    answer: '烘干时间是基于湿度负荷、材料敏感性、耗材质量和烘干机温度的诊断估算值。它应当通过实际的打印症状（如噼啪声、光泽变化、拉丝和尺寸偏差）来进行验证。',
+  },
+];
+
+const howToData = [
+  { name: '选择诊断模块', text: '选择报价、毛利、人工、投资回报率、螺纹、配合、烘干或冲刷，在保持共享流程模型实时运行的同时，切换远程测量的说明。' },
+  { name: '编辑流程输入', text: '修改机器时间、材料、人工、公差、湿度或冲刷值。结果将立即更新，无需按下计算按钮。' },
+  { name: '读取数字孪生', text: '使用 SVG 轴与孔孪生图以及远程测量画布，查看流程处于标称、监视还是临界水平。' },
+  { name: '复制工程摘要', text: '使用剪贴板按钮导出标准化的括号参数字符串，用于报价、工单或 CAD 备注。' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'zh',
+  keywords: 'FDM报价计算器, 3D打印毛利计算器, 打印农场ROI计算器, ISO螺纹公差计算器, FDM机械配合计算器, 耗材烘干计算器, AMS冲刷废料计算器, MMU冲刷成本计算器',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF 报价生成器' },
+      { id: 'margin', label: 'PVP 与毛利' },
+      { id: 'labor', label: '后处理人工' },
+      { id: 'roi', label: '农场 ROI' },
+      { id: 'threads', label: 'ISO 螺纹 CAD' },
+      { id: 'fits', label: '机械配合' },
+      { id: 'drying', label: '耗材烘干' },
+      { id: 'purge', label: 'AMS/MMU 冲刷' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: '材料成本', unit: '€' },
+      { key: 'printHours', label: '打印时间', unit: 'h' },
+      { key: 'machineRate', label: '机器费率', unit: '€/h' },
+      { key: 'energyPrice', label: '能源价格', unit: '€/kWh' },
+      { key: 'failureRate', label: '失败率', unit: '%' },
+      { key: 'marginPercent', label: '目标毛利', unit: '%' },
+      { key: 'laborMinutes', label: '人工时间', unit: 'min' },
+      { key: 'laborRate', label: '人工费率', unit: '€/h' },
+      { key: 'postProcessMinutes', label: '后处理时间', unit: 'min' },
+      { key: 'postProcessRate', label: '后处理费率', unit: '€/h' },
+      { key: 'farmPrinters', label: '农场打印机', unit: '台' },
+      { key: 'printerCost', label: '打印机成本', unit: '€' },
+      { key: 'monthlyOrders', label: '每月订单', unit: '单' },
+      { key: 'avgSalePrice', label: '平均售价', unit: '€' },
+      { key: 'threadNominalMm', label: '螺纹公称径', unit: 'mm' },
+      { key: 'threadPitchMm', label: '螺距', unit: 'mm' },
+      { key: 'shaftNominalMm', label: '轴公称径', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: '孔公差', unit: 'mm' },
+      { key: 'filamentMassG', label: '耗材质量', unit: 'g' },
+      { key: 'ambientHumidity', label: '环境湿度', unit: '%RH' },
+      { key: 'dryingTemperatureC', label: '烘干温度', unit: 'C' },
+      { key: 'objectVolumeCm3', label: '物体体积', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: '冲刷体积', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: '报价成本',
+      recommendedPvp: '推荐 PVP',
+      grossMargin: '毛利率',
+      roi: 'ROI',
+      threadMinor: '螺纹小径',
+      fitClearance: '配合间隙',
+      dryingTime: '烘干时间',
+      purgeRatio: '冲刷比例',
+    },
+    statusTexts: {
+      nominal: '远程测量在运行范围内。',
+      watch: '监视范围：远程测量可用，但在生产前值得进行流程审查。',
+      critical: '临界范围：冲刷比例超过 30%、湿度风险高或检测到负配合间隙。',
+    },
+    physicsCopy: {
+      quote: '报价工程结合了直接材料、机器折旧、人工暴露、能源和预期废料。失败率被建模为良率修正，因此售价承担了被拒件的成本。',
+      margin: '毛利是根据售价计算的，而不是成本的加成。当前毛利率为 {margin}，因此每次价格变化都会影响利润和风险缓冲。',
+      labor: '后处理成本是时间乘以车间费率。当前人工加上精加工负载为 {laborCost}。',
+      roi: 'ROI 将打印机资本支出转换为生产回收月数。由于在这些假设下农场永远无法收回硬件成本，显示屏中的负月利润已达到饱和。',
+      threads: 'ISO 公制螺纹几何形状由螺距深度近似得到。小径和螺距驱动的间隙可帮助 CAD 用户避免在 FDM 焊道膨胀后内部螺纹熔合。',
+      fits: '机械配合间隙比较打印孔范围与打印轴范围。负间隙预测干涉；正间隙预测滑动或运转配合。',
+      drying: '烘干时间遵循简化的 Arrhenius 式加速：较高的温度会增加扩散率，而湿度和聚合物因素会增加湿度负荷。',
+      purge: 'AMS/MMU 冲刷比例是冲刷体积除以总挤出体积。当比例超过 30.00% 时，该任务会被标记，因为废料正成为生产成本的驱动因素。',
+    },
+    chartLabels: ['成本', 'PVP', '毛利', 'ROI', '水分', '冲刷'],
+    copyFields: {
+      quoteCost: '报价成本',
+      pvp: 'PVP',
+      currency: '货币',
+      margin: '毛利',
+      roi: 'ROI',
+      threadMinor: '螺纹小径',
+      fitClearance: '配合间隙',
+      drying: '烘干',
+      purgeRatio: '冲刷比例',
+    },
+    displayUnits: {
+      months: '月',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: '间隙',
+    },
+    copyLabel: '复制远程测量',
+    copiedLabel: '已复制',
+    unitSystemLabel: '单位系统',
+    metricLabel: '公制',
+    imperialLabel: '英制',
+    currencyLabel: '货币',
+    currencyOptions: [
+      { code: 'EUR', label: '€ 欧元' },
+      { code: 'USD', label: '$ 美元' },
+      { code: 'GBP', label: '£ 英镑' },
+      { code: 'CAD', label: 'C$ 加拿大元' },
+      { code: 'AUD', label: 'A$ 澳大利亚元' },
+      { code: 'CHF', label: 'Fr 瑞士法郎' },
+      { code: 'MXN', label: '$ 墨西哥比索' },
+      { code: 'BRL', label: 'R$ 巴西雷亚尔' },
+      { code: 'ARS', label: '$ 阿根廷比索' },
+      { code: 'CLP', label: '$ 智利比索' },
+      { code: 'COP', label: '$ 哥伦比亚比索' },
+      { code: 'PEN', label: 'S/ 秘鲁新索尔' },
+      { code: 'JPY', label: '¥ 日元' },
+      { code: 'CNY', label: '¥ 人民币' },
+      { code: 'KRW', label: '₩ 韩元' },
+      { code: 'INR', label: '₹ 印度卢比' },
+      { code: 'PLN', label: 'zł 波兰兹罗提' },
+      { code: 'RUB', label: '₽ 俄罗斯卢布' },
+      { code: 'SEK', label: 'kr 瑞典克朗' },
+      { code: 'NOK', label: 'kr 挪威克朗' },
+      { code: 'DKK', label: 'kr 丹麦克朗' },
+      { code: 'TRY', label: '₺ 土耳其里拉' },
+    ],
+    criticalLabel: '临界',
+    watchLabel: '监视',
+    nominalLabel: '标称',
+    inputsTitle: '流程输入',
+    telemetryTitle: '视觉远程测量',
+    outputTitle: '计算输出',
+    physicsTitle: '物理与流程模型',
+    modulesAriaLabel: '精密套件模块',
+    telemetryAriaLabel: '反应式远程测量图表',
+    twinAriaLabel: '机械数字孪生',
+  },
+  seo: [
+    { type: 'title', text: '为什么精密 FDM 打印需要诊断套件而不是孤立的计算器', level: 2 },
+    { type: 'paragraph', html: 'FDM 生产决策很少因为不知道某个公式而失败。它们的失败是因为成本、公差、烘干、冲刷废料、人工和机器利用率被视为互不相关的对话。在计入后处理人工时间之前，客户报价可能看起来是有利可图的。在考虑焊道膨胀和间隙之前，CAD 螺纹可能看起来是正确的。在将冲刷体积计为购买的耗材之前，多色打印作业看起来可能很小。该套件将这些关系整合到一个反应式模型中，以便用户看到流程范围，而不是单个脱离上下文的数字。' },
+    { type: 'paragraph', html: '该界面故意使用固定的两位小数输出，因为报价和 CAD 审查需要明确无误的值。在内部，计算仍保持浮点数值，直到显示层对其进行格式化。这种区别很重要：过早四舍五入可能会稍微改变配合间隙、毛利率或冲刷阈值，从而导致错误的决策。复制的输出遵循标准化的括号参数格式，因此可以将值粘贴到工作单、工单和 CAD 变更日志中，而不会出现千位分隔符或本地化环境的异常。' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: '链接的生产诊断' },
+      { value: '2.00', label: '每个显示输出的固定小数位数' },
+      { value: '30.00%', label: '临界冲刷比例阈值' },
+      { value: '0', label: '所需的计算按钮数' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: '该套件是为流程审查而构建的', badge: '工程工作流', html: '在切片、报价或发布 CAD 之前使用它。该模型故意被设计为诊断性的：它强调了在消耗打印机时间之前，某项工作是否值得进行更深入的检查、物理校准、客户重新定价或设计更改。' },
+
+    { type: 'title', text: '报价生成与失败率的隐藏成本', level: 2 },
+    { type: 'paragraph', html: '专业的 3D 打印报价不应该仅仅对可见的塑料进行定价。直接成本基础包括材料、打印时间、机器小时费率、能源、人工、后处理和预期废料。失败率尤其重要，因为它会改变良率。如果某项工作有 8% 的失败预期，那么合格的零件必须承担被拒尝试的成本。因此，该模型用直接成本除以可用良率，而不是添加一个模糊的权宜行。' },
+    { type: 'paragraph', html: '报价模块适用于诸如 <strong>带失败率的 FDM 报价计算器</strong>、<strong>小企业 3D 打印价格计算器</strong> 以及 <strong>计算带人工的 3D 打印作业成本</strong> 等搜索意图。这些搜索通常来自已经销售打印件或计划销售打印件的用户。他们需要一个在实际生产中行得通的数字，而不是仅基于 PLA 克数的业余估算。' },
+    { type: 'table', headers: ['成本驱动因素', '为什么它很重要', '典型错误'], rows: [
+      ['材料', '获取物体、支撑、底筏 (raft)、裙边 (brim)、冲刷和测试件消耗的聚合物。', '仅对最终模型质量进行定价。'],
+      ['机器费率', '代表折旧、维护、喷嘴磨损、构建板表面和机会成本。', '因为操作员不在场而将打印机时间视为免费。'],
+      ['能源', '每项工作所占比例较小，但在农场规模的生产中显而易见。', '忽略加热腔体或需要高构建板温度的材料。'],
+      ['人工', '包括设置、拆卸、检查、包装和客户沟通。', '仅按打印持续时间收费。'],
+      ['良率', '被拒绝的零件必须通过被接受的销售来回收成本。', '添加随机加成，而不是对废料概率进行建模。'],
+    ] },
+    { type: 'tip', title: '根据测得的车间数据进行报价', html: '将默认值替换为您自己的电费费率、平均干预时间、失败作业百分比和后处理分钟数。一个手工清理缓慢的小型工作室的实际成本可能高于一个拥有更快机器和可重复工装的农场。' },
+
+    { type: 'title', text: 'PVP、毛利以及加成与利润之间的区别', level: 2 },
+    { type: 'paragraph', html: '毛利是按利润除以售价计算的，而不是成本的简单加成百分比。在为面向客户的 3D 打印零件报价时，这一区别至关重要。成本加成 40% 并不会产生 40% 的毛利率；它会产生较低的毛利率，因为分母是最终的销售价格。该套件使用基于毛利的定价，因为这是许多工作室评估产品线是否能够支付更换零件、包装、失败打印和管理时间的方式。' },
+    { type: 'paragraph', html: '对于成本为 10.00 EUR 且目标毛利为 40.00% 的零件，所需的售价为 16.67 EUR。如果因为有人添加了 40% 的加成而以 14.00 EUR 的价格出售，则仅剩 28.57% 的毛利率。对于单件商品，这种差异看起来很小，但在数百个订单中就会变得非常显着。当忽略失败、人工和冲刷时，毛利率低的农场可能会很忙但仍在亏损。' },
+    { type: 'comparative', columns: 2, items: [
+      { title: '加成思维', description: '在成本中添加一个百分比。粗略估算时速度很快，但对盈利计划不利。', points: ['简单的口算', '可能低估了所需的 PVP', '不直接表示利润份额'] },
+      { title: '毛利思维', description: '设置售价以使利润占收入的目标份额。更适合可重复的生产。', points: ['符合业务报告', '保护间接费用回收', '适用于目录定价'] },
+    ] },
+    { type: 'proscons', title: '激进的毛利目标', items: [
+      { pro: '保护工作室免受重新打印、客户支持和缓慢清理的影响。', con: '可能会使简单商品的打印价格高于当地竞争对手。' },
+      { pro: '使低产量的定制工作在财务上可行。', con: '需要解释为什么设计、配合和可靠性具有价值。' },
+      { pro: '为更好的工装、烘干机、喷嘴和质量控制提供资金。', con: '可能会降低纯装饰性低风险零件的转化率。' },
+    ] },
+
+    { type: 'title', text: '作为工程变量的人工和后处理', level: 2 },
+    { type: 'paragraph', html: '后处理不是一个模糊的精加工类别。它是一个具有自身费率、可重复性和失败模式的时间流程。从 PETG 中拆除支撑、打磨层线、热压螺纹嵌件安装、蒸汽平滑、混合车间的树脂清理、包装和测量都需要熟练的关注。如果不为这些时间定价，打印农场就会用无偿劳动补贴客户。' },
+    { type: 'paragraph', html: '人工模块将常规处理与精加工分开，以便用户可以建模两种不同的车间费率。启动作业的机器操作员的成本可能与攻丝孔、检查配合、安装螺纹嵌件或执行外观精加工的技术员不同。仪表板在材料和机器时间旁边显示了这些分钟，这样报价就不会在台面工作默默消耗利润时看起来仍然是健康的。' },
+    { type: 'list', items: [
+      '至少记录十次重复作业的设置时间与精加工时间。',
+      '当涉及机械配合或客户关键尺寸时，计入检查时间。',
+      '提高需要防尘、溶剂、热工具或精密测量的后处理人工费率。',
+      '当人工成本高于材料成本时，使用工装和批量操作。',
+      '即使客户提供了准备打印的文件，也应在报价模板中加入人工。',
+    ] },
+    { type: 'card', title: '涵盖的搜索意图', html: '寻找 <strong>3D 打印人工成本计算器</strong>、<strong>FDM 打印后处理成本</strong> 以及 <strong>如何使用人工为 3D 打印零件定价</strong> 的用户，通常试图停止对体力劳动收费过低。计算器将人工作为一个主要的数字呈现，而不是材料估算下方的备注。' },
+
+    { type: 'title', text: '打印农场 ROI 与容量回收', level: 2 },
+    { type: 'paragraph', html: '打印农场的投资回报率取决于扣除可变成本后的每月贡献利润，而不是总收入。八台打印机可能看起来令人印象深刻，但如果平均订单价格低且报价成本高，硬件回收期就会延长或永远无法实现。ROI 模块将打印机数量、打印机成本、每月订单、平均售价和实时报价成本模型转换为收回硬件资本所需的月数。' },
+    { type: 'paragraph', html: '重要的细节是 ROI 与当前流程模型相耦合。如果失败率、人工、冲刷或后处理增加，报价成本就会上升，每月利润就会下降。这使得 ROI 成为一个诊断结果，而不是商业计划书中静态的格子。当每月利润为负时，该工具会显示无限大，因为在当前的假设下永远无法收回成本。' },
+    { type: 'table', headers: ['ROI 症状', '可能的原因', '运营对策'], rows: [
+      ['回收期在 6 个月以内', '强劲的定价或高利用率，且人工受到控制。', '保护可重复性，避免接受定价过低的定制工作。'],
+      ['回收期在 6 到 18 个月', '正常的小型农场回收范围。', '改善批量处理、报价模板和失败跟踪。'],
+      ['回收期在 18 个月以上', '硬件闲置或工作定价过低。', '审查产品组合、支撑负担和机器小时费率。'],
+      ['无限回收期', '可变成本超过销售收入。', '在定价或流程经济发生变化之前，停止扩展硬件。'],
+    ] },
+    { type: 'summary', title: 'ROI 审查清单', items: [
+      '使用已接受的订单，而不是咨询，作为每月订单数。',
+      '如果可能的话，将更换喷嘴、构建板、挤出机、烘干机和备件计入硬件成本。',
+      '检查高毛利短作业是否击败了售价低的长装饰性作业。',
+      '模型化调优后的真实失败率，而不是第一周的乐观估计。',
+    ] },
+
+    { type: 'title', text: '用于 FDM CAD 的 ISO 公制螺纹规划', level: 2 },
+    { key: 'paragraph', html: '公制螺纹标准定义了几何形状和公差等级，但 FDM 增加了焊道宽度、热收缩、第一层压力、滑块补偿和材料蠕变。数学上正确的 CAD 螺纹可能因为挤出的耗材不是无限锋利的切削工具而打印得太紧。该套件近似计算了螺距驱动的小径和可配置的间隙因子，以便设计人员在打印前查看内螺纹是否值得额外的公差。' },
+    { type: 'paragraph', html: '该模型不能替代 ISO 965 表。对于寻找 <strong>3D 打印 ISO 螺纹公差计算器</strong>、<strong>M12 3D 打印螺纹间隙</strong> 或 <strong>FDM 内螺纹 CAD 间隙</strong> 的用户，它是一个 CAD 前的诊断工具。这些用户需要决定是直接建模螺纹、用丝锥加工、使用热熔嵌件还是打印引导孔进行后加工。' },
+    { type: 'glossary', items: [
+      { term: '螺距', definition: '螺纹牙顶之间的轴向距离。较大的螺距通常会增加螺纹深度并改变可打印的小径。' },
+      { term: '小径', definition: '螺纹轮廓的较小内径。在 FDM 中，它对焊道膨胀和滑块壁面顺序很敏感。' },
+      { term: '间隙因子', definition: '以螺距分数表示的实际公差，用以补偿打印塑料的行为。' },
+      { term: '公差等级', definition: '制造螺纹的标准化配合称号。打印塑料通常需要围绕这些等级进行经验调整。' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: '螺纹是测量问题', badge: 'CAD 警示', html: '每种材料、喷嘴和层高系列打印一个校准测试件。在层高 0.20 mm 的干燥 PLA 中有效的螺纹可能会在 PETG、尼龙或湿耗材中卡死，因为表面纹理和聚合物弹性发生了变化。' },
+
+    { type: 'title', text: '轴与孔配合：在打印失败前看清间隙', level: 2 },
+    { type: 'paragraph', html: 'FDM 中的机械配合由 CAD 尺寸和流程误差共同控制。孔往往打印得偏小，因为内圆周以有限的焊道宽度逼近圆形，且冷却的塑料会向内收缩。轴可能会因为挤出流量、接缝位置或构建板处的象脚压力而打印得偏大。该套件使孔和轴的范围可视化，因此在打印零件之前，负间隙会变得显而易见。' },
+    { type: 'paragraph', html: '对于功能性零件，问题不仅在于轴是否能放入孔中。而是配合是否符合使用场景：滑动配合、运转配合、推入配合、压入配合或保留轴承座。FDM 各向异性、层纹和尺寸偏差意味着数学上很小的正间隙仍然可能感觉很紧。因此，数字孪生将负间隙视为临界状态，而将小的正间隙视为需要用测试件验证的状态。' },
+    { type: 'comparative', columns: 3, items: [
+      { title: '滑动配合', description: '零件手动装配，阻力极小。适用于可拆卸盖、工装和定位销。', points: ['需要正间隙', '对表面纹理敏感', '通常最容易调节'] },
+      { title: '运转配合', description: '装配后零件之间相对运动。适用于枢轴和滚子。', points: ['需要更大的间隙', '润滑可能有所帮助', '圆度至关重要'] },
+      { title: '压入配合', description: '零件故意相互干涉。仅在材料弹性、壁厚和负载受控时有用。', points: ['开裂风险', '打印方向至关重要', '需要测试件进行验证'] },
+    ] },
+    { type: 'tip', title: '使用公差，而不是希望', html: '如果打印的孔必须接收购买的销、轴承、螺钉或嵌件，请测量打印的特征和购买的组件。根据测得的误差调整 CAD 公差，而不是对每种材料应用通用的偏移量。' },
+
+    { type: 'title', text: '耗材烘干：扩散、吸附和打印症状', level: 2 },
+    { type: 'paragraph', html: '吸湿耗材不仅是表面变湿。水分会吸附在聚合物表面，并随着时间的推移扩散到耗材内部。在挤出过程中，这些水会瞬间汽化为蒸汽，产生噼啪声、气泡、挤出不均匀、层间粘合力弱、表面哑光或混浊、拉丝和尺寸噪音。尼龙、TPU、PVA、PC 和一些填充复合材料可能特别敏感，而 PLA 则因配方和存储历史而异。' },
+    { type: 'paragraph', html: '烘干模块使用湿度负荷、耗材质量、材料因素和温度作为诊断模型。较高的温度会加速水分排除，但每种聚合物都有安全的烘干温度范围。温度太低浪费时间；温度太高可能会使线盘变形、退火耗材、软化聚合物或熔合绕组。计算的目的不是为了达到实验室水分含量，而是为了估算在精密工作之前烘干何时可能变得必要。' },
+    { type: 'table', headers: ['材料行为', '打印症状', '流程应对'], rows: [
+      ['轻度水分', '轻微拉丝或光泽度微小变化。', '在进行外观工作和回抽调整之前进行烘干。'],
+      ['中度水分', '噼啪声、表面粗糙或挤出宽度不一致。', '烘干线盘并重复流量校准。'],
+      ['重度水分', '起泡、层间粘合弱、输出变脆或支撑失效。', '烘干更长时间，密封保存，必要时丢弃受损段。'],
+      ['烘干过热', '耗材扁平化或线盘变形。', '降低温度并验证制造商指南。'],
+    ] },
+    { type: 'message', title: '水分与公差相互作用', html: '潮湿的耗材会使机械零件看起来像 CAD 或流量问题，因为挤出变得不一致。因此，烘干是尺寸控制的一部分，而不仅仅是表面质量的维护。' },
+
+    { type: 'title', text: 'AMS 和 MMU 冲刷比例作为生产警告', level: 2 },
+    { type: 'paragraph', html: '多材料打印将颜色改变转化为材料经济学。冲刷塔、擦拭块或下料道挤出物并不是免费的；它是将购买的耗材转化为非产品体积。一个具有许多交替层的小装饰物体可能会比一个更大单色支架浪费更多材料。该套件计算的冲刷比例是冲刷体积除以总挤出体积，因此废料比例立即可见。' },
+    { type: 'paragraph', html: '30.00% 的阈值故意设定得非常严格。当接近三分之一挤出的聚合物都是冲刷废料时，应当审查该作业的颜色顺序、冲刷至填充、模型拆分、批量生产或更高的报价。在打印农场方面，冲刷还会消耗机器时间并增加耗材更换磨损。忽略冲刷的报价可能会将一个具有视觉冲击力的多色零件变成一个低利润的工作。' },
+    { type: 'list', items: [
+      '将相似的颜色分组，以减少高污染的过渡。',
+      '当设计可以重新排序时，避免重复的由深到浅的切换。',
+      '仅在隐蔽处的混合色结构上可接受时才使用冲刷至填充。',
+      '在装饰性多色作业的客户报价中，单独收取冲刷材料费。',
+      '在积极减少冲刷之前，为每个材料系列运行滑块校准。',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: '临界冲刷状态', badge: '30.00%+', html: '冲刷比例超过 30.00% 意味着打印机将大量材料用于清洁。在接受生产运行前，将此作为重新设计、批量生产或价格调整的触发因素。' },
+
+    { type: 'title', text: '如何在生产备注中使用剪贴板输出', level: 2 },
+    { type: 'paragraph', html: '套件中的每个计算器都导出相同的括号参数格式：<code>[Parameter: Value | Parameter: Value]</code>。这故意是纯文本，因为它可以在没有格式化依赖性的情况下留存于电子邮件、车间工单、电子表格、客户消息和 CAD 注释中。它还可以防止隐藏的千位分隔符或本地特定的十进制分组进入报价或图纸备注中。' },
+    { type: 'paragraph', html: '将复制的行用作决策状态的快照。例如，当客户添加颜色更改时，将其附加到报价修改版中；或者当轴间隙从正变为负时，将其粘贴到 CAD 议题中。由于每个可见的值都固定为两位小数，因此机械师、设计人员和车间操作人员无需重新格式化即可阅读该备注。' },
+    { type: 'summary', title: '生产工作流摘要', items: [
+      '从报价和毛利开始，以验证工作是否具有经济可行性。',
+      '在承诺交货时间前，审查人工和后处理。',
+      '在购买打印机或接受重复合同时检查 ROI。',
+      '在发布功能性 CAD 之前，使用螺纹和配合模块。',
+      '在怪罪于滑块设置前，先烘干吸湿性材料。',
+      '将高冲刷比例视为设计和定价的警示。',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};

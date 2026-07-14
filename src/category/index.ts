@@ -35,6 +35,7 @@ import { elephantFootCompensationCalculator } from '../tool/elephantFootCompensa
 import { filamentWeightLengthConverter } from '../tool/filamentWeightLengthConverter/entry';
 import { multiMaterialPurgeCalculator } from '../tool/multiMaterialPurgeCalculator/entry';
 import { moistureSaturationMonitor } from '../tool/moistureSaturationMonitor/entry';
+import { precisionEngineeringSuite } from '../tool/precisionEngineeringSuite/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -75,6 +76,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     filamentWeightLengthConverter,
     multiMaterialPurgeCalculator,
     moistureSaturationMonitor,
+    precisionEngineeringSuite,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

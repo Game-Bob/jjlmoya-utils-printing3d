@@ -1,0 +1,321 @@
+import { bibliography } from '../bibliography';
+import type { WithContext, FAQPage, HowTo, SoftwareApplication } from 'schema-dts';
+import type { ToolLocaleContent } from '../../../types';
+import type { PrecisionEngineeringSuiteUI } from '../ui';
+
+const slug = 'praezisions-engineering-suite';
+const title = 'Präzisions Engineering Suite für FDM 3D Druck';
+const description = 'Eine reaktive Diagnose-Suite für FDM-Kalkulation, Margen, Arbeit, ROI, ISO-CAD-Toleranzen, Filamenttrocknung und AMS/MMU-Spülungsabfall.';
+
+const faqData = [
+  {
+    question: 'Warum hat jedes angezeigte Ergebnis genau zwei Dezimalstellen?',
+    answer: 'Die Suite behält intern die volle JavaScript-Gleitkommapräzision bei und wendet die Formatierung mit zwei Dezimalstellen nur an, wenn Werte angezeigt oder kopiert werden. Dies verhindert uneindeutige Ausgaben und entspricht der Art und Weise, wie viele CAD- und Kalkulations-Workflows Maße und Beträge dokumentieren.',
+  },
+  {
+    question: 'Ersetzt das ISO-Gewindemodul eine Gewindenormtabelle?',
+    answer: 'Nein. Es ist eine CAD-Planungshilfe für FDM-Spiel und steigungsabhängige Geometrie. Finale Fertigungszeichnungen sollten weiterhin die entsprechende ISO-Toleranzklasse und gemessene Druckerkalibrierungsdaten referenzieren.',
+  },
+  {
+    question: 'Warum wird ein Spülungsverhältnis über 30 Prozent als kritisch eingestuft?',
+    answer: 'Ab 30 Prozent ist ein großer Teil des extrudierten Polymers kein Produktvolumen mehr. Das ändert in der Regel die Kalkulation, die Chargenbildung, die Farbreihenfolge und die Entscheidung, ob Spülung-in-Infill oder Modellteilung verwendet werden sollte.',
+  },
+  {
+    question: 'Wie sollte die Filamenttrocknungszeit interpretiert werden?',
+    answer: 'Die Trocknungszeit ist eine Diagnoseschätzung, die auf Feuchtigkeitsbelastung, Materialempfindlichkeit, Filamentmasse und Trocknertemperatur basiert. Sie sollte mit realen Drucksymptomen wie Knistern, Glanzabweichungen, Stringing und Maßabweichungen validiert werden.',
+  },
+];
+
+const howToData = [
+  { name: 'Diagnosemodul auswählen', text: 'Wählen Sie Kalkulation, Marge, Arbeit, ROI, Gewinde, Passung, Trocknung oder Spülung, um die Telemetrieerklärung zu ändern, während das gemeinsame Prozessmodell aktiv bleibt.' },
+  { name: 'Prozesseingaben bearbeiten', text: 'Ändern Sie Maschinenzeit, Material, Arbeit, Toleranzen, Feuchtigkeit oder Spülungswerte. Die Ergebnisse werden sofort aktualisiert, ohne dass eine Berechnungs-Schaltfläche gedrückt werden muss.' },
+  { name: 'Digitalen Zwilling ablesen', text: 'Nutzen Sie die SVG-Darstellung von Welle und Bohrung sowie das Telemetriefeld, um zu sehen, ob der Prozess im Nenn-, Warn- oder kritischen Bereich liegt.' },
+  { name: 'Technische Zusammenfassung kopieren', text: 'Verwenden Sie die Zwischenablageschaltfläche, um die standardisierte Parameterzeichenfolge für Angebote, Tickets oder CAD-Notizen zu exportieren.' },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+
+const howToSchema: WithContext<HowTo> = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title,
+  description,
+  step: howToData.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const appSchema: WithContext<SoftwareApplication> = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: title,
+  description,
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  inLanguage: 'de',
+  keywords: 'FDM-Kalkulator, 3D-Druck Margenrechner, Printfarm ROI Rechner, ISO Gewindetoleranz Rechner, FDM Passungsrechner, Filament Trocknungszeit Rechner, AMS Spülungsrechner, MMU Spülungskosten Rechner',
+};
+
+export const content: ToolLocaleContent<PrecisionEngineeringSuiteUI> = {
+  slug,
+  title,
+  description,
+  ui: {
+    modules: [
+      { id: 'quote', label: 'PDF-Angebotsgenerator' },
+      { id: 'margin', label: 'PVP und Marge' },
+      { id: 'labor', label: 'Nachbearbeitungsaufwand' },
+      { id: 'roi', label: 'Farm-ROI' },
+      { id: 'threads', label: 'ISO-Gewinde CAD' },
+      { id: 'fits', label: 'Mechanische Passungen' },
+      { id: 'drying', label: 'Filamenttrocknung' },
+      { id: 'purge', label: 'AMS/MMU-Spülung' },
+    ],
+    inputs: [
+      { key: 'materialCost', label: 'Materialkosten', unit: '€' },
+      { key: 'printHours', label: 'Druckzeit', unit: 'h' },
+      { key: 'machineRate', label: 'Maschinensatz', unit: '€/h' },
+      { key: 'energyPrice', label: 'Strompreis', unit: '€/kWh' },
+      { key: 'failureRate', label: 'Ausschussrate', unit: '%' },
+      { key: 'marginPercent', label: 'Zielmarge', unit: '%' },
+      { key: 'laborMinutes', label: 'Arbeitszeit', unit: 'min' },
+      { key: 'laborRate', label: 'Stundensatz Arbeit', unit: '€/h' },
+      { key: 'postProcessMinutes', label: 'Nachbearbeitung', unit: 'min' },
+      { key: 'postProcessRate', label: 'Stundensatz Nachbearbeitung', unit: '€/h' },
+      { key: 'farmPrinters', label: 'Farm-Drucker', unit: 'Stk' },
+      { key: 'printerCost', label: 'Druckerkosten', unit: '€' },
+      { key: 'monthlyOrders', label: 'Aufträge/Monat', unit: 'Stk' },
+      { key: 'avgSalePrice', label: 'Mittlerer Verkaufspreis', unit: '€' },
+      { key: 'threadNominalMm', label: 'Gewindenennwert', unit: 'mm' },
+      { key: 'threadPitchMm', label: 'Steigung', unit: 'mm' },
+      { key: 'shaftNominalMm', label: 'Wellennennwert', unit: 'mm' },
+      { key: 'holeAllowanceMm', label: 'Toleranz Bohrung', unit: 'mm' },
+      { key: 'filamentMassG', label: 'Filamentmasse', unit: 'g' },
+      { key: 'ambientHumidity', label: 'Feuchtigkeit', unit: '%rF' },
+      { key: 'dryingTemperatureC', label: 'Trockentemp.', unit: 'C' },
+      { key: 'objectVolumeCm3', label: 'Objektvolumen', unit: 'cm3' },
+      { key: 'purgeVolumeCm3', label: 'Spülvolumen', unit: 'cm3' },
+    ],
+    kpis: {
+      quoteCost: 'Kalkulationskosten',
+      recommendedPvp: 'Empfohlener PVP',
+      grossMargin: 'Bruttomarge',
+      roi: 'ROI',
+      threadMinor: 'Gewindekerndurchmesser',
+      fitClearance: 'Passungsspiel',
+      dryingTime: 'Trocknungszeit',
+      purgeRatio: 'Spülungsverhältnis',
+    },
+    statusTexts: {
+      nominal: 'Telemetrie innerhalb des Betriebsbereichs.',
+      watch: 'Warnbereich: Telemetrie ist verwendbar, erfordert jedoch eine Prozessüberprüfung vor der Produktion.',
+      critical: 'Kritischer Bereich: Spülungsverhältnis über 30%, hohes Feuchtigkeitsrisiko oder negatives Passungsspiel erkannt.',
+    },
+    physicsCopy: {
+      quote: 'Die Angebotskalkulation kombiniert direkte Materialkosten, Maschinenabschreibung, Arbeitszeit, Energie und erwarteten Ausschuss. Die Ausschussrate wird als Ausbeutekorrektur modelliert, sodass der Verkaufspreis die Kosten für fehlerhafte Teile trägt.',
+      margin: 'Die Marge wird auf Basis des Verkaufspreises berechnet, nicht als Aufschlag auf die Kosten. Die aktuelle Bruttomarge beträgt {margin}, sodass jede Preisänderung sowohl den Gewinn als auch den Risikopuffer beeinflusst.',
+      labor: 'Die Nachbearbeitungskosten ergeben sich aus der Zeit multipliziert mit dem Stundensatz. Der aktuelle Aufwand für Arbeit plus Nachbereitung beträgt {laborCost}.',
+      roi: 'Der ROI rechnet die Drucker-Investitionskosten in Monate der Produktionsrückzahlung um. Ein negativer monatlicher Gewinn wird in der Anzeige abgeschnitten, da die Farm die Hardwarekosten unter diesen Annahmen nie amortisiert.',
+      threads: 'Die ISO-Metrische Gewindegeometrie wird anhand der Steigungstiefe angenähert. Der Kerndurchmesser und das steigungsabhängige Spiel helfen CAD-Anwendern, verschweißte Innengewinde durch Filamentquellung zu vermeiden.',
+      fits: 'Das mechanische Passungsspiel vergleicht die Toleranzen von gedruckter Bohrung und gedruckter Welle. Ein negatives Spiel deutet auf Übermaß/Presspassung hin; ein positives Spiel deutet auf Spiel- oder Übergangspassung hin.',
+      drying: 'Die Trocknungszeit folgt einer vereinfachten Beschleunigung nach Arrhenius: Eine höhere Temperatur erhöht die Diffusionsrate, während Feuchtigkeit und Polymerfaktor die Feuchtigkeitsaufnahme erhöhen.',
+      purge: 'Das AMS/MMU-Spülungsverhältnis ist das Spülvolumen geteilt durch das gesamte extrudierte Volumen. Ab 30,00% wird der Auftrag markiert, da der Abfall zu einem wesentlichen Produktionskostenfaktor wird.',
+    },
+    chartLabels: ['KOSTEN', 'PVP', 'MARGE', 'ROI', 'H2O', 'SPÜLUNG'],
+    copyFields: {
+      quoteCost: 'Kalkulationskosten',
+      pvp: 'PVP',
+      currency: 'Währung',
+      margin: 'Marge',
+      roi: 'ROI',
+      threadMinor: 'Gewindekerndurchmesser',
+      fitClearance: 'Passungsspiel',
+      drying: 'Trocknung',
+      purgeRatio: 'Spülungsverhältnis',
+    },
+    displayUnits: {
+      months: 'Mon.',
+      millimeter: 'mm',
+      inch: 'in',
+      hour: 'h',
+      clearance: 'Spiel',
+    },
+    copyLabel: 'Telemetrie kopieren',
+    copiedLabel: 'Kopiert',
+    unitSystemLabel: 'Einheiten',
+    metricLabel: 'Metrisch',
+    imperialLabel: 'Imperial',
+    currencyLabel: 'Währung',
+    currencyOptions: [
+      { code: 'EUR', label: '€ Euro' },
+      { code: 'USD', label: '$ US-Dollar' },
+      { code: 'GBP', label: '£ Pfund Sterling' },
+      { code: 'CAD', label: 'C$ Kanadischer Dollar' },
+      { code: 'AUD', label: 'A$ Australischer Dollar' },
+      { code: 'CHF', label: 'Fr Schweizer Franken' },
+      { code: 'MXN', label: '$ Mexikanischer Peso' },
+      { code: 'BRL', label: 'R$ Brasilianischer Real' },
+      { code: 'ARS', label: '$ Argentinischer Peso' },
+      { code: 'CLP', label: '$ Chilenischer Peso' },
+      { code: 'COP', label: '$ Kolumbianischer Peso' },
+      { code: 'PEN', label: 'S/ Peruanischer Sol' },
+      { code: 'JPY', label: '¥ Japanischer Yen' },
+      { code: 'CNY', label: '¥ Chinesischer Yuan' },
+      { code: 'KRW', label: '₩ Südkoreanischer Won' },
+      { code: 'INR', label: '₹ Indische Rupie' },
+      { code: 'PLN', label: 'zł Polnischer Zloty' },
+      { code: 'RUB', label: '₽ Russischer Rubel' },
+      { code: 'SEK', label: 'kr Schwedische Krone' },
+      { code: 'NOK', label: 'kr Norwegische Krone' },
+      { code: 'DKK', label: 'kr Dänische Krone' },
+      { code: 'TRY', label: '₺ Türkische Lira' },
+    ],
+    criticalLabel: 'Kritisch',
+    watchLabel: 'Warnung',
+    nominalLabel: 'Nennwert',
+    inputsTitle: 'Prozesseingaben',
+    telemetryTitle: 'Visuelle Telemetrie',
+    outputTitle: 'Berechnete Ausgaben',
+    physicsTitle: 'Physik- und Prozessmodell',
+    modulesAriaLabel: 'Präzisions-Suite Module',
+    telemetryAriaLabel: 'Reaktives Telemetriediagramm',
+    twinAriaLabel: 'Mechanischer digitaler Zwilling',
+  },
+  seo: [
+    { type: 'title', text: 'Warum präziser FDM-Druck eine Diagnose-Suite statt isolierter Rechner benötigt', level: 2 },
+    { type: 'paragraph', html: 'FDM-Produktionsentscheidungen scheitern selten daran, dass eine Formel unbekannt ist. Sie scheitern, weil Kosten, Toleranzen, Trocknung, Spülungsabfall, Arbeitszeit und Maschinenauslastung als voneinander getrennte Themen behandelt werden. Ein Kundenangebot kann profitabel aussehen, bis die Minuten für die Nachbearbeitung einbezogen werden. Ein CAD-Gewinde kann korrekt aussehen, bis Filamentquellung und Spiel berücksichtigt werden. Ein Mehrfarben-Druckauftrag kann klein wirken, bis das Spülvolumen als gekauftes Filament eingepreist wird. Diese Suite führt diese Beziehungen in einem einzigen reaktiven Modell zusammen, sodass der Anwender den gesamten Prozessbereich statt einer einzelnen, isolierten Zahl sieht.' },
+    { type: 'paragraph', html: 'Die Benutzeroberfläche verwendet bewusst feste Ausgaben mit zwei Dezimalstellen, da Kalkulationen und CAD-Prüfungen eindeutige Werte erfordern. Intern bleiben Berechnungen Gleitkommawerte, bis sie in der Anzeigeebene formatiert werden. Dieser Unterschied ist wichtig: Eine zu frühe Rundung kann ein kleines Passungsspiel, eine Marge oder einen Spülschwellenwert so weit verschieben, dass eine falsche Entscheidung getroffen wird. Die kopierte Ausgabe folgt einem standardisierten technischen Format in eckigen Klammern, sodass die Werte ohne Tausendertrennzeichen oder lokale Besonderheiten in Aufträge, Tickets und CAD-Änderungsprotokolle übernommen werden können.' },
+    { type: 'stats', columns: 4, items: [
+      { value: '8', label: 'Verknüpfte Produktionsdiagnosen' },
+      { value: '2.00', label: 'Feste Dezimalstellen bei jeder Anzeige' },
+      { value: '30.00%', label: 'Kritischer Schwellenwert für Spülungsverhältnis' },
+      { value: '0', label: 'Erforderliche Berechnungstasten' },
+    ] },
+    { type: 'diagnostic', variant: 'info', title: 'Die Suite ist für die Prozessüberprüfung konzipiert', badge: 'Engineering-Workflow', html: 'Verwenden Sie sie vor dem Slicen, Kalkulieren oder Freigeben von CAD-Daten. Das Modell ist bewusst diagnostisch: Es zeigt auf, ob ein Auftrag eine genauere Prüfung, eine physische Kalibrierung, eine Preisanpassung oder eine Konstruktionsänderung erfordert, bevor Druckerlaufzeit verbraucht wird.' },
+
+    { type: 'title', text: 'Angebotskalkulation und die versteckten Kosten des Ausschusses', level: 2 },
+    { type: 'paragraph', html: 'Ein professionelles 3D-Druck-Angebot sollte nicht nur das sichtbare Kunststoffteil einpreisen. Die direkte Kostenbasis umfasst Material, Druckzeit, Maschinenstundensatz, Energie, Arbeit, Nachbearbeitung und den erwarteten Ausschuss. Die Ausschussrate ist besonders wichtig, da sie die Ausbeute verändert. Wenn für einen Auftrag eine Ausschusswahrscheinlichkeit von 8 Prozent angenommen wird, muss das Gutteil die Kosten für die fehlerhaften Versuche tragen. Das Modell teilt daher die direkten Kosten durch die nutzbare Ausbeute, anstatt eine vage Risikoposition hinzuzufügen.' },
+    { type: 'paragraph', html: 'Das Angebotsmodul ist nützlich für Suchen wie <strong>FDM-Kalkulator mit Ausschussrate</strong>, <strong>3D-Druck-Preiskalkulator für Kleinunternehmen</strong> und <strong>3D-Druck-Jobkosten mit Arbeit berechnen</strong>. Diese Anfragen stammen meist von Anwendern, die bereits Drucke verkaufen oder dies planen. Sie benötigen eine Zahl, die der realen Produktion standhält, und keine Hobby-Schätzung, die nur auf Gramm PLA basiert.' },
+    { type: 'table', headers: ['Kostentreiber', 'Warum es wichtig ist', 'Typischer Fehler'], rows: [
+      ['Material', 'Erfasst das vom Modell, den Stützen, dem Raft, dem Rand, der Spülung und den Teststücken verbrauchte Polymer.', 'Nur die Masse des fertigen Modells einpreisen.'],
+      ['Maschinensatz', 'Repräsentiert Abschreibung, Wartung, Düsenverschleiß, Druckbett-Oberflächen und Opportunitätskosten.', 'Druckzeit als kostenlos betrachten, weil der Bediener nicht anwesend ist.'],
+      ['Energie', 'Pro Auftrag gering, aber bei Produktion im Farm-Maßstab deutlich spürbar.', 'Ignorieren der beheizten Kammer oder von Materialien mit hoher Betttemperatur.'],
+      ['Arbeit', 'Umfasst Einrichtung, Entnahme, Inspektion, Verpackung und Kundenkommunikation.', 'Nur die Druckdauer berechnen.'],
+      ['Ausschuss', 'Fehlerhafte Teile müssen durch erfolgreiche Verkäufe ausgeglichen werden.', 'Einen pauschalen Aufschlag hinzufügen, anstatt die Ausschusswahrscheinlichkeit zu modellieren.'],
+    ] },
+    { type: 'tip', title: 'Kalkulieren Sie mit gemessenen Werkstattdaten', html: 'Ersetzen Sie Standardwerte durch Ihren eigenen Stromtarif, Ihre durchschnittliche Rüstzeit, den Ausschussprozentsatz und die Nachbearbeitungsminuten. Eine kleine Werkstatt mit langsamer manueller Nachbearbeitung kann höhere reale Kosten haben als eine Farm mit schnelleren Maschinen und automatisierten Vorrichtungen.' },
+
+    { type: 'title', text: 'PVP, Marge und der Unterschied zwischen Aufschlag und Gewinn', level: 2 },
+    { type: 'paragraph', html: 'Die Marge wird berechnet als Gewinn geteilt durch den Verkaufspreis, nicht als einfacher Aufschlag auf die Kosten. Dieser Unterschied ist bei der Preisgestaltung von kundenorientierten 3D-Druckteilen entscheidend. Ein Aufschlag von 40 Prozent auf die Kosten ergibt keine Marge von 40 Prozent, sondern eine geringere Marge, da die Berechnungsbasis der endgültige Verkaufspreis ist. Die Suite verwendet die margenbasierte Preisgestaltung, da Werkstätten so bewerten, ob eine Produktlinie Ersatzteile, Verpackung, Fehldrucke und Verwaltungszeit decken kann.' },
+    { type: 'paragraph', html: 'Für ein Teil mit Kosten von 10,00 EUR und einer Zielmarge von 40,00% beträgt der erforderliche Verkaufspreis 16,67 EUR. Der Verkauf für 14,00 EUR (weil jemand einen Aufschlag von 40 Prozent addiert hat) lässt nur eine Marge von 28.57% übrig. Dieser Unterschied mag bei einem einzelnen Artikel gering erscheinen, summiert sich jedoch bei Hunderten von Aufträgen. Eine Farm mit geringen Margen kann voll ausgelastet sein und dennoch Geld verlieren, wenn Ausschuss, Arbeit und Spülung ignoriert werden.' },
+    { type: 'comparative', columns: 2, items: [
+      { title: 'Aufschlagsdenken', description: 'Addiert einen Prozentsatz zu den Kosten. Schnell für grobe Schätzungen, aber schwach für die Rentabilitätsplanung.', points: ['Einfaches Kopfrechnen', 'Kann den erforderlichen PVP unterschätzen', 'Drückt den Gewinnanteil nicht direkt aus'] },
+      { title: 'Margendenken', description: 'Setzt den Verkaufspreis so fest, dass der Gewinn einen Zielanteil am Umsatz ausmacht. Besser für wiederholbare Produktion.', points: ['Entspricht der betriebswirtschaftlichen Berichterstattung', 'Sichert die Deckung der Gemeinkosten', 'Nützlich für die Katalogpreisgestaltung'] },
+    ] },
+    { type: 'proscons', title: 'Aggressive Margenziele', items: [
+      { pro: 'Schützt die Werkstatt vor Fehldrucken, Kundensupport und zeitintensiver Nacharbeit.', con: 'Kann einfache Standarddrucke teurer machen als bei lokalen Mitbewerbern.' },
+      { pro: 'Macht kundenspezifische Kleinserienarbeiten wirtschaftlich tragbar.', con: 'Erfordert die Erklärung, warum Konstruktion, Passung und Zuverlässigkeit einen Wert haben.' },
+      { pro: 'Finanziert bessere Vorrichtungen, Trockner, Düsen und Qualitätskontrollen.', con: 'Kann die Konversionsrate bei rein dekorativen Teilen mit geringem Risiko senken.' },
+    ] },
+
+    { type: 'title', text: 'Arbeit und Nachbearbeitung als technische Variablen', level: 2 },
+    { type: 'paragraph', html: 'Die Nachbearbeitung ist keine vage Abschlusskategorie. Es ist ein zeitintensiver Prozess mit eigenem Stundensatz, eigener Wiederholbarkeit und eigenen Fehlermöglichkeiten. Das Entfernen von Stützen bei PETG, das Schleifen von Schichtlinien, die Installation von Gewindeeinsätzen, das chemische Glätten, die Harzreinigung in Hybrid-Werkstätten, das Verpacken und das Messen erfordern qualifizierte Arbeitszeit. Wenn diese Minuten nicht eingepreist werden, subventioniert die Printfarm den Kunden mit unbezahlter Arbeit.' },
+    { type: 'paragraph', html: 'Das Arbeitsmodul trennt die allgemeine Handhabung von der Nachbearbeitung, sodass der Anwender zwei verschiedene Werkstattsätze modellieren kann. Ein Maschinenbediener, der Druckaufträge startet, hat möglicherweise nicht dieselben Kosten wie ein Techniker, der Gewinde schneidet, Passungen prüft, Einsätze montiert oder kosmetische Veredelungen vornimmt. Das Dashboard macht diese Minuten neben Material- und Maschinenzeit sichtbar, damit ein Angebot nicht profitabel aussieht, während die manuelle Arbeit stillschweigend den Gewinn aufzehrt.' },
+    { type: 'list', items: [
+      'Erfassen Sie die Rüstzeit getrennt von der Nachbearbeitungszeit für mindestens zehn wiederkehrende Aufträge.',
+      'Planen Sie Inspektionszeiten ein, wenn mechanische Passungen oder kundenkritische Maße involviert sind.',
+      'Erhöhen Sie den Nachbearbeitungssatz für Arbeiten, die Staubschutz, Lösungsmittel, Heißluftwerkzeuge oder Präzisionsmessungen erfordern.',
+      'Nutzen Sie Vorrichtungen und Chargenarbeiten, wenn die Arbeitskosten höher als die Materialkosten sind.',
+      'Fügen Sie Arbeitszeiten auch dann zu den Angebotsvorlagen hinzu, wenn ein Kunde eine druckfertige Datei bereitstellt.',
+    ] },
+    { type: 'card', title: 'Abgedeckte Suchintentionen', html: 'Anwender, die nach <strong>Stundensatz 3D-Druck kalkulieren</strong>, <strong>Nachbearbeitungskosten für FDM-Drucke</strong> und <strong>Preise für 3D-Druckteile mit Arbeit kalkulieren</strong> suchen, versuchen meist, die Unterbewertung manueller Arbeit zu stoppen. Der Rechner stellt die Arbeit als eigenständigen Wert dar, nicht als Randnotiz unter der Materialschätzung.' },
+
+    { type: 'title', text: 'Printfarm-ROI und Kapazitätsrückgewinnung', level: 2 },
+    { type: 'paragraph', html: 'Die Kapitalrendite (ROI) für eine Printfarm hängt vom monatlichen Deckungsbeitrag nach variablen Kosten ab, nicht vom Bruttoumsatz. Acht Drucker mögen beeindruckend aussehen, aber wenn der durchschnittliche Auftragspreis niedrig und die kalkulierten Kosten hoch sind, verlängert sich der Amortisationszeitraum der Hardware oder wird nie erreicht. Das ROI-Modul rechnet die Anzahl der Drucker, die Druckerkosten, die monatlichen Aufträge, den durchschnittlichen Verkaufspreis und das aktive Kostenmodell in Monate um, die zur Amortisation des Hardwarekapitals erforderlich sind.' },
+    { type: 'paragraph', html: 'Wichtig ist, dass der ROI an das aktuelle Prozessmodell gekoppelt ist. Wenn Ausschussrate, Arbeitsaufwand, Spülung oder Nachbearbeitung steigen, erhöhen sich die Kalkulationskosten und der monatliche Gewinn sinkt. Das macht den ROI zu einem diagnostischen Ergebnis und nicht zu einer statischen Zelle im Businessplan. Wenn der monatliche Gewinn negativ ist, zeigt das Tool Unendlich an, da unter den aktuellen Annahmen keine Amortisation stattfindet.' },
+    { type: 'table', headers: ['ROI-Symptom', 'Wahrscheinliche Ursache', 'Betriebliche Reaktion'], rows: [
+      ['Amortisation unter 6 Monaten', 'Starke Preisgestaltung oder hohe Auslastung bei kontrollierten Arbeitskosten.', 'Sichern Sie die Wiederholbarkeit und vermeiden Sie unterpreisige Sonderaufträge.'],
+      ['Amortisation 6 bis 18 Monate', 'Normaler Amortisationsbereich für kleine Farmen.', 'Verbessern Sie die Chargenbildung, die Angebotsvorlagen und die Ausschussverfolgung.'],
+      ['Amortisation über 18 Monate', 'Die Hardware steht still oder die Aufträge sind zu günstig kalkuliert.', 'Überprüfen Sie den Produktmix, den Stützaufwand und den Maschinenstundensatz.'],
+      ['Unendliche Amortisation', 'Die variablen Kosten übersteigen die Verkaufserlöse.', 'Stoppen Sie die Skalierung der Hardware, bis sich die Preise oder die Prozessökonomie ändern.'],
+    ] },
+    { type: 'summary', title: 'Checkliste zur ROI Überprüfung', items: [
+      'Verwenden Sie angenommene Aufträge, nicht bloße Anfragen, als monatliche Auftragszahl.',
+      'Berücksichtigen Sie Ersatzdüsen, Druckbetten, Extruder, Trockner und Ersatzteile in den Hardwarekosten, wenn möglich.',
+      'Prüfen Sie, ob Aufträge mit hoher Marge und kurzer Laufzeit dekorative Aufträge mit langer Laufzeit und niedrigem Preis schlagen.',
+      'Modellieren Sie die reale Ausschussrate nach der Feinabstimmung, nicht eine optimistische Schätzung aus der ersten Woche.',
+    ] },
+
+    { type: 'title', text: 'ISO-Gewindeplanung für FDM-CAD', level: 2 },
+    { type: 'paragraph', html: 'Metrische Gewindenormen definieren Geometrie- und Toleranzklassen, aber der FDM-Druck fügt Faktoren wie Bahnbreite, thermische Schrumpfung, First-Layer-Druck, Slicer-Kompensation und Materialkriechen hinzu. Ein CAD-Gewinde, das mathematisch korrekt ist, kann zu eng gedruckt werden, da das extrudierte Filament kein unendlich scharfes Schneidwerkzeug darstellt. Die Suite nähert den steigungsabhängigen Kerndurchmesser und einen konfigurierbaren Spielwert an, damit Konstrukteure vor dem Druck sehen können, ob ein Innengewinde zusätzliches Spiel benötigt.' },
+    { type: 'paragraph', html: 'Das Modell ist kein Ersatz für ISO 965-Tabellen. Es ist eine Pre-CAD-Diagnose für Anwender, die nach <strong>ISO Gewindetoleranz Rechner 3D-Druck</strong>, <strong>M12 Gewinde 3D-Druck Spiel</strong> oder <strong>Innengewinde FDM CAD Toleranz</strong> suchen. Diese Anwender müssen entscheiden, ob sie Gewinde direkt modellieren, sie mit einem Gewindebohrer nachschneiden, Gewindeeinsätze verwenden oder ein Kernloch für die spätere Bearbeitung bohren.' },
+    { type: 'glossary', items: [
+      { term: 'Steigung', definition: 'Der axiale Abstand zwischen den Gewindespitzen. Eine größere Steigung erhöht im Allgemeinen die Gewindetiefe und verändert den druckbaren Kerndurchmesser.' },
+      { term: 'Kerndurchmesser', definition: 'Der kleinere Innendurchmesser eines Gewindeprofils. Beim FDM-Druck ist dieser empfindlich gegenüber Filamentquellung und der Wandreihenfolge im Slicer.' },
+      { term: 'Spielwert', definition: 'Eine praktische Toleranz, ausgedrückt als Bruchteil der Steigung, um das Verhalten des gedruckten Kunststoffs auszugleichen.' },
+      { term: 'Toleranzklasse', definition: 'Eine standardisierte Passungsbezeichnung für gefertigte Gewinde. Gedruckter Kunststoff erfordert in der Regel empirische Anpassungen um diese Klassen herum.' },
+    ] },
+    { type: 'diagnostic', variant: 'warning', title: 'Gewinde sind Messprobleme', badge: 'CAD-Warnung', html: 'Drucken Sie ein Testteil pro Material, Düse und Schichthöhe. Ein Gewinde, das in trockenem PLA bei 0,20 mm Schichthöhe funktioniert, kann in PETG, Nylon oder feuchtem Filament klemmen, da sich Oberflächentextur und Polymerelastizität ändern.' },
+
+    { type: 'title', text: 'Welle-Bohrung-Passungen: Spiel erkennen, bevor der Druck fehlschlägt', level: 2 },
+    { type: 'paragraph', html: 'Mechanische Passungen im FDM-Druck werden sowohl durch die CAD-Größe als auch durch Prozessfehler gesteuert. Bohrungen neigen dazu, untermaßig gedruckt zu werden, da innere Umrisse einen Kreis mit endlicher Bahnbreite annähern und das abkühlende Plastik nach innen schrumpfen kann. Wellen können durch Extrusionsfluss, Nahtplatzierung oder Elephant-Foot-Effekt am Druckbett übermaßig gedruckt werden. Die Suite visualisiert die Bohrungs- und Wellen-Toleranzbereiche, sodass ein negatives Spiel vor dem Drucken offensichtlich wird.' },
+    { type: 'paragraph', html: 'Bei Funktionsteilen stellt sich nicht nur die Frage, ob eine Welle in eine Bohrung passt. Es geht darum, ob die Passung dem Anwendungsfall entspricht: Spielpassung, Übergangspassung, Presspassung oder Lagersitz. Die FDM-Anisotropie, Schichtrillen und Maßabweichungen führen dazu, dass sich selbst ein rechnerisch geringes positives Spiel eng anfühlen kann. Der digitale Zwilling behandelt negatives Spiel daher als kritisch und ein geringes positives Spiel als etwas, das mit einem Testteil validiert werden sollte.' },
+    { type: 'comparative', columns: 3, items: [
+      { title: 'Spielpassung', description: 'Teile lassen sich von Hand mit minimalem Widerstand zusammenfügen. Nützlich für abnehmbare Abdeckungen, Vorrichtungen und Fixierstifte.', points: ['Benötigt positives Spiel', 'Empfindlich gegenüber Oberflächenbeschaffenheit', 'Meist am einfachsten abzustimmen'] },
+      { title: 'Übergangspassung', description: 'Teile bewegen sich nach der Montage relativ zueinander. Nützlich für Drehpunkte und Rollen.', points: ['Erfordert mehr Spiel', 'Schmierung kann helfen', 'Rundheit ist wichtig'] },
+      { title: 'Presspassung', description: 'Teile überlagern sich absichtlich. Nur nützlich, wenn Materialelastizität, Wandstärke und Belastung kontrolliert werden.', points: ['Rissgefahr', 'Druckausrichtung ist entscheidend', 'Testteile zwingend erforderlich'] },
+    ] },
+    { type: 'tip', title: 'Nutzen Sie Toleranzen, keine Hoffnung', html: 'Wenn eine gedruckte Bohrung einen gekauften Stift, ein Lager, eine Schraube oder einen Einsatz aufnehmen muss, messen Sie sowohl das gedruckte Merkmal als auch die gekaufte Komponente. Passen Sie die CAD-Toleranz anhand des gemessenen Fehlers an, anstatt einen universellen Offset auf jedes Material anzuwenden.' },
+
+    { type: 'title', text: 'Filamenttrocknung: Diffusion, Adsorption und Drucksymptome', level: 2 },
+    { type: 'paragraph', html: 'Hygroskopisches Filament wird nicht einfach nur an der Oberfläche nass. Feuchtigkeit lagert sich an den Polymerketten an und diffundiert mit der Zeit in das Filament. Während der Extrusion kann dieses Wasser schlagartig verdampfen, was zu Knistern, Blasen, ungleichmäßiger Extrusion, schwacher Schichthaftung, matten oder wolkigen Oberflächen, Stringing und Maßabweichungen führt. Nylon, TPU, PVA, PC und einige gefüllte Verbundstoffe sind besonders empfindlich, während PLA je nach Rezeptur und Lagerung variiert.' },
+    { type: 'paragraph', html: 'Das Trocknungsmodul nutzt die Feuchtigkeitsbelastung, die Filamentmasse, den Materialfaktor und die Temperatur als Diagnosemodell. Höhere Temperaturen beschleunigen die Feuchtigkeitsentfernung, aber jedes Polymer hat einen sicheren Trocknungsbereich. Eine zu niedrige Temperatur verschwendet Zeit; eine zu hohe Temperatur kann Spulen verformen, Filament anlassen, das Polymer erweichen oder Windungen miteinander verschmelzen. Ziel der Berechnung ist nicht der Nachweis eines exakten Feuchtigkeitsgehalts wie im Labor, sondern eine Schätzung, wann eine Trocknung vor Präzisionsarbeiten ratsam ist.' },
+    { type: 'table', headers: ['Materialverhalten', 'Drucksymptom', 'Prozessreaktion'], rows: [
+      ['Leichte Feuchtigkeit', 'Leichtes Stringing oder kleine Glanzänderungen.', 'Vor kosmetischen Aufträgen und dem Retraction-Tuning trocknen.'],
+      ['Mäßige Feuchtigkeit', 'Knistern, raue Wände oder ungleichmäßige Extrusionsbreite.', 'Spule trocknen und Flusskalibrierung wiederholen.'],
+      ['Starke Feuchtigkeit', 'Schaumbildung, schwache Schichten, sprödes Bauteil oder fehlerhafte Stützen.', 'Länger trocknen, versiegelt lagern und beschädigte Abschnitte ggf. entsorgen.'],
+      ['Überhitzte Trocknung', 'Ovales Filament oder Spulenverformung.', 'Temperatur senken und Herstellerangaben prüfen.'],
+    ] },
+    { type: 'message', title: 'Feuchtigkeit und Toleranz interagieren', html: 'Feuchtes Filament kann dazu führen, dass ein mechanisches Bauteil wie ein CAD- oder Flussproblem aussieht, da die Extrusion ungleichmäßig wird. Trocknen ist daher Teil der Maßhaltigkeit, nicht nur der Oberflächenqualität.' },
+
+    { type: 'title', text: 'AMS- und MMU-Spülungsverhältnis als Produktionswarnung', level: 2 },
+    { type: 'paragraph', html: 'Der Mehrfarbendruck macht Farbwechsel zu einem wirtschaftlichen Faktor. Der Spülturm, das Abstreifobjekt oder der Spülschacht-Ausschuss sind nicht kostenlos; es handelt sich um gekauftes Filament, das in Abfall umgewandelt wird. Ein kleines dekoratives Objekt mit vielen abwechselnden Schichten kann mehr Material verschwenden als ein größeres, einfarbiges Bauteil. Die Suite berechnet das Spülungsverhältnis als Spülvolumen geteilt durch das gesamte extrudierte Volumen, sodass der Abfallanteil sofort sichtbar wird.' },
+    { type: 'paragraph', html: 'Der Schwellenwert von 30,00% ist bewusst streng gewählt. Wenn fast ein Drittel des extrudierten Polymers Spülungsabfall ist, sollte der Auftrag auf Farbreihenfolge, Spülung-in-Infill, Modellteilung, Chargenbildung oder einen höheren Preis hin überprüft werden. Im Printfarm-Bereich verbraucht das Spülen zudem Maschinenlaufzeit und erhöht den Verschleiß durch Filamentwechsel. Ein Angebot, das das Spülen ignoriert, kann ein visuell beeindruckendes Mehrfarbenteil in einen Auftrag mit geringer Marge verwandeln.' },
+    { type: 'list', items: [
+      'Gruppieren Sie ähnliche Farben, um Übergänge mit hoher Kontamination zu reduzieren.',
+      'Vermeiden Sie wiederholte Wechsel von Dunkel nach Hell, wenn das Design umstrukturiert werden kann.',
+      'Verwenden Sie Spülen-in-Infill nur, wenn verdeckte Farbverunreinigungen strukturell acceptable sind.',
+      'Stelle Spülmaterial bei Kundenangeboten für dekorative Mehrfarbenarbeiten separat in Rechnung.',
+      'Führen Sie vor einer aggressiven Reduzierung der Spülmenge eine Slicer-Kalibrierung für jede Materialfamilie durch.',
+    ] },
+    { type: 'diagnostic', variant: 'error', title: 'Kritischer Spülzustand', badge: '30.00%+', html: 'Ein Spülungsverhältnis von über 30,00% bedeutet, dass der Drucker einen großen Teil des Materials für die Reinigung aufwendet. Behandeln Sie dies als Auslöser für eine Neukonstruktion, Chargenbildung oder Preisanpassung, bevor Sie den Produktionslauf starten.' },
+
+    { type: 'title', text: 'Verwendung der Zwischenablage-Ausgabe in Produktionsnotizen', level: 2 },
+    { type: 'paragraph', html: 'Jeder Rechner in der Suite exportiert das gleiche Parameterformat in eckigen Klammern: <code>[Parameter: Wert | Parameter: Wert]</code>. Dies ist bewusst als reiner Text formatiert, da er in E-Mails, Werkstatt-Tickets, Tabellenkalkulationen, Kundennachrichten und CAD-Kommentaren ohne Formatierungsabhängigkeiten übersteht. Es verhindert auch, dass Tausendertrennzeichen oder lokalspezifische Dezimaltrennzeichen in ein Angebot oder eine Zeichnungsnotiz einfließen.' },
+    { type: 'paragraph', html: 'Nutzen Sie die kopierte Zeile als Momentaufnahme des Entscheidungszustands. Fügen Sie sie beispielsweise einer Angebotsrevision hinzu, wenn der Kunde Farbwechsel wünscht, oder fügen Sie sie in ein CAD-Ticket ein, wenn ein Wellenspiel von positiv zu negativ wechselt. Da jeder sichtbare Wert auf zwei Dezimalstellen festgelegt ist, ist die Notiz für Zerspaner, Konstrukteure und Maschinenbediener ohne Umformatierung lesbar.' },
+    { type: 'summary', title: 'Zusammenfassung des Produktions Workflows', items: [
+      'Beginnen Sie mit Angebot und Marge, um sicherzustellen, dass sich der Auftrag rechnet.',
+      'Überprüfen Sie Arbeit und Nachbearbeitung, bevor Sie Lieferzeiten zusagen.',
+      'Prüfen Sie den ROI, wenn Sie Drucker kaufen oder wiederkehrende Verträge abschließen.',
+      'Nutzen Sie die Module für Gewinde und Passung vor der Freigabe funktioneller CAD-Daten.',
+      'Trocknen Sie hygroskopische Materialien, bevor Sie Slicer-Einstellungen beschuldigen.',
+      'Behandeln Sie ein hohes Spülungsverhältnis als Konstruktions- und Preiswarnung.',
+    ] },
+  ],
+  faq: faqData,
+  bibliography,
+  howTo: howToData,
+  schemas: [faqSchema, howToSchema, appSchema],
+};
