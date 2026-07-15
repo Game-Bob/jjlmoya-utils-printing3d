@@ -1,0 +1,107 @@
+---
+import type { PrintFarmRoiCalculatorUI } from './ui';
+import './3d-print-farm-roi-calculator.css';
+
+interface Props {
+  ui: PrintFarmRoiCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="pfroi-root"
+  data-pfroi-root
+  data-currency={ui.currencySymbol}
+  data-months-unit={ui.monthsUnit}
+  data-hours-unit={ui.hoursUnit}
+  data-percent-unit={ui.percentUnit}
+  data-default-currency={ui.defaultCurrencyCode}
+  data-not-viable={ui.notViableLabel}
+  data-positive-insight={ui.positiveInsight}
+  data-negative-insight={ui.negativeInsight}
+  data-parts-unit={ui.partsUnit}
+  data-report-title={ui.reportTitle}
+  data-report-filename={ui.reportFilename}
+  data-report-currency-label={ui.reportCurrencyLabel}
+>
+  <section class="pfroi-results" aria-label={ui.resultsAriaLabel}>
+    <div class="pfroi-payback">
+      <span>{ui.paybackLabel}</span>
+      <strong data-pfroi-output="payback">{ui.pendingLabel}</strong>
+      <small data-pfroi-output="insight">{ui.pendingLabel}</small>
+    </div>
+
+    <div class="pfroi-kpis">
+      <article><span>{ui.netProfitLabel}</span><b data-pfroi-output="profit">{ui.pendingLabel}</b></article>
+      <article><span>{ui.annualRoiLabel}</span><b data-pfroi-output="roi">{ui.pendingLabel}</b></article>
+      <article><span>{ui.productiveHoursLabel}</span><b data-pfroi-output="hours">{ui.pendingLabel}</b></article>
+      <article><span>{ui.marginLabel}</span><b data-pfroi-output="margin">{ui.pendingLabel}</b></article>
+      <article><span>{ui.breakEvenPartsLabel}</span><b data-pfroi-output="break-even-parts">{ui.pendingLabel}</b></article>
+      <article><span>{ui.breakEvenHoursLabel}</span><b data-pfroi-output="break-even-hours">{ui.pendingLabel}</b></article>
+    </div>
+
+    <div class="pfroi-chart" aria-label={ui.chartLabel}>
+      <div class="pfroi-bar-row">
+        <span>{ui.revenueLabel}</span>
+        <div><i data-pfroi-bar="revenue"></i></div>
+        <b data-pfroi-output="revenue">{ui.pendingLabel}</b>
+      </div>
+      <div class="pfroi-bar-row">
+        <span>{ui.costsLabel}</span>
+        <div><i data-pfroi-bar="costs"></i></div>
+        <b data-pfroi-output="costs">{ui.pendingLabel}</b>
+      </div>
+    </div>
+
+    <div class="pfroi-costs">
+      <span>{ui.fixedCostShortLabel}: <b data-pfroi-output="fixed-cost">{ui.pendingLabel}</b></span>
+      <span>{ui.electricityShortLabel}: <b data-pfroi-output="electricity-cost">{ui.pendingLabel}</b></span>
+      <span>{ui.variableCostShortLabel}: <b data-pfroi-output="variable-cost">{ui.pendingLabel}</b></span>
+    </div>
+  </section>
+
+  <section class="pfroi-inputs" aria-label={ui.inputsAriaLabel}>
+    <div class="pfroi-currency-field">
+      <span>{ui.currencyLabel}</span>
+      <div class="pfroi-currency" data-pfroi-currency-menu>
+        <button type="button" data-pfroi-currency-button aria-haspopup="listbox" aria-expanded="false">
+          <b data-pfroi-current-symbol>{ui.currencySymbol}</b>
+          <small>{ui.defaultCurrencyCode}</small>
+        </button>
+        <div class="pfroi-currency-list" role="listbox">
+          {
+            ui.currencyOptions.map((option) => (
+              <button type="button" role="option" data-value={option.code} data-symbol={option.symbol} aria-selected={option.code === ui.defaultCurrencyCode}>
+                <b>{option.symbol}</b>
+                <small>{option.code}</small>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <label><span>{ui.printerCountLabel}</span><input type="number" min="1" step="1" value="12" data-pfroi-input="printer-count" /></label>
+    <label><span>{ui.initialInvestmentLabel}</span><span class="pfroi-money"><input type="number" min="0" step="100" value="18000" data-pfroi-input="initial-investment" /><b data-pfroi-symbol>{ui.currencySymbol}</b></span></label>
+    <label><span>{ui.fixedMonthlyCostLabel}</span><span class="pfroi-money"><input type="number" min="0" step="10" value="950" data-pfroi-input="fixed-cost" /><b data-pfroi-symbol>{ui.currencySymbol}</b></span></label>
+    <label><span>{ui.electricityMonthlyCostLabel}</span><span class="pfroi-money"><input type="number" min="0" step="10" value="420" data-pfroi-input="electricity-cost" /><b data-pfroi-symbol>{ui.currencySymbol}</b></span></label>
+    <label><span>{ui.hourlyRateLabel}</span><span class="pfroi-money"><input type="number" min="0" step="0.1" value="7.5" data-pfroi-input="hourly-rate" /><b><i data-pfroi-symbol>{ui.currencySymbol}</i>/{ui.hoursUnit}</b></span></label>
+    <label><span>{ui.variableCostLabel}</span><span class="pfroi-money"><input type="number" min="0" step="0.1" value="1.8" data-pfroi-input="variable-cost" /><b><i data-pfroi-symbol>{ui.currencySymbol}</i>/{ui.hoursUnit}</b></span></label>
+    <label><span>{ui.averageHoursPerPartLabel}</span><span class="pfroi-money"><input type="number" min="0.1" step="0.1" value="4" data-pfroi-input="average-hours-part" /><b>{ui.hoursUnit}</b></span></label>
+    <label class="pfroi-range"><span>{ui.occupancyLabel}<output>55{ui.percentUnit}</output></span><input type="range" min="0" max="100" step="1" value="55" data-pfroi-input="occupancy" /></label>
+    <label class="pfroi-range"><span>{ui.successRateLabel}<output>92{ui.percentUnit}</output></span><input type="range" min="0" max="100" step="1" value="92" data-pfroi-input="success-rate" /></label>
+  </section>
+
+  <div class="pfroi-actions">
+    <button type="button" data-pfroi-stress>{ui.stressScenarioLabel}</button>
+    <button type="button" data-pfroi-export>{ui.exportSummaryLabel}</button>
+  </div>
+</div>
+
+<script>
+  import { initPrintFarmRoiCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initPrintFarmRoiCalculator);
+  initPrintFarmRoiCalculator();
+</script>

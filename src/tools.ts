@@ -38,6 +38,7 @@ import { MULTI_MATERIAL_PURGE_CALCULATOR_TOOL } from './tool/multiMaterialPurgeC
 import { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonitor';
 import { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite';
 import { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator';
+import { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -78,4 +79,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   MOISTURE_SATURATION_MONITOR_TOOL,
   PRECISION_ENGINEERING_SUITE_TOOL,
   METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL,
+  PRINT_FARM_ROI_CALCULATOR_TOOL,
 ];

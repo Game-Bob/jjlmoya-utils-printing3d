@@ -1,0 +1,15 @@
+---
+import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';
+import { printFarmRoiCalculator } from './index';
+import type { KnownLocale } from '../../types';
+
+interface Props {
+  locale?: KnownLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const content = await printFarmRoiCalculator.i18n[locale]?.();
+if (!content) return null;
+---
+
+{content && <SharedBibliography links={content.bibliography} />}

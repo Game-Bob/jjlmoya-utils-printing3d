@@ -37,6 +37,7 @@ import { multiMaterialPurgeCalculator } from '../tool/multiMaterialPurgeCalculat
 import { moistureSaturationMonitor } from '../tool/moistureSaturationMonitor/entry';
 import { precisionEngineeringSuite } from '../tool/precisionEngineeringSuite/entry';
 import { metricThreadToleranceCalculator } from '../tool/metricThreadToleranceCalculator/entry';
+import { printFarmRoiCalculator } from '../tool/printFarmRoiCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -79,6 +80,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     moistureSaturationMonitor,
     precisionEngineeringSuite,
     metricThreadToleranceCalculator,
+    printFarmRoiCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

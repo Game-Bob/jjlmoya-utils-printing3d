@@ -90,3 +90,5 @@ export { MOISTURE_SATURATION_MONITOR_TOOL } from './tool/moistureSaturationMonit
 export { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSuite/index';
 
 export { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator/index';
+
+export { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator/index';
