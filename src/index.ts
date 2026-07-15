@@ -92,3 +92,5 @@ export { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSui
 export { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator/index';
 
 export { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator/index';
+
+export { POST_PROCESSING_COST_CALCULATOR_TOOL } from './tool/postProcessingCostCalculator/index';

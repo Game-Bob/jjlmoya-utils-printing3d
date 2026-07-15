@@ -1,0 +1,90 @@
+---
+import type { PostProcessingCostCalculatorUI } from './ui';
+import './post-processing-cost-calculator.css';
+
+interface Props {
+  ui: PostProcessingCostCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="ppc-root"
+  data-ppc-root
+  data-currency={ui.currencySymbol}
+  data-minutes-unit={ui.minutesUnit}
+  data-hour-unit={ui.hourUnit}
+  data-rate-unit-separator={ui.rateUnitSeparator}
+  data-copy-template={ui.copyTemplate}
+  data-copied-label={ui.copiedLabel}
+>
+  <section class="ppc-result" aria-label={ui.resultsAriaLabel}>
+    <div class="ppc-total">
+      <span>{ui.totalLabel}</span>
+      <strong data-ppc-output="total">{ui.pendingLabel}</strong>
+    </div>
+    <div class="ppc-kpis">
+      <article><span>{ui.laborLabel}</span><strong data-ppc-output="labor">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.consumablesBreakdownLabel}</span><strong data-ppc-output="consumables">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.timeLabel}</span><strong data-ppc-output="minutes">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.effectiveRateLabel}</span><strong data-ppc-output="effective-rate">{ui.pendingLabel}</strong></article>
+    </div>
+    <div class="ppc-breakdown" aria-label={ui.breakdownLabel}>
+      <div class="ppc-bar" role="img" aria-label={ui.breakdownLabel}>
+        <i class="is-support"></i>
+        <i class="is-sanding"></i>
+        <i class="is-painting"></i>
+        <i class="is-other"></i>
+        <i class="is-consumables"></i>
+      </div>
+      <div class="ppc-legend">
+        <span><i></i>{ui.supportLabel}<b data-ppc-output="support-share">{ui.pendingLabel}</b></span>
+        <span><i></i>{ui.sandingLabel}<b data-ppc-output="sanding-share">{ui.pendingLabel}</b></span>
+        <span><i></i>{ui.paintingLabel}<b data-ppc-output="painting-share">{ui.pendingLabel}</b></span>
+        <span><i></i>{ui.otherLabel}<b data-ppc-output="other-share">{ui.pendingLabel}</b></span>
+        <span><i></i>{ui.consumablesLabel}<b data-ppc-output="consumables-share">{ui.pendingLabel}</b></span>
+      </div>
+    </div>
+    <button class="ppc-copy" type="button" data-ppc-copy>{ui.copyLabel}</button>
+  </section>
+
+  <section class="ppc-inputs" aria-label={ui.inputsAriaLabel}>
+    <label class="ppc-currency" for="ppc-currency">
+      <span>{ui.currencyLabel}</span>
+      <b>
+        <select id="ppc-currency" data-ppc-currency>
+          {
+            ui.currencyOptions.map((option) => (
+              <option value={option.code} data-symbol={option.symbol} selected={option.code === 'EUR'}>
+                {option.code}{ui.currencyOptionSeparator}{option.label}
+              </option>
+            ))
+          }
+        </select>
+      </b>
+    </label>
+
+    <div class="ppc-grid">
+      <label><span>{ui.supportLabel}</span><b><input type="number" min="0" step="1" value="12" data-ppc-input="support" /><small>{ui.minutesUnit}</small></b></label>
+      <label><span>{ui.sandingLabel}</span><b><input type="number" min="0" step="1" value="25" data-ppc-input="sanding" /><small>{ui.minutesUnit}</small></b></label>
+      <label><span>{ui.paintingLabel}</span><b><input type="number" min="0" step="1" value="18" data-ppc-input="painting" /><small>{ui.minutesUnit}</small></b></label>
+      <label><span>{ui.otherLabel}</span><b><input type="number" min="0" step="1" value="8" data-ppc-input="other" /><small>{ui.minutesUnit}</small></b></label>
+      <label><span>{ui.hourlyRateLabel}</span><b><input type="number" min="0" step="0.01" value="32" data-ppc-input="hourly-rate" /><small><em data-ppc-symbol>{ui.currencySymbol}</em>{ui.rateUnitSeparator}{ui.hourUnit}</small></b></label>
+      <label><span>{ui.consumablesLabel}</span><b><input type="number" min="0" step="0.01" value="4.5" data-ppc-input="consumables" /><small data-ppc-symbol>{ui.currencySymbol}</small></b></label>
+    </div>
+
+    <label class="ppc-factor">
+      <span>{ui.conversionFactorLabel}</span>
+      <b><input type="number" min="0.0001" step="0.01" value="1" data-ppc-input="conversion-factor" /><small>{ui.conversionFactorUnit}</small></b>
+      <em>{ui.conversionHint}</em>
+    </label>
+  </section>
+</div>
+
+<script>
+  import { initPostProcessingCostCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initPostProcessingCostCalculator);
+  initPostProcessingCostCalculator();
+</script>

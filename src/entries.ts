@@ -37,6 +37,7 @@ export { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entr
 export { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
 export { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 export { printFarmRoiCalculator } from './tool/printFarmRoiCalculator/entry';
+export { postProcessingCostCalculator } from './tool/postProcessingCostCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -78,6 +79,7 @@ import { moistureSaturationMonitor } from './tool/moistureSaturationMonitor/entr
 import { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entry';
 import { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 import { printFarmRoiCalculator } from './tool/printFarmRoiCalculator/entry';
+import { postProcessingCostCalculator } from './tool/postProcessingCostCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -119,4 +121,5 @@ export const ALL_ENTRIES = [
   precisionEngineeringSuite,
   metricThreadToleranceCalculator,
   printFarmRoiCalculator,
+  postProcessingCostCalculator,
 ];
