@@ -3,7 +3,7 @@ import type { FAQPage, HowTo, SoftwareApplication, WithContext } from 'schema-dt
 import type { ToolLocaleContent } from '../../../types';
 import type { MasterPricingMarginCalculatorUI } from '../ui';
 
-const slug = '3d-printing-pricing-calculator';
+const slug = '3d-print-pricing-calculator';
 const title = '3D 프린팅 가격 계산기: 마진, 마크업 및 시장 포지션';
 const description =
   '제조 원가, 목표 마진율, 마크업 비율, 경쟁사 가격을 바탕으로 정확한 금융 공식을 사용하여 3D 프린팅 권장 소비자 가격(PVP)을 계산합니다.';

@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { MasterPricingMarginCalculatorUI } from '../ui';
 
 const slug = '3d-print-prijs-calculator';
-const title = '3D-print Prijs Calculator: Marge, Markup en Marktpositionering';
+const title = '3D print Prijs Calculator: Marge, Markup en Marktpositionering';
 const description =
   'Bereken de aanbevolen verkoopprijs (PVP) voor 3D-prints op basis van productiekosten, gewenste winstmarge, markup en de prijzen van concurrenten.';
 
@@ -258,7 +258,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     },
     {
       type: 'summary',
-      title: 'Checklist voor marge-bepaling',
+      title: 'Checklist voor margebepaling',
       items: [
         'Gebruik de totale productiekosten als basis.',
         'Houd de doelmarge onder de 100%.',
@@ -323,11 +323,11 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'De factor is van toepassing op geldbedragen, niet op marge- of markuppersentages. Dit is belangrijk omdat percentages hun betekenis over verschillende valuta’s heen moeten behouden. Een marge van 35% in euro blijft een marge van 35% in dollars nadat zowel de kosten als de referentieprijs zijn omgerekend. De uitvoer blijft vastgelegd op twee decimalen zonder duizendtal-separatoren, wat zorgt voor een foutloze invoer in factuurvelden en spreadsheets.',
+      html: 'De factor is van toepassing op geldbedragen, niet op marge- of markuppersentages. Dit is belangrijk omdat percentages hun betekenis over verschillende valuta\'s heen moeten behouden. Een marge van 35% in euro blijft een marge van 35% in dollars nadat zowel de kosten als de referentieprijs zijn omgerekend. De uitvoer blijft vastgelegd op twee decimalen zonder duizendtal-separatoren, wat zorgt voor een foutloze invoer in factuurvelden en spreadsheets.',
     },
     {
       type: 'summary',
-      title: 'Valuta- en factorregels',
+      title: 'Valuta en factorregels',
       items: [
         'Selecteer de klantvaluta voordat u de prijs kopieert.',
         'Laat de factor op 1 staan voor standaardoffertes in de lokale valuta.',
@@ -361,7 +361,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     {
       type: 'card',
       icon: 'mdi:chart-timeline-variant',
-      title: 'Evalueer de winst van 3D-prints na afronding van de opdracht',
+      title: 'Evalueer de winst van 3D prints na afronding van de opdracht',
       html: '<p>De geplande nettowinst is handig voorafgaand aan de offerte, maar de werkelijk behaalde winst is wat uw prijssysteem verbetert. Vergelijk geschatte kosten met werkelijke kosten en pas toekomstige margedoelen aan per productgroep.</p>',
     },
     {

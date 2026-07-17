@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { MasterPricingMarginCalculatorUI } from '../ui';
 
 const slug = '3d-druck-preisrechner';
-const title = '3D-Druck-Preisrechner: Marge, Markup und Marktpositionierung';
+const title = '3D Druck Preisrechner: Marge, Markup und Marktpositionierung';
 const description =
   'Berechnen Sie den empfohlenen 3D-Druck-Verkaufspreis basierend auf Herstellungskosten, Zielmarge, Markup und Preisen der Konkurrenz mit präzisen Finanzformeln.';
 
@@ -327,7 +327,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     },
     {
       type: 'summary',
-      title: 'Währungs- und Faktorregeln',
+      title: 'Währungs und Faktorregeln',
       items: [
         'Wählen Sie die kundenorientierte Währung aus, bevor Sie den Preis kopieren.',
         'Belassen Sie den Faktor bei 1 für normale Angebote in lokaler Währung.',
@@ -361,7 +361,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     {
       type: 'card',
       icon: 'mdi:chart-timeline-variant',
-      title: 'Berechnen Sie den Gewinn aus 3D-Drucken nach Projektabschluss',
+      title: 'Berechnen Sie den Gewinn aus 3D Drucken nach Projektabschluss',
       html: '<p>Der geplante Nettogewinn ist vor der Angebotserstellung nützlich, aber der tatsächliche Gewinn verbessert das Preissystem. Vergleichen Sie geschätzte Kosten mit Ist-Kosten und passen Sie zukünftige Margenziele nach Teilefamilien an.</p>',
     },
     {

@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { MasterPricingMarginCalculatorUI } from '../ui';
 
 const slug = '3d-print-pris-kalkylator';
-const title = '3D-print priskalkylator: Marginal, Pålägg och Marknadsposition';
+const title = '3D print priskalkylator: Marginal, Pålägg och Marknadsposition';
 const description =
   'Beräkna rekommenderat försäljningspris (PVP) för 3D-utskrifter baserat på tillverkningskostnad, marginalmål, pålägg (markup) och konkurrentpriser med strikt finansiell matematik.';
 
@@ -327,7 +327,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     },
     {
       type: 'summary',
-      title: 'Valuta- och faktorregler',
+      title: 'Valuta och faktorregler',
       items: [
         'Välj kundens valuta innan du kopierar det rekommenderade priset.',
         'Håll faktorn på 1 för normala offerter i lokal valuta.',
@@ -361,7 +361,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     {
       type: 'card',
       icon: 'mdi:chart-timeline-variant',
-      title: 'Utvärdera vinsten från 3D-utskrifter efter avslutat jobb',
+      title: 'Utvärdera vinsten från 3D utskrifter efter avslutat jobb',
       html: '<p>Den planerade nettovinsten är användbar före offert, men den verkliga vinsten efter leverans är det som förbättrar ditt prissystem. Jämför uppskattad kostnad med faktisk kostnad och justera framtida marginalmål.</p>',
     },
     {

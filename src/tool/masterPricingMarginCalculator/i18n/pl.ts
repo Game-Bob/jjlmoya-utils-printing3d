@@ -291,7 +291,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
       variant: 'info',
       title: 'Narzut nie jest błędem',
       badge: 'Uwaga dotycząca metody',
-      html: '<p>Narzut to prawidłowy język cenowy, o ile każdy rozumie jego podstawę. Problemem nie jest sam narzut, ale nazywanie go „marżą” w ofertach lub arkuszach kalkulacyjnych.</p>',
+      html: '<p>Narzut to prawidłowy język cenowy, o ile każdy rozumie jego podstawę. Problemem nie jest sam narzut, ale nazywanie go \"marżą\" w ofertach lub arkuszach kalkulacyjnych.</p>',
     },
     { type: 'title', text: 'Cena konkurencji a pozycjonowanie rynkowe', level: 2 },
     {

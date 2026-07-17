@@ -4,7 +4,7 @@ import type { ToolLocaleContent } from '../../../types';
 import type { MasterPricingMarginCalculatorUI } from '../ui';
 
 const slug = 'calculateur-prix-impression-3d';
-const title = 'Calculateur de Prix d\'Impression 3D : Marge, Markup et Positionnement';
+const title = 'Calculateur de Prix d\'Impression 3D: Marge, Markup et Positionnement';
 const description =
   'Calculez le prix de vente conseillé en impression 3D à partir des coûts de fabrication, de la marge bénéficiaire ciblée, du taux de marque (markup) et des prix de la concurrence.';
 
@@ -52,7 +52,7 @@ const faqData = [
 ];
 
 const howToData = [
-  { name: 'Saisir le coût total de fabrication', text: 'Prenez en compte le coût complet de production : coûts fixes, variables, matière, usure machine, main-d\'œuvre et post-traitement.' },
+  { name: 'Saisir le coût total de fabrication', text: 'Prenez en compte le coût complet de production: coûts fixes, variables, matière, usure machine, main-d\'œuvre et post-traitement.' },
   { name: 'Choisir le mode marge ou markup', text: 'Sélectionnez si le prix de vente recommandé doit appliquer la formule de marge cible ou celle du markup.' },
   { name: 'Définir un prix de référence concurrentiel', text: 'Saisissez un tarif de marché équivalent pour situer votre devis par rapport à vos concurrents.' },
   { name: 'Copier le tarif conseillé', text: 'Utilisez le bouton de copie pour exporter le PVP, le bénéfice net, la marge réelle et le positionnement marché dans votre devis.' },
@@ -129,7 +129,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     sliderOutputSeparator: ' | ',
     copyLabel: 'Copier le prix',
     copiedLabel: 'Copié',
-    copyTemplate: 'PVP recommandé : {pvp}; bénéfice net : {profit}; marge réelle : {margin}; comparaison marché : {comparison}',
+    copyTemplate: 'PVP recommandé: {pvp}; bénéfice net: {profit}; marge réelle: {margin}; comparaison marché: {comparison}',
     pendingLabel: '-',
     currencySymbol: '\u20ac',
   },
@@ -137,11 +137,11 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     { type: 'title', text: 'Fonctionnement du calculateur de prix d\'impression 3D', level: 2 },
     {
       type: 'paragraph',
-      html: 'Un <strong>calculateur de prix d\'impression 3D</strong> professionnel doit se baser sur le coût de fabrication réel, et non uniquement sur le poids du consommable. Ce coût doit comprendre l\'amortissement machine, l\'électricité, le temps de main-d\'œuvre (préparation du plateau, post-traitement, contrôle qualité), les pertes de consommables, le taux d\'échec estimé et l\'emballage. Une fois ce coût déterminé, vous pouvez calculer le prix de vente final via deux approches distinctes : la marge cible ou le markup. Ces deux méthodes diffèrent fondamentalement, et les confondre risque de fausser votre rentabilité.',
+      html: 'Un <strong>calculateur de prix d\'impression 3D</strong> professionnel doit se baser sur le coût de fabrication réel, et non uniquement sur le poids du consommable. Ce coût doit comprendre l\'amortissement machine, l\'électricité, le temps de main-d\'œuvre (préparation du plateau, post-traitement, contrôle qualité), les pertes de consommables, le taux d\'échec estimé et l\'emballage. Une fois ce coût déterminé, vous pouvez calculer le prix de vente final via deux approches distinctes: la marge cible ou le markup. Ces deux méthodes diffèrent fondamentalement, et les confondre risque de fausser votre rentabilité.',
     },
     {
       type: 'paragraph',
-      html: 'Notre outil applique les formules standard : <code>PVP_marge = C / (1 - M / 100)</code> et <code>PVP_markup = C x (1 + U / 100)</code>. Le profit net s\'établit toujours à <code>PVP - C</code>. La marge réelle représente le bénéfice rapporté au prix final (et non au coût initial). Le curseur de marge est bridé en deçà de 100 % afin d\'éviter une division par zéro. La valeur finale s\'affiche avec deux décimales pour faciliter l\'import direct dans vos devis, factures ou tableurs.',
+      html: 'Notre outil applique les formules standard: <code>PVP_marge = C / (1 - M / 100)</code> et <code>PVP_markup = C x (1 + U / 100)</code>. Le profit net s\'établit toujours à <code>PVP - C</code>. La marge réelle représente le bénéfice rapporté au prix final (et non au coût initial). Le curseur de marge est bridé en deçà de 100 % afin d\'éviter une division par zéro. La valeur finale s\'affiche avec deux décimales pour faciliter l\'import direct dans vos devis, factures ou tableurs.',
     },
     {
       type: 'stats',
@@ -199,10 +199,10 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
       type: 'list',
       icon: 'mdi:check-circle-outline',
       items: [
-        'Intégrez les matières premières : filaments, résines, poudres, matériaux de support et pertes liées aux purges.',
+        'Intégrez les matières premières: filaments, résines, poudres, matériaux de support et pertes liées aux purges.',
         'Calculez l\'amortissement horaire des imprimantes, incluant l\'entretien préventif et les pièces de rechange.',
-        'Valorisez le temps passé : préparation du fichier, post-traitement, contrôle qualité et packaging.',
-        'Ajoutez les fournitures de finition directe : abrasifs, solvants, apprêts, peintures et vernis.',
+        'Valorisez le temps passé: préparation du fichier, post-traitement, contrôle qualité et packaging.',
+        'Ajoutez les fournitures de finition directe: abrasifs, solvants, apprêts, peintures et vernis.',
         'Prévoyez une marge d\'erreur (échecs) adaptée à la complexité géométrique de la pièce ou aux exigences esthétiques.',
       ],
     },
@@ -269,11 +269,11 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     { type: 'title', text: 'Utiliser le markup sans compromettre vos marges', level: 2 },
     {
       type: 'paragraph',
-      html: 'La tarification par markup (taux de marque) est pertinente pour appliquer rapidement un coefficient correcteur par catégorie de travaux. Par exemple, appliquer un markup de 80 % sur le FDM standard, 120 % sur le prototypage de précision et 200 % sur les commandes urgentes. Le calcul est linéaire : le coût est multiplié par (1 + markup). Un coût de 35,00 avec un markup de 80 % donne un prix final de 63,00. Votre bénéfice est de 28,00, mais la marge réelle sur cette vente n\'est que de 44,44 % (et non 80 %).',
+      html: 'La tarification par markup (taux de marque) est pertinente pour appliquer rapidement un coefficient correcteur par catégorie de travaux. Par exemple, appliquer un markup de 80 % sur le FDM standard, 120 % sur le prototypage de précision et 200 % sur les commandes urgentes. Le calcul est linéaire: le coût est multiplié par (1 + markup). Un coût de 35,00 avec un markup de 80 % donne un prix final de 63,00. Votre bénéfice est de 28,00, mais la marge réelle sur cette vente n\'est que de 44,44 % (et non 80 %).',
     },
     {
       type: 'proscons',
-      title: 'Marge vs. Markup : avantages et inconvénients',
+      title: 'Marge vs. Markup: avantages et inconvénients',
       items: [
         { pro: 'La marge sécurise directement les objectifs de rentabilité financière.', con: 'Demande une éducation des commerciaux pour appréhender la courbe non linéaire des prix.' },
         { pro: 'Le markup simplifie l\'application de coefficients multiplicateurs.', con: 'Peut induire en erreur sur la rentabilité réelle si on l\'assimile à la marge nette.' },
@@ -284,7 +284,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
       type: 'message',
       title: 'Usage pratique du markup',
       ariaLabel: 'Conseils markup',
-      html: '<p>Le markup convient pour les règles internes rapides : +60 % sur les séries FDM, +90 % sur les figurines résine, ou +150 % sur les pièces express. Suivez toujours la valeur de marge réelle pour valider ces choix.</p>',
+      html: '<p>Le markup convient pour les règles internes rapides: +60 % sur les séries FDM, +90 % sur les figurines résine, ou +150 % sur les pièces express. Suivez toujours la valeur de marge réelle pour valider ces choix.</p>',
     },
     {
       type: 'diagnostic',
@@ -296,7 +296,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     { type: 'title', text: 'Positionnement et analyse de la concurrence', level: 2 },
     {
       type: 'paragraph',
-      html: 'La saisie d\'un prix concurrentiel de référence transforme ce simple outil mathématique en aide à la décision commerciale. Si votre PVP conseillé est supérieur au marché, l\'affichage passe au orange. Cela n\'invalide pas votre calcul : un prix plus élevé peut refléter des délais réduits, une meilleure traçabilité des matériaux, une qualité de surface supérieure, un support d\'ingénierie, ou un risque réduit pour le client. Cependant, le commercial doit être en mesure d\'expliquer cette différence avant l\'envoi du devis.',
+      html: 'La saisie d\'un prix concurrentiel de référence transforme ce simple outil mathématique en aide à la décision commerciale. Si votre PVP conseillé est supérieur au marché, l\'affichage passe au orange. Cela n\'invalide pas votre calcul: un prix plus élevé peut refléter des délais réduits, une meilleure traçabilité des matériaux, une qualité de surface supérieure, un support d\'ingénierie, ou un risque réduit pour le client. Cependant, le commercial doit être en mesure d\'expliquer cette différence avant l\'envoi du devis.',
     },
     {
       type: 'paragraph',
@@ -323,7 +323,7 @@ export const content: ToolLocaleContent<MasterPricingMarginCalculatorUI> = {
     },
     {
       type: 'paragraph',
-      html: 'Ce facteur affecte uniquement les montants financiers, pas les taux de marge ou de markup. Cette règle préserve la signification économique de vos indicateurs : une marge de 35 % reste identique en dollars ou en euros après conversion. L\'affichage sans séparateur de milliers et avec deux décimales garantit des copier-coller propres vers vos outils de facturation ou vos ERP.',
+      html: 'Ce facteur affecte uniquement les montants financiers, pas les taux de marge ou de markup. Cette règle préserve la signification économique de vos indicateurs: une marge de 35 % reste identique en dollars ou en euros après conversion. L\'affichage sans séparateur de milliers et avec deux décimales garantit des copier-coller propres vers vos outils de facturation ou vos ERP.',
     },
     {
       type: 'summary',
