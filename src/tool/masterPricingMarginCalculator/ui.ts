@@ -1,0 +1,39 @@
+export interface MasterPricingMarginCalculatorUI {
+  inputsAriaLabel: string;
+  resultsAriaLabel: string;
+  currencyLabel: string;
+  currencyOptions: {
+    code: string;
+    label: string;
+    symbol: string;
+  }[];
+  currencyOptionSeparator: string;
+  costLabel: string;
+  competitorLabel: string;
+  marginLabel: string;
+  markupLabel: string;
+  conversionFactorLabel: string;
+  conversionFactorUnit: string;
+  conversionHint: string;
+  modeLabel: string;
+  marginModeLabel: string;
+  markupModeLabel: string;
+  pvpRecommendedLabel: string;
+  netProfitLabel: string;
+  realMarginLabel: string;
+  marketComparisonLabel: string;
+  marketPositionLabel: string;
+  aboveMarketLabel: string;
+  belowMarketLabel: string;
+  atMarketLabel: string;
+  pvpByMarginLabel: string;
+  pvpByMarkupLabel: string;
+  formulaMarginLabel: string;
+  formulaMarkupLabel: string;
+  sliderOutputSeparator: string;
+  copyLabel: string;
+  copiedLabel: string;
+  copyTemplate: string;
+  pendingLabel: string;
+  currencySymbol: string;
+}

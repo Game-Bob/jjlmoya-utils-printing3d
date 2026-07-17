@@ -94,3 +94,5 @@ export { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadTole
 export { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator/index';
 
 export { POST_PROCESSING_COST_CALCULATOR_TOOL } from './tool/postProcessingCostCalculator/index';
+
+export { MASTER_PRICING_MARGIN_CALCULATOR_TOOL } from './tool/masterPricingMarginCalculator/index';

@@ -40,6 +40,7 @@ import { PRECISION_ENGINEERING_SUITE_TOOL } from './tool/precisionEngineeringSui
 import { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadToleranceCalculator';
 import { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator';
 import { POST_PROCESSING_COST_CALCULATOR_TOOL } from './tool/postProcessingCostCalculator';
+import { MASTER_PRICING_MARGIN_CALCULATOR_TOOL } from './tool/masterPricingMarginCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -82,4 +83,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL,
   PRINT_FARM_ROI_CALCULATOR_TOOL,
   POST_PROCESSING_COST_CALCULATOR_TOOL,
+  MASTER_PRICING_MARGIN_CALCULATOR_TOOL,
 ];

@@ -1,0 +1,101 @@
+---
+import type { MasterPricingMarginCalculatorUI } from './ui';
+import './3d-print-pricing-calculator.css';
+
+interface Props {
+  ui: MasterPricingMarginCalculatorUI;
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  class="mpm-root"
+  data-mpm-root
+  data-currency={ui.currencySymbol}
+  data-copy-template={ui.copyTemplate}
+  data-copied-label={ui.copiedLabel}
+  data-above-market-label={ui.aboveMarketLabel}
+  data-below-market-label={ui.belowMarketLabel}
+  data-at-market-label={ui.atMarketLabel}
+>
+  <section class="mpm-console" aria-label={ui.inputsAriaLabel}>
+    <div class="mpm-topline">
+      <label class="mpm-currency" for="mpm-currency">
+        <span>{ui.currencyLabel}</span>
+        <select id="mpm-currency" data-mpm-currency>
+          {
+            ui.currencyOptions.map((option) => (
+              <option value={option.code} data-symbol={option.symbol} selected={option.code === 'EUR'}>
+                {option.code}{ui.currencyOptionSeparator}{option.label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+      <fieldset class="mpm-mode">
+        <legend>{ui.modeLabel}</legend>
+        <label><input type="radio" name="mpm-mode" value="margin" data-mpm-mode checked /> <span>{ui.marginModeLabel}</span></label>
+        <label><input type="radio" name="mpm-mode" value="markup" data-mpm-mode /> <span>{ui.markupModeLabel}</span></label>
+      </fieldset>
+    </div>
+
+    <div class="mpm-money-grid">
+      <label>
+        <span>{ui.costLabel}</span>
+        <b><input type="number" min="0" step="0.01" value="42.50" data-mpm-input="cost" /><small data-mpm-symbol>{ui.currencySymbol}</small></b>
+      </label>
+      <label>
+        <span>{ui.competitorLabel}</span>
+        <b><input type="number" min="0" step="0.01" value="79.00" data-mpm-input="competitor" /><small data-mpm-symbol>{ui.currencySymbol}</small></b>
+      </label>
+    </div>
+
+    <div class="mpm-sliders">
+      <label>
+        <span>{ui.marginLabel}</span>
+        <output><b data-mpm-output="margin-value">{ui.pendingLabel}</b>{ui.sliderOutputSeparator}<span data-mpm-output="pvp-margin">{ui.pendingLabel}</span></output>
+        <input type="range" min="0" max="99.99" step="0.01" value="38" data-mpm-input="margin" />
+      </label>
+      <label>
+        <span>{ui.markupLabel}</span>
+        <output><b data-mpm-output="markup-value">{ui.pendingLabel}</b>{ui.sliderOutputSeparator}<span data-mpm-output="pvp-markup">{ui.pendingLabel}</span></output>
+        <input type="range" min="0" max="300" step="0.1" value="60" data-mpm-input="markup" />
+      </label>
+    </div>
+
+    <label class="mpm-factor">
+      <span>{ui.conversionFactorLabel}</span>
+      <b><input type="number" min="0.0001" step="0.01" value="1" data-mpm-input="conversion-factor" /><small>{ui.conversionFactorUnit}</small></b>
+      <em>{ui.conversionHint}</em>
+    </label>
+  </section>
+
+  <section class="mpm-results" aria-label={ui.resultsAriaLabel}>
+    <div class="mpm-primary">
+      <span>{ui.pvpRecommendedLabel}</span>
+      <strong data-mpm-output="pvp">{ui.pendingLabel}</strong>
+    </div>
+    <div class="mpm-kpis">
+      <article><span>{ui.netProfitLabel}</span><strong data-mpm-output="profit">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.realMarginLabel}</span><strong data-mpm-output="real-margin">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.marketComparisonLabel}</span><strong data-mpm-output="comparison">{ui.pendingLabel}</strong></article>
+      <article><span>{ui.marketPositionLabel}</span><strong data-mpm-output="position">{ui.pendingLabel}</strong></article>
+    </div>
+    <div class="mpm-market" role="img" aria-label={ui.marketPositionLabel}>
+      <i></i>
+    </div>
+    <div class="mpm-formulas">
+      <code>{ui.formulaMarginLabel}</code>
+      <code>{ui.formulaMarkupLabel}</code>
+    </div>
+    <button class="mpm-copy" type="button" data-mpm-copy>{ui.copyLabel}</button>
+  </section>
+</div>
+
+<script>
+  import { initMasterPricingMarginCalculator } from './app';
+
+  document.addEventListener('astro:page-load', initMasterPricingMarginCalculator);
+  initMasterPricingMarginCalculator();
+</script>

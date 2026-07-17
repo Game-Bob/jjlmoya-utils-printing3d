@@ -38,6 +38,7 @@ export { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entr
 export { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 export { printFarmRoiCalculator } from './tool/printFarmRoiCalculator/entry';
 export { postProcessingCostCalculator } from './tool/postProcessingCostCalculator/entry';
+export { masterPricingMarginCalculator } from './tool/masterPricingMarginCalculator/entry';
 export { printing3dCategory } from './category';
 
 import { printingCostCalculator } from './tool/printingCostCalculator/entry';
@@ -80,6 +81,7 @@ import { precisionEngineeringSuite } from './tool/precisionEngineeringSuite/entr
 import { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCalculator/entry';
 import { printFarmRoiCalculator } from './tool/printFarmRoiCalculator/entry';
 import { postProcessingCostCalculator } from './tool/postProcessingCostCalculator/entry';
+import { masterPricingMarginCalculator } from './tool/masterPricingMarginCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -122,4 +124,5 @@ export const ALL_ENTRIES = [
   metricThreadToleranceCalculator,
   printFarmRoiCalculator,
   postProcessingCostCalculator,
+  masterPricingMarginCalculator,
 ];
