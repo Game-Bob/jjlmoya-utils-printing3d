@@ -94,3 +94,5 @@ description: Create a new tool in the hardware utilities library (src/tool/). Us
 10. **Critical import rule**: `bibliography.astro` MUST use the aliased import `import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';`. NEVER use `import { SharedBibliography }` — that named export does NOT exist and will crash the production build.
 
 11. **Mandatory `icons` field**: Every tool entry in `entry.ts` MUST include `icons: { bg: 'mdi:<icon>', fg: 'mdi:<icon>' }`. Omitting this field causes a runtime crash when the home page iterates all tools.
+
+12. **Mandatory `seo.astro` contract**: `seo.astro` MUST NOT destructure `ui.seo`. It MUST use `SEORenderer` from `@jjlmoya/utils-shared` with dynamic locale loading to prevent prerender crashes in category sites.
