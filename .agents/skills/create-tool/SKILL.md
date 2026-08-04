@@ -88,4 +88,9 @@ description: Create a new tool in the hardware utilities library (src/tool/). Us
 9. **Verify only after OKQA** — when the user explicitly says `OKQA`, run in order:
    - `npm run type-check`
    - `npm run lint`
-   - `npm run test -- --testPathIgnorePatterns=i18n_coverage`
+   - `npm run test`
+   - `npm run build`
+
+10. **Critical import rule**: `bibliography.astro` MUST use the aliased import `import { Bibliography as SharedBibliography } from '@jjlmoya/utils-shared';`. NEVER use `import { SharedBibliography }` — that named export does NOT exist and will crash the production build.
+
+11. **Mandatory `icons` field**: Every tool entry in `entry.ts` MUST include `icons: { bg: 'mdi:<icon>', fg: 'mdi:<icon>' }`. Omitting this field causes a runtime crash when the home page iterates all tools.
