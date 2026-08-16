@@ -299,6 +299,7 @@ export const content: ToolLocaleContent<RetractionStringingCalibratorUI> = {
         'Jeśli po przemieszczeniu pojawiają się grudki, zmniejsz odległość przed dodaniem ujemnego restartu.',
       ],
     },
+    { type: 'paragraph', html: 'Po kalibracji sprawdź wynik na modelu z mostami, wieżyczkami i krótkimi przejazdami. Jeśli pojedyncza wartość działa tylko w jednym fragmencie, wybierz ustawienie stabilne dla całego materiału i profilu.' },
   ],
   faq: [
     {
