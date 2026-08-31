@@ -41,6 +41,7 @@ import { METRIC_THREAD_TOLERANCE_CALCULATOR_TOOL } from './tool/metricThreadTole
 import { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator';
 import { POST_PROCESSING_COST_CALCULATOR_TOOL } from './tool/postProcessingCostCalculator';
 import { MASTER_PRICING_MARGIN_CALCULATOR_TOOL } from './tool/masterPricingMarginCalculator';
+import { NOZZLE_FLOW_RATE_CALCULATOR_TOOL } from './tool/nozzleFlowRateCalculator';
 
 export const ALL_TOOLS: ToolDefinition[] = [
   PRINTING_COST_CALCULATOR_TOOL,
@@ -84,4 +85,5 @@ export const ALL_TOOLS: ToolDefinition[] = [
   PRINT_FARM_ROI_CALCULATOR_TOOL,
   POST_PROCESSING_COST_CALCULATOR_TOOL,
   MASTER_PRICING_MARGIN_CALCULATOR_TOOL,
+  NOZZLE_FLOW_RATE_CALCULATOR_TOOL,
 ];

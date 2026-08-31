@@ -96,3 +96,5 @@ export { PRINT_FARM_ROI_CALCULATOR_TOOL } from './tool/printFarmRoiCalculator/in
 export { POST_PROCESSING_COST_CALCULATOR_TOOL } from './tool/postProcessingCostCalculator/index';
 
 export { MASTER_PRICING_MARGIN_CALCULATOR_TOOL } from './tool/masterPricingMarginCalculator/index';
+
+export { NOZZLE_FLOW_RATE_CALCULATOR_TOOL } from './tool/nozzleFlowRateCalculator/index';

@@ -40,6 +40,7 @@ import { metricThreadToleranceCalculator } from '../tool/metricThreadToleranceCa
 import { printFarmRoiCalculator } from '../tool/printFarmRoiCalculator/entry';
 import { postProcessingCostCalculator } from '../tool/postProcessingCostCalculator/entry';
 import { masterPricingMarginCalculator } from '../tool/masterPricingMarginCalculator/entry';
+import { nozzleFlowRateCalculator } from '../tool/nozzleFlowRateCalculator/entry';
 
 export const printing3dCategory: Printing3dCategoryEntry = {
   icon: 'mdi:printer-3d',
@@ -85,6 +86,7 @@ export const printing3dCategory: Printing3dCategoryEntry = {
     printFarmRoiCalculator,
     postProcessingCostCalculator,
     masterPricingMarginCalculator,
+    nozzleFlowRateCalculator,
   ],
   i18n: {
     es: () => import('./i18n/es').then((m) => m.content),

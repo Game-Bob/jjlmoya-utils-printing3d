@@ -1,0 +1,99 @@
+---
+import './nozzle-flow-rate-calculator.css';
+import { renderNozzleFlowScene } from './dom-views';
+import { calculateNozzleFlow } from './logic';
+import type { NozzleFlowRateCalculatorUI } from './ui';
+
+interface Props {
+  ui: NozzleFlowRateCalculatorUI;
+}
+
+const { ui } = Astro.props;
+const initialResult = calculateNozzleFlow({
+  nozzleDiameterMm: 0.4,
+  lineWidthMm: 0.48,
+  layerHeightMm: 0.2,
+  speedMmPerSecond: 120,
+  flowLimitMm3PerSecond: 15,
+});
+const config = JSON.stringify({ locale: 'en', ui });
+const initialScene = renderNozzleFlowScene(initialResult, 'metric', ui, {
+  unit: ui.flowUnit,
+  requested: ui.requestedFlowLabel,
+  limit: ui.flowLimitLabel,
+  state: ui.readyState,
+});
+---
+
+<div class="nozzle-flow-card" data-nozzle-flow-tool data-unit-system="metric">
+  <script is:inline type="application/json" data-nozzle-flow-config set:html={config} />
+  <div class="nozzle-flow-toolbar" aria-label={ui.inputsAriaLabel}>
+    <div class="unit-switch" role="group" aria-label={ui.unitSystemLabel}>
+      <button type="button" data-unit-button="metric" aria-pressed="true">{ui.metricLabel}</button>
+      <button type="button" data-unit-button="imperial" aria-pressed="false">{ui.imperialLabel}</button>
+    </div>
+    <div class="preset-strip" aria-label={ui.presetLabel}>
+      <span class="preset-label">{ui.presetLabel}</span>
+      <button type="button" data-preset="quality">{ui.qualityPreset}</button>
+      <button type="button" data-preset="balanced">{ui.balancedPreset}</button>
+      <button type="button" data-preset="draft">{ui.draftPreset}</button>
+    </div>
+  </div>
+  <div class="flow-preset-row">
+    <label>{ui.flowPresetLabel}
+      <select data-flow-preset>
+        <option value="custom">{ui.customFlowPreset}</option>
+        <option value="e3d-v6-pla">{ui.e3dV6PlaPreset} · 15 mm³/s</option>
+        <option value="e3d-v6-petg">{ui.e3dV6PetgPreset} · 12 mm³/s</option>
+        <option value="e3d-v6-abs">{ui.e3dV6PlaPreset.replace('PLA', 'ABS')} · 10 mm³/s</option>
+        <option value="volcano-pla">{ui.volcanoPlaPreset} · 28 mm³/s</option>
+        <option value="volcano-petg">{ui.volcanoPetgPreset} · 24 mm³/s</option>
+        <option value="volcano-abs">{ui.volcanoPlaPreset.replace('PLA', 'ABS')} · 20 mm³/s</option>
+        <option value="bambu-pla">{ui.bambuPlaPreset} · 32 mm³/s</option>
+        <option value="bambu-petg">{ui.bambuPetgPreset} · 26 mm³/s</option>
+        <option value="bambu-abs">{ui.bambuPlaPreset.replace('PLA', 'ABS')} · 24 mm³/s</option>
+      </select>
+    </label>
+  </div>
+  <div class="nozzle-flow-workbench">
+    <section class="nozzle-flow-controls" aria-label={ui.inputsAriaLabel}>
+      <label>{ui.nozzleDiameterLabel}<span class="input-row"><input type="text" value="0.4" data-input="nozzle" inputmode="decimal" /><span data-unit data-metric={ui.nozzleUnit} data-imperial="in">{ui.nozzleUnit}</span></span></label>
+      <label>{ui.lineWidthLabel}<span class="input-row"><input type="text" value="0.48" data-input="width" inputmode="decimal" /><span data-unit data-metric={ui.lineWidthUnit} data-imperial="in">{ui.lineWidthUnit}</span></span></label>
+      <label>{ui.layerHeightLabel}<span class="input-row"><input type="text" value="0.2" data-input="layer" inputmode="decimal" /><span data-unit data-metric={ui.layerHeightUnit} data-imperial="in">{ui.layerHeightUnit}</span></span></label>
+      <label>{ui.printSpeedLabel}<span class="input-row"><input type="text" value="120" data-input="speed" inputmode="decimal" /><span data-unit data-metric={ui.speedUnit} data-imperial="in/s">{ui.speedUnit}</span></span></label>
+      <label>{ui.flowLimitLabel}<span class="input-row"><input type="text" value="15" data-input="limit" inputmode="decimal" /><span data-unit data-metric={ui.flowUnit} data-imperial="in³/s">{ui.flowUnit}</span></span></label>
+      <p class="geometry-hint">{ui.geometryHint}</p>
+    </section>
+    <section class="nozzle-flow-scene-panel" aria-label={ui.resultsAriaLabel}>
+      <div class="scene-wrap" data-scene set:html={initialScene}></div>
+      <div class="nozzle-flow-state is-ready" data-state>
+        <div><span class="state-dot"></span><strong data-state-label>{ui.readyState}</strong></div>
+        <p data-state-hint>{ui.readyHint}</p>
+      </div>
+      <p class="layer-note" data-layer-note hidden>{ui.layerWarning}</p>
+    </section>
+  </div>
+  <section class="nozzle-flow-results" aria-label={ui.resultsAriaLabel}>
+    <article><span>{ui.requestedFlowLabel}</span><strong><b data-result="requested">10.49</b> <small data-unit data-metric={ui.flowUnit} data-imperial="in³/s">{ui.flowUnit}</small></strong></article>
+    <article><span>{ui.safeSpeedLabel}</span><strong><b data-result="safe-speed">171.60</b> <small data-unit data-metric={ui.speedUnit} data-imperial="in/s">{ui.speedUnit}</small></strong></article>
+    <article><span>{ui.productionSpeedLabel}</span><strong><b data-result="production-speed">145.86</b> <small data-unit data-metric={ui.speedUnit} data-imperial="in/s">{ui.speedUnit}</small></strong></article>
+    <article><span>{ui.marginLabel}</span><strong><b data-result="margin">4.51</b> <small data-unit data-metric={ui.flowUnit} data-imperial="in³/s">{ui.flowUnit}</small></strong></article>
+    <article class="load-result"><span>{ui.layerEnvelopeLabel}</span><strong data-result="load">70%</strong></article>
+  </section>
+  <section class="nozzle-flow-inverse" aria-label={ui.inverseTitle}>
+    <div>
+      <h2>{ui.inverseTitle}</h2>
+    </div>
+    <div class="inverse-controls">
+      <label>{ui.inverseTargetFlowLabel}<span class="input-row"><input type="text" value="15" data-input="inverse-flow" inputmode="decimal" /><span data-unit data-metric={ui.flowUnit} data-imperial="in³/s">{ui.flowUnit}</span></span></label>
+      <label>{ui.inverseSpeedLabel}<span class="input-row"><input type="text" value="120" data-input="inverse-speed" inputmode="decimal" /><span data-unit data-metric={ui.speedUnit} data-imperial="in/s">{ui.speedUnit}</span></span></label>
+      <label>{ui.inverseSolveLabel}<select data-inverse-solve><option value="layer">{ui.inverseLayerOption}</option><option value="width">{ui.inverseWidthOption}</option></select></label>
+    </div>
+    <p class="inverse-result"><span>{ui.inverseResultLabel}</span> <strong data-inverse-result>0.30</strong> <small data-inverse-result-unit>{ui.layerHeightUnit}</small></p>
+    <p class="inverse-note" data-inverse-note>{ui.inverseHint}</p>
+  </section>
+</div>
+
+<script>
+  import './controller';
+</script>

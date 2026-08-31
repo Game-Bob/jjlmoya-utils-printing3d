@@ -82,6 +82,7 @@ import { metricThreadToleranceCalculator } from './tool/metricThreadToleranceCal
 import { printFarmRoiCalculator } from './tool/printFarmRoiCalculator/entry';
 import { postProcessingCostCalculator } from './tool/postProcessingCostCalculator/entry';
 import { masterPricingMarginCalculator } from './tool/masterPricingMarginCalculator/entry';
+import { nozzleFlowRateCalculator } from './tool/nozzleFlowRateCalculator/entry';
 
 export const ALL_ENTRIES = [
   printingCostCalculator,
@@ -125,4 +126,5 @@ export const ALL_ENTRIES = [
   printFarmRoiCalculator,
   postProcessingCostCalculator,
   masterPricingMarginCalculator,
+  nozzleFlowRateCalculator,
 ];
