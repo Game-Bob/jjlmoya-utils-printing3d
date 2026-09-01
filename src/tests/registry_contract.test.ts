@@ -50,6 +50,10 @@ describe('Library registry contract', () => {
       }
 
       const [definition] = definitions;
+      if (!definition) {
+        failures.push(`${directory}: runtime definition is undefined`);
+        continue;
+      }
       if (!ALL_TOOLS.some((tool) => tool.entry.id === definition.entry.id)) {
         failures.push(`${directory}: runtime definition is missing from ALL_TOOLS`);
       }
