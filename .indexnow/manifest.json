@@ -1,0 +1,2586 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-04T11:17:03.791Z",
+  "pages": {
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-duesen-durchflussrechner/": {
+      "hash": "a05161fd58d1ba7a2d58bb30e656b51fb3717bd61b41b33f23ba4facdc712a21",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-duesen-durchflussrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-duesenverschleiss-schaetzer-abrasives-filament/": {
+      "hash": "09a4950c58fa646ad2879e0f62090b1f1c49e03c17f5f9b3f87b5bfc4f979787",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-duesenverschleiss-schaetzer-abrasives-filament/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-gewicht-infill-prozent-rechner/": {
+      "hash": "9aa8488f26456de9e440566a876d8e3d718e0fcd1221511d51dc9f99b81f6038",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-gewicht-infill-prozent-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-kostenrechner/": {
+      "hash": "330655e732dbc4e92d02817625bde0e6a1838a9b58f75184d7b98aae2b892379",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-kostenrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-preisrechner/": {
+      "hash": "4ce6b16d40f20094608ce5a6c619be2326ebdaacc84bf760e2e5c569787bf257",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-preisrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druck-schrumpfungsrechner/": {
+      "hash": "9603a1881b37f705a955ebea2bd2d70554d22078ef8220498e5fdc9f2ee45276",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druck-schrumpfungsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-drucker-beschleunigung-jerk-ringing-rechner/": {
+      "hash": "b6d879cd1a6eeb0b8c4c33988e50497263607f7c3ea29383b31de3188af4308a",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-drucker-beschleunigung-jerk-ringing-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druckfarm-roi-rechner/": {
+      "hash": "19121e41a5b2d5b2c665018ff5a1358fe3739d5113a2fc63cf27956d08b7702d",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druckfarm-roi-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druckzeit-schaetzer-nach-schichthoehe-und-geschwindigkeit/": {
+      "hash": "b389251cf0cf77f7212858a2a18120460e2495108c1a887f7a4ea48fc431525d",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druckzeit-schaetzer-nach-schichthoehe-und-geschwindigkeit/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/3d-druckzeit-workflow-optimierer/": {
+      "hash": "a137ae37179d4dac21d5521088d86bcd6feddd3a462089b6c54f5dbcc0a4c484",
+      "route": "/de/werkzeuge/kategorien/3d-druck/3d-druckzeit-workflow-optimierer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/abs-pvb-chemie-glaettzeit-rechner/": {
+      "hash": "95d872ffe98de52eb6d0e68b13799840ca13e8850862fc6f5279d4b193a19f49",
+      "route": "/de/werkzeuge/kategorien/3d-druck/abs-pvb-chemie-glaettzeit-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/additive-produktion-effizienz-rechner/": {
+      "hash": "8b697f98c5c9ffac2066648aae014e1b5e853057845ec289590b1bed7087f8f6",
+      "route": "/de/werkzeuge/kategorien/3d-druck/additive-produktion-effizienz-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/baumstuetzen-dichte-rechner/": {
+      "hash": "95b3551e659e171f89dc930155796ca495d6f4cc9c2ac427a68c04dfe8ef8b48",
+      "route": "/de/werkzeuge/kategorien/3d-druck/baumstuetzen-dichte-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/bettnetz-analyzer/": {
+      "hash": "89e273d5e69be7653d86e50554c00794ffab46a74467a399fbabce0c0661d054",
+      "route": "/de/werkzeuge/kategorien/3d-druck/bettnetz-analyzer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/bruecken-optimierer/": {
+      "hash": "5de222fd664ce8339bfb0fa742168890d63618ff3b99689f9dfdbd3aa702cebf",
+      "route": "/de/werkzeuge/kategorien/3d-druck/bruecken-optimierer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/corexy-riemen-spannungs-frequenz-rechner/": {
+      "hash": "4d1f3e9107be35cf65df6492fd1d2cd73931583da91c1839d4343b91cad73f93",
+      "route": "/de/werkzeuge/kategorien/3d-druck/corexy-riemen-spannungs-frequenz-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/e-steps-kalibrierungsrechner/": {
+      "hash": "a523f11209521bce3ea8e5bbcb4329c484b73fe9b3363157b8ed7132823230dd",
+      "route": "/de/werkzeuge/kategorien/3d-druck/e-steps-kalibrierungsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/echte-harzkosten-rechner-sla-dlp/": {
+      "hash": "4c4ecb5fc602baf5fca39001d53bb2cbc5f3d73f82281b4f336c561d53bc23c0",
+      "route": "/de/werkzeuge/kategorien/3d-druck/echte-harzkosten-rechner-sla-dlp/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/elefantenfuss-kompensationsrechner/": {
+      "hash": "5479714acc704a78d33e5a51ae55b11a3e5abec1c70a75542358328c88e9afe4",
+      "route": "/de/werkzeuge/kategorien/3d-druck/elefantenfuss-kompensationsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/filament-dehydrierungs-schaetzer/": {
+      "hash": "87f19160d39f020cc2823234aa23b84e2811ed2e5a916fdfc5cef5e8ff82f25a",
+      "route": "/de/werkzeuge/kategorien/3d-druck/filament-dehydrierungs-schaetzer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/filament-gewicht-laenge-umrechner/": {
+      "hash": "b1db9918489e051fed65872d90c78dd4fd1c97b87e6eacc16f2e350cb3d134e1",
+      "route": "/de/werkzeuge/kategorien/3d-druck/filament-gewicht-laenge-umrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/filament-roi-rechner/": {
+      "hash": "a2a6fa054a8556f3e13aa00f7f23bdeba9a5755ca1d02bed1491158bd6d0cc3d",
+      "route": "/de/werkzeuge/kategorien/3d-druck/filament-roi-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/": {
+      "hash": "7d3e646321c689569344d746a9e6344d19bea95559c644abe7d5880f2d4caf7f",
+      "route": "/de/werkzeuge/kategorien/3d-druck/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/maschinen-stundensatz-produktionskosten-rechner/": {
+      "hash": "32f6629663163dcdebf72db6090b6073356e05b02a395e2432b757ae6185daaf",
+      "route": "/de/werkzeuge/kategorien/3d-druck/maschinen-stundensatz-produktionskosten-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/metrisches-gewinde-toleranz-rechner/": {
+      "hash": "8a286300c764d294ad8038c16e9b877fc12437bcb5f7d31f3562d2fdae8a347a",
+      "route": "/de/werkzeuge/kategorien/3d-druck/metrisches-gewinde-toleranz-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/multi-material-purge-rechner/": {
+      "hash": "7e446ccf5b4ae09eb90f0a66ced81dfffa4c94ebfb1e2ca070ecd33b2067699e",
+      "route": "/de/werkzeuge/kategorien/3d-druck/multi-material-purge-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/nachbearbeitungskosten-rechner-3d-druck/": {
+      "hash": "ddf291b637e60d5a0d4080da0a20b5ee77fdde05d0f7f84215436234446e68a8",
+      "route": "/de/werkzeuge/kategorien/3d-druck/nachbearbeitungskosten-rechner-3d-druck/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/netzteil-dimensionierung-3d-drucker-rechner/": {
+      "hash": "a51cd4e66828de7070c18305abc56616df9f75b142fcee8dfb17e6b630afa7a0",
+      "route": "/de/werkzeuge/kategorien/3d-druck/netzteil-dimensionierung-3d-drucker-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/pei-blatt-lebensdauer-schaetzer/": {
+      "hash": "fd21dbee750e19d6d134b44bf9970987cd2f3e37cba426e86fb0485a2d77082a",
+      "route": "/de/werkzeuge/kategorien/3d-druck/pei-blatt-lebensdauer-schaetzer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/praezisions-engineering-suite/": {
+      "hash": "e26e049bd3869f33003684fed7575ad5c850055a6df46b805b040c7f123d0262",
+      "route": "/de/werkzeuge/kategorien/3d-druck/praezisions-engineering-suite/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/print-bett-traegheits-stabilisierungs-rechner/": {
+      "hash": "32b59e6505de29fb39d057bdb41a20a47a9f9d62d3d9b377ed4fa45bf073992d",
+      "route": "/de/werkzeuge/kategorien/3d-druck/print-bett-traegheits-stabilisierungs-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/regenbogen-filament-verlaufslaenge-rechner/": {
+      "hash": "ca0120c7aea87f0c1fae8213316a2b5c38b2c453d155821ea9bec3f15eebd610",
+      "route": "/de/werkzeuge/kategorien/3d-druck/regenbogen-filament-verlaufslaenge-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/retraktion-fadenbildung-kalibrierung/": {
+      "hash": "10dc1bbea80e9fa6830221842979128be8df98a89347559e9cc814f25db8dc58",
+      "route": "/de/werkzeuge/kategorien/3d-druck/retraktion-fadenbildung-kalibrierung/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/schrittmotor-microstepping-rechner-3d-druck/": {
+      "hash": "cfa68a615b30e1b3dff8a72cd58480e4d57a5d8da2853ab4a47544c123b67075",
+      "route": "/de/werkzeuge/kategorien/3d-druck/schrittmotor-microstepping-rechner-3d-druck/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/sicherer-ueberhangwinkel-rechner/": {
+      "hash": "f5d23cd303cb56d46d65141346aad2284ce000e30ddc0cf880c150c7812f6f75",
+      "route": "/de/werkzeuge/kategorien/3d-druck/sicherer-ueberhangwinkel-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/sla-hohlkoerper-entwaesserungsrechner/": {
+      "hash": "88bc406cfe6eaed2b463520d6a1550c07ac2c03fc654c547807c99940f291fb2",
+      "route": "/de/werkzeuge/kategorien/3d-druck/sla-hohlkoerper-entwaesserungsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/technischer-resin-uv-haertungsrechner/": {
+      "hash": "8d79fc7fa1cf4520593d19e9b8192000519dbf4ae517c96a8336db802c307e75",
+      "route": "/de/werkzeuge/kategorien/3d-druck/technischer-resin-uv-haertungsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/uv-harz-aushaertungsrechner/": {
+      "hash": "7f98dc231c3725178139d42850c45fa1b0a8c3bd0454bffd3d74d82e22e8928f",
+      "route": "/de/werkzeuge/kategorien/3d-druck/uv-harz-aushaertungsrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/volumenstrom-rechner/": {
+      "hash": "1abb5b04d4cd14d06df7e128b80952250c53e07807cbdcf6205d70e5d40ee42c",
+      "route": "/de/werkzeuge/kategorien/3d-druck/volumenstrom-rechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/volumetrischer-durchflussrechner/": {
+      "hash": "911c060b89ceec559d7790f408f1f1e685259a018893d03c2ecd372f419a17b0",
+      "route": "/de/werkzeuge/kategorien/3d-druck/volumetrischer-durchflussrechner/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/wand-perimeter-optimierer/": {
+      "hash": "582be9350ff79e3bf8443e87372d2191e9bf7d91e849749f4ca86dd6e481f648",
+      "route": "/de/werkzeuge/kategorien/3d-druck/wand-perimeter-optimierer/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/warping-risiko-simulator-3d-druck/": {
+      "hash": "1c58689400b73e4ba9d574f117ac7ee863627cb5f71c83ee9674d1713ba761dc",
+      "route": "/de/werkzeuge/kategorien/3d-druck/warping-risiko-simulator-3d-druck/"
+    },
+    "https://www.gamebob.dev/de/werkzeuge/kategorien/3d-druck/zugfestigkeitsrechner-fdm-xyz-achse/": {
+      "hash": "3ce25a2b03c35ced3aedfc33d873c8e7d4d123fcfc9834c034d5d5db0f31c734",
+      "route": "/de/werkzeuge/kategorien/3d-druck/zugfestigkeitsrechner-fdm-xyz-achse/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-farm-roi-calculator/": {
+      "hash": "a0f2d546d56ae38abf99d4a0dfda26740dddf7458f85a89bfd776ee8f6dfb870",
+      "route": "/en/utilities/categories/3d-printing/3d-print-farm-roi-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/": {
+      "hash": "513cadce24381bddcffb3221be6ac7a624abdfb9d3003c8bdd8862ac6ec84177",
+      "route": "/en/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-pricing-calculator/": {
+      "hash": "585afbea6070b227730d67c6ae688e4a01671cec5a5c74116e04a1e0c8d656cb",
+      "route": "/en/utilities/categories/3d-printing/3d-print-pricing-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/": {
+      "hash": "f688553bf6f85597c7a218275a47561c0352c8ed78eea73dd72419bff449421a",
+      "route": "/en/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/": {
+      "hash": "41961fc6785fd58a31cc6b3fd625ba78bb62c4a7a6f4d14c80142ef94f47a06f",
+      "route": "/en/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/": {
+      "hash": "6fecc66978046bb972946b353e82fd6d4c9d8bc1960762f2fc4e7f369c0f63d0",
+      "route": "/en/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/": {
+      "hash": "fd1a830029300f6ef71d327ae43520646b179f514f054bc244e06d35f982f1bd",
+      "route": "/en/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/": {
+      "hash": "a40477cbfbad2e00d46c2016096436c19a46b7d9a6533d8b648b7399a9225922",
+      "route": "/en/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/": {
+      "hash": "44e235d1751d84ce091b3439e6e0c04e706d8f1f307f956b2d350beac8c06370",
+      "route": "/en/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-printing-cost-calculator/": {
+      "hash": "e9d30a82a097b07b863fd36e5937d3e22ca6427d37285ffca9d32cbb54c88f1a",
+      "route": "/en/utilities/categories/3d-printing/3d-printing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/": {
+      "hash": "54f8c3a5f81df608941930abb1d5ab78b5c8ab9652501157450e8483975e470b",
+      "route": "/en/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/": {
+      "hash": "3f655d4624a947ccd9bc6fbf7736c7b802edb77df273fa7dac910e360d5c4bbc",
+      "route": "/en/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/additive-production-efficiency-calculator/": {
+      "hash": "845e40530b01c586cb30cdf6d5c5560481a1b07691e4b62cab9ef6ffb6032068",
+      "route": "/en/utilities/categories/3d-printing/additive-production-efficiency-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/bed-mesh-analyzer/": {
+      "hash": "2ebe5e6832f2576e0a59895f7950d2448f97f4d7da861dc0ac4979fe35fa5544",
+      "route": "/en/utilities/categories/3d-printing/bed-mesh-analyzer/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/bridging-optimizer/": {
+      "hash": "cc1517a1f2028cbf69ee46dd3b67e900676a09a61288c72779e875ab0206b403",
+      "route": "/en/utilities/categories/3d-printing/bridging-optimizer/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/bulk-filament-roi-estimator/": {
+      "hash": "4e3ad79d56cb7651535edd4d8dcae0d3fc551ef41f571ebe35c7505416efdc65",
+      "route": "/en/utilities/categories/3d-printing/bulk-filament-roi-estimator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/": {
+      "hash": "0eabde6b42aaf7072c328c1e5bff4150adbca0edd19cb7e00ae02e1725f18bc6",
+      "route": "/en/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/e-steps-calibration-calculator/": {
+      "hash": "17b6e4bc25a935c9a9329f2041e298f8b4328b2942d41c4734b04cca51033589",
+      "route": "/en/utilities/categories/3d-printing/e-steps-calibration-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/elephant-foot-compensation-calculator/": {
+      "hash": "c0d40ded188e03b2d4fb2f34252a0d966a562fbf469fae6a9f4a986e43bc1b91",
+      "route": "/en/utilities/categories/3d-printing/elephant-foot-compensation-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/filament-dehydration-estimator/": {
+      "hash": "225e44300981134c0ca7843fb04e133ffa66f57e0085a9db40bb1f1b4f5de714",
+      "route": "/en/utilities/categories/3d-printing/filament-dehydration-estimator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/filament-weight-to-length-converter/": {
+      "hash": "960f55d868268eb43517e7616635b8cc5da714c55dd2eb3e4a1bb4a2b33f9546",
+      "route": "/en/utilities/categories/3d-printing/filament-weight-to-length-converter/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/": {
+      "hash": "7474a2bf49daabf7b1bdef04828ac4c28b9daddffa2448d0f24b42c8c5a6e66a",
+      "route": "/en/utilities/categories/3d-printing/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/": {
+      "hash": "f795322c59656cb055f8232141f1ceca0f7b8d3f2ed1ec42bfece2e389d7c9e6",
+      "route": "/en/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/metric-thread-tolerance-calculator/": {
+      "hash": "ea12f5f272cefb3e9aeb7e7953b7b8fed49b42cf6d360d1e3206886042ac779d",
+      "route": "/en/utilities/categories/3d-printing/metric-thread-tolerance-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/multi-material-purge-calculator/": {
+      "hash": "b119c53498167250cc8b8199e81a11d092163ef44fbac117d701200b4ddfb45c",
+      "route": "/en/utilities/categories/3d-printing/multi-material-purge-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/nozzle-wear-estimator/": {
+      "hash": "6c2a19ea2673634fdcdc63fcc214809a1e854d24d3aaa85580077a46a3f567fb",
+      "route": "/en/utilities/categories/3d-printing/nozzle-wear-estimator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/": {
+      "hash": "2ae84c6593ff0e808eb193ef611b3f4ea1c3fa10916214b2e3bfe66394f17501",
+      "route": "/en/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/post-processing-cost-calculator/": {
+      "hash": "b2ee04adf685ba109d292feeb4d0739616638684c09ee2a3a0780fef4235d78d",
+      "route": "/en/utilities/categories/3d-printing/post-processing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/": {
+      "hash": "14ca7cf986f25f40cce30ce89e928e5b5d43ec4d2bdc5c1f9461ed9af6214426",
+      "route": "/en/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/": {
+      "hash": "5357b3f9520dd2e48247d2c0eb5db3f86e3130590f836210406c010a01381b4a",
+      "route": "/en/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/rainbow-filament-transition-calculator/": {
+      "hash": "b03ac3c27749f26a5a5e63d456215d356e2fe9f633658f1570e991d9a4c0562f",
+      "route": "/en/utilities/categories/3d-printing/rainbow-filament-transition-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/": {
+      "hash": "b5d85495831b30c71fb45e3aeef76c02ca3a9ee2f09f61d4e48d161d0b5b7a78",
+      "route": "/en/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/retraction-stringing-calibrator/": {
+      "hash": "8325849866da3c36e57b3c89b5b03b9ab62d426e17ed0a33c7b9bb618f22c817",
+      "route": "/en/utilities/categories/3d-printing/retraction-stringing-calibrator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/safe-overhang-angle-calculator/": {
+      "hash": "9a203418ec76497f935e29e72765e3da8c614e3da71f0656005cff60df7d3900",
+      "route": "/en/utilities/categories/3d-printing/safe-overhang-angle-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/": {
+      "hash": "cdedc86bd2341cacd4c469bf133e9a3aa34eadbde29dbe55a8b54d316cd93dfa",
+      "route": "/en/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/": {
+      "hash": "b0cd31a409b6c485ece6979909e21a660650dc2d60cee566665495c39581bdcd",
+      "route": "/en/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/": {
+      "hash": "8d5fd016fa470781ece32ab86e8aa2a980112bd75c72201e835d71024d5f3a30",
+      "route": "/en/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/tree-support-density-calculator/": {
+      "hash": "58b71d0e2e296543dd5819dddca3d9bef2fefebdbb0db169d63fbc79133327d9",
+      "route": "/en/utilities/categories/3d-printing/tree-support-density-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/uv-resin-curing-calculator/": {
+      "hash": "7d9d8d8a675fa989e57718c7d956227c946649af9d7672579065b68361448ac7",
+      "route": "/en/utilities/categories/3d-printing/uv-resin-curing-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/volumetric-flow-calculator/": {
+      "hash": "822e2959a3c74c5d8d0ef57551b49795a3a96ecac67efb099b2338096fd9fdc1",
+      "route": "/en/utilities/categories/3d-printing/volumetric-flow-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/": {
+      "hash": "b224a2319e02710aee1ddf9b7cd7125d2ce141a01c1be0fc3906146bffd59aa5",
+      "route": "/en/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/wall-perimeter-optimizer/": {
+      "hash": "10e27e9ba78c2a0e0abcc7720bb0d9edfab45f6f6cd4201f5d86b17d03447491",
+      "route": "/en/utilities/categories/3d-printing/wall-perimeter-optimizer/"
+    },
+    "https://www.gamebob.dev/en/utilities/categories/3d-printing/warping-risk-simulator/": {
+      "hash": "ff9ab0d9f82867efab0d5301a055354894ad4c588534b8e807908377f78c065e",
+      "route": "/en/utilities/categories/3d-printing/warping-risk-simulator/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/analyseur-maillage-lit/": {
+      "hash": "92d84fbd7bbc8a64a31139de196a1b663dfc424953805e268ab7baf8a5f05f8a",
+      "route": "/fr/utilitaires/categories/impression-3d/analyseur-maillage-lit/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-angle-surplomb-securise/": {
+      "hash": "b73b6483d3f895a38c05c86fa1b0651c8fa3776a95b6b6eb49b4972b87c736f8",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-angle-surplomb-securise/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-compensation-pied-elephant/": {
+      "hash": "b98ae57d08a869f73fe4b6786cb4c5a04e9d84959c14255489ed6f38312a0a1b",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-compensation-pied-elephant/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-cout-impression-3d/": {
+      "hash": "21c5b5fac645f8d3d5f0fc13ba03b1578ec06f46d92d34d068997a6119986fd8",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-cout-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-cout-post-traitement-impression-3d/": {
+      "hash": "b46224de858f5fd28640a03a759e7760316fcb15b569990adcc1a0d86772d45e",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-cout-post-traitement-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-cout-reel-resine-sla-dlp/": {
+      "hash": "187259c3156f39d88841c305c49f1794bfe51d8445ac33fd88c364d9914ff58b",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-cout-reel-resine-sla-dlp/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-de-calibrage-e-steps/": {
+      "hash": "9d2b91028cdc231762ba57fdb3843913e54e80904fc57f6a711620eed828f7ac",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-de-calibrage-e-steps/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-de-purge-multimateriaux/": {
+      "hash": "b95bbd212ad9273778d2c5915a50e35cf41f4b3712dc554b6d93c641b73a4b42",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-de-purge-multimateriaux/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-de-resonance-accel-jerk-ringing/": {
+      "hash": "eb4a23d6f412d4fd33a74d79a1faa8b3366a18ba0d984284308404ca83c223e1",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-de-resonance-accel-jerk-ringing/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-debit-buse-impression-3d/": {
+      "hash": "b26d0d68c2843eb5f9f7e1cad764550537c21849a991a766610dd419c9982d2e",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-debit-buse-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-debit-volumetrique/": {
+      "hash": "d5fc4731dff24d7bf9dc77fad1a10028963f7622f913b25d32444d497211186b",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-debit-volumetrique/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-debit-volumetrique-impression-3d/": {
+      "hash": "b5e5f7e04abab62e1414dfbfa8554bd7136e0f5ff9c0518c90c1d77686cc5a94",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-debit-volumetrique-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-densite-supports-arbre/": {
+      "hash": "0680813ac56e2e34d9fd3078760fa0700b3c04059207666d8c9ec264f6be3548",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-densite-supports-arbre/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-efficacite-production-additive/": {
+      "hash": "e250ee70765960483859d171ed520d4f34173e2ee747c45b13c8e0b2dbc24ba8",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-efficacite-production-additive/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-frequence-tension-courroie-corexy/": {
+      "hash": "2b07d771739e56ce3d5e7d23368e44d095e4b047d8366117ab091b08cbdea2b6",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-frequence-tension-courroie-corexy/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-microstepping-driver-moteur-pas-a-pas-impression-3d/": {
+      "hash": "92f9ac9103ac0945fa0572a0c374105ecf52bfbd832b44f0ee17d600a1f14634",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-microstepping-driver-moteur-pas-a-pas-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-poids-pourcentage-remplissage-3d/": {
+      "hash": "4934954d1826facae4e6913a9502bb83a02803953ce9ddbc5ebd44d56830f49f",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-poids-pourcentage-remplissage-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-prix-impression-3d/": {
+      "hash": "0ddf135d263643be1dbba9bca272ff1fada78455bce3216c2b7e74748b6de2df",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-prix-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-retrait-impression-3d/": {
+      "hash": "522f10425b5edd69cd08b4f07f5d184cff106b6c80d42876478409506d872a5e",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-retrait-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-roi-ferme-impression-3d/": {
+      "hash": "f580fefad66346bdebf5379c46c3f166d46e72999528f4c26c32ccfb1238dcb0",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-roi-ferme-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-roi-filament-vrac/": {
+      "hash": "b3cd1dc1d0eef543eb97dbc8f8457a3e2ec69fad4472f36203effc0d83cdb543",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-roi-filament-vrac/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-stabilisation-inertie-thermique-plateau-impression/": {
+      "hash": "3c5961c32f263b79e611378fb1c195379bc920b19bbc6f726eb0b68ce62eaf39",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-stabilisation-inertie-thermique-plateau-impression/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-taux-horaire-machine-cout-production/": {
+      "hash": "a91c9caed90801e6a7a07f4cf932e3239a6288e6fd22f26254370d23c61e9f50",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-taux-horaire-machine-cout-production/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-temps-cuisson-uv-resine-technique/": {
+      "hash": "7601566f2ec82d7b8e4e31e5a0ceb854b761b8447a08f841dbf879cf318ba52c",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-temps-cuisson-uv-resine-technique/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-temps-lissage-chimique-abs-pvb/": {
+      "hash": "109796dfbb559dd049fe55996a5774ae90270aa8d0fc0fe5fbb7097e0df9e87d",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-temps-lissage-chimique-abs-pvb/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-tolerance-filetage-metrique/": {
+      "hash": "8fd9ccb93fa28c2b776455c0d2d6168822884e3e37c7f814ddca525b5d6676b3",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-tolerance-filetage-metrique/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculateur-transition-filament-arc-en-ciel/": {
+      "hash": "4b26eaafbb01a04a4b86c7a66085c79e79d59a1e7027901abec8f904e03c0b8e",
+      "route": "/fr/utilitaires/categories/impression-3d/calculateur-transition-filament-arc-en-ciel/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculatrice-dimensionnement-alimentation-imprimante-3d/": {
+      "hash": "c29e7d58c326be4c0d06da243b34c5be53ac565ea25812c781e1cbed9eabc29c",
+      "route": "/fr/utilitaires/categories/impression-3d/calculatrice-dimensionnement-alimentation-imprimante-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculatrice-evidement-drainage-resine-sla/": {
+      "hash": "54dffd1d7314eabefb2507dada8c330c5e97eae99286bcd10db2568e834f44f4",
+      "route": "/fr/utilitaires/categories/impression-3d/calculatrice-evidement-drainage-resine-sla/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calculatrice-temps-polymerisation-resine-uv/": {
+      "hash": "24db5daf4490f19fc6ef90e4d50f708ab744deecf73d9b79fa51d1a9d15bf9c3",
+      "route": "/fr/utilitaires/categories/impression-3d/calculatrice-temps-polymerisation-resine-uv/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/calibrateur-retraction-filage-impression-3d/": {
+      "hash": "e2362a5befa31b7940e91c4ed7ed7768df2c7d56788a4c7c05661e4e36501f07",
+      "route": "/fr/utilitaires/categories/impression-3d/calibrateur-retraction-filage-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/convertisseur-poids-longueur-filament/": {
+      "hash": "10e9b6f9809392302d8adf1f04253ae538f84517573cb28df4b0ad21b25b8196",
+      "route": "/fr/utilitaires/categories/impression-3d/convertisseur-poids-longueur-filament/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/estimateur-de-temps-d-impression-3d-par-hauteur-de-couche-et-vitesse/": {
+      "hash": "30fc97e0b9316f522eaa61dc418af4dbf1bac47e276d38bb960c604b4ac91276",
+      "route": "/fr/utilitaires/categories/impression-3d/estimateur-de-temps-d-impression-3d-par-hauteur-de-couche-et-vitesse/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/estimateur-deshydratation-filament/": {
+      "hash": "35e49b922b3065f05533086ed2519abc4ab1e509f3e6f9ab07cdc77e86e9bea8",
+      "route": "/fr/utilitaires/categories/impression-3d/estimateur-deshydratation-filament/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/estimateur-duree-vie-plaque-pei/": {
+      "hash": "5717d049016fa769a955bfac6434b63e1b3dfc5099ba1a06fed9155e0315bf23",
+      "route": "/fr/utilitaires/categories/impression-3d/estimateur-duree-vie-plaque-pei/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/estimateur-resistance-traction-axes-xyz-impression-3d/": {
+      "hash": "f78bd0e1774c7618335e1b2f1611739f6c4db1e01c83268c5a528ae8ea94c462",
+      "route": "/fr/utilitaires/categories/impression-3d/estimateur-resistance-traction-axes-xyz-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/estimateur-usure-buse-filament-abrasif-3d/": {
+      "hash": "150692d20320a23e6f02cc656f4888a90fddeda81203ba4e93d4a8177258bd8f",
+      "route": "/fr/utilitaires/categories/impression-3d/estimateur-usure-buse-filament-abrasif-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/": {
+      "hash": "24df7bbcf79e40b910825435e777dbc0d66c025ddb69d468e1decbe63ab8affa",
+      "route": "/fr/utilitaires/categories/impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/optimiseur-de-perimetres-et-parois/": {
+      "hash": "9e9bc1e3b0c1b1c8026dcbc29b2c668979b5f1949b3da79080ade31a24adcd2b",
+      "route": "/fr/utilitaires/categories/impression-3d/optimiseur-de-perimetres-et-parois/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/optimiseur-de-temps-d-impression-3d/": {
+      "hash": "efd5c3ebe3fea453c5b01ffcebf385a84d97cdf988eb88d499e5d914fc92cc0c",
+      "route": "/fr/utilitaires/categories/impression-3d/optimiseur-de-temps-d-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/optimiseur-ponts/": {
+      "hash": "fbf126aeba60f17ef58da23ba2151fa0655dadfe305e711aa3cca7a9cfc614c7",
+      "route": "/fr/utilitaires/categories/impression-3d/optimiseur-ponts/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/simulateur-risque-warping-impression-3d/": {
+      "hash": "c416695c28fc49bc2d0ab50f5583d3bc798203f9ae057c23993bf3b708f2b962",
+      "route": "/fr/utilitaires/categories/impression-3d/simulateur-risque-warping-impression-3d/"
+    },
+    "https://www.gamebob.dev/fr/utilitaires/categories/impression-3d/suite-ingenierie-de-precision-impression-3d/": {
+      "hash": "5c0d12ea80c177a916edb4f803a898e11444b3ec07a32e191895b8c8a7821042",
+      "route": "/fr/utilitaires/categories/impression-3d/suite-ingenierie-de-precision-impression-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/analisator-jaring-tidur/": {
+      "hash": "d96e07d613b8c1c6b4de2f55417459dfe5ae7b658a1de34edf05e2a0b9d8bfe4",
+      "route": "/id/utilitas/kategori/cetak-3d/analisator-jaring-tidur/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/estimasi-dehidrasi-filamen/": {
+      "hash": "994281e862c21e6c126cb30e890977f0d009fdb25ea71bb7ae2a16f39bce5b2c",
+      "route": "/id/utilitas/kategori/cetak-3d/estimasi-dehidrasi-filamen/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/estimator-keausan-nozzle-filamen-abrasif-3d/": {
+      "hash": "ec89a297f11639e9b3dd9ca27f8fc6f3e759f4b9ed18726b5497c272521b587f",
+      "route": "/id/utilitas/kategori/cetak-3d/estimator-keausan-nozzle-filamen-abrasif-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/estimator-kekuatan-tarik-sumbu-xyz-cetak-3d/": {
+      "hash": "1dc41ce970c9be753d4e5a003c12cfc56b5038ac86fb3e6592ef33c227896606",
+      "route": "/id/utilitas/kategori/cetak-3d/estimator-kekuatan-tarik-sumbu-xyz-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/estimator-umur-lembaran-pei/": {
+      "hash": "b64fd809d4e70709d7a6dc360d7aa565760e17de0067622e4f5d587bc639ce6b",
+      "route": "/id/utilitas/kategori/cetak-3d/estimator-umur-lembaran-pei/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/estimator-waktu-cetak-3d-berdasarkan-tinggi-lapis-dan-kecepatan/": {
+      "hash": "dfb2825a7c840e9497810cea5699a81be9e6d9160ba52506c711fd8b4fd4370e",
+      "route": "/id/utilitas/kategori/cetak-3d/estimator-waktu-cetak-3d-berdasarkan-tinggi-lapis-dan-kecepatan/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/": {
+      "hash": "6af8515d7d9be2d066c27a5043e0007ec27976862ecb14e8d8686e243cccf04a",
+      "route": "/id/utilitas/kategori/cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalibrasi-retraksi-stringing-printing-3d/": {
+      "hash": "4d688e1b54279978f66ad03177a225c83114d63ca1b713f0eedace39872a89ec",
+      "route": "/id/utilitas/kategori/cetak-3d/kalibrasi-retraksi-stringing-printing-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-akselerasi-jerk-dan-ringing-printer-3d/": {
+      "hash": "859101b2ba4b20f73a6603a9acceec365b21be9493fc9a9233737c3f68049499",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-akselerasi-jerk-dan-ringing-printer-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-aliran-volumetrik/": {
+      "hash": "05b49116adc6ff54168301a7b6d6098b8c67abdb27e2a34a57d1d5c3b3c7671a",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-aliran-volumetrik/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-batas-laju-aliran-volumetrik/": {
+      "hash": "16c14e9f80717be68eaca65ef8c66a7f9c145dc6a41ccc60b2a27bc9f4807c70",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-batas-laju-aliran-volumetrik/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-biaya-cetak-3d/": {
+      "hash": "d75acb3a4c3a627307ba275a7874a38b830cbbf4b8ad08eb7cdfc6c86c2ee7c0",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-biaya-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-biaya-pasca-cetak-3d/": {
+      "hash": "160e3529b16db3970cbad2292f8115653d246f0ab0d0ffc1b8c6c99818e9727e",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-biaya-pasca-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-biaya-produksi-tarif-per-jam-mesin/": {
+      "hash": "88b7145a7fb690872a13f40ab73ea3668fcf79364906007f4ed4de7eb864eb3a",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-biaya-produksi-tarif-per-jam-mesin/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-biaya-resin-nyata-sla-dlp/": {
+      "hash": "09ffd753844454cea703dd193dafb0606f80d72c03d2bd9b4bfad583c4e27366",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-biaya-resin-nyata-sla-dlp/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-efisiensi-produksi-aditif/": {
+      "hash": "610aa2c9e448d41212e0eea0a0644dc39f77f2c43e9a2e14f394b71dcf8d3a9f",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-efisiensi-produksi-aditif/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-frekuensi-tegangan-sabuk-corexy/": {
+      "hash": "3c4ad107b38c45ea84200306f322f8ffc2dd8b320797bbdd4182423629fa9623",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-frekuensi-tegangan-sabuk-corexy/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-harga-cetak-3d/": {
+      "hash": "cfa2ff181253dba998ddc56c9323f4b6921d94714eafc18f07dcbcf385d1da4d",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-harga-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-kalibrasi-e-steps/": {
+      "hash": "c0fff9950d9b14baa9d7326cbf5cedae081412416d42627a0fe657bdb8a5b531",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-kalibrasi-e-steps/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-kepadatan-penyangga-pohon/": {
+      "hash": "dc066e5e952c65b8917603da647fde06bfa9d99883bad41f393d76e1a53911b2",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-kepadatan-penyangga-pohon/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-kompensasi-kaki-gajah/": {
+      "hash": "6a83c7f545e9f9f6f3a83ba1b172ae50410e862e415351736d5cce3f37558309",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-kompensasi-kaki-gajah/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-laju-aliran-nozel-cetak-3d/": {
+      "hash": "5d2b2a5f0401c03b48af5fd18fe44d331ef40d5d8dfe30d93dc29fdb6ada2751",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-laju-aliran-nozel-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-microstepping-driver-motor-langkah-3d/": {
+      "hash": "1960baa344994b8ca4925043fc2bfa3041e5b9cae7872a2273596f4e0dc4ebd6",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-microstepping-driver-motor-langkah-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-pelubangan-drainase-resin-sla/": {
+      "hash": "411fd6cf07ed7472076b098eb72dc6795422d97ff70a9a673ca9f73e3b7ede1d",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-pelubangan-drainase-resin-sla/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-penyembuhan-resin-uv/": {
+      "hash": "65b84eaf7b79b15bd44c8aec892b2f5f1c382136599c38916ac2b3d852b8cee1",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-penyembuhan-resin-uv/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-penyusutan-cetak-3d/": {
+      "hash": "ed80c0363b01f43f5cdd72b58a74c067f1dce4053c15b4c1cdfb75744ae819c1",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-penyusutan-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-persen-berat-infill-3d/": {
+      "hash": "a8da703faea023b66f6ab0ec9adb70a02168e7929e32fc4bcdb5d211ec8ab098",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-persen-berat-infill-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-purge-multi-material/": {
+      "hash": "5ef304e495adfc298258f215f007e7867b8fc80d8adbc077865420a9f2368e13",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-purge-multi-material/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-roi-filamen-curah/": {
+      "hash": "c6c075d11e71972602d20a97cb20e13140b819a701931f8ce06978bafb465acd",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-roi-filamen-curah/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-roi-peternakan-cetak-3d/": {
+      "hash": "593b56808b9928d3e2fb7cefc3e5c9126a61b5f4416f79bbb2506eff49b0b524",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-roi-peternakan-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-stabilisasi-inersia-termal-meja-print/": {
+      "hash": "93e6b1cc68ebc6e531fdfc6f0f2accc5335fd4b62eeddd5b747cb641a5302d0f",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-stabilisasi-inersia-termal-meja-print/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-sudut-overhang-aman/": {
+      "hash": "948724bdaf35b45c08feaa30e49f54dca73297209e00832e195704293ae65393",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-sudut-overhang-aman/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-toleransi-ulir-metrik/": {
+      "hash": "bde039a3534ba75f0014db31c02738738aff41a97cd04e14ec52197f7e69c04c",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-toleransi-ulir-metrik/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-transisi-filamen-pelangi/": {
+      "hash": "365d7bbebf29c68561e797b07381ad48e3d51ce068ae413a1494b44275bce758",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-transisi-filamen-pelangi/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-ukuran-catu-daya-printer-3d/": {
+      "hash": "5e8edccb45a780b97c1b955fbda522cee2150c9ac7c5e93c73305217a67e9948",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-ukuran-catu-daya-printer-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-waktu-pengeringan-uv-resin-teknis/": {
+      "hash": "2f8725251bc8dc946a16c78f7981ede6f4896d8560693844710734a5fe3a43bf",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-waktu-pengeringan-uv-resin-teknis/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/kalkulator-waktu-penghalusan-kimia-abs-pvb/": {
+      "hash": "3efadd28bfbcdaed7c7c1dbd80fbb19e6b99b41a6fa335b861288f0a6a52ffe3",
+      "route": "/id/utilitas/kategori/cetak-3d/kalkulator-waktu-penghalusan-kimia-abs-pvb/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/konverter-berat-panjang-filamen/": {
+      "hash": "896784480b350635d21d0b72b71e5f4a409df1aaa18ef7aa1f2a49719e4b905b",
+      "route": "/id/utilitas/kategori/cetak-3d/konverter-berat-panjang-filamen/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/pengoptimal-jembatan/": {
+      "hash": "80478663fc07510cc9507e56b10313bee2e05c33d9b60e34c5e4ab1e690c31b5",
+      "route": "/id/utilitas/kategori/cetak-3d/pengoptimal-jembatan/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/pengoptimal-perimeter-dan-dinding/": {
+      "hash": "115444df6576b3e91930dd6069b52f3bd366c835ebe1bdbfce2f1953c233f027",
+      "route": "/id/utilitas/kategori/cetak-3d/pengoptimal-perimeter-dan-dinding/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/pengoptimal-waktu-cetak-3d/": {
+      "hash": "6b6b76aea54e914da4aed34c902383a52dd4385862aa0ccfddf2255b4bf9e364",
+      "route": "/id/utilitas/kategori/cetak-3d/pengoptimal-waktu-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/simulator-risiko-warping-cetak-3d/": {
+      "hash": "ee3f5ebe30abf1cd901e10a57af28cf0fad68e92f5d421aedb3e56ae32658919",
+      "route": "/id/utilitas/kategori/cetak-3d/simulator-risiko-warping-cetak-3d/"
+    },
+    "https://www.gamebob.dev/id/utilitas/kategori/cetak-3d/suite-rekayasa-presisi-cetak-3d/": {
+      "hash": "f576b271d8984cace59c5670ad0eda18968854b5887f0764c9dc4fd56c9d9223",
+      "route": "/id/utilitas/kategori/cetak-3d/suite-rekayasa-presisi-cetak-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/analizzatore-maglia-letto/": {
+      "hash": "1f7d68e5947b5f2119e8ce12fed165019abaf8987eca6dee96eddb06bd9b9cfb",
+      "route": "/it/utilita/categorie/stampa-3d/analizzatore-maglia-letto/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-angolo-sbalzo-sicuro/": {
+      "hash": "0b316bdb735f0c900d1e721b9705d9ec11a3cdd09f4ed483f5c8240fbec6f9fc",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-angolo-sbalzo-sicuro/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-calibrazione-e-steps/": {
+      "hash": "9309f8e6fd85552face286b50c899d764ef4047082403ae54096fb183444947b",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-calibrazione-e-steps/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-compensazione-piede-elefante/": {
+      "hash": "20c0110df81b05e11660846a038e77e9f5ae16751b5988815476ebd04a6c025b",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-compensazione-piede-elefante/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-costi-stampa-3d/": {
+      "hash": "6aaafa94cc9ebbcff939f5d8e29aa3178f28d54918fa61df134cacc7dac33315",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-costi-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-costo-orario-macchina-produzione/": {
+      "hash": "7d598d81427750485df0dd0b29bdf9d564f4e5c96a07bc9f8da134af7e36eb4d",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-costo-orario-macchina-produzione/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-costo-post-elaborazione-stampa-3d/": {
+      "hash": "581f0b7cc87ae6fd1590bd50712f5fb0e24d64628895fac2dbe3d8b658cec9cd",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-costo-post-elaborazione-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-costo-reale-resina-sla-dlp/": {
+      "hash": "99d426af36e564802106bbe33b346ffda5c54d4aaa387bed3799270105d9b1de",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-costo-reale-resina-sla-dlp/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-densita-supporti-albero/": {
+      "hash": "5ba6ccc2b2dc9454266698fc067a43317abea935ed54b86fbdb8098273b9d7a7",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-densita-supporti-albero/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-di-accelerazione-jerk-e-ringing-per-stampante-3d/": {
+      "hash": "81bc1bc28d92075d4a4b8a82d1949b94d97e006d7e54956c4eb1e7601963bbfb",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-di-accelerazione-jerk-e-ringing-per-stampante-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-di-purga-multimateriale/": {
+      "hash": "d434c0f35da43884bbf85ca68ff0494459f3d5d5428856916385bbfc75a828a4",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-di-purga-multimateriale/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-dimensionamento-alimentatore-stampante-3d/": {
+      "hash": "dc7fca28c92d01ca8624b4df489556194aef006dde1755ab903ab9dcfbba82e9",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-dimensionamento-alimentatore-stampante-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-efficienza-produzione-additiva/": {
+      "hash": "25fa177371f4e4a35d4c1884a17b62c138e121f3e7f884d027a09c5615c0dea1",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-efficienza-produzione-additiva/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-flusso-volumetrico/": {
+      "hash": "cb4fcb5fe3f76bda8b990f19a657a879808253c03d378812ccba0b993370b546",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-flusso-volumetrico/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-frequenza-tensione-cinghia-corexy/": {
+      "hash": "15f44f680453ac2b55286672c6ea399136490efadb11c848c1226d132d91fc6b",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-frequenza-tensione-cinghia-corexy/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-peso-percentuale-infill-3d/": {
+      "hash": "daed503cdb8a91c85cdc123bf665c82cdf476ed6c8d868ddc26038b67bf5c6d5",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-peso-percentuale-infill-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-polimerizzazione-resina-uv/": {
+      "hash": "017ba915f0ab9cd3fee90d6e5473c3d85b0b7b1489227bbd3b6cab38428dbb62",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-polimerizzazione-resina-uv/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-portata-ugello-stampa-3d/": {
+      "hash": "c4c7f1160c3e90efaf0aeaa7db5be7ec4a6bced1e8fad00704bdaf6c62faf41c",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-portata-ugello-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-portata-volumetrica/": {
+      "hash": "22b414d9e1dc2c49560c815348051ac8c252f4162bc94fe74818a164eeb01462",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-portata-volumetrica/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-prezzo-stampa-3d/": {
+      "hash": "88e5d614ba0445caabd24acd606b678caab8b7565619f2e329d7260d3cc31dda",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-prezzo-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-ritiro-stampa-3d/": {
+      "hash": "f00e3a536a8328141ce0f18d7827bf92bda4232c3709beda303f02ba2e211951",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-ritiro-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-roi-farm-stampa-3d/": {
+      "hash": "7807f6cad36158c0d21228a17baed84b9e83b4c3c0de0125389ccc5651d2def9",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-roi-farm-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-roi-filamento-alla-ruvida/": {
+      "hash": "33edc320fb2c72ac0613b4486e054ab2fb41c936635a6e2f409a8610408fd6b2",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-roi-filamento-alla-ruvida/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-stabilizzazione-inerzia-termica-piano-stampa/": {
+      "hash": "b1ffbe864949533a08199384d034613bb72ec99db92f17079ec9d5e1c372a9a1",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-stabilizzazione-inerzia-termica-piano-stampa/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-svuotamento-drenaggio-resina-sla/": {
+      "hash": "652b50e28069efa7b508bf7dbceba77ef759e391143a9770d54bd905c5c0a703",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-svuotamento-drenaggio-resina-sla/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-tempo-lisciatura-chimica-abs-pvb/": {
+      "hash": "fd5cd1a3e9397cdacc92ddf87053aed708ddd0fd06c5ca39c666efd784150711",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-tempo-lisciatura-chimica-abs-pvb/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-tempo-polimerizzazione-uv-resina-tecnica/": {
+      "hash": "26a0f5804de515c0d1ee06b383584beaa3bd07bf4e83ffc2c36257c2bdd668d0",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-tempo-polimerizzazione-uv-resina-tecnica/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-tolleranza-filettatura-metrica/": {
+      "hash": "677fb675a5bfd32624123576c059a1423b44a665d36270a18d808eb813cd387f",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-tolleranza-filettatura-metrica/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatore-transizione-filamento-arcobaleno/": {
+      "hash": "b3ee1df32ab261499f2414d7568c2758d167aca9119dfdb8ba56dae10ecf3ed3",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatore-transizione-filamento-arcobaleno/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calcolatrice-microstepping-driver-motore-passo-3d/": {
+      "hash": "075c9febe6c9a739fccc04f9acb45a8dd503de5559a8f056238b74b680b22a0d",
+      "route": "/it/utilita/categorie/stampa-3d/calcolatrice-microstepping-driver-motore-passo-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/calibratore-retrazione-stringing-stampa-3d/": {
+      "hash": "045090b3e55a9b27ff06732f25ace6c0fedde630de39be24478c52f962f703d0",
+      "route": "/it/utilita/categorie/stampa-3d/calibratore-retrazione-stringing-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/convertitore-peso-lunghezza-filamento/": {
+      "hash": "5d19631032ba7369a419bcf9d77651812a7bf39c129e9438ac3595371723adb7",
+      "route": "/it/utilita/categorie/stampa-3d/convertitore-peso-lunghezza-filamento/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/estimatore-disidratazione-filamento/": {
+      "hash": "443d3dc75511d968cb00c5d305cb485e9afff463be7e1764d9e64ce8420aa4db",
+      "route": "/it/utilita/categorie/stampa-3d/estimatore-disidratazione-filamento/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/": {
+      "hash": "4f96f08b055997c9ddb7cd0c9040af300505163f2545bdda4460f63fe0ff3872",
+      "route": "/it/utilita/categorie/stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/ottimizzatore-di-perimetri-e-pareti/": {
+      "hash": "3ead9fedf13f184672948fe5fe50137380d9e33a9123689fcdfc4a908c1c0766",
+      "route": "/it/utilita/categorie/stampa-3d/ottimizzatore-di-perimetri-e-pareti/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/ottimizzatore-di-ponte/": {
+      "hash": "07c8f37e52f627d5a62a336397b2332191f9e2386528a656cb1220ebf5d7540d",
+      "route": "/it/utilita/categorie/stampa-3d/ottimizzatore-di-ponte/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/ottimizzatore-tempo-stampa-3d/": {
+      "hash": "fe721a1a5a1970918c568b96cfdb96b200fe2f3b66ebd70a8f2ed1d4ada3ddac",
+      "route": "/it/utilita/categorie/stampa-3d/ottimizzatore-tempo-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/simulatore-rischio-warping-stampa-3d/": {
+      "hash": "2ace2e711bc8dcbff6cd1754333e723f50862020e1419970a1c296975d6e473f",
+      "route": "/it/utilita/categorie/stampa-3d/simulatore-rischio-warping-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/stimatore-durata-foglio-pei/": {
+      "hash": "bc8004b44c3637e80b196f6c680f63faa1cce989f97bb38ae3bce6cbe59767dc",
+      "route": "/it/utilita/categorie/stampa-3d/stimatore-durata-foglio-pei/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/stimatore-resistenza-trazione-assi-xyz-stampa-3d/": {
+      "hash": "163940d00fbdd6c21074cff4285f2584e6ec2208bb262cda4fb74d48aa9aa9a0",
+      "route": "/it/utilita/categorie/stampa-3d/stimatore-resistenza-trazione-assi-xyz-stampa-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/stimatore-tempo-stampa-3d-per-altezza-strato-e-velocita/": {
+      "hash": "f6ac39726158670e97d33d641c222a98a8c7aecf1095040ef90102b085faf507",
+      "route": "/it/utilita/categorie/stampa-3d/stimatore-tempo-stampa-3d-per-altezza-strato-e-velocita/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/stimatore-usura-ugello-filamento-abrasivo-3d/": {
+      "hash": "c839578a9a891f6a5d36fe9fe0eef04a14f078ce500e50ca455c2838fef3ebdf",
+      "route": "/it/utilita/categorie/stampa-3d/stimatore-usura-ugello-filamento-abrasivo-3d/"
+    },
+    "https://www.gamebob.dev/it/utilita/categorie/stampa-3d/suite-ingegneria-precisione-stampa-3d/": {
+      "hash": "16323b75e88cd59cbf7ad869e6f9cd23ff0fb1ead24bae4d7ce6c5ee14ab6c6b",
+      "route": "/it/utilita/categorie/stampa-3d/suite-ingegneria-precisione-stampa-3d/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-farm-roi-calculator/": {
+      "hash": "dbcc2f1cce44d5c46bbe0d92863bd765a1479a0e8bcdb8b57667c31269299f79",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-farm-roi-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/": {
+      "hash": "f7030beac3ddc4bacddc7fe5a2f3243050513a41340ef2438a2a34bf4d8afc24",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-pricing-calculator/": {
+      "hash": "dfdedb083513ec4d48d695f5e98616d43afefac0ad0fc30f95b45b976ddce766",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-pricing-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/": {
+      "hash": "dd5c1c8a7256bb5fd7dca954e1f4d6492ae691fb93e7847cb916a0371f8cc3b1",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/": {
+      "hash": "f25136b13f6633a0ba4be1f29042b099082e4d83c47c795ac326ef4dca693613",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/": {
+      "hash": "ef98eda38d8b60453976333bc660b934828abe98cf3915c116d1f771432359d5",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/": {
+      "hash": "5d6587da31dd84699966f1bbda38c43dc94018d37fd529c2bf2393cf293ee428",
+      "route": "/ja/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/": {
+      "hash": "fa8f9f9878f2680cdb79db5d3dcd330e5c871e0b5067fb7374802926d5aedb2a",
+      "route": "/ja/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/": {
+      "hash": "fc1f1dfb1638e92cffd0bb391a47e26f6658b41e9c4f529cd946fa1c21f84651",
+      "route": "/ja/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-printing-cost-calculator/": {
+      "hash": "c9597838b30febf7ecfd98d3b5bb41c10be8c8c9ddd367215a18e0c6ee716a16",
+      "route": "/ja/utilities/categories/3d-printing/3d-printing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/": {
+      "hash": "0db0115634a1dfd97e60d47632247abaeb21f891a9f96fb931620836ad6e18e5",
+      "route": "/ja/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/": {
+      "hash": "11a067e33aa9a2b98b9884dc914e9dddb7ed701c090f129d11b900368a5db32a",
+      "route": "/ja/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/additive-production-efficiency-calculator/": {
+      "hash": "3d99474ec2a27572c1188b48ffe7b11bc079446a7130e77b16afbeafe7947195",
+      "route": "/ja/utilities/categories/3d-printing/additive-production-efficiency-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/bed-mesh-analyzer/": {
+      "hash": "44c25d774ef530ee497ca92e48cd5db5b463c72b5096705baeabf29875112609",
+      "route": "/ja/utilities/categories/3d-printing/bed-mesh-analyzer/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/bridging-optimizer/": {
+      "hash": "25b18cd3b5a81eede61bc268d6119be77bc590cbf81e453743b709380611df74",
+      "route": "/ja/utilities/categories/3d-printing/bridging-optimizer/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/bulk-filament-roi-estimator/": {
+      "hash": "ee31a080043f45f8a926be13b94f668b6bb1d6a4ba9a9a779e4eb26d2eb18d39",
+      "route": "/ja/utilities/categories/3d-printing/bulk-filament-roi-estimator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/": {
+      "hash": "e51949db8b9c8d2fb22ac1fe937fcfcb8b13136ed6ca3c6a9bb0f041607b219d",
+      "route": "/ja/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/e-steps-calibration-calculator/": {
+      "hash": "1fc2d84b958e57e0d99c4d2bc9efaa8df0d14101e8eb68c3c9d7e2f6ab0078fc",
+      "route": "/ja/utilities/categories/3d-printing/e-steps-calibration-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/elephant-foot-compensation-calculator/": {
+      "hash": "827765a42596fca62d9bc3c15bb11f9896cdd275b2ade4443c421e0ab8c077c0",
+      "route": "/ja/utilities/categories/3d-printing/elephant-foot-compensation-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/filament-dehydration-estimator/": {
+      "hash": "239c320ee631cee1d884f45456bad513c24fbb65e617a6425b984cbee9f26688",
+      "route": "/ja/utilities/categories/3d-printing/filament-dehydration-estimator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/filament-weight-to-length-converter/": {
+      "hash": "65e3881f50bc3344639d06cbd889c7c73409a2e48833ef072bdabb7746ef277b",
+      "route": "/ja/utilities/categories/3d-printing/filament-weight-to-length-converter/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/": {
+      "hash": "5e3eefd7f32f2f66cbb8bfc74f9118a363d19ced6ebbe3d8ebf7d6d5ad162556",
+      "route": "/ja/utilities/categories/3d-printing/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/": {
+      "hash": "34e0c17582aff743b704623aaeb3aba4dc20ca6d23bea6f35572f8379e6a1ba8",
+      "route": "/ja/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/metric-thread-tolerance-calculator/": {
+      "hash": "fe02ac3b406946115c101f69c1157562ced3fc35f16e36001e15abdf7cd01124",
+      "route": "/ja/utilities/categories/3d-printing/metric-thread-tolerance-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/multi-material-purge-calculator/": {
+      "hash": "71f0d3fb911a4ef24dd58e9fe02cf403607465b954533ec190d4edf77ed35363",
+      "route": "/ja/utilities/categories/3d-printing/multi-material-purge-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/nozzle-wear-estimator/": {
+      "hash": "314eb46f72361e415c154ea39afc49b8513aa027d39f0803764c6eef66e62b77",
+      "route": "/ja/utilities/categories/3d-printing/nozzle-wear-estimator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/": {
+      "hash": "a43784f363b075face0f65de775bad8a1c7d3b6f3b3e9fef6a1329e3981b9e9d",
+      "route": "/ja/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/post-processing-cost-calculator/": {
+      "hash": "a414848c047f76bff38471c6796449fe0e60e0e0af0d93e9450db06da76214dc",
+      "route": "/ja/utilities/categories/3d-printing/post-processing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/": {
+      "hash": "16d3f8cdaad75e46365cfe9072fc4b6cd14d6ff81c79f5249df493d401cee6a9",
+      "route": "/ja/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/": {
+      "hash": "9c0fb95ff0175f2f6e4ff5c2f9d5f565a74252edc1d185acace583b9d0086dcf",
+      "route": "/ja/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/rainbow-filament-transition-calculator/": {
+      "hash": "ac84779ce4b5a54405a920c5eaef98063ee2935c41dc7dfd90cd303d81d9418a",
+      "route": "/ja/utilities/categories/3d-printing/rainbow-filament-transition-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/": {
+      "hash": "636f95b5ad855d2edd2f493b96537395cca3fb26bc32a85700e14ac7804e2592",
+      "route": "/ja/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/retraction-stringing-calibrator/": {
+      "hash": "158be7c486df757b88c15a985e9ad37f14cea5f7fe5cd7b8dafc16b95db0528d",
+      "route": "/ja/utilities/categories/3d-printing/retraction-stringing-calibrator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/safe-overhang-angle-calculator/": {
+      "hash": "0862db49505a9efe75bd510b50948dc3573aa03eba4b90ef9a322c09199ee2dd",
+      "route": "/ja/utilities/categories/3d-printing/safe-overhang-angle-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/": {
+      "hash": "04987904a9209d14487aebb283a9a416f3c093570100d257ad3259fa552fc053",
+      "route": "/ja/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/": {
+      "hash": "a96e0a6655e9437e0ca542cad7be0a22955ae63644a96d91e77302b329762002",
+      "route": "/ja/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/": {
+      "hash": "40165db9b18b420f3d887c4606a558018bd8381f891dfeb135c9ccc9053327db",
+      "route": "/ja/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/tree-support-density-calculator/": {
+      "hash": "a0f0f5e6a9e9a4eb036edf0ac02ebd2934c32f4d14b7c0fc7d24063a7610fe3a",
+      "route": "/ja/utilities/categories/3d-printing/tree-support-density-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/uv-resin-curing-calculator/": {
+      "hash": "dbc9251df6bfeb9213950950fcaccbaf1da2182598b9c899af4fa38b60fa1d1a",
+      "route": "/ja/utilities/categories/3d-printing/uv-resin-curing-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/volumetric-flow-calculator/": {
+      "hash": "53b7fb70cc9948916ab7c95c56f118fd6fa76eee0863c040af7d558b4429451d",
+      "route": "/ja/utilities/categories/3d-printing/volumetric-flow-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/": {
+      "hash": "5e57e91d1ee8d3ddb338a2bc75477b7c193b2d61208a6d0e5169cbf6d985dcd1",
+      "route": "/ja/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/wall-perimeter-optimizer/": {
+      "hash": "66d14a0ede948fab8a3d02f69480981c2dfd0e4523e3e9e2dc0465adc057cade",
+      "route": "/ja/utilities/categories/3d-printing/wall-perimeter-optimizer/"
+    },
+    "https://www.gamebob.dev/ja/utilities/categories/3d-printing/warping-risk-simulator/": {
+      "hash": "57a9406ea7ff3e959f8e80b24e57780e503d826cbedc8580003d0fb90ea87b4a",
+      "route": "/ja/utilities/categories/3d-printing/warping-risk-simulator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-farm-roi-calculator/": {
+      "hash": "13d0d2b266bcfd904c5837e49a3788c78bde9dbb480b6df5a6360a052f2643ec",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-farm-roi-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/": {
+      "hash": "89f8b4ff9041c2de3f58743935f5a8745ccf03ba04f5a5f815d757b213b011c4",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-pricing-calculator/": {
+      "hash": "077424b262c7f550e7e3bf324bcf6ea94b04f24d946b148f98ca830431f60ac8",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-pricing-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/": {
+      "hash": "8f6b7ed2a10fdd3fdbe3caae1066ed3e10e3297eefacb73b18c35f56b3b6b55a",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/": {
+      "hash": "9b0e8d7c77a62812269004cdf4de071542b4a5413e3a655be7bf3a6a9d988a2a",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/": {
+      "hash": "3d9c5d7f441271e006679dc759d33c51d3aefb76b045239effe369e8a19c8586",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/": {
+      "hash": "b2d82606fbaac35685460f059eaeb9f3148c2e713fae70017b6247d53c492b08",
+      "route": "/ko/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/": {
+      "hash": "76385d352496044ad4c0683e8432ff45b8e486e6945b3279a7f632f059c94b75",
+      "route": "/ko/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/": {
+      "hash": "75909193415b4f20b797ab8cfac5b58d6dbb449bc71f2ac3b029f1038af90d6f",
+      "route": "/ko/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-printing-cost-calculator/": {
+      "hash": "69aabb322f50b7b1dab2895773721d3e7cb11b31d70303af19e4e6b97a678527",
+      "route": "/ko/utilities/categories/3d-printing/3d-printing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/": {
+      "hash": "24536d1d25213de3781513862d075dc0ed048d4023c4bce28760d68832787f69",
+      "route": "/ko/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/": {
+      "hash": "fdeba62f1eaa5a963c26525bb52ebd36eb3efaccd43eea41be1f0d0683d79fd2",
+      "route": "/ko/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/additive-production-efficiency-calculator/": {
+      "hash": "f9f0f4f1b4cb17696aee2338ba45f43d11995acbab3f96d0406dbf24f69a46b7",
+      "route": "/ko/utilities/categories/3d-printing/additive-production-efficiency-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/bed-mesh-analyzer/": {
+      "hash": "96d4b5ff0b493ac19d9a356974692be9c8d7890c44f08e60e3ca75b1abeca8ca",
+      "route": "/ko/utilities/categories/3d-printing/bed-mesh-analyzer/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/bridging-optimizer/": {
+      "hash": "f33f356d3a83614055d9e94c9a1a85401f834181205338d389edecb1a57d03bf",
+      "route": "/ko/utilities/categories/3d-printing/bridging-optimizer/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/bulk-filament-roi-estimator/": {
+      "hash": "0030bde56d664cbe15a3b802ab1c69f164f59e19e74576fa6b061d6c12dcf412",
+      "route": "/ko/utilities/categories/3d-printing/bulk-filament-roi-estimator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/": {
+      "hash": "d157f6d5470ac8bea1f9352d2c455a1fa11eb7cf87a619f3110271c28f9853c9",
+      "route": "/ko/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/e-steps-calibration-calculator/": {
+      "hash": "44f72fddcd563c67f89f4040536c2eb740f717b28de04a98f4636c7493093266",
+      "route": "/ko/utilities/categories/3d-printing/e-steps-calibration-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/elephant-foot-compensation-calculator/": {
+      "hash": "eb42b525232a82579cd049ff0962055efb9c5e7a9fbae17b08e8b6582ab7dd5f",
+      "route": "/ko/utilities/categories/3d-printing/elephant-foot-compensation-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/filament-dehydration-estimator/": {
+      "hash": "417a942bf17c84a73c8c8cd93ded0c0e074fc5c0aaae278701915f751c52c521",
+      "route": "/ko/utilities/categories/3d-printing/filament-dehydration-estimator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/filament-weight-to-length-converter/": {
+      "hash": "f93fc025c300beaea3349026ff9d405f4819e68c67a513d182e5ef4b50de4fe4",
+      "route": "/ko/utilities/categories/3d-printing/filament-weight-to-length-converter/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/": {
+      "hash": "a536f07039b3749fdf2bbdda865664898eb2549b8434737a2f1f7d77eb351a72",
+      "route": "/ko/utilities/categories/3d-printing/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/": {
+      "hash": "bd2e8d84a178cac77a3b476ad8913c0ad1fc6490b3a62c29b95e67205fdfa2aa",
+      "route": "/ko/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/metric-thread-tolerance-calculator/": {
+      "hash": "5307057e858584b4f4160e62f5426c72d1fa6db5033da439f4e863cf00fafe56",
+      "route": "/ko/utilities/categories/3d-printing/metric-thread-tolerance-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/multi-material-purge-calculator/": {
+      "hash": "9c263e558bf4427f75c764b77fa857c3cfce5198667b496a2c00eba36a8e3c53",
+      "route": "/ko/utilities/categories/3d-printing/multi-material-purge-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/nozzle-wear-estimator/": {
+      "hash": "e1da15ad2fd0e07eba3587a6a52f2bd26836f13038380783adb39afa98947fa7",
+      "route": "/ko/utilities/categories/3d-printing/nozzle-wear-estimator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/": {
+      "hash": "601c61afbaab53b22d9108c99346fff0a3bd2a87ac4057596c9dc1099eb63e52",
+      "route": "/ko/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/post-processing-cost-calculator/": {
+      "hash": "f62af86ad119d0c39f78f8c37c3976126c59f2948ff9c4f123c384547cdbfb23",
+      "route": "/ko/utilities/categories/3d-printing/post-processing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/": {
+      "hash": "0dcf0b96824af204ed36a3a0fb168d627b620fe0183f524e7cafafe09eb03459",
+      "route": "/ko/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/": {
+      "hash": "82d5faf62fbb79e2f01c288a87ef4432220bb6aa9d768fb9741c641147c25788",
+      "route": "/ko/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/rainbow-filament-transition-calculator/": {
+      "hash": "f888048fcba19cbe50ee6653680be00d01fced66f7144ffb334ac09f57bff9ff",
+      "route": "/ko/utilities/categories/3d-printing/rainbow-filament-transition-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/": {
+      "hash": "8d253b24461d060590cd264e387517789107a3347e8e63409a31772e48a1a3d3",
+      "route": "/ko/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/retraction-stringing-calibrator/": {
+      "hash": "1de7ca6dcc15cf6512bdedd0f2c24ef8576ac87fef1048f731b2e07c2fab6ba4",
+      "route": "/ko/utilities/categories/3d-printing/retraction-stringing-calibrator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/safe-overhang-angle-calculator/": {
+      "hash": "be72c5b3850605bc5903559af92ad6f403cdc88d7f34601ca01fd3e2795a3ba8",
+      "route": "/ko/utilities/categories/3d-printing/safe-overhang-angle-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/": {
+      "hash": "2a1beced34b953c18cd83066833dd4fb448b86f72be170fb06ff8aa55955b5a0",
+      "route": "/ko/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/": {
+      "hash": "b01604b15239912904b225ee7cbf57c0b25ab9a6cf6bd7706aadb82514cca8fc",
+      "route": "/ko/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/": {
+      "hash": "cd4e1c457d707a7739b75291c945fc4fa102f20244e27fbaab1168768005367f",
+      "route": "/ko/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/tree-support-density-calculator/": {
+      "hash": "208c28376086cb3d3e88e5e224625d85edf4db24e8b5ec3e452c5da6fe59e621",
+      "route": "/ko/utilities/categories/3d-printing/tree-support-density-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/uv-resin-curing-calculator/": {
+      "hash": "b6c71dac589561903ceea695559f9384bc75066de60d0c1e27fc0b75fa415ad5",
+      "route": "/ko/utilities/categories/3d-printing/uv-resin-curing-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/volumetric-flow-calculator/": {
+      "hash": "8bda6c8f49b54b27aee4394e0a67fa0bfab870f8ba84ecbdbea77cffee85e769",
+      "route": "/ko/utilities/categories/3d-printing/volumetric-flow-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/": {
+      "hash": "abf00b7db78f1afb9ca1283e490cdc0eb760fe85bda8f8db4677a6f94c1cad80",
+      "route": "/ko/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/wall-perimeter-optimizer/": {
+      "hash": "5f619db078a6725e52a39100ace5e1a42fe99cbf3bf298fa1e248fc3d2b3f2f7",
+      "route": "/ko/utilities/categories/3d-printing/wall-perimeter-optimizer/"
+    },
+    "https://www.gamebob.dev/ko/utilities/categories/3d-printing/warping-risk-simulator/": {
+      "hash": "a370313cbd154937ccd02ab49ef47c86646367770c540f3342a6fec366bb3eee",
+      "route": "/ko/utilities/categories/3d-printing/warping-risk-simulator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-gewicht-infill-percentage-calculator/": {
+      "hash": "b8cddf0bab2995b88446f6d9d491d650e95248cd98cdfc58994c417802994d1d",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-gewicht-infill-percentage-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-kosten-calculator/": {
+      "hash": "2be2d8d7c5266fc8285c6bf00050950ebdd41be461b6b5ca0b8c71aabf358562",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-kosten-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-krimp-calculator/": {
+      "hash": "85872a55f6a76168c416ba8b7761bb8d1796ab133b01fc9e59a599ee14305e83",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-krimp-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-nabewerking-kosten-calculator/": {
+      "hash": "f54182ef058d14062ef2497ffd2b2c429d0d92dac0655122801fa3fb31cb7214",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-nabewerking-kosten-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-nozzle-flow-calculator/": {
+      "hash": "3a57e7f4bed351725ae21f9e32f30b4383b87c8b191d9cbb64189dc1b8d51e19",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-nozzle-flow-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-print-prijs-calculator/": {
+      "hash": "db03164477615b461f29fe0fb885d3d0015290893508876a27695fb72895e335",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-print-prijs-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-printer-mondslijtage-schatting-abrasief-filament/": {
+      "hash": "918c29ce396c8ccd7bd49b49a8e783b5c19f15a0d5fafd293f7e816a911c0c8a",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-printer-mondslijtage-schatting-abrasief-filament/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-printer-versnelling-jerk-en-ringing-berekenaar/": {
+      "hash": "0a8faf2f3450b01886caf13d7f5adc1f3b27664f21110657f709a6c14ce8737f",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-printer-versnelling-jerk-en-ringing-berekenaar/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-printtijd-schatten-op-basis-van-laaghoogte-en-snelheid/": {
+      "hash": "e29d678df3472ce243e5c489e79e237e5cd6f1f6d2cf4f667e05783fe9a30dc3",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-printtijd-schatten-op-basis-van-laaghoogte-en-snelheid/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/3d-printtijd-workflow-optimalisator/": {
+      "hash": "14daaeb4ae199237e1b48009779b0bbcb289e2a695322179ceb752a7509a5b53",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/3d-printtijd-workflow-optimalisator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/abs-pvb-chemische-egalisatie-tijd-calculator/": {
+      "hash": "a03aadf1b4ae233fafaafa83611c4adc24d17cf8aa63dd203391be5b678c3542",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/abs-pvb-chemische-egalisatie-tijd-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/additive-productie-efficientie-calculator/": {
+      "hash": "c02a3c685de88809372c53fb139afe51e2c99e1b42e1138adb091247a47bd2df",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/additive-productie-efficientie-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/bedmesh-analyzer/": {
+      "hash": "9e284a520a16f34c8c23ae6f3e5489e3f976d1facc723a89765952957bbf738f",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/bedmesh-analyzer/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/boomondersteuning-dichtheid-calculator/": {
+      "hash": "731df2dff416326739c8d1ff5ebc543f67e527fa0939b106fff8b5fe4c1618f1",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/boomondersteuning-dichtheid-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/brug-optimalisatie/": {
+      "hash": "d0dd92525644024ed50089f6cab80d3a6784e4d2906f08ae036773407492dfd9",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/brug-optimalisatie/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/bulk-filament-rendementscalculator/": {
+      "hash": "15b3d05d124b46e878706f059bf2ca1bbb714b781c8a3b8687ac5c052425f2fc",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/bulk-filament-rendementscalculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/corexy-riem-spanning-frequentie-calculator/": {
+      "hash": "0d037780ddd4a0b567a1af5dd6e76535bdac3e7a02c744b7caa98a95ee5cef08",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/corexy-riem-spanning-frequentie-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/e-steps-kalibratie-calculator/": {
+      "hash": "43e1868b3f563f1cbeb7efd0a41e44161a808f5a913bf9da733cf1522aada533",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/e-steps-kalibratie-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/echte-harskosten-calculator-sla-dlp/": {
+      "hash": "32a7d7eb86afa13fd13bee17cb070accef9f897c3dbd47d7aadd8be1ff8649c7",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/echte-harskosten-calculator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/filament-dehydratatie-schatter/": {
+      "hash": "de5adc1895832cefeb984723e60878a10441d7b2786a5703e0f469b9759ca371",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/filament-dehydratatie-schatter/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/filament-gewicht-lengte-omzetter/": {
+      "hash": "407b553b07a40fe60dc96314d2db1ee1626733e39468717ed9fae9d2e083785a",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/filament-gewicht-lengte-omzetter/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/": {
+      "hash": "1d0d5c8c16c0e44059dda00c3b1cb42f33d0eae14f7b3b263546f35c06e2e821",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/machine-uurtarief-productiekosten-calculator/": {
+      "hash": "e9bc183efced3fdd284a90583d31fde26a54d871f3bd601fab4bed3d7cdb02ec",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/machine-uurtarief-productiekosten-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/metrische-schroefdraad-tolerantie-calculator/": {
+      "hash": "d5fa07286402f7ef4014137eb8666d24cb082aac8a6cd6fcca5b1b99c50ea8f1",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/metrische-schroefdraad-tolerantie-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/multi-materiaal-purge-calculator/": {
+      "hash": "c7282b1557d41c46136167858b39e09607a0189b9341b01943b5933593e0e75d",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/multi-materiaal-purge-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/olifantenpoot-compensatie-calculator/": {
+      "hash": "dc07ee552d0d86b7eab1555024b5981b9c83461213de4547c8eb5b0d521bf5c4",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/olifantenpoot-compensatie-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/pei-plaat-levensduur-schatter/": {
+      "hash": "61d4f352928429044141fb32b5fc8b83dde90fc9feb5883f88081e6bead4a4c4",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/pei-plaat-levensduur-schatter/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/precisie-engineering-suite-3d-printen/": {
+      "hash": "ba3858ca4a201303e9c92e8e2ee29ecc63031f48792a67fde15df43235b8b32b",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/precisie-engineering-suite-3d-printen/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/print-bed-traagheid-stabilisatie-berekenaar/": {
+      "hash": "ab3ddf40026fb99d5a3c1ee41f5f54ac48aea6b3fa047b79068f9238a38e0756",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/print-bed-traagheid-stabilisatie-berekenaar/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/regenboog-filament-overgangslengte-calculator/": {
+      "hash": "d25143ec34a17dd3bb4bfbbf412df4ceb319a9c8bf9d557aa9b57e298184aea8",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/regenboog-filament-overgangslengte-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/retractie-stringing-kalibrator-3d-printen/": {
+      "hash": "0116ce2b4bdd4b7e205e60ba3a673cf1a1afa8962d96d5714720f7dabc113400",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/retractie-stringing-kalibrator-3d-printen/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/roi-calculator-3d-printfarm/": {
+      "hash": "d2995f213d46081f5153d9c4d051b1463b316cb50b00995473aa2f3f519b6246",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/roi-calculator-3d-printfarm/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/sla-hars-uitholling-en-drainage-calculator/": {
+      "hash": "2a731be251f1214d453f7d95547c8a1ada2dfc777ac44abe63ce7de15bd05d87",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/sla-hars-uitholling-en-drainage-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/stappenmotor-microstepping-calculator-3d-printer/": {
+      "hash": "b90039f3fa96c76a2a070e896fe13fc0330c206bdfe3e71b09b0bf9630210cf4",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/stappenmotor-microstepping-calculator-3d-printer/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/technische-hars-uv-uithardingstijd-calculator/": {
+      "hash": "e098a74d959013cb83c2fe680f9058861abd70b970ada6da73d350958b8289dd",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/technische-hars-uv-uithardingstijd-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/treksterkte-schatter-xyz-as-3d-print/": {
+      "hash": "fc1a6b85072d440ebc3802ef77008d1b39d7a2e6c63a9d86c3de05cf1e4083af",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/treksterkte-schatter-xyz-as-3d-print/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/uv-resin-uithardingscalculator/": {
+      "hash": "6ac23d4ea07dfb029e0a9c5f5b674d7915bbbc6868a6980fc677c54c26485206",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/uv-resin-uithardingscalculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/veilige-overhanghoek-calculator/": {
+      "hash": "be1c8a0f64d7d09b0d48866a7d276866aa52f35447bf70c5c79724cbe8b59d5a",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/veilige-overhanghoek-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/voeding-dimensionering-3d-printer-calculator/": {
+      "hash": "28bf09ae683266d4bb9035e102ee03714decce28c8464e93a79c61712df9dc99",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/voeding-dimensionering-3d-printer-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/volumetrische-flow-calculator/": {
+      "hash": "21396bc5874be35f621ee2fb2edb347287742bf70901c8bfaa27de4196f7abde",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/volumetrische-flow-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/volumetrische-stroomsnelheid-calculator/": {
+      "hash": "53bc7df719bc88dd0314efa24ecc21b152163dd46cee5a9266edf20af0906091",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/volumetrische-stroomsnelheid-calculator/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/wand-perimeter-optimalisatie/": {
+      "hash": "744a8fcc46bab754ecdf293896421d123e0e681d980470782de70b2ec7198537",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/wand-perimeter-optimalisatie/"
+    },
+    "https://www.gamebob.dev/nl/hulpmiddelen/categorieen/3d-printen/warping-risicosimulator-3d-printen/": {
+      "hash": "7c1d9ce69a17ed9f1da67eee6df413536a3ef3d1492ea2d58fb1ef39d396c1a9",
+      "route": "/nl/hulpmiddelen/categorieen/3d-printen/warping-risicosimulator-3d-printen/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/analizator-siatki-lozka/": {
+      "hash": "af42fa8530cdebbf8d79920d0d9e06c8356032acb7cb3065f2865457cd95bacc",
+      "route": "/pl/narzedzia/kategorie/druk-3d/analizator-siatki-lozka/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/estymator-dehydratacji-filamentu/": {
+      "hash": "e9523a3f359327829de863539bd6e58c7b4e275c14aeb2a202ffce8da94cd4c0",
+      "route": "/pl/narzedzia/kategorie/druk-3d/estymator-dehydratacji-filamentu/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/": {
+      "hash": "428535b68dbefed3c993cd1fe149926d29a573cdacb48dc911af1ab500a07835",
+      "route": "/pl/narzedzia/kategorie/druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalibrator-cofania-stringowania-druk-3d/": {
+      "hash": "97554ba60b15bf225256d8b51f0c1362aede097bc955dc1a390750685c110f52",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalibrator-cofania-stringowania-druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-bezpiecznego-kata-nawisu/": {
+      "hash": "7dbe4fb8e4350cf1ad64d553c73beae21023be925a09cd1fbcb3a0fdac4377a5",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-bezpiecznego-kata-nawisu/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-cen-druku-3d/": {
+      "hash": "4ac2f010c9600b5cbe67cdc4f6b997db64b5558578aa3a436828c707ccd2822a",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-cen-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-czasu-utwardzania-uv-zywicy-technicznej/": {
+      "hash": "b68c57cb87dd36bf1180f4062523b720cbaeffbe9ee4f9db5c83db87bf70620e",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-czasu-utwardzania-uv-zywicy-technicznej/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-czasu-wygladzania-chemicznego-abs-pvb/": {
+      "hash": "bd60dde0da49837c0c7424cf1d4ecced09a70ac5e71e7d61c6e68e7b5d31bd25",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-czasu-wygladzania-chemicznego-abs-pvb/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-czestotliwosci-napiecia-paska-corexy/": {
+      "hash": "8635c966a859e9dd703a711210ecbc5b0fd95c71f67e7b6358a08997183010b3",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-czestotliwosci-napiecia-paska-corexy/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-dlugosci-przejscia-filamentu-teczowego/": {
+      "hash": "9274f9521e639f8fce34ba00117ca9565e4603264c85f4f0b4eb00f7d51dd79c",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-dlugosci-przejscia-filamentu-teczowego/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-doboru-zasilacza-drukarki-3d/": {
+      "hash": "3266fc8c6ec74ea3434ae9d9ceb2baf6198eceb0ff757535a4b897b132945aa3",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-doboru-zasilacza-drukarki-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-drazenia-i-drenazu-zywicy-sla/": {
+      "hash": "7955a70e3101e01d7c2c1abce8525a1fa469644d43b77b1e694027fccf20ff54",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-drazenia-i-drenazu-zywicy-sla/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-gestosci-podpor-drzewiastych/": {
+      "hash": "bc669091768a5153ff530312be9c35718babac26af6ff1f4097410ca5af558ae",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-gestosci-podpor-drzewiastych/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-kalibracji-e-steps/": {
+      "hash": "9f04ecb0a524ec66d503f2cd1e6999d1bf7630dbb125c704ea8bed66bdc8499e",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-kalibracji-e-steps/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-kompensacji-stopni-slonia/": {
+      "hash": "efc9cb1b6bf3a8cd47a74faf4a9709199e92ada5429553765e664d0b3344f836",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-kompensacji-stopni-slonia/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-kosztow-druku-3d/": {
+      "hash": "3faa839e3ea22e4368e89195dab7111080f3375a84e36a6bb77585cdf4ce4bb1",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-kosztow-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-kosztow-postprocessingu-druk-3d/": {
+      "hash": "d22e1c2957c624614f99dbbf02d3783d5b21835a3300711a8bb37bc98956f44c",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-kosztow-postprocessingu-druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-mikrokrokowania-drivera-silnika-krokowego-3d/": {
+      "hash": "f332367e0982e330b4ec784c12cdc13ede295465483241ae40f2eac55d6b87cc",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-mikrokrokowania-drivera-silnika-krokowego-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-oplacalnosci-filamentu-hurtowego/": {
+      "hash": "0da1dc09c7df9ee164dae57a2450e350c6fa195799fad13b68ce206a3904654f",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-oplacalnosci-filamentu-hurtowego/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-dyszy-druku-3d/": {
+      "hash": "6f6b0636c63726e651cf1e1100e54dcea5610f5daa05070cf147e05cbafaaa3a",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-dyszy-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-objektosciowego/": {
+      "hash": "fbdbfca6e928b74cf544b601262da2185f092de0bba501521307c6dcdc30f44a",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-objektosciowego/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-objetosciowego/": {
+      "hash": "299c57f0672a1369dd152c248e6a798490566737a195493c093cc044fca73bba",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-przeplywu-objetosciowego/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-przyspieszenia-jerk-i-ringing-drukarki-3d/": {
+      "hash": "89f5eb17ee8e48858013ea6449f559ca83d72ee310702b321ef3b8ab98545a8e",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-przyspieszenia-jerk-i-ringing-drukarki-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-purge-wielomaterialowy/": {
+      "hash": "6b73735243181aa4d9f7ca6aea2dfd8e6917271ccb27e00d153e0c3fb2b27464",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-purge-wielomaterialowy/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-roi-farmy-druku-3d/": {
+      "hash": "8dba514ed6d2a58e4e4e88e20b5648ed722358d2695a5cec3ce40b9430da14d0",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-roi-farmy-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-rzeczywistego-kosztu-zywicy-sla-dlp/": {
+      "hash": "e2d04566fec050be24e5801b6e0fff640dced64d601cb28dfec27b71b2cf68c1",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-rzeczywistego-kosztu-zywicy-sla-dlp/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-skurczu-druku-3d/": {
+      "hash": "f201dcfbf28d07152ccbfdc50d6d0dc5affd4d8b1cbcbda6e4fe6b9e1b0e5614",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-skurczu-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-stabilizacji-bezwladnosci-termicznej-stolu/": {
+      "hash": "a36b957d93b220dfa8c8f7523d874bafcd09710917c306fc7ab88ebef82dcdf9",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-stabilizacji-bezwladnosci-termicznej-stolu/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-stawki-godzinowej-maszyny-kosztow-produkcji/": {
+      "hash": "c946e4b5d80ebb99ab8fc25cac8ef80de2a1fc1d595435f8ac5db1666b676587",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-stawki-godzinowej-maszyny-kosztow-produkcji/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-tolerancji-gwintow-metrycznych/": {
+      "hash": "d2678dbc74c5fb6be84f3a13551c0c2bcc07fbf4fb18988025accf4006ad4d97",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-tolerancji-gwintow-metrycznych/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-utwardzania-zywicy-uv/": {
+      "hash": "5a459f6941001664570c174374416db496dbab6b892e667cc6f9abd402ae4d34",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-utwardzania-zywicy-uv/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-wagi-procentu-wypelnienia-3d/": {
+      "hash": "7cdd5693c301c53f688474350011afa8d1fc68662b8ab6e6d9f9a4c9e1fbc639",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-wagi-procentu-wypelnienia-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/kalkulator-wydajnosci-produkcji-addytywnej/": {
+      "hash": "166fbcf9d9325b492cef9f3df3fb469b60cc8ac68141f831703187524929f921",
+      "route": "/pl/narzedzia/kategorie/druk-3d/kalkulator-wydajnosci-produkcji-addytywnej/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/konwerter-wagi-dlugosci-filamentu/": {
+      "hash": "ce9b04afc04ae0302fa08a3f97942312429e6539f5b2572a51d272d9c6595cce",
+      "route": "/pl/narzedzia/kategorie/druk-3d/konwerter-wagi-dlugosci-filamentu/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/oceniacz-czasu-druku-3d-po-wysokosci-warstwy-i-predkosci/": {
+      "hash": "18e7028d956419780247b91a91785232bc0a122edd7b9087b27473f99ecd7cd6",
+      "route": "/pl/narzedzia/kategorie/druk-3d/oceniacz-czasu-druku-3d-po-wysokosci-warstwy-i-predkosci/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/optymalizator-czasu-druku-3d/": {
+      "hash": "b38f832327e2d35c26457ff178cbd4443b93b2636b328b1c2f573e2d7da93e94",
+      "route": "/pl/narzedzia/kategorie/druk-3d/optymalizator-czasu-druku-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/optymalizator-mostkow/": {
+      "hash": "10ca4bdf85ff3b2453b4a3d57175c078e098d1383f08ffc6eed791ec01d57778",
+      "route": "/pl/narzedzia/kategorie/druk-3d/optymalizator-mostkow/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/optymalizator-perymetrow-i-scian/": {
+      "hash": "f66ac932908a4702faa4d68f518df41364d2bb8c6e0556ca770cf64fde0f4e84",
+      "route": "/pl/narzedzia/kategorie/druk-3d/optymalizator-perymetrow-i-scian/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/oszacowanie-wytrzymalosci-osi-xyz-druk-3d/": {
+      "hash": "09400dcd82f60669c289c972f0e218991571271309b80a26fec92c89b3b11c95",
+      "route": "/pl/narzedzia/kategorie/druk-3d/oszacowanie-wytrzymalosci-osi-xyz-druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/precyzyjny-pakiet-inzynieryjny-druk-3d/": {
+      "hash": "660fd7c9b27dc8e22a665f95500ee4156dfec02ffb162ddb401e339cc7dd43da",
+      "route": "/pl/narzedzia/kategorie/druk-3d/precyzyjny-pakiet-inzynieryjny-druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/symulator-ryzyka-wypaczania-druk-3d/": {
+      "hash": "e687ea708c9c1d7a8fd705952550255b89f8ef49aba96f710b3e04c212eb29b4",
+      "route": "/pl/narzedzia/kategorie/druk-3d/symulator-ryzyka-wypaczania-druk-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/szacowanie-zuzycia-dyszy-filament-scierny-3d/": {
+      "hash": "75d6574c690f7b510202ccffa14619f372da6a5d0d8b1d3768f647d486dd6337",
+      "route": "/pl/narzedzia/kategorie/druk-3d/szacowanie-zuzycia-dyszy-filament-scierny-3d/"
+    },
+    "https://www.gamebob.dev/pl/narzedzia/kategorie/druk-3d/szacowanie-zywotnosci-arkusza-pei/": {
+      "hash": "201075d972e0712b39b513a4f681e8c1c9afa4be040b994f71be38e96c2c49bd",
+      "route": "/pl/narzedzia/kategorie/druk-3d/szacowanie-zywotnosci-arkusza-pei/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/analisador-malha-cama/": {
+      "hash": "c51632a75d3f5de4e80ce037bb2b792623aedcbb8d4f9632c81517f4ef56712e",
+      "route": "/pt/utilidades/categorias/impressao-3d/analisador-malha-cama/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculador-desgaste-bocal-filamento-abrasivo-3d/": {
+      "hash": "03bebbf5dbf8853b3b9dac230a00827697e37a8ccd59295345d29e17349ee562",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculador-desgaste-bocal-filamento-abrasivo-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-angulo-salgado-seguro/": {
+      "hash": "7b6f00306e7251cfb6ca91582f42339ab5f7da202eead3c454d308af9d363b0d",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-angulo-salgado-seguro/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-compensacao-pe-elefante/": {
+      "hash": "ccc350688274d2e9dff245173aaf7326f0da5ea91eda4360e7d0240d517f3500",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-compensacao-pe-elefante/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-contracao-impressao-3d/": {
+      "hash": "4b8cf33f260134d11fd9371f1d9a5107bb6e45f1f30062f45c5f1b646ae4f7ae",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-contracao-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-cura-resina-uv/": {
+      "hash": "34b8fca54ee94bbba2d53a273bb50619e6ced2fd113a3a03890ebce5a8c49570",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-cura-resina-uv/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-custo-pos-processamento-impressao-3d/": {
+      "hash": "86134baed89993f55818849887dcd5d7812d7a28776351a33a06e8fff0903e7c",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-custo-pos-processamento-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-custo-real-resina-sla-dlp/": {
+      "hash": "7b3243b3c0b8f6a9f8a528a143fd3cc3832d87c024013b73893a7beaf2fe1f96",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-custo-real-resina-sla-dlp/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-custos-impressao-3d/": {
+      "hash": "47630f3d915c6db47e9cb211ad098212f5134c40687c6c22809f278ffc6c751c",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-custos-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-de-aceleracao-jerk-e-ringing-para-impressora-3d/": {
+      "hash": "5edbcd22c8514613888fcf2651c92c3cc8df543d596eb88aa23607935468c06b",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-de-aceleracao-jerk-e-ringing-para-impressora-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-de-calibracao-de-e-steps/": {
+      "hash": "0bf3697420189131177fd95b1b530c98b5d584098767b6f0a658bf69af5b3ac5",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-de-calibracao-de-e-steps/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-densidade-suportes-arvore/": {
+      "hash": "d7ff18a77f27fc03317a9b2e493f2abfbf9fea0057cae9a694e96654cb02937f",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-densidade-suportes-arvore/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-dimensionamento-fonte-impressora-3d/": {
+      "hash": "34f6f7288841226482d9f85fc970a399999ed524f6cb3b2b8c78640fb8566d8f",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-dimensionamento-fonte-impressora-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-eficiencia-producao-aditiva/": {
+      "hash": "f6461c5a32f52b81cb949e58d4322c24ff8c4be1e5a41b6c0f0bf5ec687e4804",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-eficiencia-producao-aditiva/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-estabilizacao-inercia-termica-mesa-impressao/": {
+      "hash": "3dea93f72a88c4379ac43b6fec31d592a37fd96865d131ee91af240f20d73432",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-estabilizacao-inercia-termica-mesa-impressao/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-esvaziamento-drenagem-resina-sla/": {
+      "hash": "f647ea53e3a3b87e225859f1c412fc923ab26c393b6da958290bd25ad6ddbb82",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-esvaziamento-drenagem-resina-sla/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-fluxo-bico-impressao-3d/": {
+      "hash": "18c6164d839ed6e1060db38bfdd5f607b075b5c1ee2dc3478aff9ed5c85d8395",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-fluxo-bico-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-fluxo-volumetrico/": {
+      "hash": "1c682b0b41995da9796aa638603c5c73f0cbc7da04e5dd3aab9440d41e244424",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-fluxo-volumetrico/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-frequencia-tensao-correia-corexy/": {
+      "hash": "70b2f3580a31d360df7788378ad715fd8cc89d9d2d088ef24014066adb9fbadf",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-frequencia-tensao-correia-corexy/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-microstepping-driver-motor-passo-3d/": {
+      "hash": "74de3e684f943ae31a37a630164fffad764bc02c01a1d56f4856490c2ad5e1cf",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-microstepping-driver-motor-passo-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-porcentagem-peso-preenchimento-3d/": {
+      "hash": "6f5a9c7db2a6c02905513fe139cc15ecdef55e8090db3aded9f8f0f3731353fe",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-porcentagem-peso-preenchimento-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-preco-impressao-3d/": {
+      "hash": "6e257769d8b7d38fcfa90a940a3676c9c3cc3dd3d85cb282daab014370678f93",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-preco-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-purga-multimaterial/": {
+      "hash": "430c6c41b48458a2a6c834011ea877310b4d1eb4d21856a2921717cb866c4e5f",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-purga-multimaterial/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-roi-fazenda-impressao-3d/": {
+      "hash": "6fc7cc30e96677591ae68a3bb44c5a8ddeeff72777624f317626d1696cf743ae",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-roi-fazenda-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-taxa-horaria-maquina-custo-producao/": {
+      "hash": "5e2c4584b76d8da19fc0a0604fc44385edad340010495b7b322cfc134b7b476e",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-taxa-horaria-maquina-custo-producao/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-tempo-alisamento-quimico-abs-pvb/": {
+      "hash": "8548ead5f4eb98007ddf7faf17fcceaf191c03c3b1ac7a76fe31b317fecc22a8",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-tempo-alisamento-quimico-abs-pvb/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-tempo-curacao-uv-resina-tecnica/": {
+      "hash": "e9695db43605488f85b8e91f5fd0c31814599d266657c137addfc01e1936a746",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-tempo-curacao-uv-resina-tecnica/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-tolerancia-roscas-metricas/": {
+      "hash": "07cec1775e9eb3e97e30e3272d1ea7294f8ce3e33e6b3cec74c808773a10f615",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-tolerancia-roscas-metricas/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-transicao-filamento-arco-iris/": {
+      "hash": "585fab9f388d0feda977cf7d280577690dbcd7fedf5887d2b1b998adfba306b2",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-transicao-filamento-arco-iris/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calculadora-vazao-volumetrica/": {
+      "hash": "f4daacdee0b73a38bb923435f6a16c190e3959d36c74f3ab85a24f333a2f272a",
+      "route": "/pt/utilidades/categorias/impressao-3d/calculadora-vazao-volumetrica/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/calibrador-retracao-stringing-impressao-3d/": {
+      "hash": "8fbbf445eeed8cfb6ca5a06fff4c6124c2ee4068b3261f866935f7a13de7cc8a",
+      "route": "/pt/utilidades/categorias/impressao-3d/calibrador-retracao-stringing-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/conversor-peso-comprimento-filamento/": {
+      "hash": "a21803ea772f8ff1259a5ddfbe1ef51227c8013a3107dd40725a1fe20e489c9b",
+      "route": "/pt/utilidades/categorias/impressao-3d/conversor-peso-comprimento-filamento/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/estimador-de-tempo-de-impressao-3d-por-altura-de-camada-e-velocidade/": {
+      "hash": "2432a39511149e161f65488165db9e3d14f26cab402a44eff46bfcea4f43350c",
+      "route": "/pt/utilidades/categorias/impressao-3d/estimador-de-tempo-de-impressao-3d-por-altura-de-camada-e-velocidade/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/estimador-desidratacao-filamento/": {
+      "hash": "ebfdc7e14844961012e8775eccf1b6c1bb3beb9405afdec5b201838499fc6843",
+      "route": "/pt/utilidades/categorias/impressao-3d/estimador-desidratacao-filamento/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/estimador-resistencia-tracao-eixos-xyz-impressao-3d/": {
+      "hash": "4510cc8c02799bd6fd229040ba7334ea636fc51005197ba0794b48d98ae4f22b",
+      "route": "/pt/utilidades/categorias/impressao-3d/estimador-resistencia-tracao-eixos-xyz-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/estimador-roi-filamento-granel/": {
+      "hash": "c2ae6346a4ccdc8b3cdb87d67924e7971bb38f0a4a9e321b46f2bf258c7802e3",
+      "route": "/pt/utilidades/categorias/impressao-3d/estimador-roi-filamento-granel/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/estimador-vida-util-chapa-pei/": {
+      "hash": "af5957c60d3714545ed0dc4e260d1aab15d5dc8e15c04e82b08400c5b209491a",
+      "route": "/pt/utilidades/categorias/impressao-3d/estimador-vida-util-chapa-pei/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/": {
+      "hash": "770d209d18630d0d9b9b53c8b3714c9118d211a2cf5816fc71ea641b76028650",
+      "route": "/pt/utilidades/categorias/impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/otimizador-de-perimetros-e-paredes/": {
+      "hash": "e714031825a38f467f65d626db830933ebe7f13f46027972f61efaa4e210db6b",
+      "route": "/pt/utilidades/categorias/impressao-3d/otimizador-de-perimetros-e-paredes/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/otimizador-de-ponte/": {
+      "hash": "374a76f56683bae37ad236966734562a6b7a2d279bfc6b88a91be0484d2d2172",
+      "route": "/pt/utilidades/categorias/impressao-3d/otimizador-de-ponte/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/otimizador-de-tempo-de-impressao-3d/": {
+      "hash": "e788ce5b3a1e0a4f6f822a05f610fa436c8ee34420ffcd007fb1dddcda8ae3cf",
+      "route": "/pt/utilidades/categorias/impressao-3d/otimizador-de-tempo-de-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/simulador-risco-warping-impressao-3d/": {
+      "hash": "3e86d918e06a224086aea809a48a95eda59636ca257a991349e484026f7c5365",
+      "route": "/pt/utilidades/categorias/impressao-3d/simulador-risco-warping-impressao-3d/"
+    },
+    "https://www.gamebob.dev/pt/utilidades/categorias/impressao-3d/suite-engenharia-precisao-impressao-3d/": {
+      "hash": "b979033e503f59f9d75770acd0ac9c8b5c1fa14d45834307fd1a4c094268ec4c",
+      "route": "/pt/utilidades/categorias/impressao-3d/suite-engenharia-precisao-impressao-3d/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/analizator-setki-stola/": {
+      "hash": "43a34d6aeafbe49570675d2724dda5033fd35e587e1f6557b53868331449dfe6",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/analizator-setki-stola/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/": {
+      "hash": "38f14e548faeba2657b1a0252399c595a344a1975ddbb980637170f70a332cdc",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalibrator-vtyagivaniya-stringinga-3d-pechati/": {
+      "hash": "20621a5a86cf25b4d1a3d9f0af779f0d5e1b710b410e53aa72b3349b330b6bdd",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalibrator-vtyagivaniya-stringinga-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-bezopasnug-uglov-navesa/": {
+      "hash": "53c5165c3c0122abfd06ab5944c3164bb0b54203d87aecafd2acd99c62714cba",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-bezopasnug-uglov-navesa/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-ceny-3d-pechati/": {
+      "hash": "e8659c49976e1557aa77abbb85efb6770ee88d278d827c8c744f7624f4f95040",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-ceny-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-chastoty-natyazheniya-remnya-corexy/": {
+      "hash": "99513d7e38992d7976a8d9cec341f8b0dc0956b1d607bfd652c17a34ae1caa0d",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-chastoty-natyazheniya-remnya-corexy/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-dliny-perekhoda-raduzhnogo-filamenta/": {
+      "hash": "a85edc580e8ab7315c5d962c686617ae64093bf367e9c689ff81291b35076cfd",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-dliny-perekhoda-raduzhnogo-filamenta/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-dopuskov-metricheskoy-rezby/": {
+      "hash": "be30503bb49283ce208ebd447c3ea6b2e54f69542895cec71481042609b22558",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-dopuskov-metricheskoy-rezby/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-effektivnosti-additivnogo-proizvodstva/": {
+      "hash": "1c9a358956f5234cdbcd356975632ab04ef629b87446c549922893e6a98c22fc",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-effektivnosti-additivnogo-proizvodstva/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-kalibrovki-e-steps/": {
+      "hash": "593ff491cdb6d519316cb683ab4fbc526abe9f3571b5c0a98e51788940fd6555",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-kalibrovki-e-steps/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-kompensatsii-slonom-nogi/": {
+      "hash": "716ab26783813653f9403145b7c1bffade94795f30db03cf3fa4248296a45749",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-kompensatsii-slonom-nogi/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-mikroshagovogo-drayvera-shagovogo-dvigatelya-3d/": {
+      "hash": "0258458dc8c746a2d848bf71760fe9e7148e5fd89b7a4902542d8e533db230eb",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-mikroshagovogo-drayvera-shagovogo-dvigatelya-3d/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-moshchnosti-bloka-pitaniya-3d-printera/": {
+      "hash": "70e5500594d33f07b0d3426b0bef12b0b661d9593d09193c3f6175b8c1d55c2d",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-moshchnosti-bloka-pitaniya-3d-printera/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-obemnogo-potoka/": {
+      "hash": "50325e2ae7779f83e5a65d6ccb4abc81104954e03fe4f0b3f24d08c15d3f8d05",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-obemnogo-potoka/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-ogranicheniya-obyemnogo-potoka/": {
+      "hash": "d9951c55e52f2f792c796075fcdd842d87eb8c447be57ea341980c78a8942f9b",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-ogranicheniya-obyemnogo-potoka/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-okupaemosti-optovogo-filamenta/": {
+      "hash": "02c6de45fa853e0bf2e8e8fac6b54c72b6bf35eeaf92ed4fcea14bf09f6f1cff",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-okupaemosti-optovogo-filamenta/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-otverzhdeniya-uf-smoly/": {
+      "hash": "2b575f60f6b804162ef68ff0453bc14a7b6f8a82b773b57d111104c677c4b742",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-otverzhdeniya-uf-smoly/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-plotnosti-derevovidnyh-podderzhek/": {
+      "hash": "84056d539601c761a5a66c279b83739683d7f7312d4003ff4237f810937edda7",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-plotnosti-derevovidnyh-podderzhek/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-polostey-i-drenazha-smoly-sla/": {
+      "hash": "f3f1cf6482fcce1d90e10ad3164ec4239df83320bd4be1582af6688b855076e3",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-polostey-i-drenazha-smoly-sla/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-potoka-sopla-3d-pechati/": {
+      "hash": "9dc9dc90055bc3502d4e9bccafd94f13a48fe5cc1b50a7d3d3e805c3bd2ee4ce",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-potoka-sopla-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-prochnosti-na-rastyazhenie-osi-xyz-3d-pechat/": {
+      "hash": "9685215fac437d210a8b545e4f46c3443d01ab06f22a89a3dbfab6099feb7cd0",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-prochnosti-na-rastyazhenie-osi-xyz-3d-pechat/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-produvki-multimaterialov/": {
+      "hash": "84db8d5f13044b1db7f9df40c3690fe8f0e0bb3b9d20bc20764b1eec68e9d7b6",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-produvki-multimaterialov/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-realnoj-stoimosti-smoly-sla-dlp/": {
+      "hash": "88b8dd47577ce03ee8da6789e1ef22d4e75e45809bf69f07e9f0559c6591cbcc",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-realnoj-stoimosti-smoly-sla-dlp/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-roi-fermy-3d-pechati/": {
+      "hash": "337b4fe5b2821b46460a42e228052c7dd32b9f69285b1a208375cd8ec68b7f56",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-roi-fermy-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stabilizatsii-teplovoy-inertsii-stola/": {
+      "hash": "a03c21a9f6738c0af14a0d6a692a7a04ca8e30569d13878aa3fff06f393c99ae",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stabilizatsii-teplovoy-inertsii-stola/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-3d-pechati/": {
+      "hash": "9d7389aef97dd249f8d63bf981ff4b93ca383955bf679ea7b3d38cbfcd1e3987",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-mashinno-chasa/": {
+      "hash": "f9d23be2d95ae46f6708e781e3766dd6b5d93e8de2ab89f4313b87ce37fc0a90",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-mashinno-chasa/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-postobrabotki-3d-pechati/": {
+      "hash": "cda8b0b05645490b837d774ebb3f9f2a8bb5e300ef4d63e2e236d8fb03ff9047",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-stoimosti-postobrabotki-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-usadki-3d-pechati/": {
+      "hash": "a29ca88396e77ddb65583ac853eeedd77707ec7d88cc24adaa299134f7d7d0d9",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-usadki-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-uskoreniya-jerk-i-skorosti-dlya-3d-printera/": {
+      "hash": "644f3959812b9668dfa804584b91a04f85a16978e28c27be660599069a2f9c84",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-uskoreniya-jerk-i-skorosti-dlya-3d-printera/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vesa-protsenta-zapolneniya-3d/": {
+      "hash": "ed6a70825805b3f575e63b29c27f81a2bec8b508bb043f2978121171255b96e6",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vesa-protsenta-zapolneniya-3d/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vremeni-khimicheskogo-sglazhivaniya-abs-pvb/": {
+      "hash": "0e621a654f40bc998b4e23f4e9c3b095d55cbbf0e97d48567f2e1bcd61fcf632",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vremeni-khimicheskogo-sglazhivaniya-abs-pvb/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vremeni-uv-otverzhdeniya-tehnicheskoy-smoly/": {
+      "hash": "2f91b6d1aa67620fc3cc5f273ef42713b4991b0ed5c1ed6f3084de21df9813ff",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/kalkulyator-vremeni-uv-otverzhdeniya-tehnicheskoy-smoly/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/konverter-vesa-filamenta-v-dlinu/": {
+      "hash": "0c443c999b0e931d356d3df14a9c90d813d788592e55765d7d0309578cc5185d",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/konverter-vesa-filamenta-v-dlinu/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/ocenka-degidratacii-filamenta/": {
+      "hash": "aa41560ef1ec6879501830e242ae0daf61a2b741b2f436a90471c28b1a0e37df",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/ocenka-degidratacii-filamenta/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/optimizator-perimetrov-i-sten/": {
+      "hash": "015bfbb6bed721f2bf3df4d47144b0cf6e3dad5035bfe1e91b41c3b68e47de7b",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/optimizator-perimetrov-i-sten/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/optimizator-vremeni-3d-pechati/": {
+      "hash": "e8b4b0abd9e893d825919dd5c0ce7b57a2283f689e28bc6b81f9662a2782c2a0",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/optimizator-vremeni-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/optimizatsiya-mostov/": {
+      "hash": "51bab09c97262441f99aa202a4c6d76c80d1fea79bdb80af9cb5908555e9c8ec",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/optimizatsiya-mostov/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/otsenka-zhizni-list-pei/": {
+      "hash": "8a1b84e27ca733812d82dc7537e1908d4b051a0ee5cd8b28c220e1762e1b3287",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/otsenka-zhizni-list-pei/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/otsenok-vremeni-3d-pechati-po-vysote-sloya-i-skorosti/": {
+      "hash": "06fc242f2e37386fd07de46c43d8ff5a67a0b6b5b55611eb102dd4130d09f56a",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/otsenok-vremeni-3d-pechati-po-vysote-sloya-i-skorosti/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/paket-tochnogo-mashinostroeniya-3d-pechati/": {
+      "hash": "37963f90235414232ecb5439da52c7a21c9f22e444c8bafb1c915c017230b928",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/paket-tochnogo-mashinostroeniya-3d-pechati/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/raschet-iznosa-sopla-abrazivnym-filamentom-3d/": {
+      "hash": "21463f929482780f15d7e244836398ccf47cf3fd5c913ea3674faaa09f8f1875",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/raschet-iznosa-sopla-abrazivnym-filamentom-3d/"
+    },
+    "https://www.gamebob.dev/ru/instrumenty/kategorii/3d-pechat/simulyator-riska-winga-3d-pechati/": {
+      "hash": "b54e2aadac984e68a9ff0bba6d7a7973c858059d17d61da067094f3f986710c2",
+      "route": "/ru/instrumenty/kategorii/3d-pechat/simulyator-riska-winga-3d-pechati/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-print-farm-roi-kalkylator/": {
+      "hash": "1cb957c9ab183f23b2b7cf02df7d6b5532ff1b1ee0b10523a4780868695697c6",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-print-farm-roi-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-print-pris-kalkylator/": {
+      "hash": "647226bc96a6173c366262ef884ac7304c570e5389835c2a5a4916549e527dfb",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-print-pris-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-print-vikt-infill-procent-raknare/": {
+      "hash": "0ba6c1e0ac977a6daebe79b3f55f8513afdff8796e918c6729730580a6057ba4",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-print-vikt-infill-procent-raknare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-skrivare-munstyckeslitage-uppskattning-abrasivt-filament/": {
+      "hash": "37acd9d8edd5f61e917c9d449352fbc3c466c7a1525abb26e8324c8cedbbefb2",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-skrivare-munstyckeslitage-uppskattning-abrasivt-filament/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-utskriftstids-beraknare-efter-lagerhojd-och-hastighet/": {
+      "hash": "0facb5f3a7c2455dcf9c61526a65aaefdae2f9ffd40e9c0864dd695e7dffa086",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-utskriftstids-beraknare-efter-lagerhojd-och-hastighet/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/3d-utskriftstids-optimerare/": {
+      "hash": "c7b3a06c58cff5f3e179245ec6ed26ad6efa312fe265ace07c80dfeb890a4b28",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/3d-utskriftstids-optimerare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/abs-pvb-kemisk-utjammingstid-kalkylator/": {
+      "hash": "dde3aea0e223370fc52764d085f07f6f63f9969e4a8969cd4c33016b1b96472f",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/abs-pvb-kemisk-utjammingstid-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/additiv-produktion-effektivitet-kalkylator/": {
+      "hash": "c92627ef4e5f394a6c23e28acedea4c881f73e2b915e68d92afa970d96a4a004",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/additiv-produktion-effektivitet-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/baddmesh-analysator/": {
+      "hash": "0dfd710a6f462004d5332df56c8cc6f7dec24025b8ea641f00c5c4a896f1234a",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/baddmesh-analysator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/bryggoptimerare/": {
+      "hash": "2cbf737701adaa076923de3268297ecdce0dda82038e2117ea50d6770e482d7a",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/bryggoptimerare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/bulkfilament-avkastningsberaknare/": {
+      "hash": "7947a1d3ba72feaf2235bc65cddcecf28625e93732ee758079efefd47cfe4043",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/bulkfilament-avkastningsberaknare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/corexy-band-spanning-frekvens-kalkylator/": {
+      "hash": "3b6fd49ebac7f4694d0c25140da13350be596a15c4b15a8b3af8665aa81fabed",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/corexy-band-spanning-frekvens-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/draghallfasthet-skattning-xyz-axel-3d-print/": {
+      "hash": "abc0fd8a5660cb1304400d0f8a3085655d86a95212f6a70648c0110634f068d6",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/draghallfasthet-skattning-xyz-axel-3d-print/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/e-steps-kalibreringskalkylator/": {
+      "hash": "72a0f6367e21b2450b5bb836cacfb2ac4b7d70aa36701bfea5f8f7e6c4a4b81c",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/e-steps-kalibreringskalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/elefantfots-kompensationskalkylator/": {
+      "hash": "f26232e0baf40aef1783ce1d24b1e138fafc4690c4a2f245e54a6a4c7eea97b4",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/elefantfots-kompensationskalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/filament-dehydratiserings-estimator/": {
+      "hash": "7182890d091b0756af29c902be91ff04d1c34abea75cacfd4374b5e6bb9ce75a",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/filament-dehydratiserings-estimator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/filament-vikt-till-langd-omvandlare/": {
+      "hash": "bf16e68a6497fbbc8bcd54f546b2c8030c7fdeb7776a0d19e2be5012ca6a9bc8",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/filament-vikt-till-langd-omvandlare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/flodeskalkylator-for-3d-skrivar-munstycke/": {
+      "hash": "1befd96bebb63fcca5caa70ac1e5992caa92ee23513a823fbf78c62220c52e0d",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/flodeskalkylator-for-3d-skrivar-munstycke/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/": {
+      "hash": "42f575a1392d166081fbe5eea918cabe3f5080959f44847c3b9049352c94939f",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kalkylator-3d-utskrift-kostnad/": {
+      "hash": "110274122677236043a07554b4e35ff1a0d4bcdf72f8ffd93a3901f9d0022ebf",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kalkylator-3d-utskrift-kostnad/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kalkylator-3d-utskrift-krympning/": {
+      "hash": "39becc73d29e849bb67c2208288d688bc263ee88350c35dd87aa66a8942d42bb",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kalkylator-3d-utskrift-krympning/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kalkylator-for-3d-skrivaracceleration-jerk-och-fyrkantshornshastighet/": {
+      "hash": "67797c70244b9a75c1e43f19a1b39f5fc9899fb7b05dff06c17783ed3acc1ae6",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kalkylator-for-3d-skrivaracceleration-jerk-och-fyrkantshornshastighet/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kalkylator-saker-overhangsvinkel/": {
+      "hash": "f99c6c2e85afee34b15db7d98db4135bf1b4175cc234cf3beabb6d0a3e2dd1f6",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kalkylator-saker-overhangsvinkel/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kalkylator-urholkning-dranering-sla-harts/": {
+      "hash": "c0a3561de379cfd5276cc1125bc8c61b6a1eb25942537eb52b6707d374412741",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kalkylator-urholkning-dranering-sla-harts/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/kostnadskalkylator-efterbehandling-3d-skrivare/": {
+      "hash": "637fdc2d73236f1bb845da868b3b429a7d1f468d8b760b5a7a94b0248551b669",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/kostnadskalkylator-efterbehandling-3d-skrivare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/maskin-timpris-produktionskostnad-kalkylator/": {
+      "hash": "3ace450fcef871b8b6ac53fdc4f340c044660f447f55c2ddf327b23b782379dd",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/maskin-timpris-produktionskostnad-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/metrisk-gangtolerans-kalkylator/": {
+      "hash": "02673cc055770270dae625d3ae29abb933de52fc216dd27a0ee12c1682b19f5a",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/metrisk-gangtolerans-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/multi-material-purge-kalkylator/": {
+      "hash": "017bd3b92d6aa21f3fbbb485094b76311b1fbba27816a2b685f4652fe48ff836",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/multi-material-purge-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/pei-platta-livslangds-skattning/": {
+      "hash": "289aaebcdd6bfc23e6c16ac347efc2f5a61fad1074e53776a080013a189245a0",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/pei-platta-livslangds-skattning/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/precisions-engineering-svit-3d-utskrift/": {
+      "hash": "49344cae961fdb34a86b0949d0143b9881a3d216f5321cbe62891e16bfd806be",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/precisions-engineering-svit-3d-utskrift/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/printbadds-termiska-troeghets-stabiliserings-kalkylator/": {
+      "hash": "301c790eefa4f897726d584106e719cd6ba360232092b79c440423544b6bea22",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/printbadds-termiska-troeghets-stabiliserings-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/regnbage-filament-overgangslangd-kalkylator/": {
+      "hash": "0786b930d7b4944817ea83b43b5553eae65d3b7748f3daadfd34f1e7a890abf4",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/regnbage-filament-overgangslangd-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/retraktions-stringing-kalibrator-3d-skrivare/": {
+      "hash": "13324e2bae664725fd5458a9998808db770c040bbb9b521237804e0bab2fd738",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/retraktions-stringing-kalibrator-3d-skrivare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/stegmotor-mikrostegnings-kalkylator-3d-skrivare/": {
+      "hash": "ae2999d591618da31f6912c04a553dd63989a7e0cb3f94812eff3d7d23172c7d",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/stegmotor-mikrostegnings-kalkylator-3d-skrivare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/stromforsorjning-storlek-kalkylator-3d-skrivare/": {
+      "hash": "a3285281631d23972b17934b0e236933e3a61eca9b48486e4f8ada9e45551578",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/stromforsorjning-storlek-kalkylator-3d-skrivare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/teknisk-harts-uv-hardningstid-kalkylator/": {
+      "hash": "a346aa9a9a7453a5f981258a2fe96c9db3a7a3e3f0d4709eeef100521b0190d3",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/teknisk-harts-uv-hardningstid-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/tradstod-densitetskalkylator/": {
+      "hash": "1435ffdd57c933622416d9a08589f1673669abd4b64838ce8ef6cad5cb51d0fa",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/tradstod-densitetskalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/uv-harts-hardningskalkylator/": {
+      "hash": "17402b2f01500297c77d1b86ff1104a60541361a3ffab4d8e930edbe7bfab022",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/uv-harts-hardningskalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/vagg-perimeteroptimerare/": {
+      "hash": "baa22c84f9b9b5be3860b0ca0c030cba165f89a1e377fba472598589071160be",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/vagg-perimeteroptimerare/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/verklig-hartskostnad-kalkylator-sla-dlp/": {
+      "hash": "a52f8d56ef71634ced5baee5907aa71772fbcf19c236c274a50785a7f5d41c0d",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/verklig-hartskostnad-kalkylator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/volumetrisk-flodeshastighetskalkylator/": {
+      "hash": "722b7be241db3767515d280913125bb853b293590c6527cdc28d6f463be54c3b",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/volumetrisk-flodeshastighetskalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/volymetrisk-flodes-kalkylator/": {
+      "hash": "8973248a724a58b690c335324f99f78a546866305467efa1c1da3dc6817264a9",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/volymetrisk-flodes-kalkylator/"
+    },
+    "https://www.gamebob.dev/sv/verktyg/kategorier/3d-utskrift/warping-riskosimulator-3d-utskrift/": {
+      "hash": "6ba17bd897d02c4986aebc9cffed46c686ca9b13d58a8ae196eb61aabac2cc89",
+      "route": "/sv/verktyg/kategorier/3d-utskrift/warping-riskosimulator-3d-utskrift/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-baski-agirlik-infill-yuzde-hesaplayici/": {
+      "hash": "dd67c495836a596cd9abafe171286733c0677e5b8a9b2a44ab088c6f6f52d4e3",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-baski-agirlik-infill-yuzde-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-baski-sonrasi-islem-maliyet-hesaplayici/": {
+      "hash": "818c7b4d144b9b9346ed9e2e57f898429903ae04b08af155d87c951b79dccbf9",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-baski-sonrasi-islem-maliyet-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-baski-suresi-is-aki-optimize-edici/": {
+      "hash": "f62824009165aa855917f2af9f2890b803d630d34c6b60635b520b61a816e598",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-baski-suresi-is-aki-optimize-edici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-baski-suresi-tahmin-edici-katman-yuksekligi-ve-hiz/": {
+      "hash": "35f2caca10be992f0dbc0c945394651fc6a4b3a50d8ab256a36917268b93457f",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-baski-suresi-tahmin-edici-katman-yuksekligi-ve-hiz/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-baski-xyz-ekseni-cekme-dayanimi-tahmincisi/": {
+      "hash": "1d5c21694c284d9f6565b85ec312f58956cb8b989cbe6c1549b698595d18a1d1",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-baski-xyz-ekseni-cekme-dayanimi-tahmincisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-cehme-hesaplama/": {
+      "hash": "a45ee8f11115037967c75f90c91d2c662f2c4e1f9ed86ad39a282d5e68c08018",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-cehme-hesaplama/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-ciftligi-roi-hesaplayici/": {
+      "hash": "edad6b25abf73ac213cf349f957665dac447c98ab82adea8071fa3cc0627ac25",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-ciftligi-roi-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-fiyat-hesaplama/": {
+      "hash": "47defcb2dae15f0ca06b26c7d130adb35fc1f05cbc7970b5ce90e7379bf928bf",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-fiyat-hesaplama/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-guc-kaynagi-boyut-hesaplayici/": {
+      "hash": "1155b4465740299c6819bbc36a45ed308d959f3ab110a6bed3a565028c8aefd2",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-guc-kaynagi-boyut-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-hizlanma-jerk-ve-ringing-hesaplayici/": {
+      "hash": "d29d6a2bdd325b2d67ddfd8a621252e2124af45808238055eb1fc7c1c20f0ebe",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-hizlanma-jerk-ve-ringing-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-maliyet-hesaplama/": {
+      "hash": "0db7f7543a46a84f0a78d682fe506017f69384088ec0ec9489ede2f5f34c25a1",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-maliyet-hesaplama/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-meme-asinma-tahminleyici-abrazif-filament/": {
+      "hash": "786bf5155a4c317be644d62ef2800f13bd2c921a398e7d2b3f0a227ad09f655e",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-meme-asinma-tahminleyici-abrazif-filament/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/3d-yazici-nozul-akis-hizi-hesaplayici/": {
+      "hash": "bdcd834dac4e3742a6201d43e5e4a658ee803f917c7f010341ad63717ee3be06",
+      "route": "/tr/araclar/kategoriler/3d-baski/3d-yazici-nozul-akis-hizi-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/abs-pvb-kimyasal-duzeltme-suresi-hesaplayicisi/": {
+      "hash": "0a7b782237d4774f4ce0182cb9b99bebf345f14da7e451299c5b96e8e6c5f8f9",
+      "route": "/tr/araclar/kategoriler/3d-baski/abs-pvb-kimyasal-duzeltme-suresi-hesaplayicisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/agac-destek-yogunlugu-hesaplayici/": {
+      "hash": "d86fddd2fc6607ea870b6b91253275f62e0513087b0eb4c2a96f8455be44b700",
+      "route": "/tr/araclar/kategoriler/3d-baski/agac-destek-yogunlugu-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/baski-yatagi-termal-atalet-stabilizasyon-hesaplayici/": {
+      "hash": "c334d465750393442a65da6a08f96f8482627e5659bffc6b46e12790348bb761",
+      "route": "/tr/araclar/kategoriler/3d-baski/baski-yatagi-termal-atalet-stabilizasyon-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/cok-malzemeli-tahliye-hesaplayici/": {
+      "hash": "f5d09648a2592de44aaa080a8df6ca8aeebfa7de21c4024fc8f6860864e81d72",
+      "route": "/tr/araclar/kategoriler/3d-baski/cok-malzemeli-tahliye-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/corexy-kaynak-gerilimi-frekans-hesaplayici/": {
+      "hash": "182201763031e9c116753a0a3ca3ed7e703a8319fe3944947b7541e90a6375ed",
+      "route": "/tr/araclar/kategoriler/3d-baski/corexy-kaynak-gerilimi-frekans-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/dokum-filamenti-ro-hesaplayicisi/": {
+      "hash": "7be29f71f4b27e8868396d21fd3edb4e38011833fe9324a2332680db210d2b7e",
+      "route": "/tr/araclar/kategoriler/3d-baski/dokum-filamenti-ro-hesaplayicisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/duvar-perimetre-optimizasyonu/": {
+      "hash": "7a0f3bc1f6626d06efba25f711975e1fca3b70eddc07696da33122082c80562d",
+      "route": "/tr/araclar/kategoriler/3d-baski/duvar-perimetre-optimizasyonu/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/e-steps-kalibrasyon-hesaplayici/": {
+      "hash": "bdb3487e23357b64c6ada7f7b3f6783f5ef5755897ff0d095753c22b3ae2b690",
+      "route": "/tr/araclar/kategoriler/3d-baski/e-steps-kalibrasyon-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/fil-ayagi-kompansasyon-hesaplayici/": {
+      "hash": "6a035fa935e6b237ef696ce98a0d597cb33be378d9443acb015471217d7bdcad",
+      "route": "/tr/araclar/kategoriler/3d-baski/fil-ayagi-kompansasyon-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/filament-agirlik-uzunluk-donusturucu/": {
+      "hash": "f0f1e42096445841d55eefb41a4869ad7a2fee462fb05999a960bd89aa554a2e",
+      "route": "/tr/araclar/kategoriler/3d-baski/filament-agirlik-uzunluk-donusturucu/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/filament-dehidrasyon-tahmincisi/": {
+      "hash": "156799fcd819a81f718b2efd51261767b4eefb12a9430026f53e68708b0508bb",
+      "route": "/tr/araclar/kategoriler/3d-baski/filament-dehidrasyon-tahmincisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/gercek-recine-maliyeti-hesaplayici-sla-dlp/": {
+      "hash": "f689eb2c28409a6caccac90b73f4455d0f40bf3b2b3eb9e8044dc2e258e0085e",
+      "route": "/tr/araclar/kategoriler/3d-baski/gercek-recine-maliyeti-hesaplayici-sla-dlp/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/geri-cekme-stringing-kalibrasyon-3d-yazici/": {
+      "hash": "7ca148d1a8b4fcad468bffd3201fc58b4304d32aac295c05f68d7a0ac27a49c5",
+      "route": "/tr/araclar/kategoriler/3d-baski/geri-cekme-stringing-kalibrasyon-3d-yazici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/gokkusagi-filament-gecis-uzunlugu-hesaplayicisi/": {
+      "hash": "28ea19722b5651292325fd7fa79984ee25f8e8eab668b98891be52fc2ebd80b5",
+      "route": "/tr/araclar/kategoriler/3d-baski/gokkusagi-filament-gecis-uzunlugu-hesaplayicisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/guvenli-cikinti-acisi-hesaplayici/": {
+      "hash": "14eadcec4c02cb7a98b4e91ce5aaee8c3e2b34cea29412cd88bd1f1785438f70",
+      "route": "/tr/araclar/kategoriler/3d-baski/guvenli-cikinti-acisi-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/hacimsel-akis-hesaplama/": {
+      "hash": "1e0a29b56031f5953481abeb8b2e9a56b69268be871936a66f5a172d5c1defab",
+      "route": "/tr/araclar/kategoriler/3d-baski/hacimsel-akis-hesaplama/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/hacimsel-akis-hizi-sinir-hesaplayicisi/": {
+      "hash": "755b328b18fe925d8f24ad0389643546586160968cb016f6ea8c47cb39e4f564",
+      "route": "/tr/araclar/kategoriler/3d-baski/hacimsel-akis-hizi-sinir-hesaplayicisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/hassas-muhendislik-paketi-3d-baski/": {
+      "hash": "97a3dc46509386d591b03a8e0c693fefd942392fe31e0bede679404d9b628d81",
+      "route": "/tr/araclar/kategoriler/3d-baski/hassas-muhendislik-paketi-3d-baski/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/": {
+      "hash": "b646827a6f9d916d351eb1d62aa138b2ad6520d649214fda15f8aa5447713e17",
+      "route": "/tr/araclar/kategoriler/3d-baski/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/katmanli-uretim-verimliligi-hesaplayicisi/": {
+      "hash": "d621da04c26e2d93043d2e567a57374e1a2d40218590995252c4a46aa96648a0",
+      "route": "/tr/araclar/kategoriler/3d-baski/katmanli-uretim-verimliligi-hesaplayicisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/kopru-optimizasyonu/": {
+      "hash": "612b29de7642f2d7e7da9623dcf85a24a8677c1b6cd88ca88b0d4913d29b35d3",
+      "route": "/tr/araclar/kategoriler/3d-baski/kopru-optimizasyonu/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/makine-saatlik-ucret-uretim-maliyeti-hesaplayici/": {
+      "hash": "dabc45c7f99182da039d9e7226c3f82fcda93213442e50150ec979156c49ffe2",
+      "route": "/tr/araclar/kategoriler/3d-baski/makine-saatlik-ucret-uretim-maliyeti-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/metrik-dis-toleransi-hesaplama-araci/": {
+      "hash": "faf67535083a247c757b7291757776421fa4f5a52205d7e488e561f614d57cda",
+      "route": "/tr/araclar/kategoriler/3d-baski/metrik-dis-toleransi-hesaplama-araci/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/pei-yaprak-omur-tahmincisi/": {
+      "hash": "01d7555646d4edc0be87d00a13352a10474b90d4d4781e49764c2fa4543ad329",
+      "route": "/tr/araclar/kategoriler/3d-baski/pei-yaprak-omur-tahmincisi/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/sla-recine-oyma-ve-drenaj-hesaplayici/": {
+      "hash": "1dab03db2998b69db5a17c2066b3fd94264986cadbb46304557cbde1bca7a323",
+      "route": "/tr/araclar/kategoriler/3d-baski/sla-recine-oyma-ve-drenaj-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/step-motor-mikro-adim-hesaplayici-3d-yazici/": {
+      "hash": "2b8c0adb8a639d850a761bb6daa0f0fc9e03a7803cc6e16072103120d47c317d",
+      "route": "/tr/araclar/kategoriler/3d-baski/step-motor-mikro-adim-hesaplayici-3d-yazici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/teknik-recine-uv-sertlestirme-suresi-hesaplayici/": {
+      "hash": "903bc08597d724dc71ae7ab5ff4cd0903611d0980de0abc9d9e797e727df46cb",
+      "route": "/tr/araclar/kategoriler/3d-baski/teknik-recine-uv-sertlestirme-suresi-hesaplayici/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/uv-recine-kurleme-hesaplama/": {
+      "hash": "d02e0191695a2f36147745ad05e0ba723d26d0b1e70df8d83a1a047029cfa62b",
+      "route": "/tr/araclar/kategoriler/3d-baski/uv-recine-kurleme-hesaplama/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/warping-risk-simulator-3d-baski/": {
+      "hash": "5fccc9f5abc5aede1b1baf75f5384713a0b57536c7c71305b69b36c5e0a9d101",
+      "route": "/tr/araclar/kategoriler/3d-baski/warping-risk-simulator-3d-baski/"
+    },
+    "https://www.gamebob.dev/tr/araclar/kategoriler/3d-baski/yatak-mesh-analizor/": {
+      "hash": "99358bdd20ed69d281473a074af4e72efe49f183b92b6e3f4507a1aa11588f83",
+      "route": "/tr/araclar/kategoriler/3d-baski/yatak-mesh-analizor/"
+    },
+    "https://www.jjlmoya.es/utilidades/analizador-malla-cama/": {
+      "hash": "c8b442d1199a95970dc67efd3101346c4142c3a3185dc281aa924ff2f1e144ac",
+      "route": "/utilidades/analizador-malla-cama/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculador-desgaste-boquilla-filamento-abrasivo-3d/": {
+      "hash": "1917a5a392c3ffe2683c55983da696d98d87ef4d9edfee3135f20aa728f68d2a",
+      "route": "/utilidades/calculador-desgaste-boquilla-filamento-abrasivo-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculador-estabilizacion-inercia-termica-cama-impresion/": {
+      "hash": "9124733b144e587d55d69cb7ff643970f4416474306cbc62e92ba3dd37b3d712",
+      "route": "/utilidades/calculador-estabilizacion-inercia-termica-cama-impresion/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-ahuecado-drenaje-resina-sla/": {
+      "hash": "89eb68f65c1dfc7fe401a05770d2950fe1b78ddb06855b1053e0de53ef44fb8f",
+      "route": "/utilidades/calculadora-ahuecado-drenaje-resina-sla/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-angulo-voladizo-seguro/": {
+      "hash": "ade12b0b5e524ceac12d7d78710e4a7a4552a19f80e6b81c5c067211a11f812e",
+      "route": "/utilidades/calculadora-angulo-voladizo-seguro/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-caudal-boquilla-impresion-3d/": {
+      "hash": "f4eeff76d6c41a33c3ee919f8f6e7a9560072fd8d7a9f7bfb3788fbf24d5d983",
+      "route": "/utilidades/calculadora-caudal-boquilla-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-caudal-volumetrico/": {
+      "hash": "acdffda10fcca859ec68566f583a0153ec45b6f5f66ccf0f2065b87d14370e89",
+      "route": "/utilidades/calculadora-caudal-volumetrico/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-caudal-volumetrico-impresion-3d/": {
+      "hash": "dd56995ad23d14090d30a62e14ccab84c81d0750ffa1cddb941c08e67129ea4a",
+      "route": "/utilidades/calculadora-caudal-volumetrico-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-compensacion-pata-elefante/": {
+      "hash": "35d7c83c27a212321d63629d2a52786305788e2f4634b3dbdcec5863f0f9bf56",
+      "route": "/utilidades/calculadora-compensacion-pata-elefante/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-contraccion-impresion-3d/": {
+      "hash": "0561265e66ffec26eee32d761c64dbe40254ec32f532b87fedb5676768ad1b3a",
+      "route": "/utilidades/calculadora-contraccion-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-coste-impresion-3d/": {
+      "hash": "7009a752291382f4ca016c087c5a3a2f85fcc00c9186bc251cf93897d2338a4f",
+      "route": "/utilidades/calculadora-coste-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-coste-postprocesado-impresion-3d/": {
+      "hash": "83836981aba687d3d8f3a3f3d99fa539ad4cec44055552f63559a161e75a253f",
+      "route": "/utilidades/calculadora-coste-postprocesado-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-coste-real-resina-sla-dlp/": {
+      "hash": "021536c6a8aef3f8e928363266c61d9cf0589f6b182e81f212a6065981ffbcbb",
+      "route": "/utilidades/calculadora-coste-real-resina-sla-dlp/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-de-aceleracion-jerk-y-ringing-de-impresora-3d/": {
+      "hash": "5e6134328661d162f25b5b024d15569282f027dc132238d31c3a088fcfc08725",
+      "route": "/utilidades/calculadora-de-aceleracion-jerk-y-ringing-de-impresora-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-de-calibracion-de-e-steps/": {
+      "hash": "967f3a7f823e56d98ad2281280156d7a3af9ccf57f4fd9c5051ec811804a3730",
+      "route": "/utilidades/calculadora-de-calibracion-de-e-steps/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-de-purga-multimaterial/": {
+      "hash": "3f4f845e534533717ead9eec2ef93ee6cf52c996b3d966c6e3b4a20dfb7b2180",
+      "route": "/utilidades/calculadora-de-purga-multimaterial/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-densidad-soportes-arbol/": {
+      "hash": "2a9edac2c83619aa079edf088b086b4bd75f9af446181b8258ffe77c57dacd15",
+      "route": "/utilidades/calculadora-densidad-soportes-arbol/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-dimensionamiento-fuente-alimentacion-impresora-3d/": {
+      "hash": "4faad0663d5bcbb7fae367b903efd8873cca0fb35fdf3a0c51c8bd157b608cad",
+      "route": "/utilidades/calculadora-dimensionamiento-fuente-alimentacion-impresora-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-eficiencia-produccion-aditiva/": {
+      "hash": "4c1a63f92b7ce79c640b6eb5f876f8fe5e629612a48835c83dae642d9371fa70",
+      "route": "/utilidades/calculadora-eficiencia-produccion-aditiva/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-frecuencia-tension-correa-corexy/": {
+      "hash": "b552330e5c4b6c198fbc29c25f786b2218b59a968932eb8c6a2e75181c44da38",
+      "route": "/utilidades/calculadora-frecuencia-tension-correa-corexy/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-microstepping-driver-motor-paso-impresion-3d/": {
+      "hash": "0cdeb083f6fdf4905742dd0ac3005bbaac5bdf542815fb6355e057948c36ea75",
+      "route": "/utilidades/calculadora-microstepping-driver-motor-paso-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-porcentaje-relleno-peso-3d/": {
+      "hash": "8965ae0bec50b081941eec2a572141f40bd268a512445015e3566ed7eb16b3c0",
+      "route": "/utilidades/calculadora-porcentaje-relleno-peso-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-precio-impresion-3d/": {
+      "hash": "355efb0e0edfadbce935088cc6327d84dbbf5502ff6acb8a0a7a8c798af5551e",
+      "route": "/utilidades/calculadora-precio-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-roi-filamento-granel/": {
+      "hash": "5cef52646d912a7dcdeeffb1ceac7356cf5a309f3b9b9c4ac482ab96dabc86e2",
+      "route": "/utilidades/calculadora-roi-filamento-granel/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-roi-granja-impresion-3d/": {
+      "hash": "e6022705db9e4b4e3520c67c7a240adbfb58833cfe67a3754e119c9a06d1e656",
+      "route": "/utilidades/calculadora-roi-granja-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-tarifa-horaria-maquina-costo-produccion/": {
+      "hash": "aa72f1622bb9f428bd6cdb9c7e4dd3e646b444abd1649e5a361dd63dce3cfdb7",
+      "route": "/utilidades/calculadora-tarifa-horaria-maquina-costo-produccion/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-tiempo-curado-resina-uv/": {
+      "hash": "762fff089869ff41ddcdff486b930f254d111d6c2911b8cf072e92e571909dd8",
+      "route": "/utilidades/calculadora-tiempo-curado-resina-uv/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-tiempo-curado-uv-resina-tecnica/": {
+      "hash": "70617c5d79f43211dcb4572059e66cbed4773734b0732cb1cf4ea39b5ed73b3f",
+      "route": "/utilidades/calculadora-tiempo-curado-uv-resina-tecnica/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-tiempo-lijado-quimico-abs-pvb/": {
+      "hash": "cc303e03ce4db196ff7b543db888eb9382ab2ff849bc05ad84ba6596edda4380",
+      "route": "/utilidades/calculadora-tiempo-lijado-quimico-abs-pvb/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-tolerancia-rosca-metrica/": {
+      "hash": "e7d642d1e6ae0f664f415c5914742294c1187e42055207db9641e79bc1b9dc2b",
+      "route": "/utilidades/calculadora-tolerancia-rosca-metrica/"
+    },
+    "https://www.jjlmoya.es/utilidades/calculadora-transicion-filamento-arcoiris/": {
+      "hash": "49b03cb25650da01d0124216124eba37180b0a0c40b5d9a074a2557bd6d62112",
+      "route": "/utilidades/calculadora-transicion-filamento-arcoiris/"
+    },
+    "https://www.jjlmoya.es/utilidades/calibrador-retraccion-stringing-impresion-3d/": {
+      "hash": "93d147aa5bb0516a655656c3f24835a3045520ceb4e56308a29109f5187d93c3",
+      "route": "/utilidades/calibrador-retraccion-stringing-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/categorias/impresion-3d/": {
+      "hash": "7a1523c8e4664cc3c51c95bc89545ef990262176c6f1a9f2627b8aabb2c6edfd",
+      "route": "/utilidades/categorias/impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/convertidor-peso-filamento-longitud/": {
+      "hash": "62db6495321e93dfba6e1a16b83668f7050999edb900077293cfb273c2116b56",
+      "route": "/utilidades/convertidor-peso-filamento-longitud/"
+    },
+    "https://www.jjlmoya.es/utilidades/estimador-de-tiempo-de-impresion-3d-por-altura-de-capa-y-velocidad/": {
+      "hash": "c52150b2a09ce074d629817909ceaa51c3afa27575711b4f5fbd85aea6df1038",
+      "route": "/utilidades/estimador-de-tiempo-de-impresion-3d-por-altura-de-capa-y-velocidad/"
+    },
+    "https://www.jjlmoya.es/utilidades/estimador-deshidratacion-filamento/": {
+      "hash": "f2333c74c062f412e3c1fdcf5658eeac397a6cb204a339002c86083bb39140a2",
+      "route": "/utilidades/estimador-deshidratacion-filamento/"
+    },
+    "https://www.jjlmoya.es/utilidades/estimador-resistencia-traccion-ejes-xyz-impresion-3d/": {
+      "hash": "780cd9fe69f95f811f086d10b0f89d15f83cec7f889964185b10b65d6dc15b17",
+      "route": "/utilidades/estimador-resistencia-traccion-ejes-xyz-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/estimador-vida-util-lamina-pei/": {
+      "hash": "0b4d88b183f66be89974e0b5e50555bc8677a59754e931e23141d343ee0b666c",
+      "route": "/utilidades/estimador-vida-util-lamina-pei/"
+    },
+    "https://www.jjlmoya.es/utilidades/optimizador-de-flujo-de-trabajo-de-impresion-3d/": {
+      "hash": "db155bfb9ff4c81d823333ab195c860910a148a938399de5243ea7bc1ea727f2",
+      "route": "/utilidades/optimizador-de-flujo-de-trabajo-de-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/optimizador-de-perimetros-y-paredes/": {
+      "hash": "9b23e0298f9a3f96b1e3e8df171a2b2b09f641def4fa23ad67c3a986f9434fb7",
+      "route": "/utilidades/optimizador-de-perimetros-y-paredes/"
+    },
+    "https://www.jjlmoya.es/utilidades/optimizador-de-puentes/": {
+      "hash": "5963f1c253abde7eec200a1d088166276f701b7e19859f2b45d503ec1bfd8ac5",
+      "route": "/utilidades/optimizador-de-puentes/"
+    },
+    "https://www.jjlmoya.es/utilidades/simulador-riesgo-warping-impresion-3d/": {
+      "hash": "a9da21ce58b30df18cc8ed50cd7fc4a65e9343e25f410ac325aee413af3e7efd",
+      "route": "/utilidades/simulador-riesgo-warping-impresion-3d/"
+    },
+    "https://www.jjlmoya.es/utilidades/suite-de-ingenieria-de-precision-impresion-3d/": {
+      "hash": "059ecf01af3984db1217b33b21f5375b801506def00647c97c2c1de4ec5552b4",
+      "route": "/utilidades/suite-de-ingenieria-de-precision-impresion-3d/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-farm-roi-calculator/": {
+      "hash": "98b3ae878cf848542a07684e4eccda4ca7a4bbb853c36870c7677e0a71226c38",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-farm-roi-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/": {
+      "hash": "94dfaae00d01f9aedf6e1293aab28cd6868266b175190c1a6cb0866f5e9310ae",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-nozzle-flow-rate-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-pricing-calculator/": {
+      "hash": "cd7a64e6084ba17ed1fc19c5268868c3dce9281b6e9b015df7e13bf7ecb3dc33",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-pricing-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/": {
+      "hash": "463933cca847ac83896fb09880adfff21a8b766259036f13f7ea9e2fa60d7128",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-time-estimator-layer-height-speed/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/": {
+      "hash": "37b7a3df91c00936d25ad7542e0192a5fd3fe301fa34e9e850a228ca517d5f79",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-time-workflow-optimizer/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/": {
+      "hash": "63f3ca3c6ae42f8ef7bc396d9a60dd321f6e8d593aba7dcb561e0469c0b3abdd",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-weight-infill-percentage-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/": {
+      "hash": "93daf58133fa3192c5bd0551a6e7b1febaacd992adda9df0fb512a04176f7131",
+      "route": "/zh/utilities/categories/3d-printing/3d-print-xyz-axis-tensile-strength-estimator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/": {
+      "hash": "fd81663087241b2a67bbfa7b6aa64842548ec7a0fa4e1dab59d2a10a876131df",
+      "route": "/zh/utilities/categories/3d-printing/3d-printer-acceleration-jerk-ringing-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/": {
+      "hash": "b91ce296db1b1e359faf53487c32951d83ad9f0ee10b7f7d5652fe47f43f9af9",
+      "route": "/zh/utilities/categories/3d-printing/3d-printer-power-supply-size-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-printing-cost-calculator/": {
+      "hash": "43069e60cf4cdaab00300ccd28674f5ca25678a66439e1d775b31f0b7b2ddbb1",
+      "route": "/zh/utilities/categories/3d-printing/3d-printing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/": {
+      "hash": "5cf9d9d3e1611aa3e249b4b1334ed58ac4397a757d057ec2795caf2dad3b997c",
+      "route": "/zh/utilities/categories/3d-printing/3d-printing-shrinkage-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/": {
+      "hash": "dd9d2535e8479e865a25fd01ff7410af8a41e09940b476c149f9c34473e5285d",
+      "route": "/zh/utilities/categories/3d-printing/abs-pvb-chemical-smoothing-time-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/additive-production-efficiency-calculator/": {
+      "hash": "c12ea3099031196a13908967cb2c62c474c65095643a751ab1518d72d2bacf64",
+      "route": "/zh/utilities/categories/3d-printing/additive-production-efficiency-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/bed-mesh-analyzer/": {
+      "hash": "c5ebef2afc5eff935f3978c8a58aad64cf7bc8f488912fa0fcf92de586a0b4b7",
+      "route": "/zh/utilities/categories/3d-printing/bed-mesh-analyzer/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/bridging-optimizer/": {
+      "hash": "f9f8a49e12633a599c321f5080a376b3444c2d9d57fd4179a691f059e09d8b78",
+      "route": "/zh/utilities/categories/3d-printing/bridging-optimizer/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/bulk-filament-roi-estimator/": {
+      "hash": "3b260b3b1addb8f955f965f761ef4f082d3c05f484f1443830cae7665cdae52c",
+      "route": "/zh/utilities/categories/3d-printing/bulk-filament-roi-estimator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/": {
+      "hash": "0547fbca8b0fab206ebeaac6e9279895c80c49286330c5acde1d175acf71f3d3",
+      "route": "/zh/utilities/categories/3d-printing/corexy-belt-tension-frequency-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/e-steps-calibration-calculator/": {
+      "hash": "ebf55619e9758138d7f06240f77fdca3295dc56da74d9e80962ac36185b119aa",
+      "route": "/zh/utilities/categories/3d-printing/e-steps-calibration-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/elephant-foot-compensation-calculator/": {
+      "hash": "7f287fef3db74f99b6903b47f5358e4197fa5e901dbb54318b32a60ed6b8a3b9",
+      "route": "/zh/utilities/categories/3d-printing/elephant-foot-compensation-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/filament-dehydration-estimator/": {
+      "hash": "372669164d14cbecf69acc62ba7c0bced5d2bf66a2e4868115ab972ef5c3a315",
+      "route": "/zh/utilities/categories/3d-printing/filament-dehydration-estimator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/filament-weight-to-length-converter/": {
+      "hash": "2c18822f62eed0d6d98ac029f35f259ed5201da37e35368517997eb32f8ffc1e",
+      "route": "/zh/utilities/categories/3d-printing/filament-weight-to-length-converter/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/": {
+      "hash": "2410f67f3d73842b2e1a4f391c2f918a3393b4337ce134927ccb42a3817bbac5",
+      "route": "/zh/utilities/categories/3d-printing/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/": {
+      "hash": "adcea27cb9277afcafd9f5b02ff4d120ed834d3bc5acf4919919cc2af213f486",
+      "route": "/zh/utilities/categories/3d-printing/machine-hourly-rate-production-cost-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/metric-thread-tolerance-calculator/": {
+      "hash": "b035911ea334ee96a57d2632aae9bce5ca6c8ad315d3d0474cac0d07f144a56f",
+      "route": "/zh/utilities/categories/3d-printing/metric-thread-tolerance-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/multi-material-purge-calculator/": {
+      "hash": "b849ba42e1b5b524b5c390c5a4f147eec80dcba2cffcb7d4d9ff8de630ce291e",
+      "route": "/zh/utilities/categories/3d-printing/multi-material-purge-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/nozzle-wear-estimator/": {
+      "hash": "ad9e5a379b81ff44fce22107fdbfce3a3574e9bf9d616da35015fbfdfb4a88ec",
+      "route": "/zh/utilities/categories/3d-printing/nozzle-wear-estimator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/": {
+      "hash": "4966ac05f8826088114c9d3a05d9628daed89a389dce9d694499d8ae00b8cfde",
+      "route": "/zh/utilities/categories/3d-printing/pei-sheet-lifespan-estimator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/post-processing-cost-calculator/": {
+      "hash": "a34c2eded42db7a356649a291c5f1bf4b7a25e743258c71cbdae81dd0a1bef55",
+      "route": "/zh/utilities/categories/3d-printing/post-processing-cost-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/": {
+      "hash": "b31d07061731a9a7762aaaea5660a5d033b2fafcd9985dd899726da7d6b5bbbb",
+      "route": "/zh/utilities/categories/3d-printing/precision-engineering-suite-3d-printing/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/": {
+      "hash": "0df937d1c8747f13feeb397f35e9895ec9f3639f0d961fd304819a83fda05625",
+      "route": "/zh/utilities/categories/3d-printing/print-bed-thermal-inertia-stabilization-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/rainbow-filament-transition-calculator/": {
+      "hash": "44614eaf5da2f6c022cb8e7762f048302a6c1bd4bf2dc9a499677539a4da0a0e",
+      "route": "/zh/utilities/categories/3d-printing/rainbow-filament-transition-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/": {
+      "hash": "e6d71711dee64ea18437f7184ca94a0914ae4a5f934657ab545e8eba71454d63",
+      "route": "/zh/utilities/categories/3d-printing/real-resin-cost-calculator-sla-dlp/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/retraction-stringing-calibrator/": {
+      "hash": "8e362bc677a484615b9aca07610423ffd8fb3b074145792b5eb50a9d3a5e1b44",
+      "route": "/zh/utilities/categories/3d-printing/retraction-stringing-calibrator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/safe-overhang-angle-calculator/": {
+      "hash": "35a6c3f93f6c58f6b1dc6dd893020c31698a79b76abbe4beb2c2d0e64d378e5d",
+      "route": "/zh/utilities/categories/3d-printing/safe-overhang-angle-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/": {
+      "hash": "61b7d92bde47ad615026f01ccb0c1eeaa6dd7904a89172a46131c07829296edf",
+      "route": "/zh/utilities/categories/3d-printing/sla-resin-hollowing-drainage-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/": {
+      "hash": "5cbd406c77e4586f7d9d556a8d6554376a7c5803716d9d5d72c05dc25f949d7a",
+      "route": "/zh/utilities/categories/3d-printing/stepper-driver-microstepping-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/": {
+      "hash": "7c6037f84613fcf5002209906d0acef9df39753c32eecef5887115a42813f81f",
+      "route": "/zh/utilities/categories/3d-printing/technical-resin-uv-curing-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/tree-support-density-calculator/": {
+      "hash": "428ff4ee8dd83300ca528f7871e2b970c57a7fd2d026abb4e8926d1c81b3a9f3",
+      "route": "/zh/utilities/categories/3d-printing/tree-support-density-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/uv-resin-curing-calculator/": {
+      "hash": "bb019ca2dc26d9378db58c998975f34511b83913d28dc15dac676dc23b308b43",
+      "route": "/zh/utilities/categories/3d-printing/uv-resin-curing-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/volumetric-flow-calculator/": {
+      "hash": "64d7b27e3bc2741f2e876c4b9e34584aae5f863d71a014864900775d9476d252",
+      "route": "/zh/utilities/categories/3d-printing/volumetric-flow-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/": {
+      "hash": "c8976666f9948a2ab175341f61b0be967b6dd59f5d36249834732ea7cb48772e",
+      "route": "/zh/utilities/categories/3d-printing/volumetric-flow-rate-limit-calculator/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/wall-perimeter-optimizer/": {
+      "hash": "5c213bacd480aa3ae8cd76b85d779c54a9025b8bef76e8207dfe25cff02d1492",
+      "route": "/zh/utilities/categories/3d-printing/wall-perimeter-optimizer/"
+    },
+    "https://www.gamebob.dev/zh/utilities/categories/3d-printing/warping-risk-simulator/": {
+      "hash": "f3d65905b1620a4f93439c0f9eaa416ae7bc20014988597e08bd519cfedfd610",
+      "route": "/zh/utilities/categories/3d-printing/warping-risk-simulator/"
+    }
+  }
+}
