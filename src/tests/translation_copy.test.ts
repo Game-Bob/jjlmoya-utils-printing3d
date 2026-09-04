@@ -106,8 +106,8 @@ describe('Locales must not copy another locale wholesale', () => {
 
       for (let leftIndex = 0; leftIndex < locales.length; leftIndex += 1) {
         for (let rightIndex = leftIndex + 1; rightIndex < locales.length; rightIndex += 1) {
-          const left = locales[leftIndex];
-          const right = locales[rightIndex];
+          const left = locales[leftIndex]!;
+          const right = locales[rightIndex]!;
           const leftCorpus = corpora.get(left) ?? '';
           const rightCorpus = corpora.get(right) ?? '';
           const similarity = copySimilarity(leftCorpus, rightCorpus);
