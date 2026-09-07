@@ -95,6 +95,10 @@
             "zone_name": "jjlmoya.es"
         },
         {
+            "pattern": "www.jjlmoya.es/utilidades/calculadora-caudal-boquilla-impresion-3d*",
+            "zone_name": "jjlmoya.es"
+        },
+        {
             "pattern": "www.jjlmoya.es/utilidades/calculador-desgaste-boquilla-filamento-abrasivo-3d*",
             "zone_name": "jjlmoya.es"
         },
